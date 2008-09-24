@@ -1,0 +1,6 @@
+build
+bin
+obj
+*.suo
+*.vssscc
+*.vspscc
