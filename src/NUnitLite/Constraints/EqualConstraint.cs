@@ -6,24 +6,53 @@
 
 using System;
 using System.IO;
-using System.Text;
 using System.Collections;
-using System.Reflection;
 
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
     /// EqualConstraint is able to compare an actual value with the
-    /// expected value provided in its constructor.
+    /// expected value provided in its constructor. Two objects are 
+    /// considered equal if both are null, or if both have the same 
+    /// value. NUnit has special semantics for some object types.
     /// </summary>
     public class EqualConstraint : Constraint
     {
+        #region Static and Instance Fields
         private static IDictionary constraintHelpers = new Hashtable();
 
-        private object expected;
+        private readonly object expected;
 
         private ArrayList failurePoints;
 
+        /// <summary>
+        /// If true, all string comparisons will ignore case
+        /// </summary>
+        protected bool caseInsensitive;
+
+        /// <summary>
+        /// If true, strings in error messages will be clipped
+        /// </summary>
+        protected bool clipStrings = true;
+
+        /// <summary>
+        /// If true, arrays will be treated as collections, allowing
+        /// those of different dimensions to be compared
+        /// </summary>
+        protected bool compareAsCollection;
+
+        /// <summary>
+        /// If non-zero, equality comparisons within the specified 
+        /// tolerance will succeed.
+        /// </summary>
+        protected object tolerance;
+
+        /// <summary>
+        /// IComparer object used in comparisons for some constraints.
+        /// </summary>
+        protected IComparer compareWith;
+
+        #region Message Strings
         private static readonly string StringsDiffer_1 =
             "String lengths are both {0}. Strings differ at index {1}.";
         private static readonly string StringsDiffer_2 =
@@ -33,15 +62,17 @@ namespace NUnit.Framework.Constraints
         private static readonly string StreamsDiffer_2 =
             "Expected Stream length {0} but was {1}.";// Streams differ at offset {2}.";
         private static readonly string CollectionType_1 =
-            "Expected and actual are both <{0}>";
+            "Expected and actual are both {0}";
         private static readonly string CollectionType_2 =
-            "Expected is <{0}>, actual is <{1}>";
+            "Expected is {0}, actual is {1}";
         private static readonly string ValuesDiffer_1 =
             "Values differ at index {0}";
         private static readonly string ValuesDiffer_2 =
             "Values differ at expected index {0}, actual index {1}";
+        #endregion
 
         private static readonly int BUFFER_SIZE = 4096;
+        #endregion
 
         #region Static Method to Add Equality Helpers - Experimental
         public static void SetConstraintForType(Type argumentType, Type constraintType)
@@ -52,12 +83,75 @@ namespace NUnit.Framework.Constraints
 
         #region Constructor
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:EqualConstraint"/> class.
+        /// Initializes a new instance of the <see cref="EqualConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public EqualConstraint(object expected)
+        public EqualConstraint(object expected) : base(expected)
         {
             this.expected = expected;
+        }
+        #endregion
+
+        #region Constraint Modifiers
+        /// <summary>
+        /// Flag the constraint to ignore case and return self.
+        /// </summary>
+        public EqualConstraint IgnoreCase
+        {
+            get
+            {
+                caseInsensitive = true;
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Flag the constraint to suppress string clipping 
+        /// and return self.
+        /// </summary>
+        public EqualConstraint NoClip
+        {
+            get
+            {
+                clipStrings = false;
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Flag the constraint to compare arrays as collections
+        /// and return self.
+        /// </summary>
+        public EqualConstraint AsCollection
+        {
+            get
+            {
+                compareAsCollection = true;
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Flag the constraint to use a tolerance when determining equality.
+        /// Currently only used for doubles and floats.
+        /// </summary>
+        /// <param name="tolerance">Tolerance to be used</param>
+        /// <returns>Self.</returns>
+        public EqualConstraint Within(object tolerance)
+        {
+            this.tolerance = tolerance;
+            return this;
+        }
+
+        /// <summary>
+        /// Flag the constraint to use the supplied IComparer object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public EqualConstraint Comparer(IComparer comparer)
+        {
+            this.compareWith = comparer;
+            return this;
         }
         #endregion
 
@@ -93,6 +187,15 @@ namespace NUnit.Framework.Constraints
         public override void WriteDescriptionTo(MessageWriter writer)
         {
             writer.WriteExpectedValue( expected );
+
+            if (tolerance != null)
+            {
+                writer.WriteConnector("+/-");
+                writer.WriteExpectedValue(tolerance);
+            }
+
+            if (this.caseInsensitive)
+                writer.WriteModifier("ignoring case");
         }
 
         private void DisplayDifferences(MessageWriter writer, object expected, object actual, int depth)
@@ -128,20 +231,30 @@ namespace NUnit.Framework.Constraints
             if (expected is ICollection && actual is ICollection)
                 return CollectionsEqual((ICollection)expected, (ICollection)actual);
 
+            // String must precede IEnumerable since it implements it
+            if (expected is string && actual is string)
+                return StringsEqual((string)expected, (string)actual);
+
+            if (expected is IEnumerable && actual is IEnumerable)
+                return EnumerablesEqual((IEnumerable)expected, (IEnumerable)actual);
+
             if (expected is Stream && actual is Stream)
                 return StreamsEqual((Stream)expected, (Stream)actual);
 
             if (compareWith != null)
                 return compareWith.Compare(expected, actual) == 0;
 
+            if (expected is DirectoryInfo && actual is DirectoryInfo)
+                return DirectoriesEqual((DirectoryInfo)expected, (DirectoryInfo)actual);
+
             if (Numerics.IsNumericType(expected) && Numerics.IsNumericType(actual))
             {
-                return Numerics.AreEqual(expected, actual, tolerance);
+                return Numerics.AreEqual(expected, actual, ref tolerance);
             }
 
-            if (expected is string && actual is string)
+            if (expected is DateTime && actual is DateTime && tolerance is TimeSpan)
             {
-                return string.Compare((string)expected, (string)actual, caseInsensitive) == 0;
+                return ((DateTime)expected - (DateTime)actual).Duration() <= (TimeSpan)tolerance;
             }
 
             foreach (Type type in constraintHelpers.Keys)
@@ -193,8 +306,40 @@ namespace NUnit.Framework.Constraints
             return false;
         }
 
+        private bool EnumerablesEqual(IEnumerable expected, IEnumerable actual)
+        {
+            IEnumerator expectedEnum = expected.GetEnumerator();
+            IEnumerator actualEnum = actual.GetEnumerator();
+
+            int count = 0;
+            for (; ; )
+            {
+                bool expectedHasData = expectedEnum.MoveNext();
+                bool actualHasData = actualEnum.MoveNext();
+
+                if (!expectedHasData && !actualHasData)
+                    return true;
+
+                if (expectedHasData != actualHasData ||
+                    !ObjectsEqual(expectedEnum.Current, actualEnum.Current))
+                {
+                    failurePoints.Insert(0, count);
+                    return false;
+                }
+            }
+        }
+
         private bool StreamsEqual(Stream expected, Stream actual)
         {
+            if (!expected.CanRead)
+                throw new ArgumentException("Stream is not readable", "expected");
+            if (!actual.CanRead)
+                throw new ArgumentException("Stream is not readable", "actual");
+            if (!expected.CanSeek)
+                throw new ArgumentException("Stream is not seekable", "expected");
+            if (!actual.CanSeek)
+                throw new ArgumentException("Stream is not seekable", "actual");
+
             if (expected.Length != actual.Length) return false;
 
             byte[] bufferExpected = new byte[BUFFER_SIZE];
@@ -203,26 +348,58 @@ namespace NUnit.Framework.Constraints
             BinaryReader binaryReaderExpected = new BinaryReader(expected);
             BinaryReader binaryReaderActual = new BinaryReader(actual);
 
-            binaryReaderExpected.BaseStream.Seek(0, SeekOrigin.Begin);
-            binaryReaderActual.BaseStream.Seek(0, SeekOrigin.Begin);
+            long expectedPosition = expected.Position;
+            long actualPosition = actual.Position;
 
-            for (long readByte = 0; readByte < expected.Length; readByte += BUFFER_SIZE)
+            try
             {
-                binaryReaderExpected.Read(bufferExpected, 0, BUFFER_SIZE);
-                binaryReaderActual.Read(bufferActual, 0, BUFFER_SIZE);
+                binaryReaderExpected.BaseStream.Seek(0, SeekOrigin.Begin);
+                binaryReaderActual.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                for (int count = 0; count < BUFFER_SIZE; ++count)
+                for (long readByte = 0; readByte < expected.Length; readByte += BUFFER_SIZE)
                 {
-                    if (bufferExpected[count] != bufferActual[count])
+                    binaryReaderExpected.Read(bufferExpected, 0, BUFFER_SIZE);
+                    binaryReaderActual.Read(bufferActual, 0, BUFFER_SIZE);
+
+                    for (int count = 0; count < BUFFER_SIZE; ++count)
                     {
-                        failurePoints.Insert(0, readByte + count);
-                        //FailureMessage.WriteLine("\tIndex : {0}", readByte + count);
-                        return false;
+                        if (bufferExpected[count] != bufferActual[count])
+                        {
+                            failurePoints.Insert(0, readByte + count);
+                            //FailureMessage.WriteLine("\tIndex : {0}", readByte + count);
+                            return false;
+                        }
                     }
                 }
             }
+            finally
+            {
+                expected.Position = expectedPosition;
+                actual.Position = actualPosition;
+            }
 
             return true;
+        }
+        private bool StringsEqual(string expected, string actual)
+        {
+            string s1 = caseInsensitive ? expected.ToLower() : expected;
+            string s2 = caseInsensitive ? actual.ToLower() : actual;
+
+            return s1.Equals(s2);
+        }
+
+        /// <summary>
+        /// Method to compare two DirectoryInfo objects
+        /// </summary>
+        /// <param name="expected">first directory to compare</param>
+        /// <param name="actual">second directory to compare</param>
+        /// <returns>true if equivalent, false if not</returns>
+        private bool DirectoriesEqual(DirectoryInfo expected, DirectoryInfo actual)
+        {
+            return expected.Attributes == actual.Attributes
+                && expected.CreationTime == actual.CreationTime
+                && expected.FullName == actual.FullName
+                && expected.LastAccessTime == actual.LastAccessTime;
         }
         #endregion
 
@@ -236,7 +413,7 @@ namespace NUnit.Framework.Constraints
             else
                 writer.WriteMessageLine(StringsDiffer_2, expected.Length, actual.Length, mismatch);
 
-            writer.DisplayStringDifferences(expected, actual, mismatch, caseInsensitive);
+            writer.DisplayStringDifferences(expected, actual, mismatch, caseInsensitive, clipStrings);
         }
         #endregion
 
@@ -277,9 +454,15 @@ namespace NUnit.Framework.Constraints
                         GetValueFromCollection(actual, failurePoint),
                         ++depth);
                 else if (expected.Count < actual.Count)
-                    DisplayExtraElements(writer, actual, failurePoint, 3);
+                {
+                    writer.Write("  Extra:   ");
+                    writer.WriteCollectionElements(actual, failurePoint, 3);
+                }
                 else
-                    DisplayMissingElements(writer, expected, failurePoint, 3);
+                {
+                    writer.Write("  Missing: ");
+                    writer.WriteCollectionElements(expected, failurePoint, 3);
+                }
             }
         }
 
@@ -294,13 +477,18 @@ namespace NUnit.Framework.Constraints
         /// <param name="indent">The indentation level for the message line</param>
         private void DisplayCollectionTypesAndSizes(MessageWriter writer, ICollection expected, ICollection actual, int indent)
         {
-            string expectedType = MsgUtils.GetTypeRepresentation(expected);
-            string actualType = MsgUtils.GetTypeRepresentation(actual);
+            string sExpected = MsgUtils.GetTypeRepresentation(expected);
+            //if (!(expected is Array))
+            //    sExpected += string.Format(" with {0} elements", expected.Count);
 
-            if (expectedType == actualType)
-                writer.WriteMessageLine(indent, CollectionType_1, expectedType);
+            string sActual = MsgUtils.GetTypeRepresentation(actual);
+            //if (!(actual is Array))
+            //    sActual += string.Format(" with {0} elements", actual.Count);
+
+            if (sExpected == sActual)
+                writer.WriteMessageLine(indent, CollectionType_1, sExpected);
             else
-                writer.WriteMessageLine(indent, CollectionType_2, expectedType, actualType);
+                writer.WriteMessageLine(indent, CollectionType_2, sExpected, sActual);
         }
 
         /// <summary>
@@ -339,49 +527,6 @@ namespace NUnit.Framework.Constraints
                 writer.WriteMessageLine(indent, ValuesDiffer_2,
                     MsgUtils.GetArrayIndicesAsString(expectedIndices), MsgUtils.GetArrayIndicesAsString(actualIndices));
             }
-        }
-
-        private void DisplayMissingElements(MessageWriter writer, ICollection expected, int failurePoint, int max)
-        {
-            // TODO: We should not really assume that we are using a TextMessageWriter
-            DisplayElements(writer, TextMessageWriter.Pfx_Missing, expected, failurePoint, max);
-        }
-
-        private void DisplayExtraElements(MessageWriter writer, ICollection actual, int failurePoint, int max)
-        {
-            // TODO: We should not really assume that we are using a TextMessageWriter
-            DisplayElements(writer, TextMessageWriter.Pfx_Extra, actual, failurePoint, max);
-        }
-
-        /// <summary>
-        /// Displays elements from a collection on a line
-        /// </summary>
-        /// <param name="label">Text to prefix the line with</param>
-        /// <param name="list">The list of items to display</param>
-        /// <param name="index">The index in the collection of the first element to display</param>
-        /// <param name="max">The maximum number of elements to display</param>
-        private void DisplayElements(MessageWriter writer, string prefix, ICollection collection, int index, int max)
-        {
-            writer.Write(prefix + "< ");
-
-            if (collection == null)
-                writer.Write("null");
-            else if (collection.Count == 0)
-                writer.Write("empty");
-            else
-            {
-                for (int i = 0; i < max && index < collection.Count; i++)
-                {
-                    if (i > 0) writer.Write(", ");
-
-                    writer.WriteValue(GetValueFromCollection(collection, index++));
-                }
-
-                if (index < collection.Count)
-                    writer.Write("...");
-            }
-
-            writer.Write(" >");
         }
 
         private static object GetValueFromCollection(ICollection collection, int index)

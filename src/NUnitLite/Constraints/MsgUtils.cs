@@ -13,8 +13,11 @@ namespace NUnit.Framework.Constraints
     /// <summary>
     /// Static methods used in creating messages
     /// </summary>
-    class MsgUtils
+    public class MsgUtils
     {
+        /// <summary>
+        /// Static string used when strings are clipped
+        /// </summary>
         private static readonly string ELLIPSIS = "...";
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace NUnit.Framework.Constraints
         {
             Array array = obj as Array;
             if ( array == null )
-                return obj.GetType().ToString();
+                return string.Format("<{0}>", obj.GetType());
 
             StringBuilder sb = new StringBuilder();
             Type elementType = array.GetType();
@@ -50,7 +53,7 @@ namespace NUnit.Framework.Constraints
             while (--nest > 0)
                 sb.Append("[]");
 
-            return sb.ToString();
+            return string.Format("<{0}>", sb.ToString());
         }
 
         /// <summary>
@@ -61,7 +64,12 @@ namespace NUnit.Framework.Constraints
         /// <returns>The converted string</returns>
         public static string ConvertWhitespace(string s)
         {
-            return s.Replace("\\", "\\\\").Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
+            return s == null
+                ? null
+                : s.Replace("\\", "\\\\")
+                   .Replace("\n", "\\n")
+                   .Replace("\r", "\\r")
+                   .Replace("\t", "\\t");
         }
 
         /// <summary>
@@ -91,10 +99,11 @@ namespace NUnit.Framework.Constraints
         public static int[] GetArrayIndicesFromCollectionIndex(ICollection collection, int index)
         {
             Array array = collection as Array;
+
             int rank = array == null ? 1 : array.Rank;
             int[] result = new int[rank];
 
-            for (int r = array.Rank; --r > 0; )
+            for (int r = rank; --r > 0; )
             {
                 int l = array.GetLength(r);
                 result[r] = index % l;
@@ -106,32 +115,64 @@ namespace NUnit.Framework.Constraints
         }
 
         /// <summary>
-        /// Clip a string around a particular point, returning the clipped
+        /// Clip a string to a given length, starting at a particular offset, returning the clipped
         /// string with ellipses representing the removed parts
         /// </summary>
         /// <param name="s">The string to be clipped</param>
         /// <param name="maxStringLength">The maximum permitted length of the result string</param>
-        /// <param name="mismatch">The point around which clipping is to occur</param>
+        /// <param name="clipStart">The point at which to start clipping</param>
         /// <returns>The clipped string</returns>
-        public static string ClipString(string s, int maxStringLength, int mismatch)
+        public static string ClipString(string s, int maxStringLength, int clipStart)
         {
-            int clipLength = maxStringLength - ELLIPSIS.Length;
+            int clipLength = maxStringLength;
+            StringBuilder sb = new StringBuilder();
 
-            if (mismatch >= clipLength)
+            if (clipStart > 0)
             {
-                int clipStart = mismatch - clipLength / 2;
-                mismatch = mismatch - clipStart + ELLIPSIS.Length;
-
-                // Clip the expected value at start and at end if needed
-                if (s.Length - clipStart > maxStringLength)
-                    return ELLIPSIS + s.Substring(
-                        clipStart, clipLength - ELLIPSIS.Length) + ELLIPSIS;
-                else
-                    return ELLIPSIS + s.Substring(clipStart);
+                clipLength -= ELLIPSIS.Length;
+                sb.Append(ELLIPSIS);
             }
-            else if (s.Length > maxStringLength)
-                return s.Substring(0, clipLength) + ELLIPSIS;
-            else return s;
+
+            if (s.Length - clipStart > clipLength)
+            {
+                clipLength -= ELLIPSIS.Length;
+                sb.Append(s.Substring(clipStart, clipLength));
+                sb.Append(ELLIPSIS);
+            }
+            else if (clipStart > 0)
+                sb.Append(s.Substring(clipStart));
+            else
+                sb.Append(s);
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Clip the expected and actual strings in a coordinated fashion, 
+        /// so that they may be displayed together.
+        /// </summary>
+        /// <param name="expected"></param>
+        /// <param name="actual"></param>
+        /// <param name="maxDisplayLength"></param>
+        /// <param name="mismatch"></param>
+        public static void ClipExpectedAndActual(ref string expected, ref string actual, int maxDisplayLength, int mismatch)
+        {
+            // Case 1: Both strings fit on line
+            int maxStringLength = Math.Max(expected.Length, actual.Length);
+            if (maxStringLength <= maxDisplayLength)
+                return;
+
+            // Case 2: Assume that the tail of each string fits on line
+            int clipLength = maxDisplayLength - ELLIPSIS.Length;
+            int tailLength = clipLength - mismatch;
+            int clipStart = maxStringLength - clipLength;
+
+            // Case 3: If it doesn't, center the mismatch position
+            if (clipStart > mismatch)
+                clipStart = Math.Max(0, mismatch - clipLength / 2);
+
+            expected = ClipString(expected, maxDisplayLength, clipStart);
+            actual = ClipString(actual, maxDisplayLength, clipStart);
         }
 
         /// <summary>

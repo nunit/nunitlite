@@ -47,8 +47,8 @@ namespace NUnitLite.Tests
             //writer.Close();
             new TcpUI("ppp_peer", 9000).Execute(args);
 #else
-            new TcpUI("ferrari", 9000).Execute(args);
-            //new ConsoleUI().Execute(args);
+            //new TcpUI("ferrari", 9000).Execute(args);
+            new ConsoleUI().Execute(args);
 #endif
         }
     }

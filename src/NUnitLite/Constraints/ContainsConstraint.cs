@@ -18,6 +18,7 @@ namespace NUnit.Framework.Constraints
 	{
 		object expected;
 		Constraint realConstraint;
+        bool ignoreCase;
 
 		private Constraint RealConstraint
 		{
@@ -26,8 +27,13 @@ namespace NUnit.Framework.Constraints
 				if ( realConstraint == null )
 				{
 					if ( actual is string )
-						this.realConstraint = new SubstringConstraint( (string)expected );
-					else
+                    {
+                        StringConstraint constraint = new SubstringConstraint((string)expected);
+                        if (this.ignoreCase)
+                            constraint = constraint.IgnoreCase;
+                        this.realConstraint = constraint;
+                    }
+                    else
 						this.realConstraint = new CollectionContainsConstraint( expected );
 				}
 
@@ -48,6 +54,11 @@ namespace NUnit.Framework.Constraints
 			this.expected = expected;
 		}
 
+        public ContainsConstraint IgnoreCase
+        {
+            get { this.ignoreCase = true; return this; }
+        }
+
         /// <summary>
         /// Test whether the constraint is satisfied by a given value
         /// </summary>
@@ -56,10 +67,6 @@ namespace NUnit.Framework.Constraints
 		public override bool Matches(object actual)
 		{
 			this.actual = actual;
-
-			if ( this.caseInsensitive )
-				this.RealConstraint = RealConstraint.IgnoreCase;
-
 			return this.RealConstraint.Matches( actual );
 		}
 

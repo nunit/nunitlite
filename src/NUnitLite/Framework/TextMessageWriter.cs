@@ -20,7 +20,7 @@ namespace NUnit.Framework
     public class TextMessageWriter : MessageWriter
     {
         #region Message Formats and Constants
-        private static readonly int MAX_LINE_LENGTH = 78;
+        private static readonly int DEFAULT_LINE_LENGTH = 78;
 
         // Prefixes used in all failure messages. All must be the same
         // length, which is held in the PrefixLength field. Should not
@@ -37,8 +37,6 @@ namespace NUnit.Framework
         /// Length of a message prefix
         /// </summary>
         public static readonly int PrefixLength = Pfx_Expected.Length;
-        public static readonly string Pfx_Missing = "  Missing:  ";
-        public static readonly string Pfx_Extra = "  Extra:    ";
 
         private static readonly string Fmt_Connector = " {0} ";
         private static readonly string Fmt_Predicate = "{0} ";
@@ -56,6 +54,8 @@ namespace NUnit.Framework
         private static readonly string Fmt_Default = "<{0}>";
         #endregion
 
+        private int maxLineLength = DEFAULT_LINE_LENGTH;
+
         #region Constructors
         /// <summary>
         /// Construct a TextMessageWriter
@@ -70,17 +70,19 @@ namespace NUnit.Framework
         /// <param name="args"></param>
         public TextMessageWriter(string userMessage, params object[] args)
         {
-            this.WriteMessageLine(userMessage, args);
+            if (userMessage != null && userMessage != string.Empty)
+                this.WriteMessageLine(userMessage, args);
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the maximum line length for this writer
+        /// Gets or sets the maximum line length for this writer
         /// </summary>
         public override int MaxLineLength
         {
-            get { return MAX_LINE_LENGTH; }
+            get { return maxLineLength; }
+            set { maxLineLength = value; }
         }
         #endregion
 
@@ -154,23 +156,30 @@ namespace NUnit.Framework
         /// <param name="actual">The actual string value</param>
         /// <param name="mismatch">The point at which the strings don't match or -1</param>
         /// <param name="ignoreCase">If true, case is ignored in string comparisons</param>
-        public override void DisplayStringDifferences(string expected, string actual, int mismatch, bool ignoreCase)
+        /// <param name="clipping">If true, clip the strings to fit the max line length</param>
+        public override void DisplayStringDifferences(string expected, string actual, int mismatch, bool ignoreCase, bool clipping)
         {
             // Maximum string we can display without truncating
-            int maxStringLength = MAX_LINE_LENGTH
+            int maxDisplayLength = MaxLineLength
                 - PrefixLength   // Allow for prefix
-                - 2;                    // 2 quotation marks
+                - 2;             // 2 quotation marks
 
-            expected = MsgUtils.ConvertWhitespace(MsgUtils.ClipString(expected, maxStringLength, mismatch));
-            actual = MsgUtils.ConvertWhitespace(MsgUtils.ClipString(actual, maxStringLength, mismatch));
+            if (clipping)
+                MsgUtils.ClipExpectedAndActual(ref expected, ref actual, maxDisplayLength, mismatch);
+
+            expected = MsgUtils.ConvertWhitespace(expected);
+            actual = MsgUtils.ConvertWhitespace(actual);
 
             // The mismatch position may have changed due to clipping or white space conversion
-            if ( mismatch >= 0 )
-                mismatch = MsgUtils.FindMismatchPosition(expected, actual, 0, ignoreCase);
+            mismatch = MsgUtils.FindMismatchPosition(expected, actual, 0, ignoreCase);
 
-            WriteExpectedLine(expected);
+            Write(Pfx_Expected);
+            WriteExpectedValue(expected);
+            if (ignoreCase)
+                WriteModifier("ignoring case");
+            WriteLine();
             WriteActualLine(actual);
-
+            //DisplayDifferences(expected, actual);
             if (mismatch >= 0)
                 WriteCaretLine(mismatch);
         }
@@ -239,7 +248,7 @@ namespace NUnit.Framework
             else if (val.GetType().IsArray)
                 WriteArray((Array)val);
             else if (val is ICollection)
-                WriteCollection((ICollection)val);
+                WriteCollectionElements((ICollection)val, 0, 10);
             else if (val is string)
                 WriteString((string)val);
             else if (val is char)
@@ -297,6 +306,12 @@ namespace NUnit.Framework
 
         private void WriteArray(Array array)
         {
+            if (array.Length == 0)
+            {
+                Write(Fmt_EmptyCollection);
+                return;
+            }
+
             int rank = array.Rank;
             int[] products = new int[rank];
 
@@ -327,20 +342,6 @@ namespace NUnit.Framework
                     if (nextSegment) Write(" >");
                 }
             }
-        }
-
-        private void WriteCollection(ICollection collection)
-        {
-            int count = 0;
-            Write("< ");
-            foreach (object obj in collection)
-            {
-                if (count > 0)
-                    Write(", ");
-                WriteValue(obj);
-                ++count;
-            }
-            Write(" >");
         }
 
         private void WriteString(string s)
@@ -416,9 +417,7 @@ namespace NUnit.Framework
         /// <param name="expected">The expected value</param>
         private void WriteExpectedLine(object expected)
         {
-            Write(Pfx_Expected);
-            WriteExpectedValue(expected);
-            WriteLine();
+            WriteExpectedLine(expected, null);
         }
 
         /// <summary>
@@ -431,8 +430,11 @@ namespace NUnit.Framework
         {
             Write(Pfx_Expected);
             WriteExpectedValue(expected);
-            WriteConnector("+/-");
-            WriteExpectedValue(tolerance);
+            if (tolerance != null)
+            {
+                WriteConnector("+/-");
+                WriteExpectedValue(tolerance);
+            }
             WriteLine();
         }
 

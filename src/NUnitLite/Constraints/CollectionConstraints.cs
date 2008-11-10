@@ -16,6 +16,26 @@ namespace NUnit.Framework.Constraints
     /// </summary>
     public abstract class CollectionConstraint : Constraint
     {
+        public CollectionConstraint() { }
+
+        public CollectionConstraint(object arg) : base(arg) { }
+
+        /// <summary>
+        /// Determines whether the specified enumerable is empty.
+        /// </summary>
+        /// <param name="enumerable">The enumerable.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified enumerable is empty; otherwise, <c>false</c>.
+        /// </returns>
+        protected static bool IsEmpty(IEnumerable enumerable)
+        {
+            ICollection collection = enumerable as ICollection;
+            if (collection != null)
+                return collection.Count == 0;
+            else
+                return !enumerable.GetEnumerator().MoveNext();
+        }
+
         /// <summary>
         /// CollectionTally counts (tallies) the number of
         /// occurences of each object in one or more enuerations.
@@ -45,7 +65,7 @@ namespace NUnit.Framework.Constraints
             /// <summary>
             /// Construct a CollectionTally object from a collection
             /// </summary>
-            /// <param name="collection"></param>
+            /// <param name="c"></param>
             public CollectionTally(IEnumerable c)
             {
                 foreach (object obj in c)
@@ -115,9 +135,36 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Protected method to be implemented by derived classes
         /// </summary>
-        /// <param name="collecton"></param>
+        /// <param name="collection"></param>
         /// <returns></returns>
         protected abstract bool doMatch(ICollection collecton);
+    }
+    #endregion
+
+    #region EmptyCollectionConstraint
+    /// <summary>
+    /// EmptyCollectionConstraint tests whether a colletion is empty. 
+    /// </summary>
+    public class EmptyCollectionConstraint : CollectionConstraint
+    {
+        /// <summary>
+        /// Check that the collection is empty
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        protected override bool doMatch(ICollection collection)
+        {
+            return IsEmpty(collection);
+        }
+
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer"></param>
+        public override void WriteDescriptionTo(MessageWriter writer)
+        {
+            writer.Write("<empty>");
+        }
     }
     #endregion
 
@@ -164,8 +211,10 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="expected"></param>
         public CollectionContainsConstraint(object expected)
+            : base(expected)
         {
             this.expected = expected;
+            this.DisplayName = "contains";
         }
 
         /// <summary>
@@ -217,9 +266,10 @@ namespace NUnit.Framework.Constraints
         /// Construct a CollectionEquivalentConstraint
         /// </summary>
         /// <param name="expected"></param>
-        public CollectionEquivalentConstraint(IEnumerable expected)
+        public CollectionEquivalentConstraint(IEnumerable expected) : base(expected)
         {
             this.expected = expected;
+	    this.DisplayName = "equivalent";
         }
 
         /// <summary>
@@ -263,9 +313,10 @@ namespace NUnit.Framework.Constraints
         /// Construct a CollectionSubsetConstraint
         /// </summary>
         /// <param name="expected">The collection that the actual value is expected to be a subset of</param>
-        public CollectionSubsetConstraint(IEnumerable expected)
+        public CollectionSubsetConstraint(IEnumerable expected) : base(expected)
         {
             this.expected = expected;
+            this.DisplayName = "subsetof";
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 // *****************************************************
-// Copyright 2007, Charlie Poole
+// Copyright 2008, Charlie Poole
 //
 // Licensed under the Open Software License version 3.0
 // *****************************************************
@@ -77,10 +77,19 @@ namespace NUnit.Framework.Constraints
 		#endregion
 
 		#region Numeric Equality
-		public static bool AreEqual( object expected, object actual, object tolerance )
+        /// <summary>
+        /// Test two numeric values for equality, performing the usual numeric 
+        /// conversions and using a provided or default tolerance. If the value 
+        /// referred to by tolerance is null, this method may set it to a default.
+        /// </summary>
+        /// <param name="expected">The expected value</param>
+        /// <param name="actual">The actual value</param>
+        /// <param name="tolerance">A reference to the numeric tolerance in effect</param>
+        /// <returns>True if the values are equal</returns>
+        public static bool AreEqual(object expected, object actual, ref object tolerance)
 		{
 			if ( IsFloatingPointNumeric(expected) || IsFloatingPointNumeric(actual) )
-				return AreEqual( Convert.ToDouble(expected), Convert.ToDouble(actual), Convert.ToDouble(tolerance) );
+				return AreEqual( Convert.ToDouble(expected), Convert.ToDouble(actual), ref tolerance);
 
 			if ( expected is decimal || actual is decimal )
 				return AreEqual( Convert.ToDecimal(expected), Convert.ToDecimal(actual), Convert.ToDecimal(tolerance) );
@@ -97,7 +106,7 @@ namespace NUnit.Framework.Constraints
 			return AreEqual( Convert.ToInt32(expected), Convert.ToInt32(actual), Convert.ToInt32(tolerance) );
 		}
 
-		private static bool AreEqual( double expected, double actual, double tolerance )
+		private static bool AreEqual( double expected, double actual, ref object tolerance )
 		{
 			if (double.IsNaN(expected) && double.IsNaN(actual))
 				return true;
@@ -107,8 +116,15 @@ namespace NUnit.Framework.Constraints
 			if (double.IsInfinity(expected) || double.IsNaN(expected) || double.IsNaN(actual))
 				return expected.Equals(actual);
 
-			if ( tolerance > 0.0d )
-				return Math.Abs(expected - actual) <= tolerance;
+            if (tolerance != null)
+                return Math.Abs(expected - actual) <= Convert.ToDouble(tolerance);
+
+            if (GlobalSettings.DefaultFloatingPointTolerance > 0.0d
+                && !double.IsNaN(expected) && !double.IsInfinity(expected))
+            {
+                tolerance = GlobalSettings.DefaultFloatingPointTolerance;
+                return Math.Abs(expected - actual) <= GlobalSettings.DefaultFloatingPointTolerance;
+            }
 				
 			return expected.Equals( actual );
 		}
@@ -161,7 +177,13 @@ namespace NUnit.Framework.Constraints
 		#endregion
 
 		#region Numeric Comparisons 
-		public static int Compare( IComparable expected, object actual )
+        /// <summary>
+        /// Compare two numeric values, performing the usual numeric conversions.
+        /// </summary>
+        /// <param name="expected">The expected value</param>
+        /// <param name="actual">The actual value</param>
+        /// <returns></returns>
+        public static int Compare(IComparable expected, object actual)
 		{
 			if ( expected == null )
 				throw new ArgumentException( "Cannot compare using a null reference", "expected" );

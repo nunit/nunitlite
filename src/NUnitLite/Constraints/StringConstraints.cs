@@ -11,130 +11,256 @@ using System.Text.RegularExpressions;
 
 namespace NUnit.Framework.Constraints
 {
+    #region StringConstraint
+    /// <summary>
+    /// StringConstraint is the abstract base for constraints
+    /// that operate on strings. It supports the IgnoreCase
+    /// modifier for string operations.
+    /// </summary>
     public abstract class StringConstraint : Constraint
     {
+        /// <summary>
+        /// The expected value
+        /// </summary>
         protected string expected;
 
-        protected abstract void WriteFailureMessageTo(MessageWriter writer);
-        protected abstract bool IsMatch(string expected, string actual );
+        /// <summary>
+        /// Indicates whether tests should be case-insensitive
+        /// </summary>
+        protected bool caseInsensitive;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:StringConstraint"/> class.
+        /// Constructs a StringConstraint given an expected value
         /// </summary>
-        /// <param name="expected">The expected.</param>
+        /// <param name="expected">The expected value</param>
         public StringConstraint(string expected)
+            : base(expected)
         {
             this.expected = expected;
         }
 
+        /// <summary>
+        /// Modify the constraint to ignore case in matching.
+        /// </summary>
+        public StringConstraint IgnoreCase
+        {
+            get { caseInsensitive = true; return this; }
+        }
+    }
+    #endregion
+
+    #region EmptyStringConstraint
+    /// <summary>
+    /// EmptyStringConstraint tests whether a string is empty.
+    /// </summary>
+    public class EmptyStringConstraint : Constraint
+    {
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given value
+        /// </summary>
+        /// <param name="actual">The value to be tested</param>
+        /// <returns>True for success, false for failure</returns>
         public override bool Matches(object actual)
         {
             this.actual = actual;
 
-            if ( !(actual is string) )
+            if (!(actual is string))
                 return false;
 
-            if (caseInsensitive)
-                return IsMatch(expected.ToLower(), ((string)actual).ToLower());
-            else
-                return IsMatch(expected, (string)actual );
+            return (string)actual == string.Empty;
         }
 
-        public override void WriteMessageTo(MessageWriter writer)
-        {
-            WriteFailureMessageTo(writer);
-            writer.DisplayStringDifferences((string)expected, (string)actual, -1, caseInsensitive);
-        }
-
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            //WritePredicateTo(writer);
-            writer.WriteExpectedValue(expected);
-            //if (ignoreCase)
-            //    writer.Write(" ignoring case");
+            writer.Write("<empty>");
         }
     }
+    #endregion
 
+    #region NullOrEmptyStringConstraint
+    /// <summary>
+    /// NullEmptyStringConstraint tests whether a string is either null or empty.
+    /// </summary>
+    public class NullOrEmptyStringConstraint : Constraint
+    {
+        public NullOrEmptyStringConstraint()
+        {
+            this.DisplayName = "nullorempty";
+        }
+
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given value
+        /// </summary>
+        /// <param name="actual">The value to be tested</param>
+        /// <returns>True for success, false for failure</returns>
+        public override bool Matches(object actual)
+        {
+            this.actual = actual;
+
+            if (actual == null)
+                return true;
+
+            if (!(actual is string))
+                throw new ArgumentException("Actual value must be a string", "actual");
+
+            return (string)actual == string.Empty;
+        }
+
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
+        public override void WriteDescriptionTo(MessageWriter writer)
+        {
+            writer.Write("null or empty string");
+        }
+    }
+    #endregion
+
+    #region Substring Constraint
     /// <summary>
     /// SubstringConstraint can test whether a string contains
     /// the expected substring.
     /// </summary>
     public class SubstringConstraint : StringConstraint
     {
-        // Substring constraint failure messages
-        public static readonly string msg_DoesNotContain =
-            "String did not contain expected string.";
-        public static readonly string msg_DoesNotContain_IC =
-            "String did not contain expected string, ignoring case.";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:SubstringConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected.</param>
         public SubstringConstraint(string expected) : base(expected) { }
 
-        protected override bool IsMatch(string expected, string actual)
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given value
+        /// </summary>
+        /// <param name="actual">The value to be tested</param>
+        /// <returns>True for success, false for failure</returns>
+        public override bool Matches(object actual)
         {
-            return actual.IndexOf(expected) >= 0;
+            this.actual = actual;
+
+            if (!(actual is string))
+                return false;
+
+            if (this.caseInsensitive)
+                return ((string)actual).ToLower().IndexOf(expected.ToLower()) >= 0;
+            else
+                return ((string)actual).IndexOf(expected) >= 0;
         }
 
-        protected override void WriteFailureMessageTo(MessageWriter writer)
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
+        public override void WriteDescriptionTo(MessageWriter writer)
         {
-            if (caseInsensitive)
-                writer.WriteMessageLine(msg_DoesNotContain_IC);
-            else
-                writer.WriteMessageLine(msg_DoesNotContain);
+            writer.WritePredicate("String containing");
+            writer.WriteExpectedValue(expected);
+            if (this.caseInsensitive)
+                writer.WriteModifier("ignoring case");
         }
     }
+    #endregion
 
+    #region StartsWithConstraint
+    /// <summary>
+    /// StartsWithConstraint can test whether a string starts
+    /// with an expected substring.
+    /// </summary>
     public class StartsWithConstraint : StringConstraint
     {
-        // StartsWithConstraint failure messages
-        public static readonly string msg_DoesNotStartWith =
-            "String did not start with expected string.";
-        public static readonly string msg_DoesNotStartWith_IC =
-            "String did not start with expected string, ignoring case.";
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:StartsWithConstraint"/> class.
+        /// </summary>
+        /// <param name="expected">The expected string</param>
         public StartsWithConstraint(string expected) : base(expected) { }
 
-        protected override bool IsMatch(string expected, string actual)
+        /// <summary>
+        /// Test whether the constraint is matched by the actual value.
+        /// This is a template method, which calls the IsMatch method
+        /// of the derived class.
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        public override bool Matches(object actual)
         {
-            return actual.StartsWith( expected );
+            this.actual = actual;
+
+            if (!(actual is string))
+                return false;
+
+            if (this.caseInsensitive)
+                return ((string)actual).ToLower().StartsWith(expected.ToLower());
+            else
+                return ((string)actual).StartsWith(expected);
         }
 
-        protected override void WriteFailureMessageTo(MessageWriter writer)
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
+        public override void WriteDescriptionTo(MessageWriter writer)
         {
-            if (caseInsensitive)
-                writer.WriteMessageLine(msg_DoesNotStartWith_IC);
-            else
-                writer.WriteMessageLine(msg_DoesNotStartWith);
+            writer.WritePredicate("String starting with");
+            writer.WriteExpectedValue(MsgUtils.ClipString(expected, writer.MaxLineLength - 40, 0));
+            if (this.caseInsensitive)
+                writer.WriteModifier("ignoring case");
         }
     }
+    #endregion
 
+    #region EndsWithConstraint
+    /// <summary>
+    /// EndsWithConstraint can test whether a string ends
+    /// with an expected substring.
+    /// </summary>
     public class EndsWithConstraint : StringConstraint
     {
-        // EndsWithConstraint failure messges
-        public static readonly string msg_DoesNotEndWith =
-            "String did not end with expected string.";
-        public static readonly string msg_DoesNotEndWith_IC =
-            "String did not end with expected string, ignoring case.";
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:EndsWithConstraint"/> class.
+        /// </summary>
+        /// <param name="expected">The expected string</param>
         public EndsWithConstraint(string expected) : base(expected) { }
 
-        protected override bool IsMatch(string expected, string actual)
+        /// <summary>
+        /// Test whether the constraint is matched by the actual value.
+        /// This is a template method, which calls the IsMatch method
+        /// of the derived class.
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        public override bool Matches(object actual)
         {
-            return actual.EndsWith(expected);
+            this.actual = actual;
+
+            if (!(actual is string))
+                return false;
+
+            if (this.caseInsensitive)
+                return ((string)actual).ToLower().EndsWith(expected.ToLower());
+            else
+                return ((string)actual).EndsWith(expected);
         }
 
-        protected override void WriteFailureMessageTo(MessageWriter writer)
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
+        public override void WriteDescriptionTo(MessageWriter writer)
         {
-            if (caseInsensitive)
-                writer.WriteMessageLine(msg_DoesNotEndWith_IC);
-            else
-                writer.WriteMessageLine(msg_DoesNotEndWith);
+            writer.WritePredicate("String ending with");
+            writer.WriteExpectedValue(expected);
+            if (this.caseInsensitive)
+                writer.WriteModifier("ignoring case");
         }
     }
+    #endregion
 
+    #region RegexConstraint
 #if !NETCF
     /// <summary>
     /// RegexConstraint can test whether a string matches
@@ -146,24 +272,22 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="T:RegexConstraint"/> class.
         /// </summary>
         /// <param name="pattern">The pattern.</param>
-        public RegexConstraint(string expected) : base( expected ) { }
+        public RegexConstraint(string pattern) : base(pattern) { }
 
         /// <summary>
         /// Test whether the constraint is satisfied by a given value
         /// </summary>
         /// <param name="actual">The value to be tested</param>
         /// <returns>True for success, false for failure</returns>
-        protected override bool IsMatch(string expected, string actual)
+        public override bool Matches(object actual)
         {
-            return Regex.IsMatch(
+            this.actual = actual;
+
+            return actual is string &&
+                Regex.IsMatch(
                     (string)actual,
                     this.expected,
                     this.caseInsensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
-        }
-
-        protected override void WriteFailureMessageTo(MessageWriter writer)
-        {
-            writer.WriteMessageLine( "String does not match the pattern provided" );
         }
 
         /// <summary>
@@ -179,4 +303,5 @@ namespace NUnit.Framework.Constraints
         }
     }
 #endif
+    #endregion
 }

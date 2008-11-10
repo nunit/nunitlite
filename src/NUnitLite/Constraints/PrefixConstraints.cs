@@ -23,27 +23,12 @@ namespace NUnit.Framework.Constraints
 		/// <summary>
 		/// Construct given a base constraint
 		/// </summary>
-		/// <param name="baseConstraint"></param>
-		protected PrefixConstraint( Constraint baseConstraint )
+		/// <param name="resolvable"></param>
+		protected PrefixConstraint( IResolveConstraint resolvable ) : base(resolvable)
 		{
-			this.baseConstraint = baseConstraint;
-		}
-
-		/// <summary>
-		/// Set all modifiers applied to the prefix into
-		/// the base constraint before matching
-		/// </summary>
-		protected void PassModifiersToBase()
-		{
-			if ( this.caseInsensitive )
-				baseConstraint = baseConstraint.IgnoreCase;
-			if ( this.tolerance != null )
-				baseConstraint = baseConstraint.Within( tolerance );
-			if ( this.compareAsCollection )
-				baseConstraint = baseConstraint.AsCollection;
-			if ( this.compareWith != null )
-				baseConstraint = baseConstraint.Comparer( compareWith );
-		}
+			if (resolvable != null)
+				this.baseConstraint = resolvable.Resolve();
+        	}
 	}
 	#endregion
 
@@ -68,7 +53,6 @@ namespace NUnit.Framework.Constraints
 		public override bool Matches(object actual)
 		{
 			this.actual = actual;
-			this.PassModifiersToBase();
 			return !baseConstraint.Matches(actual);
 		}
 
@@ -105,7 +89,10 @@ namespace NUnit.Framework.Constraints
 		/// </summary>
 		/// <param name="itemConstraint"></param>
 		public AllItemsConstraint(Constraint itemConstraint)
-			: base( itemConstraint ) { }
+			: base( itemConstraint ) 
+        {
+            this.DisplayName = "all";
+        }
 
 		/// <summary>
 		/// Apply the item constraint to each item in the collection,
@@ -116,8 +103,6 @@ namespace NUnit.Framework.Constraints
 		public override bool Matches(object actual)
 		{
 			this.actual = actual;
-
-			PassModifiersToBase();
 
 			if ( !(actual is ICollection) )
 				throw new ArgumentException( "The actual value must be a collection", "actual" );
@@ -153,7 +138,10 @@ namespace NUnit.Framework.Constraints
 		/// </summary>
 		/// <param name="itemConstraint"></param>
 		public SomeItemsConstraint(Constraint itemConstraint)
-			: base( itemConstraint ) { }
+			: base( itemConstraint ) 
+        {
+            this.DisplayName = "some";
+        }
 
 		/// <summary>
 		/// Apply the item constraint to each item in the collection,
@@ -164,8 +152,6 @@ namespace NUnit.Framework.Constraints
 		public override bool Matches(object actual)
 		{
 			this.actual = actual;
-
-			PassModifiersToBase();
 
 			if ( !(actual is ICollection) )
 				throw new ArgumentException( "The actual value must be a collection", "actual" );
@@ -190,18 +176,21 @@ namespace NUnit.Framework.Constraints
 	#endregion
 
 	#region NoItemConstraint
-	/// <summary>
-	/// NoItemConstraint applies another constraint to each
-	/// item in a collection, failing if any of them succeeds.
-	/// </summary>
-	public class NoItemConstraint : PrefixConstraint
+    /// <summary>
+    /// NoItemConstraint applies another constraint to each
+    /// item in a collection, failing if any of them succeeds.
+    /// </summary>
+    public class NoItemConstraint : PrefixConstraint
 	{
 		/// <summary>
 		/// Construct a SomeItemsConstraint on top of an existing constraint
 		/// </summary>
 		/// <param name="itemConstraint"></param>
 		public NoItemConstraint(Constraint itemConstraint)
-			: base( itemConstraint ) { }
+			: base( itemConstraint ) 
+        {
+            this.DisplayName = "none";
+        }
 
 		/// <summary>
 		/// Apply the item constraint to each item in the collection,
@@ -212,8 +201,6 @@ namespace NUnit.Framework.Constraints
 		public override bool Matches(object actual)
 		{
 			this.actual = actual;
-
-			PassModifiersToBase();
 
 			if ( !(actual is ICollection) )
 				throw new ArgumentException( "The actual value must be a collection", "actual" );

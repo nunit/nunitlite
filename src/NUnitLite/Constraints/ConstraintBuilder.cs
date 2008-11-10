@@ -6,421 +6,263 @@
 
 using System;
 using System.Collections;
+#if NET_2_0
+using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// ConstraintBuilder is used to resolve the Not and All properties,
-    /// which serve as prefix operators for constraints. With the addition
-    /// of an operand stack, And and Or could be supported, but we have
-    /// left them out in favor of a simpler, more type-safe implementation.
-    /// Use the & and | operator overloads to combine constraints.
+    /// ConstraintBuilder maintains the stacks that are used in
+    /// processing a ConstraintExpression. An OperatorStack
+    /// is used to hold operators that are waiting for their
+    /// operands to be reognized. a ConstraintStack holds 
+    /// input constraints as well as the results of each
+    /// operator applied.
     /// </summary>
     public class ConstraintBuilder
     {
-        private enum Op
-        {
-            Not,
-            All,
-            Some,
-            None,
-            Prop
-        }
-
-        Stack ops = new Stack();
-
-        Stack opnds = new Stack();
-
+        #region Nested Operator Stack Class
         /// <summary>
-        /// Implicitly convert ConstraintBuilder to an actual Constraint
-        /// at the point where the syntax demands it.
+        /// OperatorStack is a type-safe stack for holding ConstraintOperators
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        public static implicit operator Constraint(ConstraintBuilder builder)
+        public class OperatorStack
         {
-            return builder.Resolve();
-        }
-
-        #region Constraints Without Arguments
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// EqualConstraint(null) as base.
-        /// </summary>
-        public Constraint Null
-        {
-            get { return Resolve(new EqualConstraint(null)); }
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// EqualConstraint(true) as base.
-        /// </summary>
-        public Constraint True
-        {
-            get { return Resolve(new EqualConstraint(true)); }
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// EqualConstraint(false) as base.
-        /// </summary>
-        public Constraint False
-        {
-            get { return Resolve(new EqualConstraint(false)); }
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// Is.NaN as base.
-        /// </summary>
-        public Constraint NaN
-        {
-            get { return Resolve(new EqualConstraint(double.NaN)); }
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// Is.Empty as base.
-        /// </summary>
-        public Constraint Empty
-        {
-            get { return Resolve(new EmptyConstraint()); }
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using
-        /// Is.Unique as base.
-        /// </summary>
-        public Constraint Unique
-        {
-            get { return Resolve(new UniqueItemsConstraint()); }
-        }
-        #endregion
-
-        #region Constraints with an expected value
-
-        #region Equality and Identity
-        /// <summary>
-        /// Resolves the chain of constraints using an
-        /// EqualConstraint as base.
-        /// </summary>
-        public Constraint EqualTo(object expected)
-        {
-            return Resolve(new EqualConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// SameAsConstraint as base.
-        /// </summary>
-        public Constraint SameAs(object expected)
-        {
-            return Resolve(new SameAsConstraint(expected));
-        }
-        #endregion
-
-        #region Comparison Constraints
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// LessThanConstraint as base.
-        /// </summary>
-        public Constraint LessThan(IComparable expected)
-        {
-            return Resolve(new LessThanConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// GreaterThanConstraint as base.
-        /// </summary>
-        public Constraint GreaterThan(IComparable expected)
-        {
-            return Resolve(new GreaterThanConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// LessThanOrEqualConstraint as base.
-        /// </summary>
-        public Constraint LessThanOrEqualTo(IComparable expected)
-        {
-            return Resolve(new LessThanOrEqualConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// LessThanOrEqualConstraint as base.
-        /// </summary>
-        public Constraint AtMost(IComparable expected)
-        {
-            return Resolve(new LessThanOrEqualConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// GreaterThanOrEqualConstraint as base.
-        /// </summary>
-        public Constraint GreaterThanOrEqualTo(IComparable expected)
-        {
-            return Resolve(new GreaterThanOrEqualConstraint(expected));
-        }
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// GreaterThanOrEqualConstraint as base.
-        /// </summary>
-        public Constraint AtLeast(IComparable expected)
-        {
-            return Resolve(new GreaterThanOrEqualConstraint(expected));
-        }
-        #endregion
-
-        #region Type Constraints
-        /// <summary>
-        /// Resolves the chain of constraints using an
-        /// ExactTypeConstraint as base.
-        /// </summary>
-        public Constraint Type(Type expectedType)
-        {
-            return Resolve(new ExactTypeConstraint(expectedType));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using an
-        /// InstanceOfTypeConstraint as base.
-        /// </summary>
-        public Constraint InstanceOfType(Type expectedType)
-        {
-            return Resolve(new InstanceOfTypeConstraint(expectedType));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using an
-        /// AssignableFromConstraint as base.
-        /// </summary>
-        public Constraint AssignableFrom(Type expectedType)
-        {
-            return Resolve(new AssignableFromConstraint(expectedType));
-        }
-        #endregion
-
-        #region Containing Constraint
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// ContainsConstraint as base. This constraint
-        /// will, in turn, make use of the appropriate
-        /// second-level constraint, depending on the
-        /// type of the actual argument.
-        /// </summary>
-        public Constraint Contains(object expected)
-        {
-            return Resolve(new ContainsConstraint(expected));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a 
-        /// CollectionContainsConstraint as base.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        public Constraint Member(object expected)
-        {
-            return Resolve(new CollectionContainsConstraint(expected));
-        }
-        #endregion
-
-        #region String Constraints
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// SubstringConstraint as base.
-        /// </summary>
-        public Constraint StringContaining(string substring)
-        {
-            return Resolve( new SubstringConstraint(substring) );
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// StartsWithConstraint as base.
-        /// </summary>
-        public Constraint StringStarting(string substring)
-        {
-            return Resolve( new StartsWithConstraint(substring) );
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// StringEndingConstraint as base.
-        /// </summary>
-        public Constraint StringEnding(string substring)
-        {
-            return Resolve( new EndsWithConstraint(substring) );
-        }
-
-#if !NETCF
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// RegexConstraint as base.
-        /// </summary>
-        public Constraint StringMatching(string pattern)
-        {
-            return Resolve(new RegexConstraint(pattern));
-        }
+#if NET_2_0
+            private Stack<ConstraintOperator> stack = new Stack<ConstraintOperator>();
+#else
+            private Stack stack = new Stack();
 #endif
-        #endregion
-
-        #region Collection Constraints
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// CollectionEquivalentConstraint as base.
-        /// </summary>
-        public Constraint EquivalentTo(ICollection expected)
-        {
-            return Resolve( new CollectionEquivalentConstraint(expected) );
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// CollectionSubsetConstraint as base.
-        /// </summary>
-        public Constraint SubsetOf(ICollection expected)
-        {
-            return Resolve(new CollectionSubsetConstraint(expected));
-        }
-        #endregion
-
-        #region Property Constraints
-        /// <summary>
-        /// Resolves the chain of constraints using a 
-        /// PropertyConstraint as base
-        /// </summary>
-        public Constraint Property(string name, object expected)
-        {
-            return Resolve(new PropertyConstraint(name, new EqualConstraint(expected)));
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// PropertyCOnstraint on Length as base
-        /// </summary>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public Constraint Length(int length)
-        {
-            return Property("Length", length);
-        }
-
-        /// <summary>
-        /// Resolves the chain of constraints using a
-        /// PropertyCOnstraint on Length as base
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public Constraint Count(int count)
-        {
-            return Property("Count", count);
-        }
-        #endregion
-
-        #endregion
-
-        #region Prefix Operators
-        /// <summary>
-        /// Modifies the ConstraintBuilder by pushing a Not operator on the stack.
-        /// </summary>
-        public ConstraintBuilder Not
-        {
-            get
+            /// <summary>
+            /// Initializes a new instance of the <see cref="T:OperatorStack"/> class.
+            /// </summary>
+            /// <param name="builder">The builder.</param>
+            public OperatorStack(ConstraintBuilder builder)
             {
-                ops.Push(Op.Not);
-                return this;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether this <see cref="T:OpStack"/> is empty.
+            /// </summary>
+            /// <value><c>true</c> if empty; otherwise, <c>false</c>.</value>
+            public bool Empty
+            {
+                get { return stack.Count == 0; }
+            }
+
+            /// <summary>
+            /// Gets the topmost operator without modifying the stack.
+            /// </summary>
+            /// <value>The top.</value>
+            public ConstraintOperator Top
+            {
+                get { return (ConstraintOperator)stack.Peek(); }
+            }
+
+            /// <summary>
+            /// Pushes the specified operator onto the stack.
+            /// </summary>
+            /// <param name="op">The op.</param>
+            public void Push(ConstraintOperator op)
+            {
+                stack.Push(op);
+            }
+
+            /// <summary>
+            /// Pops the topmost operator from the stack.
+            /// </summary>
+            /// <returns></returns>
+            public ConstraintOperator Pop()
+            {
+                return (ConstraintOperator)stack.Pop();
+            }
+        }
+        #endregion
+
+        #region Nested Constraint Stack Class
+        /// <summary>
+        /// ConstraintStack is a type-safe stack for holding Constraints
+        /// </summary>
+        public class ConstraintStack
+        {
+#if NET_2_0
+            private Stack<Constraint> stack = new Stack<Constraint>();
+#else
+            private Stack stack = new Stack();
+#endif
+            private ConstraintBuilder builder;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="T:ConstraintStack"/> class.
+            /// </summary>
+            /// <param name="builder">The builder.</param>
+            public ConstraintStack(ConstraintBuilder builder)
+            {
+                this.builder = builder;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether this <see cref="T:ConstraintStack"/> is empty.
+            /// </summary>
+            /// <value><c>true</c> if empty; otherwise, <c>false</c>.</value>
+            public bool Empty
+            {
+                get { return stack.Count == 0; }
+            }
+
+            /// <summary>
+            /// Gets the topmost constraint without modifying the stac.
+            /// </summary>
+            /// <value>The topmost constraint</value>
+            public Constraint Top
+            {
+                get { return (Constraint)stack.Peek(); }
+            }
+
+            /// <summary>
+            /// Pushes the specified constraint. As a side effect,
+            /// the constraint's builder field is set to the 
+            /// ConstraintBuilder owning this stack.
+            /// </summary>
+            /// <param name="constraint">The constraint.</param>
+            public void Push(Constraint constraint)
+            {
+                stack.Push(constraint);
+                constraint.SetBuilder(this.builder);
+            }
+
+            /// <summary>
+            /// Pops this topmost constrait from the stack.
+            /// As a side effect, the constraint's builder
+            /// field is set to null.
+            /// </summary>
+            /// <returns></returns>
+            public Constraint Pop()
+            {
+                Constraint constraint = (Constraint)stack.Pop();
+                constraint.SetBuilder(null);
+                return constraint;
+            }
+        }
+        #endregion
+
+        #region Instance Fields
+        private OperatorStack ops;
+
+        private ConstraintStack constraints;
+
+        private object lastPushed;
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:ConstraintBuilder"/> class.
+        /// </summary>
+        public ConstraintBuilder()
+        {
+            this.ops = new OperatorStack(this);
+            this.constraints = new ConstraintStack(this);
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets a value indicating whether this instance is resolvable.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is resolvable; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsResolvable
+        {
+            get { return lastPushed is Constraint || lastPushed is SelfResolvingOperator; }
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Appends the specified operator to the expression by first
+        /// reducing the operator stack and then pushing the new
+        /// operator on the stack.
+        /// </summary>
+        /// <param name="op">The operator to push.</param>
+        public void Append(ConstraintOperator op)
+        {
+            op.LeftContext = lastPushed;
+            if (lastPushed is ConstraintOperator)
+                SetTopOperatorRightContext(op);
+
+            // Reduce any lower precedence operators
+            ReduceOperatorStack(op.LeftPrecedence);
+
+            ops.Push(op);
+            lastPushed = op;
+        }
+
+        /// <summary>
+        /// Appends the specified constraint to the expresson by pushing
+        /// it on the constraint stack.
+        /// </summary>
+        /// <param name="constraint">The constraint to push.</param>
+        public void Append(Constraint constraint)
+        {
+            if (lastPushed is ConstraintOperator)
+                SetTopOperatorRightContext(constraint);
+
+            constraints.Push(constraint);
+            lastPushed = constraint;
+            constraint.SetBuilder(this);
+        }
+
+        /// <summary>
+        /// Sets the top operator right context.
+        /// </summary>
+        /// <param name="rightContext">The right context.</param>
+        private void SetTopOperatorRightContext(object rightContext)
+        {
+            // Some operators change their precedence based on
+            // the right context - save current precedence.
+            int oldPrecedence = ops.Top.LeftPrecedence;
+
+            ops.Top.RightContext = rightContext;
+
+            // If the precedence increased, we may be able to
+            // reduce the region of the stack below the operator
+            if (ops.Top.LeftPrecedence > oldPrecedence)
+            {
+                ConstraintOperator changedOp = ops.Pop();
+                ReduceOperatorStack(changedOp.LeftPrecedence);
+                ops.Push(changedOp);
             }
         }
 
         /// <summary>
-        /// Modifies the ConstraintBuilder by pushing an All operator on the stack.
+        /// Reduces the operator stack until the topmost item
+        /// precedence is greater than or equal to the target precedence.
         /// </summary>
-        public ConstraintBuilder All
+        /// <param name="targetPrecedence">The target precedence.</param>
+        private void ReduceOperatorStack(int targetPrecedence)
         {
-            get
+            while (!ops.Empty && ops.Top.RightPrecedence < targetPrecedence)
+                ops.Pop().Reduce(constraints);
+        }
+
+        /// <summary>
+        /// Resolves this instance, returning a Constraint. If the builder
+        /// is not currently in a resolvable state, an exception is thrown.
+        /// </summary>
+        /// <returns>The resolved constraint</returns>
+        public Constraint Resolve()
+        {
+            if (!IsResolvable)
+                throw new InvalidOperationException("A partial expression may not be resolved");
+
+            while (!ops.Empty)
             {
-                ops.Push(Op.All);
-                return this;
+                ConstraintOperator op = ops.Pop();
+                op.Reduce(constraints);
             }
-        }
 
-        /// <summary>
-        /// Modifies the ConstraintBuilder by pushing a Some operator on the stack.
-        /// </summary>
-        public ConstraintBuilder Some
-        {
-            get
-            {
-                ops.Push(Op.Some);
-                return this;
-            }
-        }
-
-        /// <summary>
-        /// Modifies the constraint builder by pushing All and Not operators on the stack
-        /// </summary>
-        public ConstraintBuilder None
-        {
-            get
-            {
-                ops.Push(Op.None);
-                return this;
-            }
-        }
-
-        /// <summary>
-        /// Modifies the ConstraintBuilder by pushing a Prop operator on the
-        /// ops stack and the name of the property on the opnds stack.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public ConstraintBuilder Property(string name)
-        {
-            ops.Push(Op.Prop);
-            opnds.Push(name);
-            return this;
-        }
-        #endregion
-
-        #region Helper Methods
-        /// <summary>
-        /// Resolve a constraint that has been recognized by applying
-        /// any pending operators and returning the resulting Constraint.
-        /// </summary>
-        /// <param name="constraint">The root constraint</param>
-        /// <returns>A constraint that incorporates all pending operators</returns>
-        private Constraint Resolve(Constraint constraint)
-        {
-            while (ops.Count > 0)
-                switch ((Op)ops.Pop())
-                {
-                    case Op.Not:
-                        constraint = new NotConstraint(constraint);
-                        break;
-                    case Op.All:
-                        constraint = new AllItemsConstraint(constraint);
-                        break;
-                    case Op.Some:
-                        constraint = new SomeItemsConstraint(constraint);
-                        break;
-                    case Op.None:
-                        constraint = new NoItemConstraint(constraint);
-                        break;
-                    case Op.Prop:
-                        constraint = new PropertyConstraint((string)opnds.Pop(), constraint);
-                        break;
-                }
-
-            return constraint;
-        }
-
-        private Constraint Resolve()
-        {
-            return Resolve(null);
+            return constraints.Pop();
         }
         #endregion
     }

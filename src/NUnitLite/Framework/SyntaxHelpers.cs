@@ -18,9 +18,9 @@ namespace NUnit.Framework
         /// Is.Not returns a ConstraintBuilder that negates
         /// the constraint that follows it.
         /// </summary>
-        public static ConstraintBuilder Not
+        public static ConstraintExpression Not
         {
-            get { return new ConstraintBuilder().Not; }
+            get { return new ConstraintExpression().Not; }
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace NUnit.Framework
         /// succeeding if all of them succeed. This property is
         /// a synonym for Has.AllItems.
         /// </summary>
-        public static ConstraintBuilder All
+        public static ConstraintExpression All
         {
-            get { return new ConstraintBuilder().All; }
+            get { return new ConstraintExpression().All; }
         }
         #endregion
 
@@ -178,7 +178,7 @@ namespace NUnit.Framework
         /// Is.StringContaining returns a constraint that succeeds if the actual
         /// value contains the substring supplied as an argument.
         /// </summary>
-        public static Constraint StringContaining(string substring)
+        public static SubstringConstraint StringContaining(string substring)
         {
             return new SubstringConstraint(substring);
         }
@@ -187,7 +187,7 @@ namespace NUnit.Framework
         /// Is.StringStarting returns a constraint that succeeds if the actual
         /// value starts with the substring supplied as an argument.
         /// </summary>
-        public static Constraint StringStarting(string substring)
+        public static StartsWithConstraint StringStarting(string substring)
         {
             return new StartsWithConstraint(substring);
         }
@@ -196,7 +196,7 @@ namespace NUnit.Framework
         /// Is.StringEnding returns a constraint that succeeds if the actual
         /// value ends with the substring supplied as an argument.
         /// </summary>
-        public static Constraint StringEnding(string substring)
+        public static EndsWithConstraint StringEnding(string substring)
         {
             return new EndsWithConstraint(substring);
         }
@@ -206,7 +206,7 @@ namespace NUnit.Framework
         /// Is.StringMatching returns a constraint that succeeds if the actual
         /// value matches the regular expression supplied as an argument.
         /// </summary>
-        public static Constraint StringMatching(string pattern)
+        public static RegexConstraint StringMatching(string pattern)
         {
             return new RegexConstraint(pattern);
         }
@@ -272,9 +272,9 @@ namespace NUnit.Framework
             /// </summary>
             /// <param name="name">The property name</param>
             /// <returns>A ConstraintBuilder</returns>
-            public ConstraintBuilder Property(string name)
+            public ConstraintExpression Property(string name)
             {
-                return new ConstraintBuilder().Not.Property(name);
+                return new ConstraintExpression().Not.Property(name);
             }
 
             /// <summary>
@@ -304,9 +304,9 @@ namespace NUnit.Framework
         /// the following constraint to all members of a collection,
         /// succeeding if all of them succeed.
         /// </summary>
-        public static ConstraintBuilder All
+        public static ConstraintExpression All
         {
-            get { return new ConstraintBuilder().All; }
+            get { return new ConstraintExpression().All; }
         }
 
         /// <summary>
@@ -315,9 +315,9 @@ namespace NUnit.Framework
         /// succeeding if any of them succeed. It is a synonym
         /// for Has.Item.
         /// </summary>
-        public static ConstraintBuilder Some
+        public static ConstraintExpression Some
         {
-            get { return new ConstraintBuilder().Some; }
+            get { return new ConstraintExpression().Some; }
         }
 
         /// <summary>
@@ -325,9 +325,9 @@ namespace NUnit.Framework
         /// the following constraint to all members of a collection,
         /// succeeding only if none of them succeed.
         /// </summary>
-        public static ConstraintBuilder None
+        public static ConstraintExpression None
         {
-            get { return new ConstraintBuilder().None; }
+            get { return new ConstraintExpression().None; }
         }
 
         /// <summary>
@@ -336,9 +336,9 @@ namespace NUnit.Framework
         /// being tested.
         /// </summary>
         /// <param name="name">The name of the property</param>
-        public static ConstraintBuilder Property(string name)
+        public static ConstraintExpression Property(string name)
         {
-            return new ConstraintBuilder().Property(name);
+            return new ConstraintExpression().Property(name);
         }
         #endregion
 

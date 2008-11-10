@@ -26,7 +26,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Abstract method to get the max line length
         /// </summary>
-        public abstract int MaxLineLength { get; }
+        public abstract int MaxLineLength { get; set; }
 
         /// <summary>
         /// Method to write single line  message with optional args, usually
@@ -85,7 +85,8 @@ namespace NUnit.Framework.Constraints
         /// <param name="actual">The actual string value</param>
         /// <param name="mismatch">The point at which the strings don't match or -1</param>
         /// <param name="ignoreCase">If true, case is ignored in locating the point where the strings differ</param>
-        public abstract void DisplayStringDifferences(string expected, string actual, int mismatch, bool ignoreCase);
+        /// <param name="clipping">If true, the strings should be clipped to fit the line</param>
+        public abstract void DisplayStringDifferences(string expected, string actual, int mismatch, bool ignoreCase, bool clipping);
 
         /// <summary>
         /// Writes the text for a connector.

@@ -37,7 +37,7 @@ namespace NUnitLite.Tests
             expectedMessage =
                 "  Expected is <System.Int32[5]>, actual is <System.Int32[3]>" + NL +
                 "  Values differ at index [3]" + NL +
-                TextMessageWriter.Pfx_Missing + "< 4, 5 >";
+                "  Missing: < 4, 5 >";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -50,7 +50,7 @@ namespace NUnitLite.Tests
             expectedMessage =
                 "  Expected is <System.Int32[3]>, actual is <System.Int32[7]>" + NL +
                 "  Values differ at index [3]" + NL +
-                TextMessageWriter.Pfx_Extra + "< 4, 5, 6... >";
+                "  Extra:   < 4, 5, 6... >";
             Assert.That(actual, Is.EqualTo(expected));
         }
 
