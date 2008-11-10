@@ -5,6 +5,7 @@
 // *****************************************************
 
 using System;
+using System.ComponentModel;
 using NUnit.Framework.Constraints;
 
 namespace NUnit.Framework
@@ -60,7 +61,7 @@ namespace NUnit.Framework
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static new bool Equals(object a, object b)
         {
             throw new AssertionException("Assert.Equals should not be used for Assertions");
@@ -79,6 +80,8 @@ namespace NUnit.Framework
         }
 #endif
         #endregion
+
+        #region Simple Asserts
 
         #region True
 
@@ -234,6 +237,8 @@ namespace NUnit.Framework
 
         #endregion
 
+        #endregion
+
         #region Fail
         /// <summary>
         /// Throw an assertion exception with a message and optional arguments
@@ -261,7 +266,7 @@ namespace NUnit.Framework
         }
         #endregion
 
-        #region That
+        #region Assert.That
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
@@ -274,7 +279,7 @@ namespace NUnit.Framework
         }
 
         /// <summary>
-        /// Apply a constraint to an actual value, succeedingt if the constraint
+        /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="constraint">A Constraint to be applied</param>
@@ -286,7 +291,7 @@ namespace NUnit.Framework
         }
 
         /// <summary>
-        /// Apply a constraint to an actual value, succeedingt if the constraint
+        /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="constraint">A Constraint to be applied</param>
