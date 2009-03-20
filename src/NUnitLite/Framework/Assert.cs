@@ -11,6 +11,12 @@ using NUnit.Framework.Constraints;
 namespace NUnit.Framework
 {
     /// <summary>
+    /// Delegate used by tests that execute code and
+    /// capture any thrown exception.
+    /// </summary>
+    public delegate void TestDelegate();
+
+    /// <summary>
     /// The Assert class contains a collection of static methods that
     /// implement the most common assertions used in NUnit.
     /// </summary>
@@ -140,7 +146,7 @@ namespace NUnit.Framework
         /// </summary>
         /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display if the condition is true</param>
-        static public void IsFalse(bool condition, string message)
+        static public void False(bool condition, string message)
         {
             Assert.False(condition, message, null);
         }

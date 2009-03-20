@@ -37,6 +37,7 @@
     <Compile Include="Constraints\AndTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\BasicConstraintTests.cs" />
     <Compile Include="Constraints\CollectionConstraintTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -58,12 +59,16 @@
     <Compile Include="Constraints\OrTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\PathConstraintTests.cs" />
+    <Compile Include="Constraints\RangeTests.cs" />
     <Compile Include="Constraints\SameAsTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\StringConstraintTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\TestDelegates.cs" />
+    <Compile Include="Constraints\ThrowsConstraintTests.cs" />
     <Compile Include="Constraints\TypeConstraintTests.cs">
       <SubType>Code</SubType>
     </Compile>

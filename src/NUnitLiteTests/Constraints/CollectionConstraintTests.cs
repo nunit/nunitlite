@@ -157,4 +157,178 @@ namespace NUnitLite.Tests
         }
     }
     #endregion
+
+    #region CollectionOrderedConstraint
+    [TestFixture]
+    public class CollectionOrdered_Ascending : ConstraintTestBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            Matcher = new CollectionOrderedConstraint();
+            GoodValues = new object[] { new string[] { "x", "y", "z" }, new int[] { 1, 2, 3 }, new string[] { "x", "x", "z" } };
+            BadValues = new object[] { new string[] { "x", "q", "z" }, new int[] { 3, 2, 1 } };
+            Description = "collection ordered";
+        }
+    }
+
+    [TestFixture]
+    public class CollectionOrdered_Descending : ConstraintTestBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            Matcher = new CollectionOrderedConstraint().Descending;
+            GoodValues = new object[] { new string[] { "z", "y", "x" }, new string[] { "z", "x", "x" }, new int[] { 3, 2, 1 } };
+            BadValues = new object[] { new string[] { "x", "q", "z" }, new int[] { 1, 2, 3 } };
+            Description = "collection ordered, descending";
+        }
+    }
+
+    [TestFixture]
+    public class CollectionOrdered_Extended
+    {
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void IsOrdered_Handles_null()
+        {
+            ArrayList al = new ArrayList();
+            al.Add("x");
+            al.Add(null);
+            al.Add("z");
+
+            Assert.That(al, new CollectionOrderedConstraint());
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void IsOrdered_TypesMustBeComparable()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(1);
+            al.Add("x");
+
+            Assert.That(al, new CollectionOrderedConstraint());
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void IsOrdered_AtLeastOneArgMustImplementIComparable()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(new object());
+            al.Add(new object());
+
+            Assert.That(al, new CollectionOrderedConstraint());
+        }
+
+        [Test]
+        public void IsOrdered_Handles_custom_comparison()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(new object());
+            al.Add(new object());
+
+            Assert.That(al, new CollectionOrderedConstraint(new AlwaysEqualComparer()));
+        }
+
+        [Test]
+        public void IsOrdered_Handles_custom_comparison2()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(2);
+            al.Add(1);
+
+            Assert.That(al, new CollectionOrderedConstraint(new TestComparer()));
+        }
+
+        [Test]
+        public void IsOrderedBy()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(new OrderedByTestClass(1));
+            al.Add(new OrderedByTestClass(2));
+
+            Assert.That(al, new CollectionOrderedConstraint("Value"));
+        }
+
+        [Test]
+        public void IsOrderedBy_Comparer()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(new OrderedByTestClass(1));
+            al.Add(new OrderedByTestClass(2));
+
+            Assert.That(al, new CollectionOrderedConstraint("Value", Comparer.Default));
+        }
+
+        [Test]
+        public void IsOrderedBy_Handles_heterogeneous_classes_as_long_as_the_property_is_of_same_type()
+        {
+            ArrayList al = new ArrayList();
+            al.Add(new OrderedByTestClass(1));
+            al.Add(new OrderedByTestClass2(2));
+
+            Assert.That(al, new CollectionOrderedConstraint("Value"));
+        }
+
+        class OrderedByTestClass
+        {
+            private int myValue;
+
+            public int Value
+            {
+                get { return myValue; }
+                set { myValue = value; }
+            }
+
+            public OrderedByTestClass(int value)
+            {
+                Value = value;
+            }
+        }
+
+        class OrderedByTestClass2
+        {
+            private int myValue;
+            public int Value
+            {
+                get { return myValue; }
+                set { myValue = value; }
+            }
+
+            public OrderedByTestClass2(int value)
+            {
+                Value = value;
+            }
+        }
+    }
+
+    class TestComparer : IComparer
+    {
+        #region IComparer Members
+
+        public int Compare(object x, object y)
+        {
+            if (x == null && y == null)
+                return 0;
+
+            if (x == null || y == null)
+                return -1;
+
+            if (x.Equals(y))
+                return 0;
+
+            return -1;
+        }
+
+        #endregion
+    }
+
+    class AlwaysEqualComparer : IComparer
+    {
+        int IComparer.Compare(object x, object y)
+        {
+            // This comparer ALWAYS returns zero (equal)!
+            return 0;
+        }
+    }
+    #endregion
 }

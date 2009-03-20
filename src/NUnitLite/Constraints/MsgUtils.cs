@@ -64,12 +64,14 @@ namespace NUnit.Framework.Constraints
         /// <returns>The converted string</returns>
         public static string ConvertWhitespace(string s)
         {
-            return s == null
-                ? null
-                : s.Replace("\\", "\\\\")
-                   .Replace("\n", "\\n")
-                   .Replace("\r", "\\r")
-                   .Replace("\t", "\\t");
+			if( s != null )
+			{
+				s = s.Replace( "\\", "\\\\" );
+				s = s.Replace( "\r", "\\r" );
+				s = s.Replace( "\n", "\\n" );
+				s = s.Replace( "\t", "\\t" );
+			}
+			return s;
         }
 
         /// <summary>

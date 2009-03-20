@@ -36,30 +36,106 @@ namespace NUnit.Framework
         #endregion
 
         #region Constraints Without Arguments
+
+        #region Null
+
         /// <summary>
-        /// Is.Null returns a static constraint that tests for null
+        /// Returns a constraint that tests for null
         /// </summary>
-        public static readonly Constraint Null = new EqualConstraint(null);
+        public static NullConstraint Null
+        {
+            get { return new NullConstraint(); }
+        }
+
+        #endregion
+
+        #region True
+
         /// <summary>
-        /// Is.True returns a static constraint that tests whether a value is true
+        /// Returns a constraint that tests for True
         /// </summary>
-        public static readonly Constraint True = new EqualConstraint(true);
+        public static TrueConstraint True
+        {
+            get { return new TrueConstraint(); }
+        }
+
+        #endregion
+
+        #region False
+
         /// <summary>
-        /// Is.False returns a static constraint that tests whether a value is false
+        /// Returns a constraint that tests for False
         /// </summary>
-        public static readonly Constraint False = new EqualConstraint(false);
+        public static FalseConstraint False
+        {
+            get { return new FalseConstraint(); }
+        }
+
+        #endregion
+
+        #region NaN
+
         /// <summary>
-        /// Is.NaN returns a static constraint that tests whether a value is an NaN
+        /// Returns a constraint that tests for NaN
         /// </summary>
-        public static readonly Constraint NaN = new EqualConstraint(double.NaN);
+        public static NaNConstraint NaN
+        {
+            get { return new NaNConstraint(); }
+        }
+
+        #endregion
+
+        #region Empty
+
         /// <summary>
-        /// Is.Empty returns a static constraint that tests whether a string or collection is empty
+        /// Returns a constraint that tests for empty
         /// </summary>
-        public static readonly Constraint Empty = new EmptyConstraint();
+        public static EmptyConstraint Empty
+        {
+            get { return new EmptyConstraint(); }
+        }
+
+        #endregion
+
+        #region Unique
+
         /// <summary>
-        /// Is.Unique returns a static constraint that tests whether a collection contains all unque items.
+        /// Returns a constraint that tests whether a collection 
+        /// contains all unique items.
         /// </summary>
-        public static readonly Constraint Unique = new UniqueItemsConstraint();
+        public static UniqueItemsConstraint Unique
+        {
+            get { return new UniqueItemsConstraint(); }
+        }
+
+        #endregion
+
+#if !NETCF
+        #region BinarySerializable
+        /// <summary>
+        /// Returns a constraint that tests whether an object graph is serializable in binary format.
+        /// </summary>
+        public static BinarySerializableConstraint BinarySerializable
+        {
+            get { return new BinarySerializableConstraint(); }
+        }
+        #endregion
+#endif
+
+#if !NETCF_1_0
+        #region XmlSerializable
+
+        /// <summary>
+        /// Returns a constraint that tests whether an object graph is serializable in xml format.
+        /// </summary>
+        public static XmlSerializableConstraint XmlSerializable
+        {
+            get { return new XmlSerializableConstraint(); }
+        }
+
+        #endregion
+#endif
+
         #endregion
 
         #region Constraints with an expected value
@@ -236,6 +312,33 @@ namespace NUnit.Framework
         #endregion
 
         #endregion
+
+        /// <summary>
+        /// Returns a constraint that tests whether the path provided 
+        /// is the same as an expected path after canonicalization.
+        /// </summary>
+        public static SamePathConstraint SamePath(string expected)
+        {
+            return new SamePathConstraint(expected);
+        }
+
+        /// <summary>
+        /// Returns a constraint that tests whether the path provided 
+        /// is the same path or under an expected path after canonicalization.
+        /// </summary>
+        public static SamePathOrUnderConstraint SamePathOrUnder(string expected)
+        {
+            return new SamePathOrUnderConstraint(expected);
+        }
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value falls 
+        /// within a specified range.
+        /// </summary>
+        public static RangeConstraint InRange(IComparable from, IComparable to)
+        {
+            return new RangeConstraint(from, to);
+        }
     }
     #endregion
 

@@ -28,29 +28,29 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// If true, all string comparisons will ignore case
         /// </summary>
-        protected bool caseInsensitive;
+        private bool caseInsensitive;
 
         /// <summary>
         /// If true, strings in error messages will be clipped
         /// </summary>
-        protected bool clipStrings = true;
+        private bool clipStrings = true;
 
         /// <summary>
         /// If true, arrays will be treated as collections, allowing
         /// those of different dimensions to be compared
         /// </summary>
-        protected bool compareAsCollection;
+        private bool compareAsCollection;
 
         /// <summary>
         /// If non-zero, equality comparisons within the specified 
         /// tolerance will succeed.
         /// </summary>
-        protected object tolerance;
+        private Tolerance tolerance = Tolerance.Empty;
 
         /// <summary>
         /// IComparer object used in comparisons for some constraints.
         /// </summary>
-        protected IComparer compareWith;
+        private IComparer compareWith;
 
         #region Message Strings
         private static readonly string StringsDiffer_1 =
@@ -135,11 +135,14 @@ namespace NUnit.Framework.Constraints
         /// Flag the constraint to use a tolerance when determining equality.
         /// Currently only used for doubles and floats.
         /// </summary>
-        /// <param name="tolerance">Tolerance to be used</param>
+        /// <param name="amount">Tolerance value to be used</param>
         /// <returns>Self.</returns>
-        public EqualConstraint Within(object tolerance)
+        public EqualConstraint Within(object amount)
         {
-            this.tolerance = tolerance;
+            if (!tolerance.IsEmpty)
+                throw new InvalidOperationException("Within modifier may appear only once in a constraint expression");
+
+            this.tolerance = new Tolerance(amount);
             return this;
         }
 
@@ -188,7 +191,7 @@ namespace NUnit.Framework.Constraints
         {
             writer.WriteExpectedValue( expected );
 
-            if (tolerance != null)
+            if (tolerance != null && !tolerance.IsEmpty)
             {
                 writer.WriteConnector("+/-");
                 writer.WriteExpectedValue(tolerance);
@@ -248,14 +251,13 @@ namespace NUnit.Framework.Constraints
                 return DirectoriesEqual((DirectoryInfo)expected, (DirectoryInfo)actual);
 
             if (Numerics.IsNumericType(expected) && Numerics.IsNumericType(actual))
-            {
                 return Numerics.AreEqual(expected, actual, ref tolerance);
-            }
 
-            if (expected is DateTime && actual is DateTime && tolerance is TimeSpan)
-            {
-                return ((DateTime)expected - (DateTime)actual).Duration() <= (TimeSpan)tolerance;
-            }
+            if (expected is DateTime && actual is DateTime && tolerance != null && tolerance.Value is TimeSpan)
+                return ((DateTime)expected - (DateTime)actual).Duration() <= (TimeSpan)tolerance.Value;
+
+            if (expected is TimeSpan && actual is TimeSpan && tolerance != null && tolerance.Value is TimeSpan)
+                return ((TimeSpan)expected - (TimeSpan)actual).Duration() <= (TimeSpan)tolerance.Value;
 
             foreach (Type type in constraintHelpers.Keys)
             {
@@ -273,7 +275,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Helper method to compare two arrays
         /// </summary>
-        protected virtual bool ArraysEqual(Array expected, Array actual)
+        private bool ArraysEqual(Array expected, Array actual)
         {
             int rank = expected.Rank;
 

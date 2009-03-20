@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnitLite.Framework
+namespace NUnitLite.Tests
 {
     [TestFixture]
     public class AttributeTests

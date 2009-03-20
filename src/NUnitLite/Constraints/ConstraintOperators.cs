@@ -291,9 +291,43 @@ namespace NUnit.Framework.Constraints
         public override void Reduce(ConstraintBuilder.ConstraintStack stack)
         {
             if (RightContext == null || RightContext is BinaryOperator)
-                stack.Push(new PropertyConstraint(name, null));
+                stack.Push(new PropertyExistsConstraint(name));
             else
                 stack.Push(new PropertyConstraint(name, stack.Pop()));
+        }
+    }
+    #endregion
+
+    #region ThrowsOperator
+    /// <summary>
+    /// Operator that tests that an exception is thrown and
+    /// optionally applies further tests to the exception.
+    /// </summary>
+    public class ThrowsOperator : SelfResolvingOperator
+    {
+        /// <summary>
+        /// Construct a ThrowsOperator
+        /// </summary>
+        public ThrowsOperator()
+        {
+            // ThrowsOperator stacks on everything but
+            // it's always the first item on the stack
+            // anyway. It is evaluated last of all ops.
+            this.left_precedence = 1;
+            this.right_precedence = 100;
+        }
+
+        /// <summary>
+        /// Reduce produces a constraint from the operator and 
+        /// any arguments. It takes the arguments from the constraint 
+        /// stack and pushes the resulting constraint on it.
+        /// </summary>
+        public override void Reduce(ConstraintBuilder.ConstraintStack stack)
+        {
+            if (RightContext == null || RightContext is BinaryOperator)
+                stack.Push(new ThrowsConstraint(null));
+            else
+                stack.Push(new ThrowsConstraint(stack.Pop()));
         }
     }
     #endregion

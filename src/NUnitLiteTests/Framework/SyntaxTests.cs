@@ -107,7 +107,7 @@ namespace NUnitLite.Tests
         {
             object[] c = new object[] { 1, 2, 3, 4 };
             Assert.That(c, Is.All.Not.Null);
-            Assert.That(c, Is.All.InstanceOfType(typeof(int)));
+            Assert.That(c, Is.All.InstanceOf(typeof(int)));
         }
 
         [Test]

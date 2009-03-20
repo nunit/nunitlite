@@ -339,8 +339,43 @@ namespace NUnit.Framework.Constraints
         {
             get { return Property("Count"); }
         }
+
+        /// <summary>
+        /// Returns a new ConstraintExpression, which will apply the following
+        /// constraint to the Message property of the object being tested.
+        /// </summary>
+        public ResolvableConstraintExpression Message
+        {
+            get { return Property("Message"); }
+        }
         #endregion
 
+        /// <summary>
+        /// Returns a constraint that tests whether the path provided 
+        /// is the same as an expected path after canonicalization.
+        /// </summary>
+        public SamePathConstraint SamePath(string expected)
+        {
+            return (SamePathConstraint)this.Append(Is.SamePath(expected));
+        }
+
+        /// <summary>
+        /// Returns a constraint that tests whether the path provided 
+        /// is the same path or under an expected path after canonicalization.
+        /// </summary>
+        public SamePathOrUnderConstraint SamePathOrUnder(string expected)
+        {
+            return (SamePathOrUnderConstraint)this.Append(Is.SamePathOrUnder(expected));
+        }
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value falls 
+        /// within a specified range.
+        /// </summary>
+        public RangeConstraint InRange(IComparable from, IComparable to)
+        {
+            return (RangeConstraint)this.Append(Is.InRange(from, to));
+        }
         #endregion
 
         #region Prefix Operators

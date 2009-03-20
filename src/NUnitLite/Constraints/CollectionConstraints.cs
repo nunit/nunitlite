@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections;
+using System.Reflection;
 
 namespace NUnit.Framework.Constraints
 {
@@ -337,6 +338,140 @@ namespace NUnit.Framework.Constraints
         {
             writer.WritePredicate( "subset of" );
             writer.WriteExpectedValue(expected);
+        }
+    }
+    #endregion
+
+    #region CollectionOrderedConstraint
+
+    /// <summary>
+    /// CollectionOrderedConstraint is used to test whether a collection is ordered.
+    /// </summary>
+    public class CollectionOrderedConstraint : CollectionConstraint
+    {
+        private IComparer compareWith;
+        private readonly string propertyName;
+        private bool descending;
+
+        /// <summary>
+        /// Construct a CollectionOrderedConstraint
+        /// </summary>
+        public CollectionOrderedConstraint() 
+            : this(System.Collections.Comparer.Default)
+        {
+        }
+
+        /// <summary>
+        /// Construct a CollectionOrderedConstraint
+        /// </summary>
+        /// <param name="comparer">A custom comparer to use to perform comparisons</param>
+        public CollectionOrderedConstraint(IComparer comparer) 
+        {
+            this.compareWith = comparer;
+            this.DisplayName = "ordered";
+        }
+
+        /// <summary>
+        /// Construct a CollectionOrderedConstraint
+        /// </summary>
+        /// <param name="propertyName">Name of the property on which to perform the comparison</param>
+        public CollectionOrderedConstraint(string propertyName)
+            : this(propertyName, System.Collections.Comparer.Default)
+        {
+        }
+
+        /// <summary>
+        /// Construct a CollectionOrderedConstraint
+        /// </summary>
+        /// <param name="propertyName">Name of the property on which to perform the comparison</param>
+        /// <param name="comparer">A custom comparer to use to perform comparisons</param>
+        public CollectionOrderedConstraint(string propertyName, IComparer comparer) 
+        {
+            this.propertyName = propertyName;
+            this.compareWith = comparer;
+            this.DisplayName = "ordered";
+        }
+
+        ///<summary>
+        /// If used performs a reverse comparison
+        ///</summary>
+        public CollectionOrderedConstraint Descending
+        {
+            get
+            {
+                descending = true;
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Test whether the collection is ordered
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        protected override bool doMatch(IEnumerable actual)
+        {
+            object previous = null;
+            int index = 0;
+            foreach(object obj in actual)
+            {
+                object objToCompare = obj;
+                if (obj == null)
+                    throw new ArgumentNullException("actual", "Null value at index " + index.ToString());
+
+                if (this.propertyName != null)
+                {
+                    PropertyInfo prop = obj.GetType().GetProperty(propertyName);
+                    objToCompare = prop.GetValue(obj, null);
+                    if (objToCompare == null)
+                        throw new ArgumentNullException("actual", "Null property value at index " + index.ToString());
+                }
+
+                if (previous != null)
+                {
+                    //int comparisonResult = compareWith.Compare(al[i], al[i + 1]);
+                    int comparisonResult = compareWith.Compare(previous, objToCompare);
+
+                    if (descending && comparisonResult < 0)
+                        return false;
+                    if (!descending && comparisonResult > 0)
+                        return false;
+                }
+
+                previous = objToCompare;
+                index++;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Write a description of the constraint to a MessageWriter
+        /// </summary>
+        /// <param name="writer"></param>
+        public override void WriteDescriptionTo(MessageWriter writer)
+        {
+            if (propertyName == null)
+                writer.Write("collection ordered");
+            else
+            {
+                writer.WritePredicate("collection ordered by");
+                writer.WriteExpectedValue(propertyName);
+            }
+
+            if (descending)
+                writer.WriteModifier("descending");
+        }
+
+        /// <summary>
+        /// Returns the string representation of the constraint.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return propertyName == null
+                ? string.Format("<ordered {0}>", this.compareWith.GetType().FullName)
+                : string.Format("<ordered {0} {1}>", this.compareWith.GetType().FullName, propertyName);
         }
     }
     #endregion

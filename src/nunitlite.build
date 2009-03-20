@@ -204,6 +204,7 @@
         <include name="mscorlib.dll"/>
         <include name="System.dll"/>
         <include name="System.Drawing.dll"/>
+        <include name="System.Xml.dll"/>
       </references>
     </csc>
 
@@ -242,6 +243,7 @@
         <include name="mscorlib.dll"/>
         <include name="System.dll"/>
         <include name="System.Drawing.dll"/>
+        <include name="System.Xml.dll"/>
       </references>
     </csc>
 
