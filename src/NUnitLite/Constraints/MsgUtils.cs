@@ -166,7 +166,6 @@ namespace NUnit.Framework.Constraints
 
             // Case 2: Assume that the tail of each string fits on line
             int clipLength = maxDisplayLength - ELLIPSIS.Length;
-            int tailLength = clipLength - mismatch;
             int clipStart = maxStringLength - clipLength;
 
             // Case 3: If it doesn't, center the mismatch position
@@ -184,7 +183,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="expected">The expected string</param>
         /// <param name="actual">The actual string</param>
         /// <param name="istart">The index in the strings at which comparison should start</param>
-	/// <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
+	    /// <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
         /// <returns>-1 if no mismatch found, or the index where mismatch found</returns>
         static public int FindMismatchPosition(string expected, string actual, int istart, bool ignoreCase)
         {

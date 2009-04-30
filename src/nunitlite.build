@@ -47,7 +47,7 @@
     Note that targets that set the build configuration or runtime
     to be used must come before action targets. For example:
 
-        nant net-1.1 release build
+        nant net-2.0 release build
         nant build-all
         nant debug clean build
 
@@ -78,7 +78,7 @@
          The first .NET and Mono frameworks found are the
          respective net and mono defaults. -->
   <property name="supported.frameworks" 
-    value="net-1.0,net-1.1,net-2.0,netcf-1.0,netcf-2.0,mono-1.0,mono-2.0"/>
+    value="net-2.0,net-1.1,net-1.0,netcf-2.0,netcf-1.0,mono-2.0,mono-1.0"/>
 
   <!-- Framework versions for which packages are normally created -->
   <property name="standard.packages"
@@ -291,7 +291,7 @@
     <exec basedir="${current.build.dir}"
       workingdir="${current.build.dir}" 
       program="NUnitLiteTests.exe" 
-      useruntimeengine="true"/>
+      managed="Strict"/>
 
     <echo message="*"/>
     <echo message="* Testing with NUnitLite included in the test assembly"/>
@@ -300,7 +300,7 @@
     <exec basedir="${current.build.dir}"
       workingdir="${current.build.dir}" 
       program="NUnitLiteCombined.exe" 
-      useruntimeengine="true"/>
+      managed="Strict"/>
 
   </target>
 

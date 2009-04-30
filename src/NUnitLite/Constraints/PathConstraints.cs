@@ -1,7 +1,7 @@
 // ****************************************************************
 // Copyright 2008, Charlie Poole
 // This is free software licensed under the NUnit license. You may
-// obtain a copy of the license at http://nunit.org/?p=license&r=2.4
+// obtain a copy of the license at http://nunit.org
 // ****************************************************************
 
 using System;
@@ -22,6 +22,9 @@ namespace NUnit.Framework.Constraints
 		/// </summary>
 		protected string expected;
 
+        /// <summary>
+        /// Flag indicating whether a caseInsensitive comparison should be made
+        /// </summary>
         protected bool caseInsensitive = Path.DirectorySeparatorChar == '\\';
 
         /// <summary>
@@ -33,11 +36,19 @@ namespace NUnit.Framework.Constraints
 			this.expected = expected;
         }
 
+        /// <summary>
+        /// Modifies the current instance to be case-insensitve
+        /// and returns it.
+        /// </summary>
         public PathConstraint IgnoreCase
         {
             get { caseInsensitive = true; return this; }
         }
 
+        /// <summary>
+        /// Modifies the current instance to be case-sensitve
+        /// and returns it.
+        /// </summary>
         public PathConstraint RespectCase
         {
             get { caseInsensitive = false; return this; }

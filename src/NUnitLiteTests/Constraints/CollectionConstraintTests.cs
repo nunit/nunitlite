@@ -226,7 +226,7 @@ namespace NUnitLite.Tests
             al.Add(new object());
             al.Add(new object());
 
-            Assert.That(al, new CollectionOrderedConstraint(new AlwaysEqualComparer()));
+            Assert.That(al, new CollectionOrderedConstraint().Using(new AlwaysEqualComparer()));
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace NUnitLite.Tests
             al.Add(2);
             al.Add(1);
 
-            Assert.That(al, new CollectionOrderedConstraint(new TestComparer()));
+            Assert.That(al, new CollectionOrderedConstraint().Using(new TestComparer()));
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace NUnitLite.Tests
             al.Add(new OrderedByTestClass(1));
             al.Add(new OrderedByTestClass(2));
 
-            Assert.That(al, new CollectionOrderedConstraint("Value"));
+            Assert.That(al, new CollectionOrderedConstraint().By("Value"));
         }
 
         [Test]
@@ -256,7 +256,7 @@ namespace NUnitLite.Tests
             al.Add(new OrderedByTestClass(1));
             al.Add(new OrderedByTestClass(2));
 
-            Assert.That(al, new CollectionOrderedConstraint("Value", Comparer.Default));
+            Assert.That(al, new CollectionOrderedConstraint().By("Value").Using(Comparer.Default));
         }
 
         [Test]
@@ -266,7 +266,7 @@ namespace NUnitLite.Tests
             al.Add(new OrderedByTestClass(1));
             al.Add(new OrderedByTestClass2(2));
 
-            Assert.That(al, new CollectionOrderedConstraint("Value"));
+            Assert.That(al, new CollectionOrderedConstraint().By("Value"));
         }
 
         class OrderedByTestClass

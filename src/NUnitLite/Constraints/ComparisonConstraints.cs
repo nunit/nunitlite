@@ -5,6 +5,10 @@
 // *****************************************************
 
 using System;
+using System.Collections;
+#if NET_2_0
+using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints
 {
@@ -18,7 +22,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// The value against which a comparison is to be made
         /// </summary>
-        protected IComparable expected;
+        protected object expected;
         /// <summary>
         /// If true, less than returns success
         /// </summary>
@@ -37,6 +41,11 @@ namespace NUnit.Framework.Constraints
         private string predicate;
 
         /// <summary>
+        /// ComparisonAdapter to be used in making the comparison
+        /// </summary>
+        private ComparisonAdapter comparer = ComparisonAdapter.Default;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:ComparisonConstraint"/> class.
         /// </summary>
         /// <param name="value">The value against which to make a comparison.</param>
@@ -44,7 +53,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="eqOK">if set to <c>true</c> equal succeeds.</param>
         /// <param name="gtOK">if set to <c>true</c> greater succeeds.</param>
         /// <param name="predicate">String used in describing the constraint.</param>
-        public ComparisonConstraint(IComparable value, bool ltOK, bool eqOK, bool gtOK, string predicate)
+        public ComparisonConstraint(object value, bool ltOK, bool eqOK, bool gtOK, string predicate)
 	    : base(value)
         {
             this.expected = value;
@@ -63,7 +72,14 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-            int icomp = Numerics.Compare( expected, actual );
+            if (expected == null)
+                throw new ArgumentException("Cannot compare using a null reference", "expected");
+
+            if (actual == null)
+                throw new ArgumentException("Cannot compare to null reference", "actual");
+
+            int icomp = comparer.Compare(expected, actual);
+
             return icomp < 0 && gtOK || icomp == 0 && eqOK || icomp > 0 && ltOK;
         }
 
@@ -76,6 +92,35 @@ namespace NUnit.Framework.Constraints
             writer.WritePredicate(predicate);
             writer.WriteExpectedValue(expected);
         }
+
+        /// <summary>
+        /// Modifies the constraint to use an IComparer and returns self
+        /// </summary>
+        public ComparisonConstraint Using(IComparer comparer)
+        {
+            this.comparer = ComparisonAdapter.For(comparer);
+            return this;
+        }
+
+#if NET_2_0
+        /// <summary>
+        /// Modifies the constraint to use an IComparer&lt;T&gt; and returns self
+        /// </summary>
+        public ComparisonConstraint Using<T>(IComparer<T> comparer)
+        {
+            this.comparer = ComparisonAdapter.For(comparer);
+            return this;
+        }
+
+        /// <summary>
+        /// Modifies the constraint to use a Comparison&lt;T&gt; and returns self
+        /// </summary>
+        public ComparisonConstraint Using<T>(Comparison<T> comparer)
+        {
+            this.comparer = ComparisonAdapter.For(comparer);
+            return this;
+        }
+#endif
     }
 
     /// <summary>
@@ -87,7 +132,7 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="T:GreaterThanConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public GreaterThanConstraint(IComparable expected) : base(expected, false, false, true, "greater than") { }
+        public GreaterThanConstraint(object expected) : base(expected, false, false, true, "greater than") { }
     }
 
     /// <summary>
@@ -99,7 +144,7 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="T:GreaterThanOrEqualConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public GreaterThanOrEqualConstraint(IComparable expected) : base(expected, false, true, true, "greater than or equal to") { }
+        public GreaterThanOrEqualConstraint(object expected) : base(expected, false, true, true, "greater than or equal to") { }
     }
 
     /// <summary>
@@ -111,7 +156,7 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="T:LessThanConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public LessThanConstraint(IComparable expected) : base(expected, true, false, false, "less than") { }
+        public LessThanConstraint(object expected) : base(expected, true, false, false, "less than") { }
     }
 
     /// <summary>
@@ -123,6 +168,6 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="T:LessThanOrEqualConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public LessThanOrEqualConstraint(IComparable expected) : base(expected, true, true, false, "less than or equal to") { }
+        public LessThanOrEqualConstraint(object expected) : base(expected, true, true, false, "less than or equal to") { }
     }
 }

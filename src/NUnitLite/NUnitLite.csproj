@@ -37,6 +37,7 @@
     <Compile Include="Catch.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\AttributeConstraints.cs" />
     <Compile Include="Constraints\BasicConstraints.cs" />
     <Compile Include="Constraints\BinaryOperations.cs">
       <SubType>Code</SubType>
@@ -44,6 +45,7 @@
     <Compile Include="Constraints\CollectionConstraints.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\ComparisonAdapter.cs" />
     <Compile Include="Constraints\ComparisonConstraints.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -61,11 +63,14 @@
     <Compile Include="Constraints\EqualConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constraints\EqualityAdapter.cs" />
     <Compile Include="Constraints\FloatingPointNumerics.cs" />
     <Compile Include="Constraints\IResolveConstraint.cs" />
     <Compile Include="Constraints\MessageWriter.cs" />
     <Compile Include="Constraints\MsgUtils.cs" />
     <Compile Include="Constraints\Numerics.cs" />
+    <Compile Include="Constraints\NUnitComparer.cs" />
+    <Compile Include="Constraints\NUnitEqualityComparer.cs" />
     <Compile Include="Constraints\PathConstraints.cs" />
     <Compile Include="Constraints\PrefixConstraints.cs" />
     <Compile Include="Constraints\PropertyConstraint.cs" />

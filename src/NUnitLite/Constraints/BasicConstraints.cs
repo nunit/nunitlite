@@ -1,7 +1,16 @@
+// ****************************************************************
+// Copyright 2008, Charlie Poole
+// This is free software licensed under the NUnit license. You may
+// obtain a copy of the license at http://nunit.org
+// ****************************************************************
 using System;
 
 namespace NUnit.Framework.Constraints
 {
+    /// <summary>
+    /// BasicConstraint is the abstract base for constraints that
+    /// perform a simple comparison to a constant value.
+    /// </summary>
     public abstract class BasicConstraint : Constraint
     {
         private object expected;
@@ -32,7 +41,7 @@ namespace NUnit.Framework.Constraints
 
             if (actual == null || expected == null)
                 return false;
-
+            
             return expected.Equals(actual);
         }
 
@@ -84,6 +93,11 @@ namespace NUnit.Framework.Constraints
     /// </summary>
     public class NaNConstraint : Constraint
     {
+        /// <summary>
+        /// Test that the actual value is an NaN
+        /// </summary>
+        /// <param name="actual"></param>
+        /// <returns></returns>
         public override bool Matches(object actual)
         {
             this.actual = actual;
@@ -92,6 +106,10 @@ namespace NUnit.Framework.Constraints
                 || actual is float && float.IsNaN((float)actual);
         }
 
+        /// <summary>
+        /// Write the constraint description to a specified writer
+        /// </summary>
+        /// <param name="writer"></param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
             writer.Write("NaN");

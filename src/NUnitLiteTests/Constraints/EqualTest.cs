@@ -65,13 +65,13 @@ namespace NUnitLite.Tests
             Assert.That(double.NaN, Is.EqualTo(double.NaN));
         }
 
-        [Test]
-        public void NamedAndUnnamedColorsCompareAsEqual()
-        {
-            EqualConstraint.SetConstraintForType(typeof(Color), typeof(SameColorAs));
-            Assert.That(System.Drawing.Color.Red,
-                Is.EqualTo(System.Drawing.Color.FromArgb(255, 0, 0)));
-        }
+        //[Test]
+        //public void NamedAndUnnamedColorsCompareAsEqual()
+        //{
+        //    EqualConstraint.SetConstraintForType(typeof(Color), typeof(SameColorAs));
+        //    Assert.That(System.Drawing.Color.Red,
+        //        Is.EqualTo(System.Drawing.Color.FromArgb(255, 0, 0)));
+        //}
 
         public void HandleException(Exception ex)
         {
