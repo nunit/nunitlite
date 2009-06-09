@@ -1,5 +1,5 @@
 // *****************************************************
-// Copyright 2007, Charlie Poole
+// Copyright 2009, Charlie Poole
 //
 // Licensed under the Open Software License version 3.0
 // *****************************************************
@@ -10,7 +10,6 @@ using NUnit.Framework.Constraints;
 
 namespace NUnit.Framework
 {
-    #region Contains Helper Class
     public class Contains
     {
         public static Constraint Substring(string substring)
@@ -23,5 +22,4 @@ namespace NUnit.Framework
             return new CollectionContainsConstraint(item);
         }
     }
-    #endregion
 }

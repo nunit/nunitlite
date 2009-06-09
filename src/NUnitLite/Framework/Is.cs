@@ -1,5 +1,5 @@
 // *****************************************************
-// Copyright 2007, Charlie Poole
+// Copyright 2009, Charlie Poole
 //
 // Licensed under the Open Software License version 3.0
 // *****************************************************
@@ -10,32 +10,38 @@ using NUnit.Framework.Constraints;
 
 namespace NUnit.Framework
 {
-    #region Is Helper Class
+    /// <summary>
+    /// Helper class with properties and methods that supply
+    /// a number of constraints used in Asserts.
+    /// </summary>
     public class Is
     {
-        #region Prefix Operators
+        #region Not
+
         /// <summary>
-        /// Is.Not returns a ConstraintBuilder that negates
-        /// the constraint that follows it.
+        /// Returns a ConstraintExpression that negates any
+        /// following constraint.
         /// </summary>
         public static ConstraintExpression Not
         {
             get { return new ConstraintExpression().Not; }
         }
 
+        #endregion
+
+        #region All
+
         /// <summary>
-        /// Is.All returns a ConstraintBuilder, which will apply
+        /// Returns a ConstraintExpression, which will apply
         /// the following constraint to all members of a collection,
-        /// succeeding if all of them succeed. This property is
-        /// a synonym for Has.AllItems.
+        /// succeeding if all of them succeed.
         /// </summary>
         public static ConstraintExpression All
         {
             get { return new ConstraintExpression().All; }
         }
-        #endregion
 
-        #region Constraints Without Arguments
+        #endregion
 
         #region Null
 
@@ -136,120 +142,261 @@ namespace NUnit.Framework
         #endregion
 #endif
 
-        #endregion
+        #region EqualTo
 
-        #region Constraints with an expected value
-
-        #region Equality and Identity
         /// <summary>
-        /// Is.EqualTo returns a constraint that tests whether the
-        /// actual value equals the supplied argument
+        /// Returns a constraint that tests two items for equality
         /// </summary>
-        /// <param name="expected"></param>
-        /// <returns></returns>
         public static EqualConstraint EqualTo(object expected)
         {
             return new EqualConstraint(expected);
         }
+
+        #endregion
+
+        #region SameAs
+
         /// <summary>
-        /// Is.SameAs returns a constraint that tests whether the
-        /// actual value is the same object as the supplied argument.
+        /// Returns a constraint that tests that two references are the same object
         /// </summary>
-        /// <param name="expected"></param>
-        /// <returns></returns>
-        public static Constraint SameAs(object expected)
+        public static SameAsConstraint SameAs(object expected)
         {
             return new SameAsConstraint(expected);
         }
+
         #endregion
 
-        #region Comparison Constraints
+        #region GreaterThan
+
         /// <summary>
-        /// Is.GreaterThan returns a constraint that tests whether the
+        /// Returns a constraint that tests whether the
         /// actual value is greater than the suppled argument
         /// </summary>
-        public static Constraint GreaterThan(IComparable expected)
+        public static GreaterThanConstraint GreaterThan(object expected)
         {
             return new GreaterThanConstraint(expected);
         }
+
+        #endregion
+
+        #region GreaterThanOrEqualTo
+
         /// <summary>
-        /// Is.GreaterThanOrEqualTo returns a constraint that tests whether the
+        /// Returns a constraint that tests whether the
         /// actual value is greater than or equal to the suppled argument
         /// </summary>
-        public static Constraint GreaterThanOrEqualTo(IComparable expected)
+        public static GreaterThanOrEqualConstraint GreaterThanOrEqualTo(object expected)
         {
             return new GreaterThanOrEqualConstraint(expected);
         }
 
         /// <summary>
-        /// Is.AtLeast is a synonym for Is.GreaterThanOrEqualTo
+        /// Returns a constraint that tests whether the
+        /// actual value is greater than or equal to the suppled argument
         /// </summary>
-        public static Constraint AtLeast(IComparable expected)
+        public static GreaterThanOrEqualConstraint AtLeast(object expected)
         {
-            return GreaterThanOrEqualTo(expected);
+            return new GreaterThanOrEqualConstraint(expected);
         }
 
+        #endregion
+
+        #region LessThan
+
         /// <summary>
-        /// Is.LessThan returns a constraint that tests whether the
+        /// Returns a constraint that tests whether the
         /// actual value is less than the suppled argument
         /// </summary>
-        public static Constraint LessThan(IComparable expected)
+        public static LessThanConstraint LessThan(object expected)
         {
             return new LessThanConstraint(expected);
         }
 
+        #endregion
+
+        #region LessThanOrEqualTo
+
         /// <summary>
-        /// Is.LessThanOrEqualTo returns a constraint that tests whether the
+        /// Returns a constraint that tests whether the
         /// actual value is less than or equal to the suppled argument
         /// </summary>
-        public static Constraint LessThanOrEqualTo(IComparable expected)
+        public static LessThanOrEqualConstraint LessThanOrEqualTo(object expected)
         {
             return new LessThanOrEqualConstraint(expected);
         }
 
         /// <summary>
-        /// Is.AtMost is a synonym for Is.LessThanOrEqualTo
+        /// Returns a constraint that tests whether the
+        /// actual value is less than or equal to the suppled argument
         /// </summary>
-        public static Constraint AtMost(IComparable expected)
+        public static LessThanOrEqualConstraint AtMost(object expected)
         {
-            return LessThanOrEqualTo(expected);
+            return new LessThanOrEqualConstraint(expected);
         }
+
         #endregion
 
-        #region Type Constraints
+        #region TypeOf
+
         /// <summary>
         /// Returns a constraint that tests whether the actual
         /// value is of the exact type supplied as an argument.
         /// </summary>
-        public static Constraint TypeOf(Type expectedType)
+        public static ExactTypeConstraint TypeOf(Type expectedType)
         {
             return new ExactTypeConstraint(expectedType);
         }
 
+#if NET_2_0
         /// <summary>
-        /// Is.InstanceOfType returns a constraint that tests whether 
-        /// the actual value is of the type supplied as an argument
-        /// or a derived type.
+        /// Returns a constraint that tests whether the actual
+        /// value is of the exact type supplied as an argument.
         /// </summary>
-        public static Constraint InstanceOfType(Type expectedType)
+        public static ExactTypeConstraint TypeOf<T>()
+        {
+            return new ExactTypeConstraint(typeof(T));
+        }
+
+#endif
+        #endregion
+
+        #region InstanceOf
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is of the type supplied as an argument or a derived type.
+        /// </summary>
+        public static InstanceOfTypeConstraint InstanceOf(Type expectedType)
         {
             return new InstanceOfTypeConstraint(expectedType);
         }
 
+#if NET_2_0
         /// <summary>
-        /// Is.AssignableFrom returns a constraint that tests whether
-        /// the actual value is assignable from the type supplied as
-        /// an argument.
+        /// Returns a constraint that tests whether the actual value
+        /// is of the type supplied as an argument or a derived type.
         /// </summary>
-        /// <param name="expectedType"></param>
-        /// <returns></returns>
-        public static Constraint AssignableFrom(Type expectedType)
+        public static InstanceOfTypeConstraint InstanceOf<T>()
+        {
+            return new InstanceOfTypeConstraint(typeof(T));
+        }
+
+#endif
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is of the type supplied as an argument or a derived type.
+        /// </summary>
+        [Obsolete("Use InstanceOf")]
+        public static InstanceOfTypeConstraint InstanceOfType(Type expectedType)
+        {
+            return new InstanceOfTypeConstraint(expectedType);
+        }
+
+#if NET_2_0
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is of the type supplied as an argument or a derived type.
+        /// </summary>
+        [Obsolete("Use InstanceOf")]
+        public static InstanceOfTypeConstraint InstanceOfType<T>()
+        {
+            return new InstanceOfTypeConstraint(typeof(T));
+        }
+
+#endif
+
+        #endregion
+
+        #region AssignableFrom
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is assignable from the type supplied as an argument.
+        /// </summary>
+        public static AssignableFromConstraint AssignableFrom(Type expectedType)
         {
             return new AssignableFromConstraint(expectedType);
         }
+
+#if NET_2_0
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is assignable from the type supplied as an argument.
+        /// </summary>
+        public static AssignableFromConstraint AssignableFrom<T>()
+        {
+            return new AssignableFromConstraint(typeof(T));
+        }
+
+#endif
         #endregion
 
-        #region String Constraints
+        #region AssignableTo
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is assignable from the type supplied as an argument.
+        /// </summary>
+        public static AssignableToConstraint AssignableTo(Type expectedType)
+        {
+            return new AssignableToConstraint(expectedType);
+        }
+
+#if NET_2_0
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is assignable from the type supplied as an argument.
+        /// </summary>
+        public static AssignableToConstraint AssignableTo<T>()
+        {
+            return new AssignableToConstraint(typeof(T));
+        }
+
+#endif
+        #endregion
+
+        #region EquivalentTo
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is a collection containing the same elements as the 
+        /// collection supplied as an argument.
+        /// </summary>
+        public static CollectionEquivalentConstraint EquivalentTo(IEnumerable expected)
+        {
+            return new CollectionEquivalentConstraint(expected);
+        }
+
+        #endregion
+
+        #region SubsetOf
+
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value
+        /// is a subset of the collection supplied as an argument.
+        /// </summary>
+        public static CollectionSubsetConstraint SubsetOf(IEnumerable expected)
+        {
+            return new CollectionSubsetConstraint(expected);
+        }
+
+        #endregion
+
+        #region Ordered
+
+        /// <summary>
+        /// Returns a constraint that tests whether a collection is ordered
+        /// </summary>
+        public static CollectionOrderedConstraint Ordered
+        {
+            get { return new CollectionOrderedConstraint(); }
+        }
+
+        #endregion
+
+        #region StringContaining
+
         /// <summary>
         /// Is.StringContaining returns a constraint that succeeds if the actual
         /// value contains the substring supplied as an argument.
@@ -258,6 +405,10 @@ namespace NUnit.Framework
         {
             return new SubstringConstraint(substring);
         }
+
+        #endregion
+
+        #region StringStarting
 
         /// <summary>
         /// Is.StringStarting returns a constraint that succeeds if the actual
@@ -268,6 +419,10 @@ namespace NUnit.Framework
             return new StartsWithConstraint(substring);
         }
 
+        #endregion
+
+        #region StringEnding
+
         /// <summary>
         /// Is.StringEnding returns a constraint that succeeds if the actual
         /// value ends with the substring supplied as an argument.
@@ -277,6 +432,9 @@ namespace NUnit.Framework
             return new EndsWithConstraint(substring);
         }
 
+        #endregion
+
+        #region StringMatching
 #if !NETCF
         /// <summary>
         /// Is.StringMatching returns a constraint that succeeds if the actual
@@ -289,29 +447,7 @@ namespace NUnit.Framework
 #endif
         #endregion
 
-        #region Collection Constraints
-        /// <summary>
-        /// Is.EquivalentTo returns a constraint that tests whether
-        /// the actual value is a collection containing the same
-        /// elements as the collection supplied as an arument
-        /// </summary>
-        public static Constraint EquivalentTo(ICollection expected)
-        {
-            return new CollectionEquivalentConstraint(expected);
-        }
-
-        /// <summary>
-        /// Is.SubsetOf returns a constraint that tests whether
-        /// the actual value is a subset of the collection 
-        /// supplied as an arument
-        /// </summary>
-        public static Constraint SubsetOf(ICollection expected)
-        {
-            return new CollectionSubsetConstraint(expected);
-        }
-        #endregion
-
-        #endregion
+        #region SamePath
 
         /// <summary>
         /// Returns a constraint that tests whether the path provided 
@@ -322,6 +458,10 @@ namespace NUnit.Framework
             return new SamePathConstraint(expected);
         }
 
+        #endregion
+
+        #region SamePathOrUnder
+
         /// <summary>
         /// Returns a constraint that tests whether the path provided 
         /// is the same path or under an expected path after canonicalization.
@@ -331,6 +471,10 @@ namespace NUnit.Framework
             return new SamePathOrUnderConstraint(expected);
         }
 
+        #endregion
+
+        #region InRange
+
         /// <summary>
         /// Returns a constraint that tests whether the actual value falls 
         /// within a specified range.
@@ -339,6 +483,7 @@ namespace NUnit.Framework
         {
             return new RangeConstraint(from, to);
         }
+
+        #endregion
     }
-    #endregion
 }
