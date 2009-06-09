@@ -72,6 +72,7 @@
     <Compile Include="Constraints\NUnitComparer.cs" />
     <Compile Include="Constraints\NUnitEqualityComparer.cs" />
     <Compile Include="Constraints\PathConstraints.cs" />
+    <Compile Include="Constraints\PredicateConstraint.cs" />
     <Compile Include="Constraints\PrefixConstraints.cs" />
     <Compile Include="Constraints\PropertyConstraint.cs" />
     <Compile Include="Constraints\RangeConstraint.cs" />

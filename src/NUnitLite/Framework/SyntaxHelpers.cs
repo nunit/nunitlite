@@ -218,10 +218,10 @@ namespace NUnit.Framework
 
         #region Type Constraints
         /// <summary>
-        /// Is.Type returns a constraint that tests whether the actual
+        /// Returns a constraint that tests whether the actual
         /// value is of the exact type supplied as an argument.
         /// </summary>
-        public static Constraint Type(Type expectedType)
+        public static Constraint TypeOf(Type expectedType)
         {
             return new ExactTypeConstraint(expectedType);
         }

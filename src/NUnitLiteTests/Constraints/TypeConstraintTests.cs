@@ -15,7 +15,7 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = Is.Type(typeof(D1));
+            Matcher = Is.TypeOf(typeof(D1));
             GoodValues = new object[] { new D1() };
             BadValues = new object[] { new B(), new D2() };
             Description = "<NUnitLite.Tests.D1>";
