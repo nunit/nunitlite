@@ -89,6 +89,7 @@
     <Compile Include="Constraints\TypeConstraints.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Contains.cs" />
     <Compile Include="Env.cs" />
     <Compile Include="Framework\Attributes.cs">
       <SubType>Code</SubType>
@@ -97,13 +98,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Framework\GlobalSettings.cs" />
+    <Compile Include="Framework\Has.cs" />
     <Compile Include="Framework\IExpectException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Is.cs" />
     <Compile Include="Reflect.cs" />
-    <Compile Include="Framework\SyntaxHelpers.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Framework\Assert.cs" />
     <Compile Include="Framework\StackFilter.cs" />
     <Compile Include="Framework\TextMessageWriter.cs" />
