@@ -19,7 +19,7 @@ namespace NUnitLite.Tests
             TestSuite suite = new TestSuite(typeof(SimpleTestCase));
             Assert.That(suite.TestCaseCount, Is.EqualTo(6));
             foreach (ITest test in suite.Tests)
-                Assert.That(test, Is.InstanceOfType(typeof(TestCase)), "Not a TestCase");
+                Assert.That(test, Is.InstanceOf(typeof(TestCase)), "Not a TestCase");
             RecordingTestListener listener = new RecordingTestListener();
             TestResult result = suite.Run(listener);
             Assert.That(result.ResultState, Is.EqualTo(ResultState.Failure));

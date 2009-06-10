@@ -221,6 +221,8 @@
   </target>
 
   <target name="set-net-1.0-runtime-config">
+    <fail unless="${framework::exists( 'net-1.0' )}"
+      message=".NET 1.0 is not installed"/>
     <fail unless="${framework::sdk-exists( 'net-1.0' )}"
       message="The .NET 1.0 SDK is not configured or not installed"/>
 
@@ -240,7 +242,8 @@
   </target>
 	
   <target name="set-net-1.1-runtime-config">
-    <property name="runtime.platform" value="net"/>
+    <fail unless="${framework::exists( 'net-1.1' )}"
+      message=".NET 1.1 is not installed"/>
     <fail unless="${framework::sdk-exists( 'net-1.1' )}"
       message="The .NET 1.1 SDK is not configured or not installed"/>
 
@@ -260,6 +263,8 @@
   </target>
 	
   <target name="set-net-2.0-runtime-config">
+    <fail unless="${framework::exists( 'net-2.0' )}"
+      message=".NET 2.0 is not installed"/>
     <fail unless="${framework::sdk-exists( 'net-2.0' )}"
       message="The .NET 2.0 SDK is not configured or not installed"/>
 
@@ -279,6 +284,8 @@
   </target>
 	
   <target name="set-netcf-1.0-runtime-config">
+    <fail unless="${framework::exists( 'netcf-1.0' )}"
+      message=".NET CF 1.0 is not installed"/>
     <fail unless="${framework::sdk-exists( 'netcf-1.0' )}"
       message="The .NET CF 1.0 SDK is not configured or not installed"/>
 
@@ -298,6 +305,8 @@
   </target>
 	
   <target name="set-netcf-2.0-runtime-config">
+    <fail unless="${framework::exists( 'netcf-2.0' )}"
+      message=".NET CF 2.0 is not installed"/>
     <fail unless="${framework::sdk-exists( 'netcf-2.0' )}"
       message="The .NET CF 2.0 SDK is not configured or not installed"/>
 
@@ -317,6 +326,8 @@
   </target>
 	
   <target name="set-mono-1.0-runtime-config">
+    <fail unless="${framework::exists( 'mono-1.0' )}"
+      message="Mono is not installed"/>
     <fail unless="${framework::sdk-exists( 'mono-1.0' )}"
       message="The Mono 1.0 SDK is not configured or not installed"/>
 
@@ -336,6 +347,8 @@
   </target>
 
   <target name="set-mono-2.0-runtime-config">
+    <fail unless="${framework::exists( 'mono-2.0' )}"
+      message="Mono is not installed"/>
     <fail unless="${framework::sdk-exists( 'mono-2.0' )}"
       message="The Mono 2.0 SDK is not configured or not installed"/>
 

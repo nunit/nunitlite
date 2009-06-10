@@ -28,7 +28,7 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = Is.InstanceOfType(typeof(D1));
+            Matcher = Is.InstanceOf(typeof(D1));
             GoodValues = new object[] { new D1(), new D2() };
             BadValues = new object[] { new B() };
             Description = "instance of <NUnitLite.Tests.D1>";

@@ -69,7 +69,7 @@ namespace NUnitLite.Tests
         public void AllItemsAreInstancesOfType()
         {
             object[] c = new object[] { 'a', 'b', 'c' };
-            Assert.That(c, new AllItemsConstraint(Is.InstanceOfType(typeof(char))));
+            Assert.That(c, new AllItemsConstraint(Is.InstanceOf(typeof(char))));
         }
 
         [Test, ExpectedException(typeof(AssertionException))]
@@ -79,7 +79,7 @@ namespace NUnitLite.Tests
             expectedMessage = 
                 TextMessageWriter.Pfx_Expected + "all items instance of <System.Char>" + Env.NewLine +
                 TextMessageWriter.Pfx_Actual   + "< 'a', \"b\", 'c' >" + Env.NewLine;
-            Assert.That(c, new AllItemsConstraint(Is.InstanceOfType(typeof(char))));
+            Assert.That(c, new AllItemsConstraint(Is.InstanceOf(typeof(char))));
         }
 
         public void HandleException(Exception ex)

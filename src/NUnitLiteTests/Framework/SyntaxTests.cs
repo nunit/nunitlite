@@ -60,7 +60,7 @@ namespace NUnitLite.Tests
         public void TypeTests()
         {
             Assert.That("Hello", Is.TypeOf(typeof(string)));
-            Assert.That("Hello", Is.InstanceOfType(typeof(string)));
+            Assert.That("Hello", Is.InstanceOf(typeof(string)));
             Assert.That("Hello".GetType(), Is.EqualTo(typeof(string)));
             Assert.That("Hello".GetType().FullName, Is.EqualTo("System.String"));
         }
