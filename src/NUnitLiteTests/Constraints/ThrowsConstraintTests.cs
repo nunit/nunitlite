@@ -50,6 +50,7 @@ namespace NUnitLite.Tests
         }
     }
 
+    [TestFixture]
     public class ThrowsConstraintTest_WithConstraint : ConstraintTestBase
     {
         [SetUp]

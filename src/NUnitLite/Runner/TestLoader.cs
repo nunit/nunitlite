@@ -23,11 +23,16 @@ namespace NUnitLite.Runner
 
             foreach (Type type in assembly.GetTypes())
             {
-                if ( Reflect.HasAttribute( type, typeof(TestFixtureAttribute) ) )
+                if (IsTestFixture(type))
                     suite.AddTest(new TestSuite(type));
             }
 
             return suite;
+        }
+
+        private static bool IsTestFixture(Type type)
+        {
+            return Reflect.HasAttribute(type, typeof(TestFixtureAttribute));
         }
 
         /// <summary>

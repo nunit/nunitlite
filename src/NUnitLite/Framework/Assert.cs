@@ -22,6 +22,17 @@ namespace NUnit.Framework
     /// </summary>
     public class Assert
     {
+        #region Constructor
+
+        /// <summary>
+        /// We don't actually want any instances of this object, but some people
+        /// like to inherit from it to add other static methods. Hence, the
+        /// protected constructor disallows any instances of this object. 
+        /// </summary>
+        protected Assert() { }
+
+        #endregion
+
         #region Assert Counting
 
         private static int counter = 0;
@@ -44,17 +55,6 @@ namespace NUnit.Framework
         {
             ++counter;
         }
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// We don't actually want any instances of this object, but some people
-        /// like to inherit from it to add other static methods. Hence, the
-        /// protected constructor disallows any instances of this object. 
-        /// </summary>
-        protected Assert() { }
 
         #endregion
 
@@ -86,8 +86,6 @@ namespace NUnit.Framework
         }
 #endif
         #endregion
-
-        #region Simple Asserts
 
         #region True
 
@@ -240,8 +238,6 @@ namespace NUnit.Framework
         {
             Assert.Null(anObject, string.Empty, null);
         }
-
-        #endregion
 
         #endregion
 
