@@ -1,3 +1,48 @@
+NUnitLite Version 0.5 - June 14, 2009
+
+This is the first release from our new Launchpad.net project
+and aims at improved compatibility with NUnit 2.5.
+
+New Features and Enhancements
+
+* New Constraints: 
+       AssignableToConstraint
+       AttributeConstraint
+       AttributeExistsConstraint,
+       BinarySerializableConstraint (not available on compact framework)
+       CollectionOrderedConstraint
+       EmptyCollectionConstraint
+       EmptyStringConstraint
+       EqualConstraint
+       FalseConstraint
+       NaNConstraint
+       NullConstraint
+       NullOrEmptyStringConstraint
+       RangeConstraint
+       SamePathConstraint
+       SamePathOrUnderConstraint
+       ThrowsConstraint
+       ThrowsNothingConstraint
+       TrueConstraint
+       XmlSerializableConstraint (not available on compact framework 1.0)
+
+* New Syntax Helpers
+
+  Is:  AssignableTo
+       BinarySerializable (not available on compact framework)
+       TypeOf (replacing Type)
+       InRange
+       InstanceOf (replacing InstanceOfType)
+       Ordered
+       SamePath
+       SamePathOrUnder
+       XmlSerializable (not available on compact framework 1.0)
+
+  Has: Attribute
+       Message
+
+
+----------------------------------------------------------------------------
 NUnitLite Version 0.2 - November 3, 2007
 
 New Features and Enhancements

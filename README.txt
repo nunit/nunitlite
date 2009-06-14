@@ -1,4 +1,4 @@
-NUnitLite Version 0.2 - November 3, 2007
+NUnitLite Version 0.5 - June 14, 2009
 
 NUnitLite is a small-footprint implementation of much of the current NUnit framework. It is distributed in source form and is intended for use in situations where NUnit is too large or complex. In particular, it targets mobile and embedded environments as well as testing of applications that require "embedding" the framework in another piece of software, as when testing plugin architectures.
 
@@ -6,16 +6,16 @@ This file provides basic information about NUnitLite. For more info see the NUni
 
 COPYRIGHT AND LICENSE
 
-NUnitLite is CopyRight © 2007, Charlie Poole
+NUnitLite is Copyright © 2009, Charlie Poole
 and is licensed under the Open Software License version 3.0
 
 A copy of the license is distributed with the program in the file LICENSE.txt and is also available at http://www.opensource.org/licenses/osl-3.0.php
 
-NUNitLite is based on ideas in NUnit, but not on the NUnit implementation. In addition, some code developed in NUnitLite was subsequently contributed to the NUnit project, where it is available under the NUnit license.
+NUNitLite is based on ideas in NUnit, but not on the NUnit implementation. In addition, some code developed in NUnitLite was subsequently contributed to the NUnit project, where it is available under the NUnit license. Subsequently, some (but not all) of the newer NUnit features were ported back to NUnitLite.
 
 ATTRIBUTES
 
-NUnitLite supports both an attribute-based and an inheritance-based approach to test identification. Classes marked with the TestFixtureAttribute represent fixtures and methods with the TestAttribute are test cases. Alternatively, test fixtures may be created by inheriting from the TestCase class. In that case, any methods begining with the case-insensitive prefix "test" are identified as tests. 
+Classes marked with the TestFixtureAttribute represent fixtures and methods with the TestAttribute are test cases.
 
 The SetUp and TearDown attributes are recognized as in NUnit. In methods inheriting from TestCase, the SetUp and TearDown methods may be overridden and will be called before and after each test.
 
@@ -41,40 +41,61 @@ NUnitLite supports most of the same built-in constraints as NUnit. Users may als
        AllItemsConstraint
        AndConstraint
        AssignableFromConstraint
+       AssignableToConstraint
+       AttributeConstraint
+       AttributeExistsConstraint
+       BinarySerializableConstraint (not available on compact framework)
        CollectionContainsConstraint
        CollectionEquivalentConstraint
+       CollectionOrderedConstraint
        CollectionSubsetConstraint
        ContainsConstraint
+       EmptyCollectionConstraint
        EmptyConstraint
+       EmptyStringConstraint
        EndsWithConstraint
+       EqualConstraint
        ExactTypeConstraint
+       FalseConstraint
        GreaterThanConstraint
        GreaterThanOrEqualConstraint
        InstanceOfTypeConstraint
        LessThanConstraint
        LessThanOrEqualConstraint
+       NaNConstraint
        NoItemConstraint
        NotConstraint
+       NullConstraint
+       NullOrEmptyStringConstraint
        OrConstraint
        PropertyConstraint
+       PropertyExistsConstraint
+       RangeConstraint
        RegexConstraint (not available on compact framework)
        SameAsConstraint
+       SamePathConstraint
+       SamePathOrUnderConstraint
        SomeItemsConstraint
        StartsWithConstraint
        SubstringConstraint
+       ThrowsConstraint
+       ThrowsNothingConstraint
+       TrueConstraint
        UniqueItemsConstraint
+       XmlSerializableConstraint (not available on compact framework 1.0)
 
 Although constraints may be created using their constructors, the more usual approach is to make use of one or more of the NUnitLite SyntaxHelpers. The following helpers are provided: 
 
   Is: Not, All, Null, True, False, NaN, Empty, Unique, EqualTo, SameAs,
       GreaterThan, GreaterThanOrEqualTo, LessThan, LessThanOrEqualTo,
-      AtLeast, AtMost, Type, InstanceOfType, AssignableFrom, StringContaining,
-      StringStarting, StringEnding, StringMatching (except compact framework),
-      EquivalentTo, SubsetOf
+      AtLeast, AtMost, TypeOf, InstanceOf, InstanceOfType, AssignableFrom,
+      AssignableTo, StringContaining, StringStarting, StringEnding, 
+      StringMatching, EquivalentTo, SubsetOf, BinarySerializable, XmlSerializable, 
+      Ordered, SamePath, SamePathOrUnder, InRange
 
   Contains: Substring, Item
 
-  Has: No, All, Some, None,Property, Length, Count, Member
+  Has: No, All, Some, None,Property, Length, Count, Message, Member, Attribute
 
 Tests are loaded as a list of fixtures, without any additional hierarchy. Each fixture contains it's tests. Tests are executed in the order found, without any guarantees of ordering. A separate instance of the fixture object is created for each test case executed by NUnitLite. The embedded console runner produces a summary of tests run and lists any errors or failures.
 
