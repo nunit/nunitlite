@@ -59,8 +59,8 @@ namespace NUnitLite.Tests
             Matcher = new ThrowsConstraint(
                 new AndConstraint(
                     new ExactTypeConstraint(typeof(ArgumentException)),
-                    new PropertyConstraint("ParamName", new EqualConstraint("myParam"))));
-            Description = @"<System.ArgumentException> and property ParamName equal to ""myParam""";
+                    new PropertyConstraint("Message", new SubstringConstraint("myParam"))));
+            Description = @"<System.ArgumentException> and property Message String containing ""myParam""";
             GoodValues = new object[]
             {
                 new TestDelegate( TestDelegates.ThrowsArgumentException )
