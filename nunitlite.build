@@ -54,7 +54,7 @@
   <property name="project.name" value="NUnitLite"/>
 
   <!-- NUnit version for packaging -->
-  <property name="package.version" value="0.2.0"/>
+  <property name="package.version" value="0.5.0"/>
 
   <!-- Additional suffix used to distinguish files with the same version -->
   <property name="package.suffix" value=""/>
@@ -62,7 +62,7 @@
   <!-- Nominal version used for install directory and program
        files menu. Normally the same as the package version, 
        but may differ when we are in alpha or beta. -->
-  <property name="nominal.version" value="0.2.0" />
+  <property name="nominal.version" value="0.5.0" />
 
   <!-- Frameworks supported by this build script. The first
          installed framework found is the default for builds. 
@@ -359,14 +359,17 @@
         <include name="README.txt"/>
         <include name="CHANGES.txt"/>
         <include name="LICENSE.txt"/>
+        <include name="nunitlite.build"/>
+        <include name="nunitlite.build.include"/>
       </fileset>
     </copy>
 
     <call target="copy-src"/>
+    <call target="copy-solutions"/>
 
     <!-- Create the zip file -->
     <zip zipfile="${project.package.dir}/${package.name}.zip" ziplevel="9">
-      <fileset basedir="${package.working.dir}">
+      <fileset basedir="${package.working.dir}" prefix="${package.name}">
         <include name="**"/>
       </fileset>
     </zip>
