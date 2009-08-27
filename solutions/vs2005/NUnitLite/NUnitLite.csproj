@@ -168,6 +168,9 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\IExpectException.cs">
       <Link>Framework\IExpectException.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\IgnoreAttribute.cs">
+      <Link>IgnoreAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Is.cs">
       <Link>Framework\Is.cs</Link>
     </Compile>
@@ -243,7 +246,6 @@
     <Compile Include="..\..\..\src\NUnitLite\TestSuite.cs">
       <Link>TestSuite.cs</Link>
     </Compile>
-    <Compile Include="Framework\IgnoreAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
