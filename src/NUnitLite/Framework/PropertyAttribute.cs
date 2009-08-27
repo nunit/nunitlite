@@ -30,34 +30,69 @@ namespace NUnit.Framework
 	/// <summary>
 	/// PropertyAttribute is used to attach information to a test as a name/value pair..
 	/// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Assembly, AllowMultiple = true)]
-    public class PropertyAttribute : Attribute
-    {
-        private string propertyName;
-        private object propertyValue;
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Assembly, AllowMultiple=true)]
+	public class PropertyAttribute : Attribute
+	{
+        private IDictionary properties = new ListDictionary();
 
-        public PropertyAttribute(string propertyName, object propertyValue)
+        /// <summary>
+        /// Construct a PropertyAttribute with a name and string value
+        /// </summary>
+        /// <param name="propertyName">The name of the property</param>
+        /// <param name="propertyValue">The property value</param>
+        public PropertyAttribute(string propertyName, string propertyValue)
         {
-            this.propertyName = propertyName;
-            this.propertyValue = propertyValue;
+            this.properties.Add(propertyName, propertyValue);
         }
 
-        protected PropertyAttribute(object propertyValue)
+        /// <summary>
+        /// Construct a PropertyAttribute with a name and int value
+        /// </summary>
+        /// <param name="propertyName">The name of the property</param>
+        /// <param name="propertyValue">The property value</param>
+        public PropertyAttribute(string propertyName, int propertyValue)
         {
-            this.propertyName = this.GetType().Name;
-            if (propertyName.EndsWith("Attribute"))
-                propertyName = propertyName.Substring(0, propertyName.Length - 9);
-            this.propertyValue = propertyValue;
+            this.properties.Add(propertyName, propertyValue);
         }
 
-        public string Name
+        /// <summary>
+        /// Construct a PropertyAttribute with a name and double value
+        /// </summary>
+        /// <param name="propertyName">The name of the property</param>
+        /// <param name="propertyValue">The property value</param>
+        public PropertyAttribute(string propertyName, double propertyValue)
         {
-            get { return propertyName; }
+            this.properties.Add(propertyName, propertyValue);
         }
 
-        public virtual object Value
+        /// <summary>
+        /// Constructor for derived classes that set the
+        /// property dictionary directly.
+        /// </summary>
+        protected PropertyAttribute() { }
+
+        /// <summary>
+		/// Constructor for use by derived classes that use the
+		/// name of the type as the property name. Derived classes
+        /// must ensure that the Type of the property value is
+        /// a standard type supported by the BCL. Any custom
+        /// types will cause a serialization Exception when
+        /// in the client.
+		/// </summary>
+		protected PropertyAttribute( object propertyValue )
+		{
+			string propertyName = this.GetType().Name;
+			if ( propertyName.EndsWith( "Attribute" ) )
+				propertyName = propertyName.Substring( 0, propertyName.Length - 9 );
+            this.properties.Add(propertyName, propertyValue);
+		}
+
+        /// <summary>
+        /// Gets the property dictionary for this attribute
+        /// </summary>
+        public IDictionary Properties
         {
-            get { return propertyValue; }
+            get { return properties; }
         }
     }
 }

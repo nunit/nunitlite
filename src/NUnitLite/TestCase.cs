@@ -111,7 +111,8 @@ namespace NUnitLite
 
                     object[] attrs = this.method.GetCustomAttributes(typeof(PropertyAttribute), true);
                     foreach (PropertyAttribute attr in attrs)
-                        this.Properties[attr.Name] = attr.Value;
+                        foreach( DictionaryEntry entry in attr.Properties )
+                            this.Properties[entry.Key] = entry.Value;
                 }
 
                 return properties; 

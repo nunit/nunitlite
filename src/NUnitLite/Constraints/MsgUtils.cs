@@ -62,7 +62,7 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="s">The string to be converted</param>
         /// <returns>The converted string</returns>
-        public static string ConvertWhitespace(string s)
+        public static string EscapeControlChars(string s)
         {
 			if( s != null )
 			{

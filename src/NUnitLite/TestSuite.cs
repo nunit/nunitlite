@@ -38,7 +38,8 @@ namespace NUnitLite
 
             object[] attrs = type.GetCustomAttributes( typeof(PropertyAttribute), true);
             foreach (PropertyAttribute attr in attrs)
-                this.Properties[attr.Name] = attr.Value;
+                foreach( DictionaryEntry entry in attr.Properties )
+                    this.Properties[entry.Key] = entry.Value;
 
             IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(type, typeof(IgnoreAttribute));
             if (ignore != null)
