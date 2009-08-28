@@ -1,8 +1,25 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2007 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
 using System.Collections;
@@ -31,7 +48,7 @@ namespace NUnit.Framework.Constraints
 #if NET_2_0
             private Stack<ConstraintOperator> stack = new Stack<ConstraintOperator>();
 #else
-            private Stack stack = new Stack();
+		    private Stack stack = new Stack();
 #endif
             /// <summary>
             /// Initializes a new instance of the <see cref="T:OperatorStack"/> class.
@@ -88,7 +105,7 @@ namespace NUnit.Framework.Constraints
 #if NET_2_0
             private Stack<Constraint> stack = new Stack<Constraint>();
 #else
-            private Stack stack = new Stack();
+		    private Stack stack = new Stack();
 #endif
             private ConstraintBuilder builder;
 
@@ -128,7 +145,7 @@ namespace NUnit.Framework.Constraints
             public void Push(Constraint constraint)
             {
                 stack.Push(constraint);
-                constraint.SetBuilder(this.builder);
+                constraint.SetBuilder( this.builder );
             }
 
             /// <summary>
@@ -140,7 +157,7 @@ namespace NUnit.Framework.Constraints
             public Constraint Pop()
             {
                 Constraint constraint = (Constraint)stack.Pop();
-                constraint.SetBuilder(null);
+                constraint.SetBuilder( null );
                 return constraint;
             }
         }
@@ -193,7 +210,7 @@ namespace NUnit.Framework.Constraints
 
             // Reduce any lower precedence operators
             ReduceOperatorStack(op.LeftPrecedence);
-
+            
             ops.Push(op);
             lastPushed = op;
         }
@@ -210,7 +227,7 @@ namespace NUnit.Framework.Constraints
 
             constraints.Push(constraint);
             lastPushed = constraint;
-            constraint.SetBuilder(this);
+            constraint.SetBuilder( this );
         }
 
         /// <summary>

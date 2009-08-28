@@ -1,8 +1,25 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2007 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
 using System.Collections;
@@ -39,37 +56,37 @@ namespace NUnit.Framework.Constraints
         /// <returns>
         /// 	<c>true</c> if the specified enumerable is empty; otherwise, <c>false</c>.
         /// </returns>
-        protected static bool IsEmpty(IEnumerable enumerable)
-        {
-            ICollection collection = enumerable as ICollection;
-            if (collection != null)
-                return collection.Count == 0;
-            else
-                return !enumerable.GetEnumerator().MoveNext();
-        }
+		protected static bool IsEmpty( IEnumerable enumerable )
+		{
+			ICollection collection = enumerable as ICollection;
+			if ( collection != null )
+				return collection.Count == 0;
+			else
+				return !enumerable.GetEnumerator().MoveNext();
+		}
 
-        /// <summary>
-        /// Test whether the constraint is satisfied by a given value
-        /// </summary>
-        /// <param name="actual">The value to be tested</param>
-        /// <returns>True for success, false for failure</returns>
-        public override bool Matches(object actual)
-        {
-            this.actual = actual;
+		/// <summary>
+		/// Test whether the constraint is satisfied by a given value
+		/// </summary>
+		/// <param name="actual">The value to be tested</param>
+		/// <returns>True for success, false for failure</returns>
+		public override bool Matches(object actual)
+		{
+			this.actual = actual;
 
-            IEnumerable enumerable = actual as IEnumerable;
-            if (enumerable == null)
-                throw new ArgumentException("The actual value must be an IEnumerable", "actual");
+			IEnumerable enumerable = actual as IEnumerable;
+			if ( enumerable == null )
+				throw new ArgumentException( "The actual value must be an IEnumerable", "actual" );
+		
+			return doMatch( enumerable );
+		}
 
-            return doMatch(enumerable);
-        }
-
-        /// <summary>
-        /// Protected method to be implemented by derived classes
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        protected abstract bool doMatch(IEnumerable collection);
+		/// <summary>
+		/// Protected method to be implemented by derived classes
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
+		protected abstract bool doMatch(IEnumerable collection);
     }
     #endregion
 
@@ -256,29 +273,29 @@ namespace NUnit.Framework.Constraints
     /// EmptyCollectionConstraint tests whether a collection is empty. 
     /// </summary>
     public class EmptyCollectionConstraint : CollectionConstraint
-    {
-        /// <summary>
-        /// Check that the collection is empty
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        protected override bool doMatch(IEnumerable collection)
-        {
-            return IsEmpty(collection);
-        }
+	{
+		/// <summary>
+		/// Check that the collection is empty
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
+		protected override bool doMatch(IEnumerable collection)
+		{
+			return IsEmpty( collection );
+		}
+	
+		/// <summary>
+		/// Write the constraint description to a MessageWriter
+		/// </summary>
+		/// <param name="writer"></param>
+		public override void WriteDescriptionTo(MessageWriter writer)
+		{
+			writer.Write( "<empty>" );
+		}
+	}
+	#endregion
 
-        /// <summary>
-        /// Write the constraint description to a MessageWriter
-        /// </summary>
-        /// <param name="writer"></param>
-        public override void WriteDescriptionTo(MessageWriter writer)
-        {
-            writer.Write("<empty>");
-        }
-    }
-    #endregion
-
-    #region UniqueItemsConstraint
+	#region UniqueItemsConstraint
     /// <summary>
     /// UniqueItemsConstraint tests whether all the items in a 
     /// collection are unique.
@@ -296,8 +313,8 @@ namespace NUnit.Framework.Constraints
 
             foreach (object o1 in actual)
             {
-                foreach (object o2 in list)
-                    if (ItemsEqual(o1, o2))
+                foreach( object o2 in list )
+                    if ( ItemsEqual(o1, o2) )
                         return false;
                 list.Add(o1);
             }
@@ -356,7 +373,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer"></param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            writer.WritePredicate( "collection containing " );
+            writer.WritePredicate("collection containing");
             writer.WriteExpectedValue(expected);
         }
     }
@@ -378,7 +395,7 @@ namespace NUnit.Framework.Constraints
         public CollectionEquivalentConstraint(IEnumerable expected) : base(expected)
         {
             this.expected = expected;
-	    this.DisplayName = "equivalent";
+            this.DisplayName = "equivalent";
         }
 
         /// <summary>
@@ -388,10 +405,10 @@ namespace NUnit.Framework.Constraints
         /// <returns></returns>
         protected override bool doMatch(IEnumerable actual)
         {
-            // This is just an optimization
-            if (expected is ICollection && actual is ICollection)
-                if ( ((ICollection)actual).Count != ((ICollection)expected).Count )
-                    return false;
+			// This is just an optimization
+			if( expected is ICollection && actual is ICollection )
+				if( ((ICollection)actual).Count != ((ICollection)expected).Count )
+					return false;
 
             CollectionTally tally = Tally(expected);
             return tally.TryRemove(actual) && tally.Count == 0;
@@ -436,9 +453,9 @@ namespace NUnit.Framework.Constraints
         /// <returns></returns>
         protected override bool doMatch(IEnumerable actual)
         {
-            return Tally(expected).TryRemove(actual);
+            return Tally(expected).TryRemove( actual );
         }
-
+        
         /// <summary>
         /// Write a description of this constraint to a MessageWriter
         /// </summary>
@@ -466,7 +483,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Construct a CollectionOrderedConstraint
         /// </summary>
-        public CollectionOrderedConstraint()
+        public CollectionOrderedConstraint() 
         {
             this.DisplayName = "ordered";
         }
@@ -488,7 +505,7 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         public CollectionOrderedConstraint Using(IComparer comparer)
         {
-            this.comparer = ComparisonAdapter.For(comparer);
+            this.comparer = ComparisonAdapter.For( comparer );
             this.comparerName = comparer.GetType().FullName;
             return this;
         }
@@ -520,10 +537,10 @@ namespace NUnit.Framework.Constraints
         /// a specified property and returns self.
         /// </summary>
         public CollectionOrderedConstraint By(string propertyName)
-        {
-            this.propertyName = propertyName;
-            return this;
-        }
+		{
+			this.propertyName = propertyName;
+			return this;
+		}
 
         /// <summary>
         /// Test whether the collection is ordered
@@ -534,7 +551,7 @@ namespace NUnit.Framework.Constraints
         {
             object previous = null;
             int index = 0;
-            foreach (object obj in actual)
+            foreach(object obj in actual)
             {
                 object objToCompare = obj;
                 if (obj == null)
