@@ -169,7 +169,7 @@
       <Link>Framework\IExpectException.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\IgnoreAttribute.cs">
-      <Link>IgnoreAttribute.cs</Link>
+      <Link>Framework\IgnoreAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Is.cs">
       <Link>Framework\Is.cs</Link>
