@@ -36,9 +36,6 @@
     <Compile Include="..\..\..\src\NUnitLite\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Catch.cs">
-      <Link>Catch.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Constraints\AttributeConstraints.cs">
       <Link>Constraints\AttributeConstraints.cs</Link>
     </Compile>
