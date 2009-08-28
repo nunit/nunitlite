@@ -48,7 +48,7 @@ namespace NUnit.Framework.Constraints
         {
             Array array = obj as Array;
             if ( array == null )
-                return string.Format("<{0}>", obj.GetType());
+                return string.Format( "<{0}>", obj.GetType() );
 
             StringBuilder sb = new StringBuilder();
             Type elementType = array.GetType();
@@ -70,9 +70,8 @@ namespace NUnit.Framework.Constraints
             while (--nest > 0)
                 sb.Append("[]");
 
-            return string.Format("<{0}>", sb.ToString());
+            return string.Format( "<{0}>", sb.ToString() );
         }
-
         /// <summary>
         /// Converts any control characters in a string 
         /// to their escaped representation.
@@ -81,13 +80,65 @@ namespace NUnit.Framework.Constraints
         /// <returns>The converted string</returns>
         public static string EscapeControlChars(string s)
         {
-			if( s != null )
-			{
-				s = s.Replace( "\\", "\\\\" );
-				s = s.Replace( "\r", "\\r" );
-				s = s.Replace( "\n", "\\n" );
-				s = s.Replace( "\t", "\\t" );
-			}
+            if (s != null)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < s.Length; i++)
+                {
+                    char c = s[i];
+
+                    switch (c)
+                    {
+                        //case '\'':
+                        //    sb.Append("\\\'");
+                        //    break;
+                        //case '\"':
+                        //    sb.Append("\\\"");
+                        //    break;
+                        case '\\':
+                            sb.Append("\\\\");
+                            break;
+                        case '\0':
+                            sb.Append("\\0");
+                            break;
+                        case '\a':
+                            sb.Append("\\a");
+                            break;
+                        case '\b':
+                            sb.Append("\\b");
+                            break;
+                        case '\f':
+                            sb.Append("\\f");
+                            break;
+                        case '\n':
+                            sb.Append("\\n");
+                            break;
+                        case '\r':
+                            sb.Append("\\r");
+                            break;
+                        case '\t':
+                            sb.Append("\\t");
+                            break;
+                        case '\v':
+                            sb.Append("\\v");
+                            break;
+
+                        case '\x0085':
+                        case '\x2028':
+                        case '\x2029':
+                            sb.AppendFormat("\\x{0:X4}", (int)c);
+                            break;
+
+                        default:
+                            sb.Append(c);
+                            break;
+                    }
+                }
+
+                s = sb.ToString();
+            }
+
 			return s;
         }
 
@@ -149,20 +200,20 @@ namespace NUnit.Framework.Constraints
             if (clipStart > 0)
             {
                 clipLength -= ELLIPSIS.Length;
-                sb.Append(ELLIPSIS);
+                sb.Append( ELLIPSIS );
             }
 
             if (s.Length - clipStart > clipLength)
             {
                 clipLength -= ELLIPSIS.Length;
-                sb.Append(s.Substring(clipStart, clipLength));
+                sb.Append( s.Substring( clipStart, clipLength ));
                 sb.Append(ELLIPSIS);
             }
             else if (clipStart > 0)
-                sb.Append(s.Substring(clipStart));
+                sb.Append( s.Substring(clipStart));
             else
-                sb.Append(s);
-
+                sb.Append( s );
+ 
             return sb.ToString();
         }
 
@@ -186,8 +237,8 @@ namespace NUnit.Framework.Constraints
             int clipStart = maxStringLength - clipLength;
 
             // Case 3: If it doesn't, center the mismatch position
-            if (clipStart > mismatch)
-                clipStart = Math.Max(0, mismatch - clipLength / 2);
+            if ( clipStart > mismatch )
+                clipStart = Math.Max( 0, mismatch - clipLength / 2 );
 
             expected = ClipString(expected, maxDisplayLength, clipStart);
             actual = ClipString(actual, maxDisplayLength, clipStart);
@@ -200,7 +251,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="expected">The expected string</param>
         /// <param name="actual">The actual string</param>
         /// <param name="istart">The index in the strings at which comparison should start</param>
-	    /// <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
+        /// <param name="ignoreCase">Boolean indicating whether case should be ignored</param>
         /// <returns>-1 if no mismatch found, or the index where mismatch found</returns>
         static public int FindMismatchPosition(string expected, string actual, int istart, bool ignoreCase)
         {
