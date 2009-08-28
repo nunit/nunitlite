@@ -6,10 +6,9 @@ This file provides basic information about NUnitLite. For more info see the NUni
 
 COPYRIGHT AND LICENSE
 
-NUnitLite is Copyright © 2009, Charlie Poole
-and is licensed under the Open Software License version 3.0
+NUnitLite is Copyright © 2009, Charlie Poole and is licensed under the MIT license.
 
-A copy of the license is distributed with the program in the file LICENSE.txt and is also available at http://www.opensource.org/licenses/osl-3.0.php
+A copy of the license is distributed with the program in the file LICENSE.txt and is also available at http://www.opensource.org/licenses/mit-license.php.
 
 NUNitLite is based on ideas in NUnit, but not on the NUnit implementation. In addition, some code developed in NUnitLite was subsequently contributed to the NUnit project, where it is available under the NUnit license. Subsequently, some (but not all) of the newer NUnit features were ported back to NUnitLite.
 
