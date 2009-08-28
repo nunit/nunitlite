@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2009 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,20 +21,43 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Text;
-
-namespace NUnitLite
+namespace NUnit.Framework
 {
-    public class Env
-    {
-        // Define NewLine to be used for this system
-        // NOTE: Since this is done at compile time for .NET CF,
-        // these binaries are not yet currently portable.
-#if PocketPC || WindowsCE || NETCF
-        public static readonly string NewLine = "\r\n";
-#else
-        public static readonly string NewLine = Environment.NewLine;
-#endif
-    }
+	using System;
+
+	/// <summary>
+	/// Adding this attribute to a method within a <seealso cref="TestFixtureAttribute"/> 
+	/// class makes the method callable from the NUnit test runner. There is a property 
+	/// called Description which is optional which you can provide a more detailed test
+	/// description. This class cannot be inherited.
+	/// </summary>
+	/// 
+	/// <example>
+	/// [TestFixture]
+	/// public class Fixture
+	/// {
+	///   [Test]
+	///   public void MethodToTest()
+	///   {}
+	///   
+	///   [Test(Description = "more detailed description")]
+	///   publc void TestDescriptionMethod()
+	///   {}
+	/// }
+	/// </example>
+	/// 
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
+	public class TestAttribute : Attribute
+	{
+		private string description;
+
+		/// <summary>
+		/// Descriptive text for this test
+		/// </summary>
+		public string Description
+		{
+			get { return description; }
+			set { description = value; }
+		}
+	}
 }

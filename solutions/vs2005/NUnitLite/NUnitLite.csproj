@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -147,14 +147,17 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\Assert.cs">
       <Link>Framework\Assert.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Framework\Attributes.cs">
-      <Link>Framework\Attributes.cs</Link>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\AssertionException.cs">
+      <Link>Framework\AssertionException.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Contains.cs">
       <Link>Framework\Contains.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Framework\Exceptions.cs">
-      <Link>Framework\Exceptions.cs</Link>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\DescriptionAttribute.cs">
+      <Link>Framework\DescriptionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\ExpectedExceptionAttribute.cs">
+      <Link>Framework\ExpectedExceptionAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\GlobalSettings.cs">
       <Link>Framework\GlobalSettings.cs</Link>
@@ -165,11 +168,32 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\IExpectException.cs">
       <Link>Framework\IExpectException.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\IgnoreAttribute.cs">
+      <Link>Framework\IgnoreAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Is.cs">
       <Link>Framework\Is.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\NUnitLiteException.cs">
+      <Link>Framework\NUnitLiteException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\PropertyAttribute.cs">
+      <Link>Framework\PropertyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\SetUpAttribute.cs">
+      <Link>Framework\SetUpAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\StackFilter.cs">
       <Link>Framework\StackFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\TearDownAttribute.cs">
+      <Link>Framework\TearDownAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\TestAttribute.cs">
+      <Link>Framework\TestAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\TestFixtureAttribute.cs">
+      <Link>Framework\TestFixtureAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\TextMessageWriter.cs">
       <Link>Framework\TextMessageWriter.cs</Link>

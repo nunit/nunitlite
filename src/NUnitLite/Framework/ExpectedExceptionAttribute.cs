@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2009 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,20 +21,32 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Text;
-
-namespace NUnitLite
+namespace NUnit.Framework
 {
-    public class Env
+    using System;
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class ExpectedExceptionAttribute : Attribute
     {
-        // Define NewLine to be used for this system
-        // NOTE: Since this is done at compile time for .NET CF,
-        // these binaries are not yet currently portable.
-#if PocketPC || WindowsCE || NETCF
-        public static readonly string NewLine = "\r\n";
-#else
-        public static readonly string NewLine = Environment.NewLine;
-#endif
+        private Type exceptionType;
+        private string handler;
+
+        public ExpectedExceptionAttribute() { }
+
+        public ExpectedExceptionAttribute(Type exceptionType)
+        {
+            this.exceptionType = exceptionType;
+        }
+
+        public Type ExceptionType
+        {
+            get { return exceptionType; }
+        }
+
+        public string Handler
+        {
+            get { return handler; }
+            set { handler = value; }
+        }
     }
 }

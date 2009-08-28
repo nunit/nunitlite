@@ -22,19 +22,17 @@
 // ***********************************************************************
 
 using System;
-using System.Text;
 
-namespace NUnitLite
+namespace NUnit.Framework
 {
-    public class Env
+	/// <summary>
+	/// Attribute used to provide descriptive text about a 
+	/// test case or fixture.
+	/// </summary>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Assembly, AllowMultiple = false)]
+    public sealed class DescriptionAttribute : PropertyAttribute
     {
-        // Define NewLine to be used for this system
-        // NOTE: Since this is done at compile time for .NET CF,
-        // these binaries are not yet currently portable.
-#if PocketPC || WindowsCE || NETCF
-        public static readonly string NewLine = "\r\n";
-#else
-        public static readonly string NewLine = Environment.NewLine;
-#endif
+        public DescriptionAttribute(string description) : base(description) { }
     }
+
 }

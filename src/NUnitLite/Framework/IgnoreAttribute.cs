@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2009 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,20 +21,44 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Text;
-
-namespace NUnitLite
+namespace NUnit.Framework
 {
-    public class Env
-    {
-        // Define NewLine to be used for this system
-        // NOTE: Since this is done at compile time for .NET CF,
-        // these binaries are not yet currently portable.
-#if PocketPC || WindowsCE || NETCF
-        public static readonly string NewLine = "\r\n";
-#else
-        public static readonly string NewLine = Environment.NewLine;
-#endif
-    }
+	using System;
+
+	/// <summary>
+	/// Attribute used to mark a test that is to be ignored.
+	/// Ignored tests result in a warning message when the
+	/// tests are run.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Method|AttributeTargets.Class|AttributeTargets.Assembly, AllowMultiple=false)]
+	public class IgnoreAttribute : Attribute
+	{
+		private string reason;
+
+		/// <summary>
+		/// Constructs the attribute without giving a reason 
+		/// for ignoring the test.
+		/// </summary>
+		public IgnoreAttribute()
+		{
+			this.reason = "";
+		}
+
+		/// <summary>
+		/// Constructs the attribute giving a reason for ignoring the test
+		/// </summary>
+		/// <param name="reason">The reason for ignoring the test</param>
+		public IgnoreAttribute(string reason)
+		{
+			this.reason = reason;
+		}
+
+		/// <summary>
+		/// The reason for ignoring a test
+		/// </summary>
+		public string Reason
+		{
+			get { return reason; }
+		}
+	}
 }

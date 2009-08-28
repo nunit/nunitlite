@@ -1,8 +1,25 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2007 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
 #if !NETCF
@@ -126,9 +143,9 @@ namespace NUnit.Framework.Constraints
 
     #region Substring Constraint
     /// <summary>
-    /// SubstringConstraint can test whether a string contains
-    /// the expected substring.
-    /// </summary>
+	/// SubstringConstraint can test whether a string contains
+	/// the expected substring.
+	/// </summary>
     public class SubstringConstraint : StringConstraint
     {
         /// <summary>
@@ -145,8 +162,8 @@ namespace NUnit.Framework.Constraints
         public override bool Matches(object actual)
         {
             this.actual = actual;
-
-            if (!(actual is string))
+            
+            if ( !(actual is string) )
                 return false;
 
             if (this.caseInsensitive)
@@ -163,17 +180,17 @@ namespace NUnit.Framework.Constraints
         {
             writer.WritePredicate("String containing");
             writer.WriteExpectedValue(expected);
-            if (this.caseInsensitive)
-                writer.WriteModifier("ignoring case");
-        }
+			if ( this.caseInsensitive )
+				writer.WriteModifier( "ignoring case" );
+		}
     }
     #endregion
 
     #region StartsWithConstraint
     /// <summary>
-    /// StartsWithConstraint can test whether a string starts
-    /// with an expected substring.
-    /// </summary>
+	/// StartsWithConstraint can test whether a string starts
+	/// with an expected substring.
+	/// </summary>
     public class StartsWithConstraint : StringConstraint
     {
         /// <summary>
@@ -196,7 +213,7 @@ namespace NUnit.Framework.Constraints
             if (!(actual is string))
                 return false;
 
-            if (this.caseInsensitive)
+            if ( this.caseInsensitive )
                 return ((string)actual).ToLower().StartsWith(expected.ToLower());
             else
                 return ((string)actual).StartsWith(expected);
@@ -209,10 +226,10 @@ namespace NUnit.Framework.Constraints
         public override void WriteDescriptionTo(MessageWriter writer)
         {
             writer.WritePredicate("String starting with");
-            writer.WriteExpectedValue(MsgUtils.ClipString(expected, writer.MaxLineLength - 40, 0));
-            if (this.caseInsensitive)
-                writer.WriteModifier("ignoring case");
-        }
+            writer.WriteExpectedValue( MsgUtils.ClipString(expected, writer.MaxLineLength - 40, 0) );
+			if ( this.caseInsensitive )
+				writer.WriteModifier( "ignoring case" );
+		}
     }
     #endregion
 
@@ -243,7 +260,7 @@ namespace NUnit.Framework.Constraints
             if (!(actual is string))
                 return false;
 
-            if (this.caseInsensitive)
+            if ( this.caseInsensitive )
                 return ((string)actual).ToLower().EndsWith(expected.ToLower());
             else
                 return ((string)actual).EndsWith(expected);
@@ -257,9 +274,9 @@ namespace NUnit.Framework.Constraints
         {
             writer.WritePredicate("String ending with");
             writer.WriteExpectedValue(expected);
-            if (this.caseInsensitive)
-                writer.WriteModifier("ignoring case");
-        }
+			if ( this.caseInsensitive )
+				writer.WriteModifier( "ignoring case" );
+		}
     }
     #endregion
 
@@ -286,11 +303,11 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-            return actual is string &&
-                Regex.IsMatch(
-                    (string)actual,
+            return actual is string && 
+                Regex.IsMatch( 
+                    (string)actual, 
                     this.expected,
-                    this.caseInsensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
+                    this.caseInsensitive ? RegexOptions.IgnoreCase : RegexOptions.None );
         }
 
         /// <summary>
@@ -301,9 +318,9 @@ namespace NUnit.Framework.Constraints
         {
             writer.WritePredicate("String matching");
             writer.WriteExpectedValue(this.expected);
-            if (this.caseInsensitive)
-                writer.WriteModifier("ignoring case");
-        }
+			if ( this.caseInsensitive )
+				writer.WriteModifier( "ignoring case" );
+		}
     }
 #endif
     #endregion

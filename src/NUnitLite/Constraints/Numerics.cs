@@ -1,8 +1,25 @@
-// *****************************************************
-// Copyright 2008, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2008 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
 
@@ -64,7 +81,7 @@ namespace NUnit.Framework.Constraints
 		}
 		#endregion
 
-        #region Numeric Equality
+		#region Numeric Equality
         /// <summary>
         /// Test two numeric values for equality, performing the usual numeric 
         /// conversions and using a provided or default tolerance. If the tolerance 
@@ -74,34 +91,34 @@ namespace NUnit.Framework.Constraints
         /// <param name="actual">The actual value</param>
         /// <param name="tolerance">A reference to the tolerance in effect</param>
         /// <returns>True if the values are equal</returns>
-        public static bool AreEqual(object expected, object actual, ref Tolerance tolerance)
-        {
-            if (expected is double || actual is double)
-                return AreEqual(Convert.ToDouble(expected), Convert.ToDouble(actual), ref tolerance);
+		public static bool AreEqual( object expected, object actual, ref Tolerance tolerance )
+		{
+            if ( expected is double || actual is double )
+                return AreEqual( Convert.ToDouble(expected), Convert.ToDouble(actual), ref tolerance );
 
-            if (expected is float || actual is float)
-                return AreEqual(Convert.ToSingle(expected), Convert.ToSingle(actual), ref tolerance);
+            if ( expected is float || actual is float )
+                return AreEqual( Convert.ToSingle(expected), Convert.ToSingle(actual), ref tolerance );
 
             if (tolerance.Mode == ToleranceMode.Ulps)
                 throw new InvalidOperationException("Ulps may only be specified for floating point arguments");
 
-            if (expected is decimal || actual is decimal)
-                return AreEqual(Convert.ToDecimal(expected), Convert.ToDecimal(actual), tolerance);
+			if ( expected is decimal || actual is decimal )
+				return AreEqual( Convert.ToDecimal(expected), Convert.ToDecimal(actual), tolerance );
 
             if (expected is ulong || actual is ulong)
-                return AreEqual(Convert.ToUInt64(expected), Convert.ToUInt64(actual), tolerance);
+                return AreEqual(Convert.ToUInt64(expected), Convert.ToUInt64(actual), tolerance );
+		
+			if ( expected is long || actual is long )
+				return AreEqual( Convert.ToInt64(expected), Convert.ToInt64(actual), tolerance );
+			
+			if ( expected is uint || actual is uint )
+				return AreEqual( Convert.ToUInt32(expected), Convert.ToUInt32(actual), tolerance );
 
-            if (expected is long || actual is long)
-                return AreEqual(Convert.ToInt64(expected), Convert.ToInt64(actual), tolerance);
+			return AreEqual( Convert.ToInt32(expected), Convert.ToInt32(actual), tolerance );
+		}
 
-            if (expected is uint || actual is uint)
-                return AreEqual(Convert.ToUInt32(expected), Convert.ToUInt32(actual), tolerance);
-
-            return AreEqual(Convert.ToInt32(expected), Convert.ToInt32(actual), tolerance);
-        }
-
-        private static bool AreEqual(double expected, double actual, ref Tolerance tolerance)
-        {
+        private static bool AreEqual( double expected, double actual, ref Tolerance tolerance )
+		{
             if (double.IsNaN(expected) && double.IsNaN(actual))
                 return true;
 
@@ -128,7 +145,7 @@ namespace NUnit.Framework.Constraints
                 case ToleranceMode.Percent:
                     if (expected == 0.0)
                         return expected.Equals(actual);
-
+                    
                     double relativeError = Math.Abs((expected - actual) / expected);
                     return (relativeError <= Convert.ToDouble(tolerance.Value) / 100.0);
 #if !NETCF_1_0
@@ -141,9 +158,9 @@ namespace NUnit.Framework.Constraints
             }
         }
 
-        private static bool AreEqual(float expected, float actual, ref Tolerance tolerance)
-        {
-            if (float.IsNaN(expected) && float.IsNaN(actual))
+        private static bool AreEqual( float expected, float actual, ref Tolerance tolerance )
+		{
+            if ( float.IsNaN(expected) && float.IsNaN(actual) )
                 return true;
 
             // handle infinity specially since subtracting two infinite values gives 
@@ -178,10 +195,10 @@ namespace NUnit.Framework.Constraints
                 default:
                     throw new ArgumentException("Unknown tolerance mode specified", "mode");
             }
-        }
+		}
 
 
-        private static bool AreEqual(decimal expected, decimal actual, Tolerance tolerance)
+        private static bool AreEqual( decimal expected, decimal actual, Tolerance tolerance )
         {
             switch (tolerance.Mode)
             {
@@ -190,13 +207,13 @@ namespace NUnit.Framework.Constraints
 
                 case ToleranceMode.Linear:
                     decimal decimalTolerance = Convert.ToDecimal(tolerance.Value);
-                    if (decimalTolerance > 0m)
-                        return Math.Abs(expected - actual) <= decimalTolerance;
-
-                    return expected.Equals(actual);
+                    if(decimalTolerance > 0m)
+                      return Math.Abs(expected - actual) <= decimalTolerance;
+				
+			        return expected.Equals( actual );
 
                 case ToleranceMode.Percent:
-                    if (expected == 0m)
+                    if(expected == 0m)
                         return expected.Equals(actual);
 
                     double relativeError = Math.Abs(
@@ -208,8 +225,8 @@ namespace NUnit.Framework.Constraints
             }
         }
 
-        private static bool AreEqual(ulong expected, ulong actual, Tolerance tolerance)
-        {
+		private static bool AreEqual( ulong expected, ulong actual, Tolerance tolerance )
+		{
             switch (tolerance.Mode)
             {
                 case ToleranceMode.None:
@@ -217,13 +234,13 @@ namespace NUnit.Framework.Constraints
 
                 case ToleranceMode.Linear:
                     ulong ulongTolerance = Convert.ToUInt64(tolerance.Value);
-                    if (ulongTolerance > 0ul)
-                    {
-                        ulong diff = expected >= actual ? expected - actual : actual - expected;
+                    if(ulongTolerance > 0ul)
+			        {
+				        ulong diff = expected >= actual ? expected - actual : actual - expected;
                         return diff <= ulongTolerance;
-                    }
+			        }
 
-                    return expected.Equals(actual);
+			        return expected.Equals( actual );
 
                 case ToleranceMode.Percent:
                     if (expected == 0ul)
@@ -231,16 +248,16 @@ namespace NUnit.Framework.Constraints
 
                     // Can't do a simple Math.Abs() here since it's unsigned
                     ulong difference = Math.Max(expected, actual) - Math.Min(expected, actual);
-                    double relativeError = Math.Abs((double)difference / (double)expected);
+                    double relativeError = Math.Abs( (double)difference / (double)expected );
                     return (relativeError <= Convert.ToDouble(tolerance.Value) / 100.0);
 
                 default:
                     throw new ArgumentException("Unknown tolerance mode specified", "mode");
             }
-        }
+		}
 
-        private static bool AreEqual(long expected, long actual, Tolerance tolerance)
-        {
+		private static bool AreEqual( long expected, long actual, Tolerance tolerance )
+		{
             switch (tolerance.Mode)
             {
                 case ToleranceMode.None:
@@ -248,13 +265,13 @@ namespace NUnit.Framework.Constraints
 
                 case ToleranceMode.Linear:
                     long longTolerance = Convert.ToInt64(tolerance.Value);
-                    if (longTolerance > 0L)
-                        return Math.Abs(expected - actual) <= longTolerance;
+                    if(longTolerance > 0L)
+				        return Math.Abs(expected - actual) <= longTolerance;
 
-                    return expected.Equals(actual);
+			        return expected.Equals( actual );
 
                 case ToleranceMode.Percent:
-                    if (expected == 0L)
+                    if(expected == 0L)
                         return expected.Equals(actual);
 
                     double relativeError = Math.Abs(
@@ -264,10 +281,10 @@ namespace NUnit.Framework.Constraints
                 default:
                     throw new ArgumentException("Unknown tolerance mode specified", "mode");
             }
-        }
+		}
 
-        private static bool AreEqual(uint expected, uint actual, Tolerance tolerance)
-        {
+		private static bool AreEqual( uint expected, uint actual, Tolerance tolerance )
+		{
             switch (tolerance.Mode)
             {
                 case ToleranceMode.None:
@@ -275,30 +292,30 @@ namespace NUnit.Framework.Constraints
 
                 case ToleranceMode.Linear:
                     uint uintTolerance = Convert.ToUInt32(tolerance.Value);
-                    if (uintTolerance > 0)
-                    {
-                        uint diff = expected >= actual ? expected - actual : actual - expected;
+                    if(uintTolerance > 0)
+			        {
+				        uint diff = expected >= actual ? expected - actual : actual - expected;
                         return diff <= uintTolerance;
-                    }
-
-                    return expected.Equals(actual);
+			        }
+				
+			        return expected.Equals( actual );
 
                 case ToleranceMode.Percent:
-                    if (expected == 0u)
+                    if(expected == 0u)
                         return expected.Equals(actual);
 
                     // Can't do a simple Math.Abs() here since it's unsigned
                     uint difference = Math.Max(expected, actual) - Math.Min(expected, actual);
-                    double relativeError = Math.Abs((double)difference / (double)expected);
+                    double relativeError = Math.Abs((double)difference / (double)expected );
                     return (relativeError <= Convert.ToDouble(tolerance.Value) / 100.0);
 
                 default:
                     throw new ArgumentException("Unknown tolerance mode specified", "mode");
             }
-        }
+		}
 
-        private static bool AreEqual(int expected, int actual, Tolerance tolerance)
-        {
+		private static bool AreEqual( int expected, int actual, Tolerance tolerance )
+		{
             switch (tolerance.Mode)
             {
                 case ToleranceMode.None:
@@ -322,8 +339,8 @@ namespace NUnit.Framework.Constraints
                 default:
                     throw new ArgumentException("Unknown tolerance mode specified", "mode");
             }
-        }
-        #endregion
+		}
+		#endregion
 
 		#region Numeric Comparisons 
         /// <summary>
@@ -332,10 +349,10 @@ namespace NUnit.Framework.Constraints
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
         /// <returns>The relationship of the values to each other</returns>
-        public static int Compare(object expected, object actual)
+		public static int Compare( object expected, object actual )
 		{
-            if (!IsNumericType(expected) || !IsNumericType(actual))
-                throw new ArgumentException("Both arguments must be numeric");
+			if( !IsNumericType( expected ) || !IsNumericType( actual ) )
+				throw new ArgumentException( "Both arguments must be numeric");
 
 			if ( IsFloatingPointNumeric(expected) || IsFloatingPointNumeric(actual) )
 				return Convert.ToDouble(expected).CompareTo(Convert.ToDouble(actual));
@@ -353,7 +370,7 @@ namespace NUnit.Framework.Constraints
 				return Convert.ToUInt32(expected).CompareTo(Convert.ToUInt32(actual));
 
 			return Convert.ToInt32(expected).CompareTo(Convert.ToInt32(actual));
-		}
+        }
 		#endregion
 
 		private Numerics()

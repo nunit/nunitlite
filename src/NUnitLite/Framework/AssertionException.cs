@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2009 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,20 +21,40 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Text;
-
-namespace NUnitLite
+namespace NUnit.Framework 
 {
-    public class Env
-    {
-        // Define NewLine to be used for this system
-        // NOTE: Since this is done at compile time for .NET CF,
-        // these binaries are not yet currently portable.
-#if PocketPC || WindowsCE || NETCF
-        public static readonly string NewLine = "\r\n";
-#else
-        public static readonly string NewLine = Environment.NewLine;
+	using System;
+#if !NETCF
+	using System.Runtime.Serialization;
 #endif
-    }
+	
+	/// <summary>
+	/// Thrown when an assertion failed.
+	/// </summary>
+	/// 
+	[Serializable]
+	public class AssertionException : System.Exception
+	{
+		/// <param name="message">The error message that explains 
+		/// the reason for the exception</param>
+		public AssertionException (string message) : base(message) 
+		{}
+
+		/// <param name="message">The error message that explains 
+		/// the reason for the exception</param>
+		/// <param name="inner">The exception that caused the 
+		/// current exception</param>
+		public AssertionException(string message, Exception inner) :
+			base(message, inner) 
+		{}
+
+#if !NETCF
+		/// <summary>
+		/// Serialization Constructor
+		/// </summary>
+		protected AssertionException(SerializationInfo info, 
+			StreamingContext context) : base(info,context)
+		{}
+#endif
+	}
 }

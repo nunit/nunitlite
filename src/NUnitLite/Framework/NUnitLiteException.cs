@@ -8,12 +8,6 @@ using System;
 
 namespace NUnit.Framework
 {
-    //[Serializable]
-    public class AssertionException : Exception
-    {
-        public AssertionException(string message) : base(message) { }
-    }
-
     /// <summary>
     /// This class is used to wrap other exceptions, in order
     /// to preserve InnerException, including its stack trace
