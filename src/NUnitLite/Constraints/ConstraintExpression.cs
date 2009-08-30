@@ -175,7 +175,7 @@ namespace NUnit.Framework.Constraints
         #endregion
 
         #region InnerException
-        
+
         /// <summary>
         /// Returns a new ConstraintExpression, which will apply the following
         /// constraint to the InnerException property of the object being tested.
@@ -184,9 +184,9 @@ namespace NUnit.Framework.Constraints
         {
             get { return Property("InnerException"); }
         }
-        
+
         #endregion
-        
+
         #region Attribute
 
         /// <summary>
@@ -207,8 +207,8 @@ namespace NUnit.Framework.Constraints
         {
             return Attribute(typeof(T));
         }
-
 #endif
+
         #endregion
 
         #region With
@@ -243,8 +243,8 @@ namespace NUnit.Framework.Constraints
         {
             return this.Append(new PredicateConstraint<T>(predicate));
         }
-
 #endif
+
         #endregion
 
         #region Null
@@ -319,9 +319,10 @@ namespace NUnit.Framework.Constraints
         }
 
         #endregion
-#if !NETCF
+
         #region BinarySerializable
 
+#if !NETCF
         /// <summary>
         /// Returns a constraint that tests whether an object graph is serializable in binary format.
         /// </summary>
@@ -329,13 +330,13 @@ namespace NUnit.Framework.Constraints
         {
             get { return (BinarySerializableConstraint)this.Append(new BinarySerializableConstraint()); }
         }
-
-        #endregion
 #endif
 
-#if !NETCF_1_0
+        #endregion
+
         #region XmlSerializable
 
+#if !NETCF_1_0
         /// <summary>
         /// Returns a constraint that tests whether an object graph is serializable in xml format.
         /// </summary>
@@ -343,9 +344,9 @@ namespace NUnit.Framework.Constraints
         {
             get { return (XmlSerializableConstraint)this.Append(new XmlSerializableConstraint()); }
         }
+#endif
 
         #endregion
-#endif
 
         #region EqualTo
 
@@ -397,7 +398,7 @@ namespace NUnit.Framework.Constraints
 
         /// <summary>
         /// Returns a constraint that tests whether the
-        /// actual value is greater than or equal tothe suppled argument
+        /// actual value is greater than or equal to the suppled argument
         /// </summary>
         public GreaterThanOrEqualConstraint AtLeast(object expected)
         {
@@ -555,8 +556,8 @@ namespace NUnit.Framework.Constraints
         {
             return (AssignableToConstraint)this.Append(new AssignableToConstraint(typeof(T)));
         }
-
 #endif
+
         #endregion
 
         #region EquivalentTo
@@ -765,5 +766,6 @@ namespace NUnit.Framework.Constraints
         }
 
         #endregion
+
     }
 }

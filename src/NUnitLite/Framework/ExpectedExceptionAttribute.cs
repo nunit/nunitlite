@@ -25,22 +25,34 @@ namespace NUnit.Framework
 {
     using System;
 
+    /// <summary>
+    /// ExpectedExceptionAttribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ExpectedExceptionAttribute : Attribute
     {
-        private Type exceptionType;
+        private Type expectedException;
         private string handler;
 
-        public ExpectedExceptionAttribute() { }
+        /// <summary>
+        /// Constructor for a non-specific exception
+        /// </summary>
+        public ExpectedExceptionAttribute() 
+        { 
+        }
 
+        /// <summary>
+        /// Constructor for a given type of exception
+        /// </summary>
+        /// <param name="exceptionType">The type of the expected exception</param>
         public ExpectedExceptionAttribute(Type exceptionType)
         {
-            this.exceptionType = exceptionType;
+            this.expectedException = exceptionType;
         }
 
         public Type ExceptionType
         {
-            get { return exceptionType; }
+            get { return expectedException; }
         }
 
         public string Handler
