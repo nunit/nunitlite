@@ -637,15 +637,24 @@ namespace NUnit.Framework.Constraints
 
         #endregion
 
-        #region ContainsSubstring
+        #region StringContaining
 
         /// <summary>
         /// Returns a constraint that succeeds if the actual
         /// value contains the substring supplied as an argument.
         /// </summary>
-        public SubstringConstraint StringContaining(string substring)
+        public SubstringConstraint StringContaining(string expected)
         {
-            return (SubstringConstraint)this.Append(Is.StringContaining(substring));
+            return (SubstringConstraint)this.Append(new SubstringConstraint(expected));
+        }
+
+        /// <summary>
+        /// Returns a constraint that succeeds if the actual
+        /// value contains the substring supplied as an argument.
+        /// </summary>
+        public SubstringConstraint ContainsSubstring(string expected)
+        {
+            return (SubstringConstraint)this.Append(new SubstringConstraint(expected));
         }
 
         #endregion
@@ -656,9 +665,18 @@ namespace NUnit.Framework.Constraints
         /// Returns a constraint that succeeds if the actual
         /// value starts with the substring supplied as an argument.
         /// </summary>
-        public StartsWithConstraint StringStarting(string substring)
+        public StartsWithConstraint StartsWith(string expected)
         {
-            return (StartsWithConstraint)this.Append(Is.StringStarting(substring));
+            return (StartsWithConstraint)this.Append(new StartsWithConstraint(expected));
+        }
+
+        /// <summary>
+        /// Returns a constraint that succeeds if the actual
+        /// value starts with the substring supplied as an argument.
+        /// </summary>
+        public StartsWithConstraint StringStarting(string expected)
+        {
+            return (StartsWithConstraint)this.Append(new StartsWithConstraint(expected));
         }
 
         #endregion
@@ -669,9 +687,18 @@ namespace NUnit.Framework.Constraints
         /// Returns a constraint that succeeds if the actual
         /// value ends with the substring supplied as an argument.
         /// </summary>
-        public EndsWithConstraint StringEnding(string substring)
+        public EndsWithConstraint EndsWith(string expected)
         {
-            return (EndsWithConstraint)this.Append(Is.StringEnding(substring));
+            return (EndsWithConstraint)this.Append(new EndsWithConstraint(expected));
+        }
+
+        /// <summary>
+        /// Returns a constraint that succeeds if the actual
+        /// value ends with the substring supplied as an argument.
+        /// </summary>
+        public EndsWithConstraint StringEnding(string expected)
+        {
+            return (EndsWithConstraint)this.Append(new EndsWithConstraint(expected));
         }
 
         #endregion
@@ -683,9 +710,18 @@ namespace NUnit.Framework.Constraints
         /// Returns a constraint that succeeds if the actual
         /// value matches the Regex pattern supplied as an argument.
         /// </summary>
+        public RegexConstraint Matches(string pattern)
+        {
+            return (RegexConstraint)this.Append(new RegexConstraint(pattern));
+        }
+
+        /// <summary>
+        /// Returns a constraint that succeeds if the actual
+        /// value matches the Regex pattern supplied as an argument.
+        /// </summary>
         public RegexConstraint StringMatching(string pattern)
         {
-            return (RegexConstraint)this.Append(Is.StringMatching(pattern));
+            return (RegexConstraint)this.Append(new RegexConstraint(pattern));
         }
 #endif
 
