@@ -1,3 +1,35 @@
+NUnitLite Version 0.6 - In process
+
+This is the first release of NUnitLite under the MIT license.
+
+New Features and Enhancements
+
+* New Constraints:
+
+* New Syntax Helpers:
+
+  Throws: InnerException
+          InvalidOperationException
+          ArgumentException
+          TargetInvocationException
+
+  Has:    InnerException
+
+  ConstraintExpression:
+          BinarySerializable
+          XmlSerializable
+          ContainsSubstring
+          StartsWith
+          EndsWith
+          Matches
+
+Bug fixes:
+
+* Additional control characters are now escapted in message output
+
+* A Stream now compares correctly as equal to itself
+
+
 NUnitLite Version 0.5 - June 14, 2009
 
 This is the first release from our new Launchpad.net project
