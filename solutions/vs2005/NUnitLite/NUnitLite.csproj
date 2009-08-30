@@ -168,6 +168,12 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\IgnoreAttribute.cs">
       <Link>Framework\IgnoreAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\IgnoreException.cs">
+      <Link>Framework\IgnoreException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\InconclusiveException.cs">
+      <Link>Framework\InconclusiveException.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Is.cs">
       <Link>Framework\Is.cs</Link>
     </Compile>
@@ -182,6 +188,9 @@
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\StackFilter.cs">
       <Link>Framework\StackFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\SuccessException.cs">
+      <Link>Framework\SuccessException.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\TearDownAttribute.cs">
       <Link>Framework\TearDownAttribute.cs</Link>
