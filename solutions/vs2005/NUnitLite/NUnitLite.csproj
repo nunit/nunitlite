@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0, NUNITLITE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -65,6 +65,9 @@
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintExpressionBase.cs">
       <Link>Constraints\ConstraintExpressionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintFactory.cs">
+      <Link>Constraints\ConstraintFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintOperators.cs">
       <Link>Constraints\ConstraintOperators.cs</Link>
@@ -147,6 +150,9 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\AssertionException.cs">
       <Link>Framework\AssertionException.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\AssertionHelper.cs">
+      <Link>Framework\AssertionHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\Contains.cs">
       <Link>Framework\Contains.cs</Link>
     </Compile>
@@ -177,11 +183,17 @@
     <Compile Include="..\..\..\src\NUnitLite\Framework\Is.cs">
       <Link>Framework\Is.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\Iz.cs">
+      <Link>Framework\Iz.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\NUnitLiteException.cs">
       <Link>Framework\NUnitLiteException.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\PropertyAttribute.cs">
       <Link>Framework\PropertyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLite\Framework\RequiredAddinAttribute.cs">
+      <Link>Framework\RequiredAddinAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLite\Framework\SetUpAttribute.cs">
       <Link>Framework\SetUpAttribute.cs</Link>
