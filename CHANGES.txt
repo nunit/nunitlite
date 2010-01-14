@@ -9,8 +9,6 @@ New Features and Enhancements
           Ignore
           Inconclusive
 
-* New Constraints:
-
 * New Syntax Helpers:
 
   Throws: InnerException
@@ -30,7 +28,7 @@ New Features and Enhancements
 
 Bug fixes:
 
-* Additional control characters are now escapted in message output
+* Additional control characters are now escaped in message output
 
 * A Stream now compares correctly as equal to itself
 

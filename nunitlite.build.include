@@ -99,14 +99,14 @@
   <target name="set-debug-build-config">
     <property name="build.config" value="debug"/>
     <property name="build.debug" value="true"/>
-    <property name="build.defines" value="DEBUG,TRACE,${runtime.defines}"
+    <property name="build.defines" value="DEBUG,TRACE,NUNITLITE,${runtime.defines}"
         dynamic="true"/>
   </target>
 	
   <target name="set-release-build-config">
     <property name="build.config" value="release"/>
     <property name="build.debug" value="false"/>
-    <property name="build.defines" value="TRACE,${runtime.defines}"
+    <property name="build.defines" value="TRACE,NUNITLITE,${runtime.defines}"
 	dynamic="true"/>
   </target>
 
