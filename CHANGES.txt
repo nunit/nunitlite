@@ -1,4 +1,4 @@
-NUnitLite Version 0.6 - In process
+NUnitLite Version 0.6 - January 13, 2010
 
 This is the first release of NUnitLite under the MIT license.
 
