@@ -189,15 +189,15 @@ namespace NUnitLite
         {
             IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(method, typeof(IgnoreAttribute));
             if (this.RunState == RunState.NotRunnable)
-                result.Failure(this.ignoreReason);
+                result.SetResult(ResultState.Failure, this.ignoreReason);
             else if ( ignore != null )
-                result.NotRun(ignore.Reason);
+                result.SetResult(ResultState.NotRun, ignore.Reason);
             else
             {
                 try
                 {
                     RunBare();
-                    result.Success();
+                    result.SetResult(ResultState.Success);
                 }
                 catch (NUnitLiteException nex)
                 {

@@ -24,7 +24,7 @@ namespace NUnitLite.Runner.Tests
         public void SummarizeSingleTestCase()
         {
             TestResult result = new TestResult(new TestCase( "TheTest", new DummyTestCase() ));
-            result.Success();
+            result.SetResult(ResultState.Success);
             CreateSummaryAndVerify(result, 1, 0, 0, 0);
         }
 
@@ -69,13 +69,13 @@ namespace NUnitLite.Runner.Tests
                 switch (c)
                 {
                     case 'S':
-                        r.Success();
+                        r.SetResult(ResultState.Success);
                         break;
                     case 'F':
-                        r.Failure("failed!");
+                        r.SetResult(ResultState.Failure, "failed!");
                         break;
                     case 'E':
-                        r.Error(new Exception("error!"));
+                        r.SetResult(ResultState.Error, "System.Exception : error!");
                         break;
                     default:
                         break;
@@ -85,9 +85,9 @@ namespace NUnitLite.Runner.Tests
             }
 
             if (recipe.IndexOfAny(new char[] { 'E', 'F' }) >= 0)
-                result.Failure("Errors");
+                result.SetResult(ResultState.Failure, "Errors");
             else
-                result.Success();
+                result.SetResult(ResultState.Success);
 
             return result;
         }

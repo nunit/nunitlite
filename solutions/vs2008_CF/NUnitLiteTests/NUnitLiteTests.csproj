@@ -68,8 +68,20 @@
     <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\ArrayFailureMessageTests.cs">
       <Link>Assertions\ArrayFailureMessageTests.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertFailTests.cs">
+      <Link>Assertions\AssertFailTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertIgnoreTests.cs">
+      <Link>Assertions\AssertIgnoreTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertInconclusiveTests.cs">
+      <Link>Assertions\AssertInconclusiveTests.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertionExceptionTests.cs">
       <Link>Assertions\AssertionExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertPassTests.cs">
+      <Link>Assertions\AssertPassTests.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertTests.cs">
       <Link>Assertions\AssertTests.cs</Link>

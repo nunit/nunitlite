@@ -21,52 +21,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if CLR_2_0 && !NETCF
 using System;
-using System.Collections.Generic;
 
-namespace NUnit.Framework.Constraints
+namespace NUnit.Framework.Assertions
 {
-    /// <summary>
-    /// Predicate constraint wraps a Predicate in a constraint,
-    /// returning success if the predicate is true.
-    /// </summary>
-    public class PredicateConstraint<T> : Constraint
+    [TestFixture]
+    public class AssertInconclusiveTests
     {
-        Predicate<T> predicate;
-
-        /// <summary>
-        /// Construct a PredicateConstraint from a predicate
-        /// </summary>
-        public PredicateConstraint(Predicate<T> predicate)
+        [Test, ExpectedException(typeof(InconclusiveException))]
+        public void ThrowsInconclusiveException()
         {
-            this.predicate = predicate;
+            Assert.Inconclusive();
         }
 
-        /// <summary>
-        /// Determines whether the predicate succeeds when applied
-        /// to the actual value.
-        /// </summary>
-        public override bool Matches(object actual)
+        [Test, ExpectedException(typeof(InconclusiveException))]
+        public void ThrowsInconclusiveExceptionWithMessage()
         {
-            this.actual = actual;
-
-            if (!(actual is T))
-                throw new ArgumentException("The actual value is not of type " + typeof(T).Name, "actual");
-
-            return predicate((T)actual);
+            Assert.Inconclusive("MESSAGE");
         }
 
-        /// <summary>
-        /// Writes the description to a MessageWriter
-        /// </summary>
-        public override void WriteDescriptionTo(MessageWriter writer)
+        [Test, ExpectedException(typeof(InconclusiveException))]
+        public void ThrowsInconclusiveExceptionWithMessageAndArgs()
         {
-            writer.WritePredicate("value matching");
-            writer.Write(predicate.Method.Name.StartsWith("<")
-                ? "lambda expression"
-                : predicate.Method.Name);
+            Assert.Inconclusive("MESSAGE: {0}+{1}={2}", 2, 2, 4);
         }
     }
 }
-#endif

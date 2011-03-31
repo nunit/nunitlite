@@ -223,7 +223,7 @@ namespace NUnitLite.Runner
             if (result.Results.Count > 0)
                 foreach (TestResult r in result.Results)
                     PrintErrorResults(r);
-            else if (result.IsError || result.IsFailure)
+            else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
             {
                 writer.WriteLine();
                 writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Test.Name, result.Test.FullName);

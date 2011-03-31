@@ -79,20 +79,20 @@ namespace NUnitLite
             get { return resultState != ResultState.NotRun; }
         }
 
-        public bool IsSuccess
-        {
-            get { return resultState == ResultState.Success; }
-        }
+        //public bool IsSuccess
+        //{
+        //    get { return resultState == ResultState.Success; }
+        //}
 
-        public bool IsFailure
-        {
-            get { return resultState == ResultState.Failure; }
-        }
+        //public bool IsFailure
+        //{
+        //    get { return resultState == ResultState.Failure; }
+        //}
 
-        public bool IsError
-        {
-            get { return resultState == ResultState.Error; }
-        }
+        //public bool IsError
+        //{
+        //    get { return resultState == ResultState.Error; }
+        //}
 
         public string Message
         {
@@ -117,71 +117,87 @@ namespace NUnitLite
             {
                 case ResultState.Error:
                 case ResultState.Failure:
-                    this.Failure("Component test failure");
+                    this.SetResult(ResultState.Failure, "Component test failure");
                     break;
                 default:
                     break;
             }
         }
 
-        public void Success()
+//        public void Error(Exception ex)
+//        {
+//#if !NETCF_1_0
+//            SetResult(ResultState.Error, ex.GetType().ToString() + " : " + ex.Message, ex.StackTrace);
+//#else
+//            SetResult(ResultState.Error, ex.GetType().ToString() + " : " + ex.Message);
+//#endif
+////            this.resultState = ResultState.Error;
+////            this.message = ex.GetType().ToString() + " : " + ex.Message;
+////#if !NETCF_1_0
+////            this.stackTrace = ex.StackTrace;
+////#endif
+//        }
+
+        /// <summary>
+        /// Set the result of the test
+        /// </summary>
+        /// <param name="resultState">The ResultState to use in the result</param>
+        public void SetResult(ResultState resultState)
         {
-            this.resultState = ResultState.Success;
-            this.message = null;
+            SetResult(resultState, null, null);
         }
 
-
-	    public void Failure(string message)
-	    {
-                this.resultState = ResultState.Failure;
-                if (this.message == null || this.message == string.Empty)
-                    this.message = message;
-                else
-                    this.message = this.message + NUnitLite.Env.NewLine + message;
-            }
-
-        public void Error(string message)
+        /// <summary>
+        /// Set the result of the test
+        /// </summary>
+        /// <param name="resultState">The ResultState to use in the result</param>
+        /// <param name="message">A message associated with the result state</param>
+        public void SetResult(ResultState resultState, string message)
         {
-            this.resultState = ResultState.Error;
-            if (this.message == null || this.message == string.Empty)
-                this.message = message;
-            else
-                this.message = this.message + NUnitLite.Env.NewLine + message;
+            SetResult(resultState, message, null);
         }
 
-#if !NETCF_1_0
-        public void Failure(string message, string stackTrace)
+        /// <summary>
+        /// Set the result of the test
+        /// </summary>
+        /// <param name="resultState">The ResultState to use in the result</param>
+        /// <param name="message">A message associated with the result state</param>
+        /// <param name="stackTrace">Stack trace giving the location of the command</param>
+        public void SetResult(ResultState resultState, string message, string stackTrace)
         {
-            this.Failure(message);
-            this.stackTrace = stackTrace;
-        }
-#endif
-
-        public void Error(Exception ex)
-        {
-            this.resultState = ResultState.Error;
-            this.message = ex.GetType().ToString() + " : " + ex.Message;
-#if !NETCF_1_0
-            this.stackTrace = ex.StackTrace;
-#endif
-        }
-
-        public void NotRun(string message)
-        {
-            this.resultState = ResultState.NotRun;
+            this.resultState = resultState;
             this.message = message;
+            this.stackTrace = stackTrace;
         }
 
         public void RecordException(Exception ex)
         {
+            if (ex is NUnitLiteException)
+                ex = ex.InnerException;
+
+#if !NETCF_1_0
             if (ex is AssertionException)
-#if NETCF_1_0
-		this.Failure(ex.Message);
-#else
-                this.Failure(ex.Message, StackFilter.Filter(ex.StackTrace));
-#endif
+                this.SetResult(ResultState.Failure, ex.Message, StackFilter.Filter(ex.StackTrace));
+            else if (ex is SuccessException)
+                this.SetResult(ResultState.Success, ex.Message);
+            else if (ex is IgnoreException)
+                this.SetResult(ResultState.NotRun, ex.Message, StackFilter.Filter(ex.StackTrace));
+            else if (ex is InconclusiveException)
+                this.SetResult(ResultState.NotRun, ex.Message, StackFilter.Filter(ex.StackTrace));
             else
-                this.Error(ex);
+                this.SetResult(ResultState.Error, ex.GetType().ToString() + " : " + ex.Message, ex.StackTrace);
+#else
+            if (ex is AssertionException)
+		        this.SetResult(ResultState.Failure, ex.Message);
+            else if (ex is SuccessException)
+                this.SetResult(ResultState.Success, ex.Message);
+            else if (ex is IgnoreException)
+                this.SetResult(ResultState.NotRun, ex.Message);
+            else if (ex is InconclusiveException)
+                this.SetResult(ResultState.NotRun, ex.Message);
+            else
+                this.SetResult(ResultState.Error, ex.GetType().ToString() + " : " + ex.Message);
+#endif
         }
     }
 }

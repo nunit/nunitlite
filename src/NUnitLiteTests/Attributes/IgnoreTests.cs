@@ -13,7 +13,7 @@ namespace NUnitLite.Tests
             Assert.That(suite, Is.Not.Null);
             Assert.That(suite.TestCaseCount, Is.EqualTo(1));
             TestResult result = suite.Run();
-            Assert.That(result.IsSuccess);
+            Assert.That(result.ResultState == ResultState.Success);
             Assert.That(result.Results.Count, Is.EqualTo(1));
             TestResult caseResult = (TestResult)result.Results[0];
             Assert.That(caseResult.ResultState, Is.EqualTo(ResultState.NotRun));

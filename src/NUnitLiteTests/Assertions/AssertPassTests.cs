@@ -21,52 +21,56 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if CLR_2_0 && !NETCF
 using System;
-using System.Collections.Generic;
 
-namespace NUnit.Framework.Constraints
+namespace NUnit.Framework.Assertions
 {
-    /// <summary>
-    /// Predicate constraint wraps a Predicate in a constraint,
-    /// returning success if the predicate is true.
-    /// </summary>
-    public class PredicateConstraint<T> : Constraint
+    [TestFixture]
+    public class AssertPassTests
     {
-        Predicate<T> predicate;
-
-        /// <summary>
-        /// Construct a PredicateConstraint from a predicate
-        /// </summary>
-        public PredicateConstraint(Predicate<T> predicate)
+        [Test, ExpectedException(typeof(SuccessException))]
+        public void ThrowsSuccessException()
         {
-            this.predicate = predicate;
+            Assert.Pass();
         }
 
-        /// <summary>
-        /// Determines whether the predicate succeeds when applied
-        /// to the actual value.
-        /// </summary>
-        public override bool Matches(object actual)
+        [Test]
+        public void ThrowsSuccessExceptionWithMessage()
         {
-            this.actual = actual;
-
-            if (!(actual is T))
-                throw new ArgumentException("The actual value is not of type " + typeof(T).Name, "actual");
-
-            return predicate((T)actual);
+            try
+            {
+                Assert.Pass("MESSAGE");
+            }
+            catch (SuccessException ex)
+            {
+                Assert.That(ex.Message, Is.EqualTo("MESSAGE"));
+            }
         }
 
-        /// <summary>
-        /// Writes the description to a MessageWriter
-        /// </summary>
-        public override void WriteDescriptionTo(MessageWriter writer)
+        [Test]
+        public void ThrowsSuccessExceptionWithMessageAndArgs()
         {
-            writer.WritePredicate("value matching");
-            writer.Write(predicate.Method.Name.StartsWith("<")
-                ? "lambda expression"
-                : predicate.Method.Name);
+            try
+            {
+                Assert.Pass("MESSAGE: {0}+{1}={2}", 2, 2, 4);
+            }
+            catch (SuccessException ex)
+            {
+                Assert.That(ex.Message, Is.EqualTo("MESSAGE: 2+2=4"));
+            }
+        }
+
+        [Test]
+        public void AssertPassReturnsSuccess()
+        {
+            Assert.Pass("This test is OK!");
+        }
+
+        [Test]
+        public void SubsequentFailureIsIrrelevant()
+        {
+            Assert.Pass("This test is OK!");
+            Assert.Fail("No it's NOT!");
         }
     }
 }
-#endif

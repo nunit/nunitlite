@@ -47,9 +47,18 @@ namespace NUnitLite.Runner.Tests
             if ( result.Results.Count == 0 )
             {
                 ++tests;
-                if (result.IsError) ++errors;
-                if (result.IsFailure) ++failures;
-                if (!result.Executed) ++notrun;
+                switch (result.ResultState)
+                {
+                    case ResultState.Error:
+                        ++errors;
+                        break;
+                    case ResultState.Failure:
+                        ++failures;
+                        break;
+                    case ResultState.NotRun:
+                        ++notrun;
+                        break;
+                }
             }
         }
     }

@@ -142,11 +142,11 @@ namespace NUnitLite
             switch (this.RunState)
             {
                 case RunState.NotRunnable:
-                    result.Error(this.IgnoreReason);
+                    result.SetResult(ResultState.Error, this.IgnoreReason);
                     break;
 
                 case RunState.Ignored:
-                    result.NotRun(this.IgnoreReason);
+                    result.SetResult(ResultState.NotRun, this.IgnoreReason);
                     break;
 
                 case RunState.Runnable:
@@ -169,11 +169,11 @@ namespace NUnitLite
                     }
 
                     if (count == 0)
-                        result.NotRun("Class has no tests");
+                        result.SetResult(ResultState.NotRun, "Class has no tests");
                     else if (errors > 0 || failures > 0)
-                        result.Failure("One or more component tests failed");
+                        result.SetResult(ResultState.Failure, "One or more component tests failed");
                     else
-                        result.Success();
+                        result.SetResult(ResultState.Success);
                     break;
             }
 
