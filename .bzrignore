@@ -1,4 +1,4 @@
-builds
+build
 bin
 obj
 *.suo
@@ -7,4 +7,4 @@ obj
 *.csproj.user
 *.pidb
 *.userprefs
-packages
+package

@@ -234,7 +234,7 @@ namespace NUnit.Framework.Constraints
             return this.Append(constraint);
         }
 
-#if CLR_2_0
+#if CLR_2_0 && !NETCF
         /// <summary>
         /// Returns the constraint provided as an argument - used to allow custom
         /// custom constraints to easily participate in the syntax.

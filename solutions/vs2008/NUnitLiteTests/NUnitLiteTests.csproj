@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C8FA4073-B24E-4178-93A1-5E1256C8B528}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NUnitLiteTests</RootNamespace>
+    <AssemblyName>NUnitLiteTests</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NUnitLite\NUnitLite.csproj">
+      <Project>{C24A3FC4-2541-4E9C-BADD-564777610B75}</Project>
+      <Name>NUnitLite</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\src\NUnitLiteTests\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\ArrayEqualityTests.cs">
+      <Link>Assertions\ArrayEqualityTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\ArrayFailureMessageTests.cs">
+      <Link>Assertions\ArrayFailureMessageTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertionExceptionTests.cs">
+      <Link>Assertions\AssertionExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\AssertTests.cs">
+      <Link>Assertions\AssertTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\CollectionTests.cs">
+      <Link>Assertions\CollectionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Assertions\ExpectedExceptionTests.cs">
+      <Link>Assertions\ExpectedExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Attributes\AttributeTests.cs">
+      <Link>Attributes\AttributeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Attributes\IgnoreTests.cs">
+      <Link>Attributes\IgnoreTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\AndTest.cs">
+      <Link>Constraints\AndTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\BasicConstraintTests.cs">
+      <Link>Constraints\BasicConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\CollectionConstraintTests.cs">
+      <Link>Constraints\CollectionConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ComparisonConstraintTests.cs">
+      <Link>Constraints\ComparisonConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ConstraintTestBase.cs">
+      <Link>Constraints\ConstraintTestBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\EmptyTest.cs">
+      <Link>Constraints\EmptyTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\EqualTest.cs">
+      <Link>Constraints\EqualTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\MessageWriterTests.cs">
+      <Link>Constraints\MessageWriterTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\NotTest.cs">
+      <Link>Constraints\NotTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\OrTest.cs">
+      <Link>Constraints\OrTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\PathConstraintTests.cs">
+      <Link>Constraints\PathConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\RangeTests.cs">
+      <Link>Constraints\RangeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\SameAsTest.cs">
+      <Link>Constraints\SameAsTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\StringConstraintTests.cs">
+      <Link>Constraints\StringConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\TestDelegates.cs">
+      <Link>Constraints\TestDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\ThrowsConstraintTests.cs">
+      <Link>Constraints\ThrowsConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Constraints\TypeConstraintTests.cs">
+      <Link>Constraints\TypeConstraintTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\DummyTestCase.cs">
+      <Link>DummyTestCase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\DummyTestSuite.cs">
+      <Link>DummyTestSuite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\StackFilterTest.cs">
+      <Link>Framework\StackFilterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\SyntaxTests.cs">
+      <Link>Framework\SyntaxTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestCaseInvocationTests.cs">
+      <Link>Framework\TestCaseInvocationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestResultTests.cs">
+      <Link>Framework\TestResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestSuiteBasicTests.cs">
+      <Link>Framework\TestSuiteBasicTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Framework\TestSuiteCreationTests.cs">
+      <Link>Framework\TestSuiteCreationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Program.cs">
+      <Link>Program.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\RecordingTestListener.cs">
+      <Link>RecordingTestListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\CommandLineOptionTests.cs">
+      <Link>Runner\CommandLineOptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\ResultSummaryTests.cs">
+      <Link>Runner\ResultSummaryTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TestLoaderTests.cs">
+      <Link>Runner\TestLoaderTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TestRunnerTests.cs">
+      <Link>Runner\TestRunnerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\Runner\TextUITests.cs">
+      <Link>Runner\TextUITests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\NUnitLiteTests\SimpleTestCase.cs">
+      <Link>SimpleTestCase.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
