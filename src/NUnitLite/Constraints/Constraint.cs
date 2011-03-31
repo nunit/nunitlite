@@ -26,6 +26,12 @@ using System.Collections;
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
+    /// Delegate used to delay evaluation of the actual value
+    /// to be used in evaluating a constraint
+    /// </summary>
+    public delegate object ActualValueDelegate();
+    
+    /// <summary>
     /// The Constraint class is the base of all built-in constraints
     /// within NUnit. It provides the operator overloads used to combine 
     /// constraints.
@@ -47,14 +53,14 @@ namespace NUnit.Framework.Constraints
         }
         #endregion
 
-        #region Static and Instance Fields
+		#region Static and Instance Fields
         /// <summary>
         /// Static UnsetObject used to detect derived constraints
         /// failing to set the actual value.
         /// </summary>
         protected static object UNSET = new UnsetObject();
 
-        /// <summary>
+		/// <summary>
         /// The actual value being tested against a constraint
         /// </summary>
         protected object actual = UNSET;
@@ -130,6 +136,8 @@ namespace NUnit.Framework.Constraints
                 if (displayName == null)
                 {
                     displayName = this.GetType().Name.ToLower();
+                    if (displayName.EndsWith("`1") || displayName.EndsWith("`2"))
+                        displayName = displayName.Substring(0, displayName.Length - 2);
                     if (displayName.EndsWith("constraint"))
                         displayName = displayName.Substring(0, displayName.Length - 10);
                 }
@@ -139,9 +147,9 @@ namespace NUnit.Framework.Constraints
 
             set { displayName = value; }
         }
-        #endregion
+		#endregion
 
-        #region Abstract and Virtual Methods
+		#region Abstract and Virtual Methods
         /// <summary>
         /// Write the failure message to the MessageWriter provided
         /// as an argument. The default implementation simply passes
@@ -165,23 +173,63 @@ namespace NUnit.Framework.Constraints
         public abstract bool Matches(object actual);
 
         /// <summary>
+        /// Test whether the constraint is satisfied by an
+        /// ActualValueDelegate that returns the value to be tested.
+        /// The default implementation simply evaluates the delegate
+        /// but derived classes may override it to provide for delayed 
+        /// processing.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate</param>
+        /// <returns>True for success, false for failure</returns>
+        public virtual bool Matches(ActualValueDelegate del)
+        {
+            return Matches(del());
+        }
+
+#if NET_2_0
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given reference.
+        /// The default implementation simply dereferences the value but
+        /// derived classes may override it to provide for delayed processing.
+        /// </summary>
+        /// <param name="actual">A reference to the value to be tested</param>
+        /// <returns>True for success, false for failure</returns>
+        public virtual bool Matches<T>(ref T actual)
+        {
+            return Matches(actual);
+        }
+#else
+		/// <summary>
+		/// Test whether the constraint is satisfied by a given bool reference.
+		/// The default implementation simply dereferences the value but
+		/// derived classes may override it to provide for delayed processing.
+		/// </summary>
+		/// <param name="actual">A reference to the value to be tested</param>
+		/// <returns>True for success, false for failure</returns>
+		public virtual bool Matches(ref bool actual)
+		{
+			return Matches(actual);
+		}
+#endif
+
+        /// <summary>
         /// Write the constraint description to a MessageWriter
         /// </summary>
         /// <param name="writer">The writer on which the description is displayed</param>
         public abstract void WriteDescriptionTo(MessageWriter writer);
 
         /// <summary>
-        /// Write the actual value for a failing constraint test to a
-        /// MessageWriter. The default implementation simply writes
-        /// the raw value of actual, leaving it to the writer to
-        /// perform any formatting.
-        /// </summary>
-        /// <param name="writer">The writer on which the actual value is displayed</param>
-        public virtual void WriteActualValueTo(MessageWriter writer)
-        {
-            writer.WriteActualValue(actual);
-        }
-        #endregion
+		/// Write the actual value for a failing constraint test to a
+		/// MessageWriter. The default implementation simply writes
+		/// the raw value of actual, leaving it to the writer to
+		/// perform any formatting.
+		/// </summary>
+		/// <param name="writer">The writer on which the actual value is displayed</param>
+		public virtual void WriteActualValueTo(MessageWriter writer)
+		{
+			writer.WriteActualValue( actual );
+		}
+		#endregion
 
         #region ToString Override
         /// <summary>
@@ -297,6 +345,39 @@ namespace NUnit.Framework.Constraints
                 return new ConstraintExpression(builder);
             }
         }
+        #endregion
+
+        #region After Modifier
+
+#if !NUNITLITE
+        /// <summary>
+        /// Returns a DelayedConstraint with the specified delay time.
+        /// </summary>
+        /// <param name="delayInMilliseconds">The delay in milliseconds.</param>
+        /// <returns></returns>
+        public DelayedConstraint After(int delayInMilliseconds)
+        {
+            return new DelayedConstraint(
+                builder == null ? this : builder.Resolve(),
+                delayInMilliseconds);
+        }
+
+        /// <summary>
+        /// Returns a DelayedConstraint with the specified delay time
+        /// and polling interval.
+        /// </summary>
+        /// <param name="delayInMilliseconds">The delay in milliseconds.</param>
+        /// <param name="pollingInterval">The interval at which to test the constraint.</param>
+        /// <returns></returns>
+        public DelayedConstraint After(int delayInMilliseconds, int pollingInterval)
+        {
+            return new DelayedConstraint(
+                builder == null ? this : builder.Resolve(),
+                delayInMilliseconds,
+                pollingInterval);
+        }
+
+#endif
         #endregion
 
         #region IResolveConstraint Members

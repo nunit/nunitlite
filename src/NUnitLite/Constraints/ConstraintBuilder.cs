@@ -23,7 +23,7 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
+#if CLR_2_0
 using System.Collections.Generic;
 #endif
 
@@ -45,10 +45,10 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         public class OperatorStack
         {
-#if NET_2_0
+#if CLR_2_0
             private Stack<ConstraintOperator> stack = new Stack<ConstraintOperator>();
 #else
-		    private Stack stack = new Stack();
+            private Stack stack = new Stack();
 #endif
             /// <summary>
             /// Initializes a new instance of the <see cref="T:OperatorStack"/> class.
@@ -102,10 +102,10 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         public class ConstraintStack
         {
-#if NET_2_0
+#if CLR_2_0
             private Stack<Constraint> stack = new Stack<Constraint>();
 #else
-		    private Stack stack = new Stack();
+            private Stack stack = new Stack();
 #endif
             private ConstraintBuilder builder;
 

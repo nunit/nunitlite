@@ -13,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C24A3FC4-2541-4E9C-BADD-564777610B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -21,10 +25,9 @@ Global
 		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8FA4073-B24E-4178-93A1-5E1256C8B528}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = NUnitLiteTests\NUnitLiteTests.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

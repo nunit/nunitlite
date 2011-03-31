@@ -82,6 +82,20 @@ namespace NUnit.Framework.Constraints
             return baseConstraint == null || baseConstraint.Matches(caughtException);
         }
 
+#if NET_2_0
+        /// <summary>
+        /// Converts an ActualValueDelegate to a TestDelegate
+        /// before calling the primary overload.
+        /// </summary>
+        /// <param name="del"></param>
+        /// <returns></returns>
+        public override bool Matches(ActualValueDelegate del)
+        {
+            TestDelegate testDelegate = new TestDelegate(delegate { del(); });
+            return Matches((object)testDelegate);
+        }
+#endif
+
         /// <summary>
         /// Write the constraint description to a MessageWriter
         /// </summary>
@@ -157,7 +171,7 @@ namespace NUnit.Framework.Constraints
             }
 
             return this.caughtException == null;
-		}
+        }
 
         /// <summary>
         /// Write the constraint description to a MessageWriter

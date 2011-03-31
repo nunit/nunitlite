@@ -24,7 +24,7 @@
 using System;
 using System.IO;
 using System.Collections;
-#if NET_2_0
+#if CLR_2_0
 using System.Collections.Generic;
 #endif
 
@@ -39,8 +39,6 @@ namespace NUnit.Framework.Constraints
     public class EqualConstraint : Constraint
     {
         #region Static and Instance Fields
-        private static IDictionary constraintHelpers = new Hashtable();
-
         private readonly object expected;
 
         /// <summary>
@@ -258,24 +256,13 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="comparer">The IComparer object to use.</param>
         /// <returns>Self.</returns>
-        [Obsolete("Replace with 'Using'")]
-        public EqualConstraint Comparer(IComparer comparer)
-        {
-            return Using(comparer);
-        }
-
-        /// <summary>
-        /// Flag the constraint to use the supplied IComparer object.
-        /// </summary>
-        /// <param name="comparer">The IComparer object to use.</param>
-        /// <returns>Self.</returns>
         public EqualConstraint Using(IComparer comparer)
         {
             this.comparer.ExternalComparer = EqualityAdapter.For(comparer);
             return this;
         }
 
-#if NET_2_0
+#if CLR_2_0
         /// <summary>
         /// Flag the constraint to use the supplied IComparer object.
         /// </summary>

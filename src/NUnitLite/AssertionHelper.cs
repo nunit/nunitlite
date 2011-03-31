@@ -130,7 +130,7 @@ namespace NUnit.Framework
 
         #region ref Object
 #if !NUNITLITE
-#if NET_2_0
+#if CLR_2_0
         /// <summary>
         /// Apply a constraint to a referenced value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.

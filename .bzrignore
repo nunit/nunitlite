@@ -1,8 +1,10 @@
-build
+builds
 bin
 obj
 *.suo
 *.vssscc
 *.vspscc
 *.csproj.user
-package
+*.pidb
+*.userprefs
+packages
