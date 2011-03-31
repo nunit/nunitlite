@@ -19,7 +19,14 @@ namespace NUnitLite.Runner
         /// <returns>A Test containing all fixtures found</returns>
         public static ITest Load(Assembly assembly)
         {
-            TestSuite suite = new TestSuite(assembly.GetName().Name);
+            // We no longer use assembly.GetName() because it is not
+            // available in some restricted environments like Unity.
+            //TestSuite suite = new TestSuite(assembly.GetName().Name);
+            string suiteName = assembly.FullName;
+            int comma = suiteName.IndexOf(',');
+            if (comma > 0)
+                suiteName = suiteName.Substring(0, comma);
+            TestSuite suite = new TestSuite(suiteName);
 
             foreach (Type type in assembly.GetTypes())
             {
