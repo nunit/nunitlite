@@ -1,5 +1,7 @@
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {
@@ -12,7 +14,7 @@ namespace NUnitLite.Tests
             TestSuite suite = new TestSuite(typeof(FixtureWithIgnoredTestCase));
             Assert.That(suite, Is.Not.Null);
             Assert.That(suite.TestCaseCount, Is.EqualTo(1));
-            TestResult result = suite.Run();
+            ITestResult result = suite.Run();
             Assert.That(result.ResultState == ResultState.Success);
             Assert.That(result.Results.Count, Is.EqualTo(1));
             TestResult caseResult = (TestResult)result.Results[0];
@@ -27,7 +29,7 @@ namespace NUnitLite.Tests
             Assert.That(suite, Is.Not.Null);
             Assert.That(suite.TestCaseCount, Is.EqualTo(2));
             Assert.That(suite.RunState, Is.EqualTo(RunState.Ignored));
-            TestResult result = suite.Run();
+            ITestResult result = suite.Run();
             Assert.That(result.ResultState, Is.EqualTo( ResultState.NotRun ) );
             Assert.That(result.Message, Is.EqualTo("Ignore all the tests"));
             Assert.That(result.Results.Count, Is.EqualTo(0));

@@ -6,6 +6,8 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {
@@ -123,7 +125,7 @@ namespace NUnitLite.Tests
         {
             ExceptionHandlerCalledClass fixture = new ExceptionHandlerCalledClass();
             ITest testCase = new TestCase("MethodWithBadHandler", fixture);
-            TestResult result = testCase.Run();
+            ITestResult result = testCase.Run();
             Assert.That(result.ResultState, Is.EqualTo(ResultState.Failure));
             Assert.That(result.Message, Is.EqualTo(
                 "The specified exception handler DeliberatelyMissingHandler was not found" ));

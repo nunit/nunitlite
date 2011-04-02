@@ -7,6 +7,8 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {
@@ -15,7 +17,7 @@ namespace NUnitLite.Tests
     {
         DummyTestCase dummy;
         TestCase test;
-        TestResult result;
+        ITestResult result;
 
         [SetUp]
         public void SetUp()

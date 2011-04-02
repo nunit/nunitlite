@@ -22,13 +22,14 @@
 // ***********************************************************************
 
 using System;
+using NUnit.Framework.Api;
 
-namespace NUnitLite
+namespace NUnit.Framework.Internal
 {
-    public class NullListener : TestListener
+    public class NullListener : ITestListener
     {
         public void TestStarted(ITest test) { }
 
-        public void TestFinished(TestResult result) { }
+        public void TestFinished(ITestResult result) { }
     }
 }

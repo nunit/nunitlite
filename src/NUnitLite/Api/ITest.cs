@@ -21,11 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace NUnitLite
+namespace NUnit.Framework.Api
 {
-    public interface TestListener
+    public interface ITest
     {
-        void TestStarted(ITest test);
-        void TestFinished(TestResult result);
+        string Name { get; }
+        string FullName { get; }
+
+        RunState RunState { get; }
+        string IgnoreReason { get; }
+        int TestCaseCount { get; }
+
+        System.Collections.IDictionary Properties { get; }
+
+        ITestResult Run();
+        ITestResult Run(ITestListener listener);
     }
 }

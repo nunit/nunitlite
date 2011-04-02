@@ -6,6 +6,8 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite
 {
@@ -16,7 +18,7 @@ namespace NUnitLite
         private int failureCount;
         private int notRunCount;
 
-        public ResultSummary(TestResult result)
+        public ResultSummary(ITestResult result)
         {
             Visit(result);
         }
@@ -41,7 +43,7 @@ namespace NUnitLite
             get { return notRunCount; }
         }
 
-        private void Visit(TestResult result)
+        private void Visit(ITestResult result)
         {
             if (result.Test is TestSuite)
             {

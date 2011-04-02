@@ -25,8 +25,9 @@ using System;
 using System.Collections;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
-namespace NUnitLite
+namespace NUnit.Framework.Internal
 {
     public class TestSuite : ITest
     {
@@ -128,12 +129,12 @@ namespace NUnitLite
         #endregion
 
         #region Public Methods
-        public TestResult Run()
+        public ITestResult Run()
         {
             return Run(new NullListener());
         }
 
-        public TestResult Run(TestListener listener)
+        public ITestResult Run(ITestListener listener)
         {
             int count = 0, failures = 0, errors = 0;
             listener.TestStarted(this);
@@ -153,7 +154,7 @@ namespace NUnitLite
                     foreach (ITest test in tests)
                     {
                         ++count;
-                        TestResult r = test.Run(listener);
+                        ITestResult r = test.Run(listener);
                         result.AddResult(r);
                         switch (r.ResultState)
                         {

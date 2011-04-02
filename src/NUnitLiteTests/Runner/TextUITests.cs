@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 using NUnitLite.Tests;
 
 namespace NUnitLite.Runner.Tests

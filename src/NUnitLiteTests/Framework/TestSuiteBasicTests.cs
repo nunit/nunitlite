@@ -6,6 +6,8 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {
@@ -26,7 +28,7 @@ namespace NUnitLite.Tests
         {
             RecordingTestListener listener = new RecordingTestListener();
             TestSuite suite = CreateSimpleSuite("my suite");
-            TestResult result = suite.Run(listener);
+            ITestResult result = suite.Run(listener);
             Assert.That( result.ResultState, Is.EqualTo( ResultState.Success ) );
             foreach (TestResult r in result.Results)
                 Assert.That( r.ResultState, Is.EqualTo( ResultState.Success ) );
@@ -41,7 +43,7 @@ namespace NUnitLite.Tests
             DummyTestCase dummy = new DummyTestCase();
             suite.AddTest(new TestCase( "TheTest", dummy) );
             dummy.simulateTestFailure = true;
-            TestResult result = suite.Run();
+            ITestResult result = suite.Run();
             Assert.That( result.ResultState, Is.EqualTo( ResultState.Failure ) );
         }
 
@@ -52,7 +54,7 @@ namespace NUnitLite.Tests
             DummyTestCase dummy = new DummyTestCase();
             suite.AddTest( new TestCase( "TheTest", dummy ) );
             dummy.simulateTestError = true;
-            TestResult result = suite.Run();
+            ITestResult result = suite.Run();
             Assert.That( result.ResultState, Is.EqualTo( ResultState.Failure ) );
         }
 

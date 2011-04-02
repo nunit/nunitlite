@@ -7,12 +7,13 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 using NUnitLite.Tests;
 
 namespace NUnitLite.Runner.Tests
 {
     [TestFixture]
-    public class TestRunnerTests : TestListener
+    public class TestRunnerTests : ITestListener
     {
         private int tests;
         private int errors;
@@ -38,11 +39,11 @@ namespace NUnitLite.Runner.Tests
             Assert.That(notrun, Is.EqualTo(0), "notrun");
         }
 
-        void TestListener.TestStarted(ITest test)
+        void ITestListener.TestStarted(ITest test)
         {
         }
 
-        void TestListener.TestFinished(TestResult result)
+        void ITestListener.TestFinished(ITestResult result)
         {
             if ( result.Results.Count == 0 )
             {

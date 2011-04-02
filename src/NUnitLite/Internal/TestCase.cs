@@ -25,8 +25,9 @@ using System;
 using System.Reflection;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
-namespace NUnitLite
+namespace NUnit.Framework.Internal
 {
     public class TestCase : ITest
     {
@@ -148,12 +149,12 @@ namespace NUnitLite
             return Reflect.HasAttribute(method, typeof(TestAttribute));
         }
 
-        public TestResult Run()
+        public ITestResult Run()
         {
             return Run( new NullListener() );
         }
 
-        public TestResult Run(TestListener listener)
+        public ITestResult Run(ITestListener listener)
         {
             listener.TestStarted(this);
 
@@ -185,7 +186,7 @@ namespace NUnitLite
             }
         }
 
-        protected virtual void Run(TestResult result, TestListener listener)
+        protected virtual void Run(TestResult result, ITestListener listener)
         {
             IgnoreAttribute ignore = (IgnoreAttribute)Reflect.GetAttribute(method, typeof(IgnoreAttribute));
             if (this.RunState == RunState.NotRunnable)

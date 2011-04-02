@@ -24,18 +24,11 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
-namespace NUnitLite
+namespace NUnit.Framework.Internal
 {
-    public enum ResultState
-    {
-        NotRun,
-        Success,
-        Failure,
-        Error
-    }
-
-    public class TestResult
+    public class TestResult : ITestResult
     {
         private ITest test;
 
@@ -79,21 +72,6 @@ namespace NUnitLite
             get { return resultState != ResultState.NotRun; }
         }
 
-        //public bool IsSuccess
-        //{
-        //    get { return resultState == ResultState.Success; }
-        //}
-
-        //public bool IsFailure
-        //{
-        //    get { return resultState == ResultState.Failure; }
-        //}
-
-        //public bool IsError
-        //{
-        //    get { return resultState == ResultState.Error; }
-        //}
-
         public string Message
         {
             get { return message; }
@@ -106,7 +84,7 @@ namespace NUnitLite
         }
 #endif
 
-        public void AddResult(TestResult result)
+        public void AddResult(ITestResult result)
         {
             if (results == null)
                 results = new ArrayList();

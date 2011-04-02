@@ -9,6 +9,7 @@ using System.IO;
 using System.Collections;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
 namespace NUnitLite.Runner
 {
@@ -151,7 +152,7 @@ namespace NUnitLite.Runner
             ReportResults( runner.Run(assembly, tests) );
         }
 
-        private void ReportResults( TestResult result )
+        private void ReportResults( ITestResult result )
         {
             ResultSummary summary = new ResultSummary(result);
 
@@ -210,7 +211,7 @@ namespace NUnitLite.Runner
             writer.WriteLine();
         }
 
-        private void PrintErrorReport(TestResult result)
+        private void PrintErrorReport(ITestResult result)
         {
             reportCount = 0;
             writer.WriteLine();
@@ -218,10 +219,10 @@ namespace NUnitLite.Runner
             PrintErrorResults(result);
         }
 
-        private void PrintErrorResults(TestResult result)
+        private void PrintErrorResults(ITestResult result)
         {
             if (result.Results.Count > 0)
-                foreach (TestResult r in result.Results)
+                foreach (ITestResult r in result.Results)
                     PrintErrorResults(r);
             else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
             {
@@ -236,7 +237,7 @@ namespace NUnitLite.Runner
             }
         }
 
-        private void PrintNotRunReport(TestResult result)
+        private void PrintNotRunReport(ITestResult result)
         {
             reportCount = 0;
             writer.WriteLine();
@@ -244,10 +245,10 @@ namespace NUnitLite.Runner
             PrintNotRunResults(result);
         }
 
-        private void PrintNotRunResults(TestResult result)
+        private void PrintNotRunResults(ITestResult result)
         {
             if (result.Results != null)
-                foreach (TestResult r in result.Results)
+                foreach (ITestResult r in result.Results)
                     PrintNotRunResults(r);
             else if (result.ResultState == ResultState.NotRun)
             {

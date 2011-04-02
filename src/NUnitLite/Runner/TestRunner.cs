@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
 namespace NUnitLite.Runner
 {
@@ -18,7 +19,7 @@ namespace NUnitLite.Runner
         public TestRunnerException(string message) : base(message) { }
     }
 
-    public class TestRunner : TestListener
+    public class TestRunner : ITestListener
     {
         private IList listeners = new ArrayList();
 
@@ -27,7 +28,7 @@ namespace NUnitLite.Runner
         /// </summary>
         /// <param name="assembly">The assembly for which tests are to be run.</param>
         /// <returns>TestResult representing the result of the run</returns>
-        public virtual TestResult Run(Assembly assembly)
+        public virtual ITestResult Run(Assembly assembly)
         {
             return Run( TestLoader.Load(assembly) );
         }
@@ -36,8 +37,8 @@ namespace NUnitLite.Runner
         /// Runs a set of tests specified by name
         /// </summary>
         /// <param name="tests">Array of test names to be run</param>
-        /// <returns>TestResult representing the result of the run</returns>
-        public virtual TestResult Run(Assembly assembly, string[] tests)
+        /// <returns>ITestResult representing the result of the run</returns>
+        public virtual ITestResult Run(Assembly assembly, string[] tests)
         {
             return Run( TestLoader.Load( assembly, tests ) );
         }
@@ -47,7 +48,7 @@ namespace NUnitLite.Runner
         /// Runs the specified test.
         /// </summary>
         /// <param name="test">The test.</param>
-        public virtual TestResult Run(ITest test)
+        public virtual ITestResult Run(ITest test)
         {
             return test.Run(this);
         }
@@ -56,7 +57,7 @@ namespace NUnitLite.Runner
         /// Adds a listener to the TestRunner.
         /// </summary>
         /// <param name="listener">The listener.</param>
-        public void AddListener(TestListener listener)
+        public void AddListener(ITestListener listener)
         {
             listeners.Add(listener);
         }
@@ -65,7 +66,7 @@ namespace NUnitLite.Runner
         /// Removes a listener from the TestRunner.
         /// </summary>
         /// <param name="listener">The listener.</param>
-        public void RemoveListener(TestListener listener)
+        public void RemoveListener(ITestListener listener)
         {
             listeners.Remove(listener);
         }
@@ -76,7 +77,7 @@ namespace NUnitLite.Runner
         /// <param name="test">The test that just started.</param>
         public void TestStarted(ITest test)
         {
-            foreach (TestListener listener in listeners)
+            foreach (ITestListener listener in listeners)
                 listener.TestStarted(test);
         }
 
@@ -84,9 +85,9 @@ namespace NUnitLite.Runner
         /// Forwards the TestFinished event to all listeners.
         /// </summary>
         /// <param name="result">The result of the test that just finished.</param>
-        public void TestFinished(TestResult result)
+        public void TestFinished(ITestResult result)
         {
-            foreach (TestListener listener in listeners)
+            foreach (ITestListener listener in listeners)
                 listener.TestFinished(result);
         }
     }

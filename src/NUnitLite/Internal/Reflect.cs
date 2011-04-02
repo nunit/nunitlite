@@ -24,8 +24,9 @@
 using System;
 using System.Reflection;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
-namespace NUnitLite
+namespace NUnit.Framework.Internal
 {
     public class Reflect
     {

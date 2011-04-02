@@ -7,7 +7,7 @@
 using System;
 using System.IO;
 
-namespace NUnit.Framework
+namespace NUnit.Framework.Internal
 {
     public class StackFilter
     {

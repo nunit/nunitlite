@@ -6,10 +6,11 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Framework.Api;
 
 namespace NUnitLite.Tests
 {
-    public class RecordingTestListener : TestListener
+    public class RecordingTestListener : ITestListener
     {
         public string Events = string.Empty;
 
@@ -18,7 +19,7 @@ namespace NUnitLite.Tests
             Events += string.Format("<{0}:", test.Name);
         }
 
-        public void TestFinished(TestResult result)
+        public void TestFinished(ITestResult result)
         {
             Events += string.Format(":{0}>", result.ResultState);
         }
