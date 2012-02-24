@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C24A3FC4-2541-4E9C-BADD-564777610B75}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -276,7 +276,9 @@
     <Compile Include="..\..\..\src\NUnitLite\Api\ITestResult.cs">
       <Link>Api\ITestResult.cs</Link>
     </Compile>
-    <Compile Include="Api\ResultState.cs" />
+    <Compile Include="..\..\..\src\NUnitLite\Api\ResultState.cs">
+      <Link>Api\ResultState.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
