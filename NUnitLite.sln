@@ -1,11 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLite", "NUnitLite\NUnitLite.csproj", "{C24A3FC4-2541-4E9C-BADD-564777610B75}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLite", "src\NUnitLite\NUnitLite.csproj", "{C24A3FC4-2541-4E9C-BADD-564777610B75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLiteTests", "NUnitLiteTests\NUnitLiteTests.csproj", "{C8FA4073-B24E-4178-93A1-5E1256C8B528}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLiteTests", "src\NUnitLiteTests\NUnitLiteTests.csproj", "{C8FA4073-B24E-4178-93A1-5E1256C8B528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestResultConsole", "TestResultConsole\TestResultConsole.csproj", "{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestResultConsole", "src\TestResultConsole\TestResultConsole.csproj", "{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
