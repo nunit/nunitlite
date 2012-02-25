@@ -26,11 +26,18 @@ using System.Text;
 
 namespace NUnitLite
 {
+    /// <summary>
+    /// Env is a static class that provides some of the features of
+    /// System.Environment that are not available under all runtimes
+    /// </summary>
     public class Env
     {
         // Define NewLine to be used for this system
         // NOTE: Since this is done at compile time for .NET CF,
         // these binaries are not yet currently portable.
+        /// <summary>
+        /// The newline sequence in the current environmemt.
+        /// </summary>
 #if PocketPC || WindowsCE || NETCF
         public static readonly string NewLine = "\r\n";
 #else

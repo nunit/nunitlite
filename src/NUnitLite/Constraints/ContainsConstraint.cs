@@ -21,8 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-
 namespace NUnit.Framework.Constraints
 {
 	// TODO Needs tests
@@ -35,7 +33,7 @@ namespace NUnit.Framework.Constraints
 	/// </summary>
 	public class ContainsConstraint : Constraint
 	{
-		object expected;
+		readonly object expected;
 		Constraint realConstraint;
         bool ignoreCase;
 
@@ -65,7 +63,7 @@ namespace NUnit.Framework.Constraints
 		}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ContainsConstraint"/> class.
+        /// Initializes a new instance of the <see cref="ContainsConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected.</param>
 		public ContainsConstraint( object expected )

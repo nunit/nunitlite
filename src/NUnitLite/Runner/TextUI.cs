@@ -1,8 +1,25 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2007 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
 using System.IO;
@@ -23,6 +40,9 @@ namespace NUnitLite.Runner
     /// </summary>
     public class ConsoleUI : TextUI
     {
+        /// <summary>
+        /// Construct an instance of ConsoleUI
+        /// </summary>
 #if NETCF_1_0
         public ConsoleUI() : base(ConsoleWriter.Out) { }
 #else
@@ -38,6 +58,10 @@ namespace NUnitLite.Runner
     /// </summary>
     public class FileUI : TextUI
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileUI"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public FileUI(string path) : base(new StreamWriter(path)) { }
     }
 
@@ -49,15 +73,33 @@ namespace NUnitLite.Runner
     /// </summary>
     public class DebugUI : TextUI
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DebugUI"/> class.
+        /// </summary>
         public DebugUI() : base(DebugWriter.Out) { }
     }
 
+    /// <summary>
+    /// A version of TextUI that writes to a TcpWriter
+    /// </summary>
     public class TcpUI : TextUI
     {
-        public TcpUI(string hostName, int port) : base( new TcpWriter(hostName, port) ) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpUI"/> class.
+        /// </summary>
+        /// <param name="hostName">Name of the host.</param>
+        /// <param name="port">The port.</param>
+        public TcpUI(string hostName, int port) : base(new TcpWriter(hostName, port)) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpUI"/> class.
+        /// </summary>
+        /// <param name="hostName">Name of the host.</param>
         public TcpUI(string hostName) : this(hostName, 9000) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpUI"/> class.
+        /// </summary>
         public TcpUI() : this("localhost", 9000) { }
     }
 
@@ -80,6 +122,10 @@ namespace NUnitLite.Runner
         private TestRunner runner = new TestRunner();
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextUI"/> class.
+        /// </summary>
+        /// <param name="writer">The TextWriter to use.</param>
         public TextUI(TextWriter writer)
         {
             this.writer = writer;

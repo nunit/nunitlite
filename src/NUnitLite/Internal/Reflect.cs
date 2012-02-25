@@ -28,6 +28,21 @@ using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal
 {
+    /// <summary>
+    /// Helper methods for inspecting a type by reflection. 
+    /// 
+    /// Many of these methods take ICustomAttributeProvider as an 
+    /// argument to avoid duplication, even though certain attributes can 
+    /// only appear on specific types of members, like MethodInfo or Type.
+    /// 
+    /// In the case where a type is being examined for the presence of
+    /// an attribute, interface or named member, the Reflect methods
+    /// operate with the full name of the member being sought. This
+    /// removes the necessity of the caller having a reference to the
+    /// assembly that defines the item being sought and allows the
+    /// NUnit core to inspect assemblies that reference an older
+    /// version of the NUnit framework.
+    /// </summary>
     public class Reflect
     {
         #region Types
