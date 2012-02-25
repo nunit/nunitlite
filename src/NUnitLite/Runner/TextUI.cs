@@ -112,7 +112,7 @@ namespace NUnitLite.Runner
     /// </summary>
     public class TextUI
     {
-        private CommandLineOptions options;
+        private CommandLineOptions commandLineOptions;
         private int reportCount = 0;
 
         private ArrayList assemblies = new ArrayList();
@@ -140,30 +140,30 @@ namespace NUnitLite.Runner
         /// <param name="args">An array of arguments</param>
         public void Execute(string[] args)
         {
-            // NOTE: This must be directly called from the
+            // NOTE: Execute must be directly called from the
             // test assembly in order for the mechanism to work.
             Assembly callingAssembly = Assembly.GetCallingAssembly();
 
-            this.options = ProcessArguments( args );
+            this.commandLineOptions = ProcessArguments( args );
 
-            if (!options.Help && !options.Error)
+            if (!commandLineOptions.Help && !commandLineOptions.Error)
             {
-                if (options.Wait && !(this is ConsoleUI))
+                if (commandLineOptions.Wait && !(this is ConsoleUI))
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
 
                 try
                 {
-                    foreach (string name in options.Parameters)
+                    foreach (string name in commandLineOptions.Parameters)
                         assemblies.Add(Assembly.Load(name));
 
                     if (assemblies.Count == 0)
                         assemblies.Add(callingAssembly);
 
                     foreach (Assembly assembly in assemblies)
-                        if (options.TestCount == 0)
+                        if (commandLineOptions.TestCount == 0)
                             Run(assembly);
                         else
-                            Run(assembly, options.Tests);
+                            Run(assembly, commandLineOptions.Tests);
                 }
                 catch (TestRunnerException ex)
                 {
@@ -179,7 +179,7 @@ namespace NUnitLite.Runner
                 }
                 finally
                 {
-                    if (options.Wait && this is ConsoleUI)
+                    if (commandLineOptions.Wait && this is ConsoleUI)
                     {
                         Console.WriteLine("Press Enter key to continue . . .");
                         Console.ReadLine();
@@ -216,18 +216,18 @@ namespace NUnitLite.Runner
         #region Helper Methods
         private CommandLineOptions ProcessArguments(string[] args)
         {
-            this.options = new CommandLineOptions();
-            options.Parse(args);
+            this.commandLineOptions = new CommandLineOptions();
+            commandLineOptions.Parse(args);
 
-            if (!options.Nologo)
+            if (!commandLineOptions.Nologo)
                 WriteCopyright();
 
-            if (options.Help)
-                writer.Write(options.HelpText);
-            else if (options.Error)
-                writer.WriteLine(options.ErrorMessage);
+            if (commandLineOptions.Help)
+                writer.Write(commandLineOptions.HelpText);
+            else if (commandLineOptions.Error)
+                writer.WriteLine(commandLineOptions.ErrorMessage);
 
-            return options;
+            return commandLineOptions;
         }
 
         private void WriteCopyright()
@@ -274,7 +274,7 @@ namespace NUnitLite.Runner
             {
                 writer.WriteLine();
                 writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Test.Name, result.Test.FullName);
-                if (options.ListProperties)
+                if (commandLineOptions.ListProperties)
                     PrintTestProperties(result.Test);
                 writer.WriteLine(result.Message);
 #if !NETCF_1_0
@@ -287,7 +287,7 @@ namespace NUnitLite.Runner
         {
             reportCount = 0;
             writer.WriteLine();
-            writer.WriteLine("Errors and Failures:");
+            writer.WriteLine("Tests Not Run:");
             PrintNotRunResults(result);
         }
 
@@ -300,7 +300,7 @@ namespace NUnitLite.Runner
             {
                 writer.WriteLine();
                 writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Test.Name, result.Test.FullName, result.Message);
-                if (options.ListProperties)
+                if (commandLineOptions.ListProperties)
                     PrintTestProperties(result.Test);
             }
         }

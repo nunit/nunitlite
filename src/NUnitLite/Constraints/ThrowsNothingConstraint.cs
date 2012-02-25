@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2008 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,40 +21,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// SameAsConstraint tests whether an object is identical to
-    /// the object passed to its constructor
+    /// ThrowsNothingConstraint tests that a delegate does not
+    /// throw an exception.
     /// </summary>
-    public class SameAsConstraint : Constraint
+    public class ThrowsNothingConstraint : Constraint
     {
-        private readonly object expected;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:SameAsConstraint"/> class.
-        /// </summary>
-        /// <param name="expected">The expected object.</param>
-        public SameAsConstraint(object expected) : base(expected)
-        {
-            this.expected = expected;
-        }
+        private Exception caughtException;
 
         /// <summary>
         /// Test whether the constraint is satisfied by a given value
         /// </summary>
         /// <param name="actual">The value to be tested</param>
-        /// <returns>True for success, false for failure</returns>
+        /// <returns>True if no exception is thrown, otherwise false</returns>
         public override bool Matches(object actual)
         {
-            this.actual = actual;
+            TestDelegate code = actual as TestDelegate;
+            if (code == null)
+                throw new ArgumentException("The actual value must be a TestDelegate", "actual");
 
-#if NETCF_1_0
-            // TODO: THis makes it compile, now make it work.
-            return expected.Equals(actual);
-#else
-            return ReferenceEquals(expected, actual);
-#endif
+            this.caughtException = null;
+
+            try
+            {
+                code();
+            }
+            catch (Exception ex)
+            {
+                this.caughtException = ex;
+            }
+
+            return this.caughtException == null;
         }
 
         /// <summary>
@@ -63,8 +64,19 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The writer on which the description is displayed</param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            writer.WritePredicate("same as");
-            writer.WriteExpectedValue(expected);
+            writer.Write(string.Format("No Exception to be thrown"));
+        }
+
+        /// <summary>
+        /// Write the actual value for a failing constraint test to a
+        /// MessageWriter. The default implementation simply writes
+        /// the raw value of actual, leaving it to the writer to
+        /// perform any formatting.
+        /// </summary>
+        /// <param name="writer">The writer on which the actual value is displayed</param>
+        public override void WriteActualValueTo(MessageWriter writer)
+        {
+            writer.WriteActualValue(this.caughtException.GetType());
         }
     }
 }

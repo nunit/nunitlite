@@ -21,40 +21,34 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace NUnit.Framework
+namespace NUnit.Framework.Constraints
 {
-    using System;
-
     /// <summary>
-    /// Thrown when an assertion failed.
+    /// Modes in which the tolerance value for a comparison can be interpreted.
     /// </summary>
-#if !NETCF_1_0
-    [Serializable]
-#endif
-    public class SuccessException : System.Exception
+    public enum ToleranceMode
     {
-        /// <param name="message"></param>
-        public SuccessException(string message)
-            : base(message)
-        { }
-
-        /// <param name="message">The error message that explains 
-        /// the reason for the exception</param>
-        /// <param name="inner">The exception that caused the 
-        /// current exception</param>
-        public SuccessException(string message, Exception inner)
-            :
-            base(message, inner)
-        { }
-
-#if !NETCF
         /// <summary>
-        /// Serialization Constructor
+        /// The tolerance was created with a value, without specifying 
+        /// how the value would be used. This is used to prevent setting
+        /// the mode more than once and is generally changed to Linear
+        /// upon execution of the test.
         /// </summary>
-        protected SuccessException(System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context)
-            : base(info, context)
-        { }
-#endif
+        None,
+        /// <summary>
+        /// The tolerance is used as a numeric range within which
+        /// two compared values are considered to be equal.
+        /// </summary>
+        Linear,
+        /// <summary>
+        /// Interprets the tolerance as the percentage by which
+        /// the two compared values my deviate from each other.
+        /// </summary>
+        Percent,
+        /// <summary>
+        /// Compares two values based in their distance in
+        /// representable numbers.
+        /// </summary>
+        Ulps
     }
 }

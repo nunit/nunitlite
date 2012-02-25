@@ -62,6 +62,7 @@
     <Compile Include="Api\ITestResult.cs" />
     <Compile Include="Api\ResultState.cs" />
     <Compile Include="Api\RunState.cs" />
+    <Compile Include="Api\TestStatus.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Assert.cs" />
     <Compile Include="AssertionHelper.cs" />
@@ -107,7 +108,9 @@
     <Compile Include="Constraints\SerializableConstraints.cs" />
     <Compile Include="Constraints\StringConstraints.cs" />
     <Compile Include="Constraints\ThrowsConstraint.cs" />
+    <Compile Include="Constraints\ThrowsNothingConstraint.cs" />
     <Compile Include="Constraints\Tolerance.cs" />
+    <Compile Include="Constraints\ToleranceMode.cs" />
     <Compile Include="Constraints\TypeConstraints.cs" />
     <Compile Include="Contains.cs" />
     <Compile Include="Env.cs" />
