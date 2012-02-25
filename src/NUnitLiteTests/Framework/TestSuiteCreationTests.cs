@@ -27,7 +27,7 @@ namespace NUnitLite.Tests
             Assert.That(result.ResultState, Is.EqualTo(ResultState.Failure));
             Assert.That(result.Results.Count, Is.EqualTo(6));
             Assert.That(listener.Events, Is.EqualTo(
-                "<SimpleTestCase:<test1::Success><test2::Success><Test3::Success><TEST4::Success><test6::Failure><test7::Failure>:Failure>"));
+                "<SimpleTestCase:<test1::Passed><test2::Passed><Test3::Passed><TEST4::Passed><test6::Failed><test7::Failed>:Failed>"));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace NUnitLite.Tests
             RecordingTestListener listener = new RecordingTestListener();
             suite.Run(listener);
             Assert.That(listener.Events, Is.EqualTo(
-                "<NonTestCaseClassWithTestAttributes:<FirstTest::Success><SecondTest::Success><TestThree::Success>:Success>"));
+                "<NonTestCaseClassWithTestAttributes:<FirstTest::Passed><SecondTest::Passed><TestThree::Passed>:Passed>"));
         }
 
         #region Nested Classes for Testing

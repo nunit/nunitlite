@@ -151,7 +151,7 @@ namespace NUnitLite.Tests
         {
             RecordingTestListener listener = new RecordingTestListener();
             test.Run(listener);
-            Assert.That( listener.Events, Is.EqualTo( "<TheTest::Success>" ) );
+            Assert.That( listener.Events, Is.EqualTo( "<TheTest::Passed>" ) );
         }
 
         [Test]
@@ -160,7 +160,7 @@ namespace NUnitLite.Tests
             RecordingTestListener listener = new RecordingTestListener();
             dummy.simulateTestFailure = true;
             test.Run(listener);
-            Assert.That( listener.Events, Is.EqualTo( "<TheTest::Failure>" ) );
+            Assert.That( listener.Events, Is.EqualTo( "<TheTest::Failed>" ) );
         }
 
         #region Helper Methods

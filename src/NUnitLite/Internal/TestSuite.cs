@@ -147,7 +147,7 @@ namespace NUnit.Framework.Internal
                     break;
 
                 case RunState.Ignored:
-                    result.SetResult(ResultState.NotRun, this.IgnoreReason);
+                    result.SetResult(ResultState.Ignored, this.IgnoreReason);
                     break;
 
                 case RunState.Runnable:
@@ -156,21 +156,14 @@ namespace NUnit.Framework.Internal
                         ++count;
                         ITestResult r = test.Run(listener);
                         result.AddResult(r);
-                        switch (r.ResultState)
-                        {
-                            case ResultState.Error:
-                                ++errors;
-                                break;
-                            case ResultState.Failure:
-                                ++failures;
-                                break;
-                            default:
-                                break;
-                        }
+                        if (r.ResultState == ResultState.Error)
+                            ++errors;
+                        else if (r.ResultState == ResultState.Failure)
+                            ++failures;
                     }
 
                     if (count == 0)
-                        result.SetResult(ResultState.NotRun, "Class has no tests");
+                        result.SetResult(ResultState.NotRunnable, "Class has no tests");
                     else if (errors > 0 || failures > 0)
                         result.SetResult(ResultState.Failure, "One or more component tests failed");
                     else

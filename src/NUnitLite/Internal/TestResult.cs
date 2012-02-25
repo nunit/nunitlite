@@ -32,7 +32,7 @@ namespace NUnit.Framework.Internal
     {
         private ITest test;
 
-        private ResultState resultState = ResultState.NotRun;
+        private ResultState resultState = ResultState.Inconclusive;
 
         private string message;
 #if !NETCF_1_0
@@ -67,10 +67,10 @@ namespace NUnit.Framework.Internal
             }
         }
 
-        public bool Executed
-        {
-            get { return resultState != ResultState.NotRun; }
-        }
+        //public bool Executed
+        //{
+        //    get { return resultState != ResultState.NotRun; }
+        //}
 
         public string Message
         {
@@ -91,10 +91,9 @@ namespace NUnit.Framework.Internal
 
             results.Add(result);
 
-            switch (result.ResultState)
+            switch (result.ResultState.Status)
             {
-                case ResultState.Error:
-                case ResultState.Failure:
+                case TestStatus.Failed:
                     this.SetResult(ResultState.Failure, "Component test failure");
                     break;
                 default:
@@ -159,9 +158,9 @@ namespace NUnit.Framework.Internal
             else if (ex is SuccessException)
                 this.SetResult(ResultState.Success, ex.Message);
             else if (ex is IgnoreException)
-                this.SetResult(ResultState.NotRun, ex.Message, StackFilter.Filter(ex.StackTrace));
+                this.SetResult(ResultState.Ignored, ex.Message, StackFilter.Filter(ex.StackTrace));
             else if (ex is InconclusiveException)
-                this.SetResult(ResultState.NotRun, ex.Message, StackFilter.Filter(ex.StackTrace));
+                this.SetResult(ResultState.Inconclusive, ex.Message, StackFilter.Filter(ex.StackTrace));
             else
                 this.SetResult(ResultState.Error, ex.GetType().ToString() + " : " + ex.Message, ex.StackTrace);
 #else

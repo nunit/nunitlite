@@ -18,7 +18,7 @@ namespace NUnitLite.Tests
             Assert.That(result.ResultState == ResultState.Success);
             Assert.That(result.Results.Count, Is.EqualTo(1));
             TestResult caseResult = (TestResult)result.Results[0];
-            Assert.That(caseResult.ResultState, Is.EqualTo(ResultState.NotRun));
+            Assert.That(caseResult.ResultState, Is.EqualTo(ResultState.Ignored));
             Assert.That(caseResult.Message, Is.EqualTo("I ignored this"));
         }
 
@@ -30,7 +30,7 @@ namespace NUnitLite.Tests
             Assert.That(suite.TestCaseCount, Is.EqualTo(2));
             Assert.That(suite.RunState, Is.EqualTo(RunState.Ignored));
             ITestResult result = suite.Run();
-            Assert.That(result.ResultState, Is.EqualTo( ResultState.NotRun ) );
+            Assert.That(result.ResultState, Is.EqualTo( ResultState.Ignored ) );
             Assert.That(result.Message, Is.EqualTo("Ignore all the tests"));
             Assert.That(result.Results.Count, Is.EqualTo(0));
         }

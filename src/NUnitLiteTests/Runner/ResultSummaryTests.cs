@@ -79,6 +79,9 @@ namespace NUnitLite.Runner.Tests
                     case 'E':
                         r.SetResult(ResultState.Error, "System.Exception : error!");
                         break;
+                    case 'N':
+                        r.SetResult(ResultState.Skipped);
+                        break;
                     default:
                         break;
                 }

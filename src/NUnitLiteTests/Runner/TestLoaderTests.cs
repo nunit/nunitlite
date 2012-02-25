@@ -36,7 +36,7 @@ namespace NUnitLite.Runner.Tests
             RecordingTestListener listener = new RecordingTestListener();
             suite.Run(listener);
             Assert.That(listener.Events, Is.EqualTo(
-                "<MyTests:<One::Success><Two::Success><TheTest::Failure><Three::Success>:Failure>"));
+                "<MyTests:<One::Passed><Two::Passed><TheTest::Failed><Three::Passed>:Failed>"));
         }
 
         private class MyTests

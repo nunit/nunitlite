@@ -27,10 +27,9 @@ namespace NUnitLite.Tests
             result = new TestResult(null);
         }
 
-        void VerifyResultState(ResultState expectedState, bool executed, string message )
+        void VerifyResultState(ResultState expectedState, string message )
         {
             Assert.That( result.ResultState , Is.EqualTo( expectedState ) );
-            Assert.That( result.Executed, Is.EqualTo( executed ) );
             //if ( expectedState == ResultState.Error )
             //    Assert.That(result.Message, Is.EqualTo("System.Exception : " + message));
             //else
@@ -38,16 +37,16 @@ namespace NUnitLite.Tests
         }
 
         [Test]
-        public void DefaultStateIsNotRun()
+        public void DefaultStateIsInconclusive()
         {
-            VerifyResultState(ResultState.NotRun, false, null);
+            VerifyResultState(ResultState.Inconclusive, null);
         }
 
         [Test]
         public void CanMarkAsSuccess()
         {
             result.SetResult(ResultState.Success);
-            VerifyResultState(ResultState.Success, true, null);
+            VerifyResultState(ResultState.Success, null);
         }
 
         [Test]
@@ -58,7 +57,7 @@ namespace NUnitLite.Tests
             VerifyResultState(ResultState.Failure, true, false, true, false, MESSAGE);
 #else
             result.SetResult(ResultState.Failure, MESSAGE, STACKTRACE);
-            VerifyResultState(ResultState.Failure, true, MESSAGE);
+            VerifyResultState(ResultState.Failure, MESSAGE);
             Assert.That( result.StackTrace, Is.EqualTo( STACKTRACE ) );
 #endif
         }
@@ -81,17 +80,17 @@ namespace NUnitLite.Tests
 #else
             result.SetResult(ResultState.Error, caught.Message);
 #endif
-            VerifyResultState(ResultState.Error, true, MESSAGE);
+            VerifyResultState(ResultState.Error, MESSAGE);
 #if !NETCF_1_0
             Assert.That( result.StackTrace, Is.EqualTo( caught.StackTrace ) );
 #endif
         }
 
         [Test]
-        public void CanMarkAsNotRun()
+        public void CanMarkAsIgnored()
         {
-            result.SetResult(ResultState.NotRun, MESSAGE);
-            VerifyResultState(ResultState.NotRun, false, MESSAGE);
+            result.SetResult(ResultState.Ignored, MESSAGE);
+            VerifyResultState(ResultState.Ignored, MESSAGE);
         }
     }
 }

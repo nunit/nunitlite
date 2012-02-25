@@ -55,16 +55,16 @@ namespace NUnitLite
  
             // We only count non-suites
             testCount++;
-            switch (result.ResultState)
+            switch (result.ResultState.Status)
             {
-                case ResultState.NotRun:
+                case TestStatus.Skipped:
                     notRunCount++;
                     break;
-                case ResultState.Error:
-                    errorCount++;
-                    break;
-                case ResultState.Failure:
-                    failureCount++;
+                case TestStatus.Failed:
+                    if (result.ResultState == ResultState.Error)
+                        errorCount++;
+                    else
+                        failureCount++;
                     break;
                 default:
                     break;

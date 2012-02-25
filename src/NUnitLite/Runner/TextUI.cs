@@ -296,7 +296,7 @@ namespace NUnitLite.Runner
             if (result.Results != null)
                 foreach (ITestResult r in result.Results)
                     PrintNotRunResults(r);
-            else if (result.ResultState == ResultState.NotRun)
+            else if (result.ResultState.Status == TestStatus.Skipped)
             {
                 writer.WriteLine();
                 writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Test.Name, result.Test.FullName, result.Message);

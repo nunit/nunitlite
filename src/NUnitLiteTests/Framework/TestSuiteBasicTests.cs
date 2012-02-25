@@ -33,7 +33,7 @@ namespace NUnitLite.Tests
             foreach (TestResult r in result.Results)
                 Assert.That( r.ResultState, Is.EqualTo( ResultState.Success ) );
             Assert.That( listener.Events, Is.EqualTo(
-                "<my suite:<One::Success><Two::Success><Three::Success>:Success>" ) );
+                "<my suite:<One::Passed><Two::Passed><Three::Passed>:Passed>" ) );
         }
 
         [Test]

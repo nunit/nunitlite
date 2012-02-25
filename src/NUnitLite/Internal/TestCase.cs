@@ -192,7 +192,7 @@ namespace NUnit.Framework.Internal
             if (this.RunState == RunState.NotRunnable)
                 result.SetResult(ResultState.Failure, this.ignoreReason);
             else if ( ignore != null )
-                result.SetResult(ResultState.NotRun, ignore.Reason);
+                result.SetResult(ResultState.Ignored, ignore.Reason);
             else
             {
                 try
