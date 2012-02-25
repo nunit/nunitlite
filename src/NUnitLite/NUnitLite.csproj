@@ -62,6 +62,7 @@
     <Compile Include="Api\ITestResult.cs" />
     <Compile Include="Api\ResultState.cs" />
     <Compile Include="Api\RunState.cs" />
+    <Compile Include="Api\TestOutput.cs" />
     <Compile Include="Api\TestStatus.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Assert.cs" />

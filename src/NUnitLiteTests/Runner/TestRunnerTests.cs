@@ -56,5 +56,7 @@ namespace NUnitLite.Runner.Tests
                     ++notrun;
             }
         }
+
+        void ITestListener.TestOutput(TestOutput output) { }
     }
 }

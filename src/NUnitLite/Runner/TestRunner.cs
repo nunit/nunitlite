@@ -90,5 +90,15 @@ namespace NUnitLite.Runner
             foreach (ITestListener listener in listeners)
                 listener.TestFinished(result);
         }
+
+        /// <summary>
+        /// Called when the test creates text output.
+        /// </summary>
+        /// <param name="testOutput">A console message</param>
+        public void TestOutput(TestOutput output)
+        {
+            foreach (ITestListener listener in listeners)
+                listener.TestOutput(output);
+        }
     }
 }

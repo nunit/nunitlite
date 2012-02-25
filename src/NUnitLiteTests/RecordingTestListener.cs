@@ -23,5 +23,7 @@ namespace NUnitLite.Tests
         {
             Events += string.Format(":{0}>", result.ResultState);
         }
+
+        public void TestOutput(TestOutput output) { }
     }
 }

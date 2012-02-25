@@ -28,8 +28,22 @@ namespace NUnit.Framework.Internal
 {
     public class NullListener : ITestListener
     {
+        /// <summary>
+        /// Called when a test has just started
+        /// </summary>
+        /// <param name="test">The test that is starting</param>
         public void TestStarted(ITest test) { }
 
+        /// <summary>
+        /// Called when a test has finished
+        /// </summary>
+        /// <param name="result">The result of the test</param>
         public void TestFinished(ITestResult result) { }
+
+        /// <summary>
+        /// Called when the test creates text output.
+        /// </summary>
+        /// <param name="testOutput">A console message</param>
+        public void TestOutput(TestOutput output) { }
     }
 }
