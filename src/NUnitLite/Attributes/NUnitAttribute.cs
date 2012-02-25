@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2010 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -22,22 +22,17 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Framework.Internal;
 
 namespace NUnit.Framework
 {
-	/// <summary>
-	/// Attribute used to provide descriptive text about a 
-	/// test case or fixture.
-	/// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Assembly, AllowMultiple = false, Inherited=false)]
-    public sealed class DescriptionAttribute : PropertyAttribute
+    /// <summary>
+    /// The abstract base class for all custom attributes defined by NUnit.
+    /// </summary>
+    public abstract class NUnitAttribute : Attribute
     {
         /// <summary>
-        /// Construct a description Attribute
+        /// Default constructor
         /// </summary>
-        /// <param name="description">The text of the description</param>
-        public DescriptionAttribute(string description) : base(PropertyNames.Description, description) { }
+        public NUnitAttribute() { }
     }
-
 }

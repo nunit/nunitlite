@@ -28,8 +28,8 @@ namespace NUnit.Framework
     /// <summary>
     /// ExpectedExceptionAttribute
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class ExpectedExceptionAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited=false)]
+    public class ExpectedExceptionAttribute : NUnitAttribute
     {
         private Type expectedException;
         private string handler;
