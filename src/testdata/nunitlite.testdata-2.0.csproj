@@ -61,6 +61,7 @@
     <Compile Include="AttributeInheritanceData.cs" />
     <Compile Include="DescriptionFixture.cs" />
     <Compile Include="ExpectedExceptionData.cs" />
+    <Compile Include="FixtureSetUpTearDownData.cs" />
     <Compile Include="ParameterizedTestFixture.cs" />
     <Compile Include="PropertyAttributeTests.cs" />
     <Compile Include="SetUpData.cs" />
