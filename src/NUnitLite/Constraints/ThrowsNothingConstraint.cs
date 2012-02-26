@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2008 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -44,7 +44,7 @@ namespace NUnit.Framework.Constraints
             if (code == null)
                 throw new ArgumentException("The actual value must be a TestDelegate", "actual");
 
-            this.caughtException = null;
+            caughtException = null;
 
             try
             {
@@ -52,10 +52,10 @@ namespace NUnit.Framework.Constraints
             }
             catch (Exception ex)
             {
-                this.caughtException = ex;
+                caughtException = ex;
             }
 
-            return this.caughtException == null;
+            return caughtException == null;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The writer on which the actual value is displayed</param>
         public override void WriteActualValueTo(MessageWriter writer)
         {
-            writer.WriteActualValue(this.caughtException.GetType());
+            writer.WriteActualValue(caughtException.GetType());
         }
     }
 }

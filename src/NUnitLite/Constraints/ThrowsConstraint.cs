@@ -50,6 +50,7 @@ namespace NUnit.Framework.Constraints
         }
 
         #region Constraint Overrides
+
         /// <summary>
         /// Executes the code of the delegate and captures any exception.
         /// If a non-null base constraint was provided, it applies that
@@ -62,9 +63,9 @@ namespace NUnit.Framework.Constraints
             TestDelegate code = actual as TestDelegate;
             if (code == null)
                 throw new ArgumentException(
-                    string.Format("The actual value must be a TestDelegate but was {0}",actual.GetType().Name), "actual");
+                    string.Format("The actual value must be a TestDelegate but was {0}", actual.GetType().Name), "actual");
 
-            this.caughtException = null;
+            caughtException = null;
 
             try
             {
@@ -72,16 +73,15 @@ namespace NUnit.Framework.Constraints
             }
             catch (Exception ex)
             {
-                this.caughtException = ex;
+                caughtException = ex;
             }
 
-            if (this.caughtException == null)
-                return false;
+            bool hasSucceeded = caughtException != null &&
+                (baseConstraint == null || baseConstraint.Matches(caughtException));
 
-            return baseConstraint == null || baseConstraint.Matches(caughtException);
+            return hasSucceeded;
         }
 
-#if NET_2_0
         /// <summary>
         /// Converts an ActualValueDelegate to a TestDelegate
         /// before calling the primary overload.
@@ -93,7 +93,6 @@ namespace NUnit.Framework.Constraints
             TestDelegate testDelegate = new TestDelegate(delegate { del(); });
             return Matches((object)testDelegate);
         }
-#endif
 
         /// <summary>
         /// Write the constraint description to a MessageWriter
@@ -128,12 +127,12 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Returns the string representation of this constraint
         /// </summary>
-        public override string ToString()
+        protected override string GetStringRepresentation()
         {
             if (baseConstraint == null)
                 return "<throws>";
-            
-            return base.ToString();
+
+            return base.GetStringRepresentation();
         }
     }
 }

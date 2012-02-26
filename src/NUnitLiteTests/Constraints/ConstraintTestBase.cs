@@ -7,6 +7,7 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {

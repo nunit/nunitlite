@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Env = NUnit.Env;
 
 namespace NUnitLite.Tests
@@ -45,7 +46,7 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                "  Expected is <System.Int32[3]>, actual is <System.Collections.ArrayList>" + Env.NewLine +
+                "  Expected is <System.Int32[3]>, actual is <System.Collections.ArrayList> with 3 elements" + Env.NewLine +
                 "  Values differ at index [1]" + Env.NewLine +
                 TextMessageWriter.Pfx_Expected + "2" + Env.NewLine +
                 TextMessageWriter.Pfx_Actual   + "5" + Env.NewLine));

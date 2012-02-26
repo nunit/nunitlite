@@ -101,6 +101,7 @@
     <Compile Include="Constraints\BasicConstraints.cs" />
     <Compile Include="Constraints\BinaryOperations.cs" />
     <Compile Include="Constraints\CollectionConstraints.cs" />
+    <Compile Include="Constraints\CollectionTally.cs" />
     <Compile Include="Constraints\ComparisonAdapter.cs" />
     <Compile Include="Constraints\ComparisonConstraints.cs" />
     <Compile Include="Constraints\Constraint.cs" />
@@ -123,9 +124,9 @@
     <Compile Include="Constraints\NUnitComparer.cs" />
     <Compile Include="Constraints\NUnitEqualityComparer.cs" />
     <Compile Include="Constraints\PathConstraints.cs" />
-    <Compile Include="Constraints\PredicateConstraint.cs" />
     <Compile Include="Constraints\PrefixConstraints.cs" />
     <Compile Include="Constraints\PropertyConstraint.cs" />
+    <Compile Include="Constraints\PropertyExistsConstraint.cs" />
     <Compile Include="Constraints\RangeConstraint.cs" />
     <Compile Include="Constraints\ResolvableConstraintExpression.cs" />
     <Compile Include="Constraints\SameAsConstraint.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Internal\XmlHelper.cs" />
     <Compile Include="Is.cs" />
     <Compile Include="Iz.cs" />
+    <Compile Include="ListMapper.cs" />
     <Compile Include="MessageMatch.cs" />
     <Compile Include="ObjectList.cs" />
     <Compile Include="Runner\CommandLineOptions.cs" />

@@ -7,7 +7,8 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using TMW = NUnit.Framework.TextMessageWriter;
+using NUnit.Framework.Internal;
+using TMW = NUnit.Framework.Internal.TextMessageWriter;
 
 namespace NUnitLite.Tests
 {
