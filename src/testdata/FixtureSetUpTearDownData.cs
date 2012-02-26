@@ -51,30 +51,30 @@ namespace NUnit.TestData.FixtureSetUpTearDownData
 		public void EvenMoreSuccess(){}
 	}
 
-    //[TestFixture,Explicit]
-    //public class ExplicitSetUpAndTearDownFixture
-    //{
-    //    public int setUpCount = 0;
-    //    public int tearDownCount = 0;
+    [TestFixture, Explicit]
+    public class ExplicitSetUpAndTearDownFixture
+    {
+        public int setUpCount = 0;
+        public int tearDownCount = 0;
 
-    //    [TestFixtureSetUp]
-    //    public virtual void Init()
-    //    {
-    //        setUpCount++;
-    //    }
+        [TestFixtureSetUp]
+        public virtual void Init()
+        {
+            setUpCount++;
+        }
 
-    //    [TestFixtureTearDown]
-    //    public virtual void Destroy()
-    //    {
-    //        tearDownCount++;
-    //    }
+        [TestFixtureTearDown]
+        public virtual void Destroy()
+        {
+            tearDownCount++;
+        }
 
-    //    [Test]
-    //    public void Success(){}
+        [Test]
+        public void Success() { }
 
-    //    [Test]
-    //    public void EvenMoreSuccess(){}
-    //}
+        [Test]
+        public void EvenMoreSuccess() { }
+    }
 
 	[TestFixture]
 	public class InheritSetUpAndTearDown : SetUpAndTearDownFixture

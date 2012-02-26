@@ -179,10 +179,7 @@ namespace NUnitLite.Runner
                         return;
                     }
 
-                    if (commandLineOptions.ListTests)
-                        ListTests(runner.LoadedTest);
-                    else
-                        ReportResults(runner.Run(TestListener.NULL, TestFilter.Empty));
+                    ReportResults(runner.Run(TestListener.NULL, TestFilter.Empty));
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -201,19 +198,6 @@ namespace NUnitLite.Runner
                     }
                 }
             }
-        }
-
-        private void ListTests(ITest test)
-        {
-            XmlNode testNode = test.ToXml(true);
-
-            string listFile = commandLineOptions.ListFile;
-            XmlTextWriter testWriter = listFile != null && listFile.Length > 0
-                ? new XmlTextWriter(listFile, System.Text.Encoding.UTF8)
-                : new XmlTextWriter(Console.Out);
-            testWriter.Formatting = Formatting.Indented;
-            testNode.WriteTo(testWriter);
-            testWriter.Close();
         }
 
         /// <summary>

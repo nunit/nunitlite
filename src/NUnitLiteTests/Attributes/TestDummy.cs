@@ -117,19 +117,5 @@ namespace NUnit.Framework.Attributes
         }
 
         #endregion
-
-        #region IXmlNodeBuilder Members
-
-        public System.Xml.XmlNode ToXml(bool recursive)
-        {
-            throw new NotImplementedException();
-        }
-
-        public System.Xml.XmlNode AddToXml(System.Xml.XmlNode parentNode, bool recursive)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

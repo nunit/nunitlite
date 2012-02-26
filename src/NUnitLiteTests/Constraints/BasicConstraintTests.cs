@@ -1,14 +1,29 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2012 Charlie Poole
 //
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// ***********************************************************************
 
 using System;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
-namespace NUnitLite.Tests
+namespace NUnit.Framework.Constraints.Tests
 {
     [TestFixture]
     public class NullConstraintTest : ConstraintTestBase
@@ -16,11 +31,14 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = new NullConstraint();
-            GoodValues = new object[] { null };
-            BadValues = new object[] { "hello" };
-            Description = "null";
+            theConstraint = new NullConstraint();
+            stringRepresentation = "<null>";
+            expectedDescription = "null";
         }
+
+        object[] SuccessData = new object[] { null };
+
+        object[] FailureData = new object[] { new object[] { "hello", "\"hello\"" } };
     }
 
     [TestFixture]
@@ -29,11 +47,18 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = new TrueConstraint();
-            GoodValues = new object[] { true, 2+2==4 };
-            BadValues = new object[] { null, "hello", false, 2+2==5 };
-            Description = "True";
+            theConstraint = new TrueConstraint();
+            stringRepresentation = "<true>";
+            expectedDescription = "True";
         }
+
+        object[] SuccessData = new object[] { true, 2 + 2 == 4 };
+
+        object[] FailureData = new object[] { 
+            new object[] { null, "null" }, 
+            new object[] { "hello", "\"hello\"" },
+            new object[] { false, "False" },
+            new object[] { 2 + 2 == 5, "False" } };
     }
 
     [TestFixture]
@@ -42,11 +67,18 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = new FalseConstraint();
-            GoodValues = new object[] { false, 2+2==5 };
-            BadValues = new object[] { null, "hello", true, 2+2==4 };
-            Description = "False";
+            theConstraint = new FalseConstraint();
+            stringRepresentation = "<false>";
+            expectedDescription = "False";
         }
+
+        object[] SuccessData = new object[] { false, 2 + 2 == 5 };
+
+        object[] FailureData = new object[] { 
+            new object[] { null, "null" },
+            new object[] { "hello", "\"hello\"" },
+            new object[] { true, "True" },
+            new object[] { 2 + 2 == 4, "True" } };
     }
 
     [TestFixture]
@@ -55,12 +87,20 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            Matcher = new NaNConstraint();
-            GoodValues = new object[] { double.NaN, float.NaN };
-            BadValues = new object[] { null, "hello", 42, 4.2, 4.2f, 4.2m, 
-                double.PositiveInfinity, double.NegativeInfinity,
-                float.PositiveInfinity, float.NegativeInfinity };
-            Description = "NaN";
+            theConstraint = new NaNConstraint();
+            stringRepresentation = "<nan>";
+            expectedDescription = "NaN";
         }
+
+        object[] SuccessData = new object[] { double.NaN, float.NaN };
+
+        object[] FailureData = new object[] { 
+            new object[] { null, "null" },
+            new object[] { "hello", "\"hello\"" },
+            new object[] { 42, "42" },
+            new object[] { double.PositiveInfinity, "Infinity" },
+            new object[] { double.NegativeInfinity, "-Infinity" },
+            new object[] { float.PositiveInfinity, "Infinity" },
+            new object[] { float.NegativeInfinity, "-Infinity" } };
     }
 }

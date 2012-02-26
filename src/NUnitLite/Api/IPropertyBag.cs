@@ -41,7 +41,7 @@ namespace NUnit.Framework.Api
     ///     Assert.That(bag.GetSetting("Priority", "low"),
     ///       Is.EqualTo("high"));
     /// </summary>
-    public interface IPropertyBag : IXmlNodeBuilder, IEnumerable
+    public interface IPropertyBag : /*IXmlNodeBuilder,*/ IEnumerable
     {
         /// <summary>
         /// Get the number of key/value pairs in the property bag

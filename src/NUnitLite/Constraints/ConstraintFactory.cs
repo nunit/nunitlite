@@ -96,6 +96,20 @@ namespace NUnit.Framework.Constraints
 
         #endregion
 
+        #region Exactly(n)
+ 
+        /// <summary>
+        /// Returns a ConstraintExpression, which will apply
+        /// the following constraint to all members of a collection,
+        /// succeeding only if a specified number of them succeed.
+        /// </summary>
+        public static ConstraintExpression Exactly(int expectedCount)
+        {
+            return Has.Exactly(expectedCount);
+        }
+ 
+        #endregion
+ 
         #region Property
 
         /// <summary>
@@ -220,6 +234,30 @@ namespace NUnit.Framework.Constraints
             get { return new FalseConstraint(); }
         }
 
+        #endregion
+
+        #region Positive
+ 
+        /// <summary>
+        /// Returns a constraint that tests for a positive value
+        /// </summary>
+        public GreaterThanConstraint Positive
+        {
+            get { return new GreaterThanConstraint(0); }
+        }
+ 
+        #endregion
+ 
+        #region Negative
+ 
+        /// <summary>
+        /// Returns a constraint that tests for a negative value
+        /// </summary>
+        public LessThanConstraint Negative
+        {
+            get { return new LessThanConstraint(0); }
+        }
+ 
         #endregion
 
         #region NaN

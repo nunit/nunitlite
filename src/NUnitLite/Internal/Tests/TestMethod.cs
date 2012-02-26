@@ -170,22 +170,6 @@ namespace NUnit.Framework.Internal
         }
 #endif
 
-        /// <summary>
-        /// Returns an XmlNode representing the current result after
-        /// adding it as a child of the supplied parent node.
-        /// </summary>
-        /// <param name="parentNode">The parent node.</param>
-        /// <param name="recursive">If true, descendant results are included</param>
-        /// <returns></returns>
-        public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
-        {
-            XmlNode thisNode = XmlHelper.AddElement(parentNode, XmlElementName);
-
-            PopulateTestNode(thisNode, recursive);
-
-            return thisNode;
-        }
-
 		/// <summary>
         /// Gets this test's child tests
         /// </summary>
@@ -193,15 +177,6 @@ namespace NUnit.Framework.Internal
         public override IList<ITest> Tests
         {
             get { return new ITest[0]; }
-        }
-
-        /// <summary>
-        /// Gets the name used for the top-level element in the
-        /// XML representation of this test
-        /// </summary>
-        public override string XmlElementName
-        {
-            get { return "test-case"; }
         }
 
         protected override TestCommand MakeTestCommand(ITestFilter filter)

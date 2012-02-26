@@ -263,50 +263,6 @@ namespace NUnit.Framework.Internal
             }
         }
 
-        #region IXmlNodeBuilder Members
-
-        /// <summary>
-        /// Returns an XmlNode representating the current PropertyBag.
-        /// </summary>
-        /// <param name="recursive">Not used</param>
-        /// <returns>An XmlNode representing the PropertyBag</returns>
-        public System.Xml.XmlNode ToXml(bool recursive)
-        {
-            XmlNode topNode = XmlHelper.CreateTopLevelElement("dummy");
-
-            XmlNode thisNode = AddToXml(topNode, recursive);
-
-            return thisNode;
-        }
-
-        /// <summary>
-        /// Returns an XmlNode representing the PropertyBag after
-        /// adding it as a child of the supplied parent node.
-        /// </summary>
-        /// <param name="parentNode">The parent node.</param>
-        /// <param name="recursive">Not used</param>
-        /// <returns></returns>
-        public System.Xml.XmlNode AddToXml(System.Xml.XmlNode parentNode, bool recursive)
-        {
-            XmlNode properties = XmlHelper.AddElement(parentNode, "properties");
-
-            foreach (string key in Keys)
-            {
-                foreach (object value in this[key])
-                {
-                    XmlNode prop = XmlHelper.AddElement(properties, "property");
-
-                    // TODO: Format as string
-                    XmlHelper.AddAttribute(prop, "name", key.ToString());
-                    XmlHelper.AddAttribute(prop, "value", value.ToString());
-                }
-            }
-
-            return properties;
-        }
-
-        #endregion
-
         #region Nested PropertyBagEnumerator Class
 
         /// <summary>

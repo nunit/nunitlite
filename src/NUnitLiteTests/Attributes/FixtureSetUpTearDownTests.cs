@@ -47,15 +47,15 @@ namespace NUnit.Framework.Attributes
 			Assert.AreEqual(1, fixture.tearDownCount, "TearDown");
 		}
 
-        //[Test]
-        //public void MakeSureSetUpAndTearDownAreCalledOnExplicitFixture()
-        //{
-        //    ExplicitSetUpAndTearDownFixture fixture = new ExplicitSetUpAndTearDownFixture();
-        //    TestBuilder.RunTestFixture(fixture);
+        [Test]
+        public void MakeSureSetUpAndTearDownAreCalledOnExplicitFixture()
+        {
+            ExplicitSetUpAndTearDownFixture fixture = new ExplicitSetUpAndTearDownFixture();
+            TestBuilder.RunTestFixture(fixture);
 
-        //    Assert.AreEqual(1, fixture.setUpCount, "SetUp");
-        //    Assert.AreEqual(1, fixture.tearDownCount, "TearDown");
-        //}
+            Assert.AreEqual(1, fixture.setUpCount, "SetUp");
+            Assert.AreEqual(1, fixture.tearDownCount, "TearDown");
+        }
 
 		[Test]
 		public void CheckInheritedSetUpAndTearDownAreCalled()

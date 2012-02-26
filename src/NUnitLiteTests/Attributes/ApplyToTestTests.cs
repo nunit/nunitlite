@@ -41,21 +41,21 @@ namespace NUnit.Framework.Attributes
 
         #region CategoryAttribute
 
-        //[Test]
-        //public void CategoryAttributeSetsCategory()
-        //{
-        //    new CategoryAttribute("database").ApplyToTest(test);
-        //    Assert.That(test.Properties.Get(PropertyNames.Category), Is.EqualTo("database"));
-        //}
+        [Test]
+        public void CategoryAttributeSetsCategory()
+        {
+            new CategoryAttribute("database").ApplyToTest(test);
+            Assert.That(test.Properties.Get(PropertyNames.Category), Is.EqualTo("database"));
+        }
 
-        //[Test]
-        //public void CategoryAttributeSetsMultipleCategories()
-        //{
-        //    new CategoryAttribute("group1").ApplyToTest(test);
-        //    new CategoryAttribute("group2").ApplyToTest(test);
-        //    Assert.That(test.Properties[PropertyNames.Category], 
-        //        Is.EquivalentTo( new string[] { "group1", "group2" } ));
-        //}
+        [Test]
+        public void CategoryAttributeSetsMultipleCategories()
+        {
+            new CategoryAttribute("group1").ApplyToTest(test);
+            new CategoryAttribute("group2").ApplyToTest(test);
+            Assert.That(test.Properties[PropertyNames.Category],
+                Is.EquivalentTo(new string[] { "group1", "group2" }));
+        }
 
         #endregion
 
@@ -91,20 +91,20 @@ namespace NUnit.Framework.Attributes
 
         #region ExplicitAttribute
 
-        //[Test]
-        //public void ExplicitAttributeMakesTestExplicit()
-        //{
-        //    new ExplicitAttribute().ApplyToTest(test);
-        //    Assert.That(test.RunState, Is.EqualTo(RunState.Explicit));
-        //}
+        [Test]
+        public void ExplicitAttributeMakesTestExplicit()
+        {
+            new ExplicitAttribute().ApplyToTest(test);
+            Assert.That(test.RunState, Is.EqualTo(RunState.Explicit));
+        }
 
-        //[Test]
-        //public void ExplicitAttributeSetsIgnoreReason()
-        //{
-        //    new ExplicitAttribute("BECAUSE").ApplyToTest(test);
-        //    Assert.That(test.RunState, Is.EqualTo(RunState.Explicit));
-        //    Assert.That(test.Properties.Get(PropertyNames.SkipReason), Is.EqualTo("BECAUSE"));
-        //}
+        [Test]
+        public void ExplicitAttributeSetsIgnoreReason()
+        {
+            new ExplicitAttribute("BECAUSE").ApplyToTest(test);
+            Assert.That(test.RunState, Is.EqualTo(RunState.Explicit));
+            Assert.That(test.Properties.Get(PropertyNames.SkipReason), Is.EqualTo("BECAUSE"));
+        }
 
         #endregion
 
