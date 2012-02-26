@@ -24,7 +24,7 @@
 using System;
 using System.Text;
 
-namespace NUnitLite
+namespace NUnit
 {
     /// <summary>
     /// Env is a static class that provides some of the features of
@@ -42,6 +42,15 @@ namespace NUnitLite
         public static readonly string NewLine = "\r\n";
 #else
         public static readonly string NewLine = Environment.NewLine;
+#endif
+
+        /// <summary>
+        /// Path to the 'My Documents' folder
+        /// </summary>
+#if NETCF_1_0
+        public static string DocumentFolder = @"\My Documents";
+#else
+        public static string DocumentFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 #endif
     }
 }

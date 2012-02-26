@@ -14,6 +14,8 @@ namespace NUnitLite.Tests
     [TestFixture]
     class SubstringTest : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -35,15 +37,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not contain expected string." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "String containing \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + Env.NewLine));
+                //"  String did not contain expected string." + NL +
+                TextMessageWriter.Pfx_Expected + "String containing \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + NL));
         }
     }
 
     [TestFixture]
     class SubstringTestIgnoringCase : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -65,15 +69,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not contain expected string, ignoring case." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + Env.NewLine));
+                //"  String did not contain expected string, ignoring case." + NL +
+                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + NL));
         }
     }
 
     [TestFixture]
     class StartsWithTest : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -95,15 +101,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not start with expected string." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + Env.NewLine));
+                //"  String did not start with expected string." + NL +
+                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + NL));
         }
     }
 
     [TestFixture]
     class StartsWithTestIgnoringCase : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -125,15 +133,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not start with expected string, ignoring case." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + Env.NewLine));
+                //"  String did not start with expected string, ignoring case." + NL +
+                TextMessageWriter.Pfx_Expected + "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + NL));
         }
     }
 
     [TestFixture]
     public class EndsWithTest : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -155,15 +165,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not end with expected string." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "String ending with \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + Env.NewLine));
+                //"  String did not end with expected string." + NL +
+                TextMessageWriter.Pfx_Expected + "String ending with \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...\"" + NL));
         }
     }
 
     [TestFixture]
     public class EndsWithTestIgnoringCase : ConstraintTestBase//, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -185,15 +197,17 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                //"  String did not end with expected string, ignoring case." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "\"...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!\"" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx!\"" + Env.NewLine));
+                //"  String did not end with expected string, ignoring case." + NL +
+                TextMessageWriter.Pfx_Expected + "\"...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!\"" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx!\"" + NL));
         }
     }
 
     [TestFixture]
     class EqualIgnoringCaseTest : ConstraintTestBase, IExpectException
     {
+        private static readonly string NL = NUnit.Env.NewLine;
+
         [SetUp]
         public void SetUp()
         {
@@ -212,10 +226,10 @@ namespace NUnitLite.Tests
         public void HandleException(Exception ex)
         {
             Assert.That(ex.Message, Is.EqualTo(
-                "  Expected string length 11 but was 12. Strings differ at index 6." + Env.NewLine +
-                TextMessageWriter.Pfx_Expected + "\"hello fred!\", ignoring case" + Env.NewLine +
-                TextMessageWriter.Pfx_Actual   + "\"Hello World!\"" + Env.NewLine +
-                "  -----------------^" + Env.NewLine));
+                "  Expected string length 11 but was 12. Strings differ at index 6." + NL +
+                TextMessageWriter.Pfx_Expected + "\"hello fred!\", ignoring case" + NL +
+                TextMessageWriter.Pfx_Actual   + "\"Hello World!\"" + NL +
+                "  -----------------^" + NL));
         }
     }
 }

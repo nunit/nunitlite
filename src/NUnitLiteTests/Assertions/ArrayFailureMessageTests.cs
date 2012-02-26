@@ -13,7 +13,7 @@ namespace NUnitLite.Tests
     [TestFixture]
     public class ArrayFailureMessageTests : IExpectException
     {
-        private static readonly string NL = Env.NewLine;
+        private static readonly string NL = NUnit.Env.NewLine;
 
         private string expectedMessage;
 

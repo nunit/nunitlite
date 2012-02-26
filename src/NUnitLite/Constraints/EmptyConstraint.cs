@@ -34,10 +34,12 @@ namespace NUnit.Framework.Constraints
 		{
 			get 
 			{
-				if ( actual is string )
-					return new EmptyStringConstraint();
-				else
-					return new EmptyCollectionConstraint();
+                if (actual is string)
+                    return new EmptyStringConstraint();
+                else if (actual is System.IO.DirectoryInfo)
+                    return new EmptyDirectoryConstraint();
+                else
+                    return new EmptyCollectionConstraint();
 			}
 		}
 		
@@ -50,7 +52,10 @@ namespace NUnit.Framework.Constraints
 		{
 			this.actual = actual;
 
-			return this.RealConstraint.Matches( actual );
+            if (actual == null)
+                throw new System.ArgumentException("The actual value must be a non-null string, IEnumerable or DirectoryInfo", "actual");
+
+			return RealConstraint.Matches( actual );
 		}
 
         /// <summary>
@@ -59,7 +64,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The writer on which the description is displayed</param>
 		public override void WriteDescriptionTo(MessageWriter writer)
 		{
-			this.RealConstraint.WriteDescriptionTo( writer );
+			RealConstraint.WriteDescriptionTo( writer );
 		}
 	}
 }

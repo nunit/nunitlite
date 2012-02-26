@@ -21,7 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if !NUNITLITE
 using System;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework
 {
@@ -31,10 +34,11 @@ namespace NUnit.Framework
     /// assembly. If the addin is not loaded, the entire assembly is marked
     /// as NotRunnable.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly,AllowMultiple=true)]
-    public class RequiredAddinAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Assembly,AllowMultiple=true, Inherited=false)]
+    public class RequiredAddinAttribute : TestModificationAttribute, IApplyToTest
     {
         private string requiredAddin;
+        private bool isAddinAvailable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:RequiredAddinAttribute"/> class.
@@ -43,6 +47,11 @@ namespace NUnit.Framework
         public RequiredAddinAttribute(string requiredAddin)
         {
             this.requiredAddin = requiredAddin;
+            this.isAddinAvailable = false;
+
+            foreach (NUnit.Framework.Extensibility.Addin addin in CoreExtensions.Host.AddinRegistry.Addins)
+                if (addin.Name == requiredAddin && addin.Status == NUnit.Framework.Extensibility.AddinStatus.Loaded)
+                    this.isAddinAvailable = true;
         }
 
         /// <summary>
@@ -53,5 +62,23 @@ namespace NUnit.Framework
         {
             get { return requiredAddin; }
         }
+
+        #region IApplyToTest members
+
+        /// <summary>
+        /// Modifies the test to be skipped if the addin is not available.
+        /// </summary>
+        /// <param name="test">The test to modify</param>
+        public void ApplyToTest(ITest test)
+        {
+            if (test.RunState != RunState.NotRunnable && !isAddinAvailable)
+            {
+                test.RunState = RunState.NotRunnable;
+                test.Properties.Set(PropertyNames.SkipReason, string.Format("Required addin {0} not available", requiredAddin));
+            }
+        }
+
+        #endregion
     }
 }
+#endif

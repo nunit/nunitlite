@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
+using Env = NUnit.Env;
 
 namespace NUnitLite.Tests
 {

@@ -207,6 +207,24 @@
       </references>
     </csc>
 
+
+    <echo message="*"/>
+    <echo message="* Building test data as a separate assembly"/>
+    <echo message="*"/>
+
+    <csc target="library"
+        output="${current.build.dir}/nunitlite.testdata.dll"
+        debug="${build.debug}" 
+        define="${build.defines}">
+      <sources basedir="${project.src.dir}/testdata">
+        <include name="**/*.cs"/>
+      </sources>
+      <references basedir="${current.build.dir}">
+        <include name="mscorlib.dll"/>
+        <include name="NUnitLite.dll"/>
+      </references>
+    </csc>
+
     <echo message="*"/>
     <echo message="* Building NUnitLiteTests as a separate assembly"/>
     <echo message="*"/>
@@ -222,6 +240,7 @@
         <include name="mscorlib.dll"/>
         <include name="System.Drawing.dll"/>
         <include name="NUnitLite.dll"/>
+        <include name="nunitlite.testdata.dll"/>
       </references>
     </csc>
 
@@ -229,7 +248,7 @@
     <echo message="* Building NUnitLite and Tests combined"/>
     <echo message="*"/>
 
-    <csc target="exe"
+    <!--<csc target="exe"
         output="${current.build.dir}/NUnitLiteCombined.exe"
         debug="${build.debug}" 
         define="${build.defines}">
@@ -244,7 +263,7 @@
         <include name="System.Drawing.dll"/>
         <include name="System.Xml.dll"/>
       </references>
-    </csc>
+    </csc>-->
 
   </target>
 
@@ -282,14 +301,14 @@
       program="NUnitLiteTests.exe" 
       managed="Strict"/>
 
-    <echo message="*"/>
+    <!--<echo message="*"/>
     <echo message="* Testing with NUnitLite included in the test assembly"/>
     <echo message="*"/>
 
     <exec basedir="${current.build.dir}"
       workingdir="${current.build.dir}" 
       program="NUnitLiteCombined.exe" 
-      managed="Strict"/>
+      managed="Strict"/>-->
 
   </target>
 

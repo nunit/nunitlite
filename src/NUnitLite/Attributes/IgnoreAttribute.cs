@@ -21,17 +21,19 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
+
 namespace NUnit.Framework
 {
-	using System;
-
 	/// <summary>
 	/// Attribute used to mark a test that is to be ignored.
 	/// Ignored tests result in a warning message when the
 	/// tests are run.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method|AttributeTargets.Class|AttributeTargets.Assembly, AllowMultiple=false)]
-	public class IgnoreAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Method|AttributeTargets.Class|AttributeTargets.Assembly, AllowMultiple=false, Inherited=false)]
+	public class IgnoreAttribute : TestModificationAttribute, IApplyToTest
 	{
 		private string reason;
 
@@ -51,14 +53,23 @@ namespace NUnit.Framework
 		public IgnoreAttribute(string reason)
 		{
 			this.reason = reason;
-		}
+        }
 
-		/// <summary>
-		/// The reason for ignoring a test
-		/// </summary>
-		public string Reason
-		{
-			get { return reason; }
-		}
-	}
+        #region IApplyToTest members
+
+        /// <summary>
+        /// Modifies a test by marking it as Ignored.
+        /// </summary>
+        /// <param name="test">The test to modify</param>
+        public void ApplyToTest(ITest test)
+        {
+            if (test.RunState != RunState.NotRunnable)
+            {
+                test.RunState = RunState.Ignored;
+                test.Properties.Set(PropertyNames.SkipReason, reason);
+            }
+        }
+
+        #endregion
+    }
 }

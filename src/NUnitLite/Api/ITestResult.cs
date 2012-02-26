@@ -39,29 +39,29 @@ namespace NUnit.Framework.Api
             get;
         }
 
-        ///// <summary>
-        ///// Gets the name of the test result
-        ///// </summary>
-        //string Name
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the name of the test result
+        /// </summary>
+        string Name
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Gets the full name of the test result
-        ///// </summary>
-        //string FullName
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the full name of the test result
+        /// </summary>
+        string FullName
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Gets the elapsed time for running the test
-        ///// </summary>
-        //double Time
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the elapsed time for running the test
+        /// </summary>
+        double Time
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the message associated with a test
@@ -82,74 +82,70 @@ namespace NUnit.Framework.Api
             get;
         }
 
-        ///// <summary>
-        ///// Gets the number of asserts executed
-        ///// when running the test and all its children.
-        ///// </summary>
-        //int AssertCount
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the number of asserts executed
+        /// when running the test and all its children.
+        /// </summary>
+        int AssertCount
+        {
+            get;
+        }
 
 
-        ///// <summary>
-        ///// Gets the number of test cases that failed
-        ///// when running the test and all its children.
-        ///// </summary>
-        //int FailCount
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the number of test cases that failed
+        /// when running the test and all its children.
+        /// </summary>
+        int FailCount
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Gets the number of test cases that passed
-        ///// when running the test and all its children.
-        ///// </summary>
-        //int PassCount
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the number of test cases that passed
+        /// when running the test and all its children.
+        /// </summary>
+        int PassCount
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Gets the number of test cases that were skipped
-        ///// when running the test and all its children.
-        ///// </summary>
-        //int SkipCount
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the number of test cases that were skipped
+        /// when running the test and all its children.
+        /// </summary>
+        int SkipCount
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Gets the number of test cases that were inconclusive
-        ///// when running the test and all its children.
-        ///// </summary>
-        //int InconclusiveCount
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Gets the number of test cases that were inconclusive
+        /// when running the test and all its children.
+        /// </summary>
+        int InconclusiveCount
+        {
+            get;
+        }
 
-        ///// <summary>
-        ///// Indicates whether this result has any child results.
-        ///// Accessing HasChildren should not force creation of the
-        ///// Children collection in classes implementing this interface.
-        ///// </summary>
-        //bool HasChildren
-        //{
-        //    get;
-        //}
+        /// <summary>
+        /// Indicates whether this result has any child results.
+        /// Accessing HasChildren should not force creation of the
+        /// Children collection in classes implementing this interface.
+        /// </summary>
+        bool HasChildren
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the the collection of child results.
         /// </summary>
-//#if CLR_2_0 || CLR_4_0
-//        System.Collections.Generic.IList<ITestResult> Children
-//#else
-//        System.Collections.IList Children
-//#endif
-//        {
-//            get;
-//        }
-        System.Collections.IList Results
+#if CLR_2_0 || CLR_4_0
+        System.Collections.Generic.IList<ITestResult> Children
+#else
+        System.Collections.IList Children
+#endif
         {
             get;
         }

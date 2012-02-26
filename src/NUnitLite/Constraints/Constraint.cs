@@ -30,7 +30,7 @@ namespace NUnit.Framework.Constraints
     /// to be used in evaluating a constraint
     /// </summary>
     public delegate object ActualValueDelegate();
-    
+
     /// <summary>
     /// The Constraint class is the base of all built-in constraints
     /// within NUnit. It provides the operator overloads used to combine 
@@ -53,14 +53,14 @@ namespace NUnit.Framework.Constraints
         }
         #endregion
 
-		#region Static and Instance Fields
+        #region Static and Instance Fields
         /// <summary>
         /// Static UnsetObject used to detect derived constraints
         /// failing to set the actual value.
         /// </summary>
         protected static object UNSET = new UnsetObject();
 
-		/// <summary>
+        /// <summary>
         /// The actual value being tested against a constraint
         /// </summary>
         protected object actual = UNSET;
@@ -87,7 +87,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Construct a constraint with no arguments
         /// </summary>
-        public Constraint()
+        protected Constraint()
         {
             argcnt = 0;
         }
@@ -95,7 +95,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Construct a constraint with one argument
         /// </summary>
-        public Constraint(object arg)
+        protected Constraint(object arg)
         {
             argcnt = 1;
             this.arg1 = arg;
@@ -104,7 +104,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Construct a constraint with two arguments
         /// </summary>
-        public Constraint(object arg1, object arg2)
+        protected Constraint(object arg1, object arg2)
         {
             argcnt = 2;
             this.arg1 = arg1;
@@ -129,7 +129,7 @@ namespace NUnit.Framework.Constraints
         /// trailing "Constraint" removed. Derived classes may set
         /// this to another name in their constructors.
         /// </summary>
-        public string DisplayName
+        protected string DisplayName
         {
             get
             {
@@ -147,9 +147,9 @@ namespace NUnit.Framework.Constraints
 
             set { displayName = value; }
         }
-		#endregion
+        #endregion
 
-		#region Abstract and Virtual Methods
+        #region Abstract and Virtual Methods
         /// <summary>
         /// Write the failure message to the MessageWriter provided
         /// as an argument. The default implementation simply passes
@@ -186,7 +186,6 @@ namespace NUnit.Framework.Constraints
             return Matches(del());
         }
 
-#if NET_2_0
         /// <summary>
         /// Test whether the constraint is satisfied by a given reference.
         /// The default implementation simply dereferences the value but
@@ -198,19 +197,6 @@ namespace NUnit.Framework.Constraints
         {
             return Matches(actual);
         }
-#else
-		/// <summary>
-		/// Test whether the constraint is satisfied by a given bool reference.
-		/// The default implementation simply dereferences the value but
-		/// derived classes may override it to provide for delayed processing.
-		/// </summary>
-		/// <param name="actual">A reference to the value to be tested</param>
-		/// <returns>True for success, false for failure</returns>
-		public virtual bool Matches(ref bool actual)
-		{
-			return Matches(actual);
-		}
-#endif
 
         /// <summary>
         /// Write the constraint description to a MessageWriter
@@ -219,17 +205,17 @@ namespace NUnit.Framework.Constraints
         public abstract void WriteDescriptionTo(MessageWriter writer);
 
         /// <summary>
-		/// Write the actual value for a failing constraint test to a
-		/// MessageWriter. The default implementation simply writes
-		/// the raw value of actual, leaving it to the writer to
-		/// perform any formatting.
-		/// </summary>
-		/// <param name="writer">The writer on which the actual value is displayed</param>
-		public virtual void WriteActualValueTo(MessageWriter writer)
-		{
-			writer.WriteActualValue( actual );
-		}
-		#endregion
+        /// Write the actual value for a failing constraint test to a
+        /// MessageWriter. The default implementation simply writes
+        /// the raw value of actual, leaving it to the writer to
+        /// perform any formatting.
+        /// </summary>
+        /// <param name="writer">The writer on which the actual value is displayed</param>
+        public virtual void WriteActualValueTo(MessageWriter writer)
+        {
+            writer.WriteActualValue(actual);
+        }
+        #endregion
 
         #region ToString Override
         /// <summary>
@@ -238,6 +224,17 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <returns></returns>
         public override string ToString()
+        {
+            string rep = GetStringRepresentation();
+
+            return this.builder == null ? rep : string.Format("<unresolved {0}>", rep);
+        }
+
+        /// <summary>
+        /// Returns the string representation of this constraint
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string GetStringRepresentation()
         {
             switch (argcnt)
             {
@@ -251,7 +248,7 @@ namespace NUnit.Framework.Constraints
             }
         }
 
-        private string _displayable(object o)
+        private static string _displayable(object o)
         {
             if (o == null) return "null";
 

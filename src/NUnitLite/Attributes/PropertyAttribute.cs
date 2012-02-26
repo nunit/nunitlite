@@ -22,18 +22,18 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework
 {
 	/// <summary>
 	/// PropertyAttribute is used to attach information to a test as a name/value pair..
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Assembly, AllowMultiple=true)]
-	public class PropertyAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Assembly, AllowMultiple=true, Inherited=true)]
+	public class PropertyAttribute : TestModificationAttribute, IApplyToTest
 	{
-        private IDictionary properties = new ListDictionary();
+        private PropertyBag properties = new PropertyBag();
 
         /// <summary>
         /// Construct a PropertyAttribute with a name and string value
@@ -90,9 +90,24 @@ namespace NUnit.Framework
         /// <summary>
         /// Gets the property dictionary for this attribute
         /// </summary>
-        public IDictionary Properties
+        public IPropertyBag Properties
         {
             get { return properties; }
         }
+
+        #region IApplyToTest Members
+
+        /// <summary>
+        /// Modifies a test by adding properties to it.
+        /// </summary>
+        /// <param name="test">The test to modify</param>
+        public virtual void ApplyToTest(ITest test)
+        {
+            foreach (string key in Properties.Keys)
+                foreach(object value in Properties[key])
+                    test.Properties.Add(key, value);
+        }
+
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace NUnitLite.Tests
         [SetUp]
         public void SetUp()
         {
-            result = new TestResult(null);
+            result = new TestCaseResult(null);
         }
 
         void VerifyResultState(ResultState expectedState, string message )

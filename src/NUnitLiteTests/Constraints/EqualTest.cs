@@ -96,11 +96,11 @@ namespace NUnitLite.Tests
                 if (caret > minLength ||
                     expected.Substring(0, minMatch) != actual.Substring(0, minMatch) ||
                     expected[caret] == actual[caret])
-                Assert.Fail("Message Error: Caret does not point at first mismatch..." + Env.NewLine + ex.Message);
+                Assert.Fail("Message Error: Caret does not point at first mismatch..." + NUnit.Env.NewLine + ex.Message);
             }
 
             if (expected.Length > 68 || actual.Length > 68 || caret > 68)
-                Assert.Fail("Message Error: Strings are not truncated..." + Env.NewLine + ex.Message);
+                Assert.Fail("Message Error: Strings are not truncated..." + NUnit.Env.NewLine + ex.Message);
         }
 
         public class SameColorAs : Constraint

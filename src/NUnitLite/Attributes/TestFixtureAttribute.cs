@@ -21,28 +21,31 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using System.Collections;
+using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
+
 namespace NUnit.Framework
 {
-	using System;
-
 	/// <example>
 	/// [TestFixture]
 	/// public class ExampleClass 
 	/// {}
 	/// </example>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
-	public class TestFixtureAttribute : Attribute
+	public class TestFixtureAttribute : TestModificationAttribute, IApplyToTest
 	{
 		private string description;
 
-        private object[] arguments;
+        private object[] originalArgs;
+        private object[] constructorArgs;
+        private Type[] typeArgs;
+        private bool argsInitialized;
+
         private bool isIgnored;
         private string ignoreReason;
-
-#if CLR_2_0
-        private Type[] typeArgs;
-        private bool argsSeparated;
-#endif
+		private string category;
 
         /// <summary>
         /// Default constructor
@@ -57,9 +60,11 @@ namespace NUnit.Framework
         /// <param name="arguments"></param>
         public TestFixtureAttribute(params object[] arguments)
         {
-            this.arguments = arguments == null
+            this.originalArgs = arguments == null
                 ? new object[0]
                 : arguments;
+            this.constructorArgs = this.originalArgs;
+            this.typeArgs = new Type[0];
         }
 
 		/// <summary>
@@ -78,11 +83,9 @@ namespace NUnit.Framework
         {
             get 
             {
-#if CLR_2_0
-                if (!argsSeparated)
-                    SeparateArgs();
-#endif
-                return arguments; 
+                if (!argsInitialized)
+                    InitializeArgs();
+                return constructorArgs; 
             }
         }
 
@@ -110,7 +113,6 @@ namespace NUnit.Framework
             }
         }
 
-#if CLR_2_0
         /// <summary>
         /// Get or set the type arguments. If not set
         /// explicitly, any leading arguments that are
@@ -120,45 +122,81 @@ namespace NUnit.Framework
         {
             get
             {
-                if (!argsSeparated)
-                    SeparateArgs();
-
+                if (!argsInitialized)
+                    InitializeArgs();
                 return typeArgs;
             }
             set 
             { 
                 typeArgs = value;
-                argsSeparated = true;
+                argsInitialized = true;
             }
         }
 
-        private void SeparateArgs()
+        /// <summary>
+        /// Gets and sets the category for this fixture.
+        /// May be a comma-separated list of categories.
+        /// </summary>
+        public string Category
         {
-            int cnt = 0;
-            if (arguments != null)
-            {
-                foreach (object o in arguments)
-                    if (o is Type) cnt++;
-                    else break;
-
-                typeArgs = new Type[cnt];
-                for (int i = 0; i < cnt; i++)
-                    typeArgs[i] = (Type)arguments[i];
-
-                if (cnt > 0)
-                {
-                    object[] args = new object[arguments.Length - cnt];
-                    for (int i = 0; i < args.Length; i++)
-                        args[i] = arguments[cnt + i];
-
-                    arguments = args;
-                }
-            }
-            else
-                typeArgs = new Type[0];
-
-            argsSeparated = true;
+            get { return category; }
+            set { category = value; }
         }
-#endif
-	}
+ 
+        /// <summary>
+        /// Gets a list of categories for this fixture
+        /// </summary>
+        public IList Categories
+        {
+            get { return category == null ? null : category.Split(','); }
+        }
+ 
+        /// <summary>
+        /// Helper method to split the original argument list
+        /// into type arguments and constructor arguments.
+        /// This action has to be delayed rather than done in
+        /// the constructor, since TypeArgs may be set by
+        /// menas of a named parameter.
+        /// </summary>
+        private void InitializeArgs()
+        {
+            int typeArgCount = 0;
+
+            if (this.originalArgs != null)
+            {
+                foreach (object o in this.originalArgs)
+                    if (o is Type) typeArgCount++;
+                    else break;
+            }
+
+            this.typeArgs = new Type[typeArgCount];
+            for (int i = 0; i < typeArgCount; i++)
+                this.typeArgs[i] = (Type)this.originalArgs[i];
+
+            int constructorArgCount = originalArgs.Length - typeArgCount;
+            this.constructorArgs = new object[constructorArgCount];
+                for (int i = 0; i < constructorArgCount; i++)
+                    this.constructorArgs[i] = this.originalArgs[typeArgCount + i];
+                
+            argsInitialized = true;
+        }
+
+        #region IApplyToTest Members
+
+        /// <summary>
+        /// Modifies a test by adding a description, if not already set.
+        /// </summary>
+        /// <param name="test">The test to modify</param>
+        public void ApplyToTest(ITest test)
+        {
+            if (!test.Properties.ContainsKey(PropertyNames.Description) && description != null)
+                test.Properties.Set(PropertyNames.Description, description);
+			
+			if (category != null)
+				foreach (string cat in category.Split(new char[] { ',' }) )
+					test.Properties.Add(PropertyNames.Category, cat);
+        }
+
+        #endregion
+    }
 }
