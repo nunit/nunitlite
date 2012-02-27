@@ -21,45 +21,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
+#if !NETCF
+using System.Text.RegularExpressions;
+#endif
 
 namespace NUnit.Framework.Constraints
 {
+#if !NETCF
     /// <summary>
-    /// NullEmptyStringConstraint tests whether a string is either null or empty.
+    /// RegexConstraint can test whether a string matches
+    /// the pattern provided.
     /// </summary>
-    public class NullOrEmptyStringConstraint : Constraint
+    public class RegexConstraint : StringConstraint
     {
         /// <summary>
-        /// Constructs a new NullOrEmptyStringConstraint
+        /// Initializes a new instance of the <see cref="T:RegexConstraint"/> class.
         /// </summary>
-        public NullOrEmptyStringConstraint()
-        {
-            this.DisplayName = "nullorempty";
-        }
+        /// <param name="pattern">The pattern.</param>
+        public RegexConstraint(string pattern) : base(pattern) { }
 
         /// <summary>
         /// Test whether the constraint is satisfied by a given value
         /// </summary>
         /// <param name="actual">The value to be tested</param>
         /// <returns>True for success, false for failure</returns>
-        public override bool Matches(object actual)
+        protected override bool Matches(string actual)
         {
-            // NOTE: Do not change this to use string.IsNullOrEmpty
-            // since that won't work in earlier versions of .NET
+            //this.actual = actual;
 
-            this.actual = actual;
-
-            if (actual == null)
-                return true;
-            else
-            {
-                string actualAsString = actual as string;
-                if (actualAsString == null)
-                    throw new ArgumentException("Actual value must be a string", "actual");
-
-                return actualAsString == string.Empty;
-            }
+            return Regex.IsMatch(
+                    actual,
+                    this.expected,
+                    this.caseInsensitive ? RegexOptions.IgnoreCase : RegexOptions.None);
         }
 
         /// <summary>
@@ -68,7 +61,11 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The writer on which the description is displayed</param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            writer.Write("null or empty string");
+            writer.WritePredicate("String matching");
+            writer.WriteExpectedValue(this.expected);
+            if (this.caseInsensitive)
+                writer.WriteModifier("ignoring case");
         }
     }
+#endif
 }

@@ -129,6 +129,8 @@
     <Compile Include="Constraints\ContainsConstraint.cs" />
     <Compile Include="Constraints\EmptyConstraint.cs" />
     <Compile Include="Constraints\EmptyDirectoryConstraint.cs" />
+    <Compile Include="Constraints\EmptyStringConstraint.cs" />
+    <Compile Include="Constraints\EndsWithConstraint.cs" />
     <Compile Include="Constraints\EqualConstraint.cs" />
     <Compile Include="Constraints\EqualityAdapter.cs" />
     <Compile Include="Constraints\ExactCountConstraint.cs" />
@@ -142,6 +144,9 @@
     <Compile Include="Constraints\NoItemConstraint.cs" />
     <Compile Include="Constraints\NotConstraint.cs" />
     <Compile Include="Constraints\NullConstraint.cs" />
+    <Compile Include="Constraints\NullOrEmptyStringConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Constraints\Numerics.cs" />
     <Compile Include="Constraints\NUnitComparer.cs" />
     <Compile Include="Constraints\NUnitEqualityComparer.cs" />
@@ -164,13 +169,16 @@
     <Compile Include="Constraints\PropertyConstraint.cs" />
     <Compile Include="Constraints\PropertyExistsConstraint.cs" />
     <Compile Include="Constraints\RangeConstraint.cs" />
+    <Compile Include="Constraints\RegexConstraint.cs" />
     <Compile Include="Constraints\ResolvableConstraintExpression.cs" />
     <Compile Include="Constraints\SameAsConstraint.cs" />
     <Compile Include="Constraints\SamePathConstraint.cs" />
     <Compile Include="Constraints\SamePathOrUnderConstraint.cs" />
     <Compile Include="Constraints\SerializableConstraints.cs" />
     <Compile Include="Constraints\SomeItemsConstraint.cs" />
-    <Compile Include="Constraints\StringConstraints.cs" />
+    <Compile Include="Constraints\StartsWithConstraint.cs" />
+    <Compile Include="Constraints\StringConstraint.cs" />
+    <Compile Include="Constraints\SubstringConstraint.cs" />
     <Compile Include="Constraints\ThrowsConstraint.cs" />
     <Compile Include="Constraints\ThrowsNothingConstraint.cs" />
     <Compile Include="Constraints\Tolerance.cs" />

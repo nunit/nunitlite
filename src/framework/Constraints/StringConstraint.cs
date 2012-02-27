@@ -21,21 +21,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// NullEmptyStringConstraint tests whether a string is either null or empty.
+    /// StringConstraint is the abstract base for constraints
+    /// that operate on strings. It supports the IgnoreCase
+    /// modifier for string operations.
     /// </summary>
-    public class NullOrEmptyStringConstraint : Constraint
+    public abstract class StringConstraint : Constraint
     {
         /// <summary>
-        /// Constructs a new NullOrEmptyStringConstraint
+        /// The expected value
         /// </summary>
-        public NullOrEmptyStringConstraint()
+        protected string expected;
+
+        /// <summary>
+        /// Indicates whether tests should be case-insensitive
+        /// </summary>
+        protected bool caseInsensitive;
+
+        /// <summary>
+        /// Constructs a StringConstraint given an expected value
+        /// </summary>
+        /// <param name="expected">The expected value</param>
+        protected StringConstraint(string expected)
+            : base(expected)
         {
-            this.DisplayName = "nullorempty";
+            this.expected = expected;
+        }
+
+        /// <summary>
+        /// Modify the constraint to ignore case in matching.
+        /// </summary>
+        public StringConstraint IgnoreCase
+        {
+            get { caseInsensitive = true; return this; }
         }
 
         /// <summary>
@@ -45,30 +65,17 @@ namespace NUnit.Framework.Constraints
         /// <returns>True for success, false for failure</returns>
         public override bool Matches(object actual)
         {
-            // NOTE: Do not change this to use string.IsNullOrEmpty
-            // since that won't work in earlier versions of .NET
-
             this.actual = actual;
 
-            if (actual == null)
-                return true;
-            else
-            {
-                string actualAsString = actual as string;
-                if (actualAsString == null)
-                    throw new ArgumentException("Actual value must be a string", "actual");
-
-                return actualAsString == string.Empty;
-            }
+            string actualAsString = actual as string;
+            return actualAsString != null && Matches(actualAsString);
         }
 
         /// <summary>
-        /// Write the constraint description to a MessageWriter
+        /// Test whether the constraint is satisfied by a given string
         /// </summary>
-        /// <param name="writer">The writer on which the description is displayed</param>
-        public override void WriteDescriptionTo(MessageWriter writer)
-        {
-            writer.Write("null or empty string");
-        }
+        /// <param name="actual">The string to be tested</param>
+        /// <returns>True for success, false for failure</returns>
+        protected abstract bool Matches(string actual);
     }
 }
