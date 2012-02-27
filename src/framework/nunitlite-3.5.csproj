@@ -121,7 +121,12 @@
     <Compile Include="Constraints\BasicConstraint.cs" />
     <Compile Include="Constraints\BinaryConstraint.cs" />
     <Compile Include="Constraints\BinarySerializableConstraint.cs" />
-    <Compile Include="Constraints\CollectionConstraints.cs" />
+    <Compile Include="Constraints\CollectionConstraint.cs" />
+    <Compile Include="Constraints\CollectionContainsConstraint.cs" />
+    <Compile Include="Constraints\CollectionEquivalentConstraint.cs" />
+    <Compile Include="Constraints\CollectionItemsEqualConstraint.cs" />
+    <Compile Include="Constraints\CollectionOrderedConstraint.cs" />
+    <Compile Include="Constraints\CollectionSubsetConstraint.cs" />
     <Compile Include="Constraints\CollectionTally.cs" />
     <Compile Include="Constraints\ComparisonAdapter.cs" />
     <Compile Include="Constraints\ComparisonConstraint.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="Constraints\ConstraintExpressionBase.cs" />
     <Compile Include="Constraints\ConstraintFactory.cs" />
     <Compile Include="Constraints\ContainsConstraint.cs" />
+    <Compile Include="Constraints\EmptyCollectionConstraint.cs" />
     <Compile Include="Constraints\EmptyConstraint.cs" />
     <Compile Include="Constraints\EmptyDirectoryConstraint.cs" />
     <Compile Include="Constraints\EmptyStringConstraint.cs" />
@@ -192,6 +198,7 @@
     <Compile Include="Constraints\ToleranceMode.cs" />
     <Compile Include="Constraints\TrueConstraint.cs" />
     <Compile Include="Constraints\TypeConstraint.cs" />
+    <Compile Include="Constraints\UniqueItemsConstraint.cs" />
     <Compile Include="Constraints\XmlSerializableConstraint.cs" />
     <Compile Include="Contains.cs" />
     <Compile Include="Env.cs" />
