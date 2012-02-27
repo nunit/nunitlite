@@ -114,6 +114,8 @@
     <Compile Include="Attributes\ValueSourceAttribute.cs" />
     <Compile Include="Constraints\AllItemsConstraint.cs" />
     <Compile Include="Constraints\AndConstraint.cs" />
+    <Compile Include="Constraints\AssignableFromConstraint.cs" />
+    <Compile Include="Constraints\AssignableToConstraint.cs" />
     <Compile Include="Constraints\AttributeConstraint.cs" />
     <Compile Include="Constraints\AttributeExistsConstraint.cs" />
     <Compile Include="Constraints\BasicConstraint.cs" />
@@ -136,11 +138,13 @@
     <Compile Include="Constraints\EqualConstraint.cs" />
     <Compile Include="Constraints\EqualityAdapter.cs" />
     <Compile Include="Constraints\ExactCountConstraint.cs" />
+    <Compile Include="Constraints\ExactTypeConstraint.cs" />
     <Compile Include="Constraints\ExceptionTypeConstraint.cs" />
     <Compile Include="Constraints\FalseConstraint.cs" />
     <Compile Include="Constraints\FloatingPointNumerics.cs" />
     <Compile Include="Constraints\GreaterThanConstraint.cs" />
     <Compile Include="Constraints\GreaterThanOrEqualConstraint.cs" />
+    <Compile Include="Constraints\InstanceOfTypeConstraint.cs" />
     <Compile Include="Constraints\IResolveConstraint.cs" />
     <Compile Include="Constraints\LessThanConstraint.cs" />
     <Compile Include="Constraints\LessThanOrEqualConstraint.cs" />
@@ -187,7 +191,7 @@
     <Compile Include="Constraints\Tolerance.cs" />
     <Compile Include="Constraints\ToleranceMode.cs" />
     <Compile Include="Constraints\TrueConstraint.cs" />
-    <Compile Include="Constraints\TypeConstraints.cs" />
+    <Compile Include="Constraints\TypeConstraint.cs" />
     <Compile Include="Constraints\XmlSerializableConstraint.cs" />
     <Compile Include="Contains.cs" />
     <Compile Include="Env.cs" />
