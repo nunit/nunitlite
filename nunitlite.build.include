@@ -194,22 +194,36 @@
 	<property name="build.framework" value="net-3.5"/>
 	<property name="test.platforms" value="net-3.0,mono-3.0"/>
   </target>
-	
-  <target name="set-net-3.5-runtime-config">
-    <fail unless="${framework::exists( 'net-3.5' )}"
-      message=".NET 3.5 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'net-3.5' )}"
-      message="The .NET 3.5 SDK is not configured or not installed"/>
 
-    <property name="runtime.platform" value="net"/>
-    <property name="runtime.version" value="3.5"/>
-    <property name="runtime.config" value="net-3.5"/>
-    <property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
-    <property name="build.framework" value="net-3.5"/>
-    <property name="test.platforms" value="net-3.5,mono-3.5"/>
-  </target>
-	
-  <target name="set-netcf-1.0-runtime-config">
+	<target name="set-net-3.5-runtime-config">
+		<fail unless="${framework::exists( 'net-3.5' )}"
+		  message=".NET 3.5 is not installed"/>
+		<fail unless="${framework::sdk-exists( 'net-3.5' )}"
+		  message="The .NET 3.5 SDK is not configured or not installed"/>
+
+		<property name="runtime.platform" value="net"/>
+		<property name="runtime.version" value="3.5"/>
+		<property name="runtime.config" value="net-3.5"/>
+		<property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
+		<property name="build.framework" value="net-3.5"/>
+		<property name="test.platforms" value="net-3.5,mono-3.5"/>
+	</target>
+
+	<target name="set-net-4.0-runtime-config">
+		<fail unless="${framework::exists( 'net-4.0' )}"
+		  message=".NET 4.0 is not installed"/>
+		<fail unless="${framework::sdk-exists( 'net-4.0' )}"
+		  message="The .NET 4.0 SDK is not configured or not installed"/>
+
+		<property name="runtime.platform" value="net"/>
+		<property name="runtime.version" value="4.0"/>
+		<property name="runtime.config" value="net-4.0"/>
+		<property name="runtime.defines" value="NET,NET_4_0,CLR_4_0"/>
+		<property name="build.framework" value="net-4.0"/>
+		<property name="test.platforms" value="net-4.0,mono-4.0"/>
+	</target>
+
+	<target name="set-netcf-1.0-runtime-config">
     <fail unless="${framework::exists( 'netcf-1.0' )}"
       message=".NET CF 1.0 is not installed"/>
     <fail unless="${framework::sdk-exists( 'netcf-1.0' )}"
@@ -251,21 +265,49 @@
     <property name="test.platforms" value="mono-1.0,mono-2.0,net-1.0,net-1.1,net-2.0"/>
   </target>
 
-  <target name="set-mono-2.0-runtime-config">
-    <fail unless="${framework::exists( 'mono-2.0' )}"
-      message="Mono is not installed"/>
-    <fail unless="${framework::sdk-exists( 'mono-2.0' )}"
-      message="The Mono 2.0 SDK is not configured or not installed"/>
+	<target name="set-mono-2.0-runtime-config">
+		<fail unless="${framework::exists( 'mono-2.0' )}"
+		  message="Mono 2.0 is not installed"/>
+		<fail unless="${framework::sdk-exists( 'mono-2.0' )}"
+		  message="The Mono 2.0 SDK is not configured or not installed"/>
 
-    <property name="runtime.platform" value="mono"/>
-    <property name="runtime.version" value="2.0"/>
-    <property name="runtime.config" value="mono-2.0"/>
-    <property name="runtime.defines" value="MONO,MONO_2_0,CLR_2_0"/>
-    <property name="build.framework" value="mono-3.5"/>
-    <property name="test.platforms" value="mono-2.0,net-2.0"/>
-  </target>
+		<property name="runtime.platform" value="mono"/>
+		<property name="runtime.version" value="2.0"/>
+		<property name="runtime.config" value="mono-2.0"/>
+		<property name="runtime.defines" value="MONO,MONO_2_0,CLR_2_0"/>
+		<property name="build.framework" value="mono-3.5"/>
+		<property name="test.platforms" value="mono-2.0,net-2.0"/>
+	</target>
 
-<!-- ***************************************************************** -->
+	<target name="set-mono-3.5-runtime-config">
+		<fail unless="${framework::exists( 'mono-3.5' )}"
+		  message="Mono 3.5 is not installed"/>
+		<fail unless="${framework::sdk-exists( 'mono-3.5' )}"
+		  message="The Mono 3.5 SDK is not configured or not installed"/>
+
+		<property name="runtime.platform" value="mono"/>
+		<property name="runtime.version" value="3.5"/>
+		<property name="runtime.config" value="mono-3.5"/>
+		<property name="runtime.defines" value="MONO,MONO_3_5,CLR_2_0"/>
+		<property name="build.framework" value="mono-3.5"/>
+		<property name="test.platforms" value="mono-3.5,net-3.5"/>
+	</target>
+
+	<target name="set-mono-4.0-runtime-config">
+		<fail unless="${framework::exists( 'mono-4.0' )}"
+		  message="Mono 4.0 is not installed"/>
+		<fail unless="${framework::sdk-exists( 'mono-4.0' )}"
+		  message="The Mono 4.0 SDK is not configured or not installed"/>
+
+		<property name="runtime.platform" value="mono"/>
+		<property name="runtime.version" value="4.0"/>
+		<property name="runtime.config" value="mono-4.0"/>
+		<property name="runtime.defines" value="MONO,MONO_4_0,CLR_4_0"/>
+		<property name="build.framework" value="mono-4.0"/>
+		<property name="test.platforms" value="mono-4.0,net-4.0"/>
+	</target>
+
+	<!-- ***************************************************************** -->
 <!-- **************** Internally used targets ************************ -->
 <!-- ***************************************************************** -->
 
