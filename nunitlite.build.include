@@ -149,9 +149,8 @@
     <property name="runtime.version" value="1.0"/>
     <property name="runtime.config" value="net-1.0"/>
     <property name="runtime.defines" value="NET,NET_1_0"/>
-    <property name="nant.settings.currentframework" 
-      value="net-1.0"/>
-    <property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
+	<property name="build.framework" value="net-1.1"/>
+	<property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
   </target>
 	
   <target name="set-net-1.1-runtime-config">
@@ -164,8 +163,7 @@
     <property name="runtime.version" value="1.1"/>
     <property name="runtime.config" value="net-1.1"/>
     <property name="runtime.defines" value="NET,NET_1_1"/>
-    <property name="nant.settings.currentframework" 
-      value="net-1.1"/>
+    <property name="build.framework" value="net-1.1"/>
     <property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
   </target>
 	
@@ -179,9 +177,8 @@
     <property name="runtime.version" value="2.0"/>
     <property name="runtime.config" value="net-2.0"/>
     <property name="runtime.defines" value="NET,NET_2_0,CLR_2_0"/>
-    <property name="nant.settings.currentframework" 
-      value="net-2.0"/>
-    <property name="test.platforms" value="net-2.0,mono-2.0"/>
+    <property name="build.framework" value="net-3.5"/>
+	<property name="test.platforms" value="net-2.0,mono-2.0"/>
   </target>
 	
   <target name="set-net-3.0-runtime-config">
@@ -194,9 +191,8 @@
     <property name="runtime.version" value="3.0"/>
     <property name="runtime.config" value="net-3.0"/>
     <property name="runtime.defines" value="NET,NET_3_0,CLR_2_0"/>
-    <property name="nant.settings.currentframework" 
-      value="net-3.0"/>
-    <property name="test.platforms" value="net-3.0,mono-3.0"/>
+	<property name="build.framework" value="net-3.5"/>
+	<property name="test.platforms" value="net-3.0,mono-3.0"/>
   </target>
 	
   <target name="set-net-3.5-runtime-config">
@@ -209,8 +205,7 @@
     <property name="runtime.version" value="3.5"/>
     <property name="runtime.config" value="net-3.5"/>
     <property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
-    <property name="nant.settings.currentframework" 
-      value="net-3.5"/>
+    <property name="build.framework" value="net-3.5"/>
     <property name="test.platforms" value="net-3.5,mono-3.5"/>
   </target>
 	
@@ -224,8 +219,7 @@
     <property name="runtime.version" value="1.0"/>
     <property name="runtime.config" value="netcf-1.0"/>
     <property name="runtime.defines" value="NETCF,NETCF_1_0"/>
-    <property name="nant.settings.currentframework" 
-      value="netcf-1.0"/>
+    <property name="build.framework" value="netcf-1.0"/>
     <property name="test.platforms" value="netcf-1.0"/>
   </target>
 	
@@ -239,8 +233,7 @@
     <property name="runtime.version" value="2.0"/>
     <property name="runtime.config" value="netcf-2.0"/>
     <property name="runtime.defines" value="NETCF,NETCF_2_0,CLR_2_0"/>
-    <property name="nant.settings.currentframework" 
-      value="netcf-2.0"/>
+    <property name="build.framework" value="netcf-2.0"/>
     <property name="test.platforms" value="netcf-2.0"/>
   </target>
 	
@@ -254,8 +247,7 @@
     <property name="runtime.version" value="1.0"/>
     <property name="runtime.config" value="mono-1.0"/>
     <property name="runtime.defines" value="MONO,MONO_1_0"/>
-    <property name="nant.settings.currentframework" 
-      value="mono-1.0"/>
+    <property name="nant.settings.currentframework" value="mono-1.0"/>
     <property name="test.platforms" value="mono-1.0,mono-2.0,net-1.0,net-1.1,net-2.0"/>
   </target>
 
@@ -269,8 +261,7 @@
     <property name="runtime.version" value="2.0"/>
     <property name="runtime.config" value="mono-2.0"/>
     <property name="runtime.defines" value="MONO,MONO_2_0,CLR_2_0"/>
-    <property name="nant.settings.currentframework" 
-      value="mono-2.0"/>
+    <property name="build.framework" value="mono-3.5"/>
     <property name="test.platforms" value="mono-2.0,net-2.0"/>
   </target>
 
@@ -309,9 +300,14 @@
 
     <copy todir="${package.src.dir}">
       <fileset basedir="${project.src.dir}">
-        <include name="NUnitLite/**/*.cs"/>
-        <include name="NUnitLiteTests/**/*.cs"/>
-        <include name="TestResultConsole/**/*.cs"/>
+		<include name="framework/*.csproj"/>
+        <include name="framework/**/*.cs"/>
+		<include name="tests/*.csproj"/>
+        <include name="tests/**/*.cs"/>
+		<include name="testdata/*.csproj"/>
+        <include name="testdata/**/*.cs"/>
+		<include name="TestResultConsole/*.csproj"/>
+		<include name="TestResultConsole/**/*.cs"/>
       </fileset>
     </copy>
 

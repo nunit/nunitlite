@@ -190,13 +190,15 @@
     <echo message="* Current Build Directory = ${current.build.dir}"/>
     <echo message="*"/>
 
-    <echo message="* Building NUnitLite as a separate assembly"/>
+	<property name="nant.settings.currentframework" value="${build.framework}"/>
+
+    <echo message="* Building nunitlite.dll"/>
     <echo message="*"/>
     <csc target="library"
-        output="${current.build.dir}/NUnitLite.dll"
+        output="${current.build.dir}/nunitlite.dll"
         debug="${build.debug}" 
         define="${build.defines}">
-      <sources basedir="${project.src.dir}/NUnitLite">
+      <sources basedir="${project.src.dir}/framework">
         <include name="**/*.cs"/>
       </sources>
       <references>
@@ -209,7 +211,7 @@
 
 
     <echo message="*"/>
-    <echo message="* Building test data as a separate assembly"/>
+    <echo message="* Building nunitlite.testdata.dll"/>
     <echo message="*"/>
 
     <csc target="library"
@@ -221,49 +223,28 @@
       </sources>
       <references basedir="${current.build.dir}">
         <include name="mscorlib.dll"/>
-        <include name="NUnitLite.dll"/>
+        <include name="nunitlite.dll"/>
       </references>
     </csc>
 
     <echo message="*"/>
-    <echo message="* Building NUnitLiteTests as a separate assembly"/>
+    <echo message="* Building nunitlite.tests.exe"/>
     <echo message="*"/>
 
     <csc target="exe"
-        output="${current.build.dir}/NUnitLiteTests.exe"
+        output="${current.build.dir}/nunitlite.tests.exe"
         debug="${build.debug}" 
         define="${build.defines}">
-      <sources basedir="${project.src.dir}/NUnitLiteTests">
+      <sources basedir="${project.src.dir}/tests">
         <include name="**/*.cs"/>
       </sources>
       <references basedir="${current.build.dir}">
         <include name="mscorlib.dll"/>
         <include name="System.Drawing.dll"/>
-        <include name="NUnitLite.dll"/>
+        <include name="nunitlite.dll"/>
         <include name="nunitlite.testdata.dll"/>
       </references>
     </csc>
-
-    <echo message="*"/>
-    <echo message="* Building NUnitLite and Tests combined"/>
-    <echo message="*"/>
-
-    <!--<csc target="exe"
-        output="${current.build.dir}/NUnitLiteCombined.exe"
-        debug="${build.debug}" 
-        define="${build.defines}">
-      <sources basedir="${project.src.dir}">
-        <include name="NUnitLite/**/*.cs"/>
-        <include name="NUnitLiteTests/**/*.cs"/>
-        <exclude name="NUnitLiteTests/**/AssemblyInfo.cs"/>
-      </sources>
-      <references basedir="${current.build.dir}">
-        <include name="mscorlib.dll"/>
-        <include name="System.dll"/>
-        <include name="System.Drawing.dll"/>
-        <include name="System.Xml.dll"/>
-      </references>
-    </csc>-->
 
   </target>
 
@@ -293,32 +274,23 @@
     <echo message="* Testing ${runtime.config} ${build.config} build"/>
     <echo message="*    Running under ${nant.settings.currentframework}"/>
     <echo message="*"/>
-    <echo message="* Testing with NUnitLite in a separate assembly"/>
-    <echo message="*"/>
 
     <exec basedir="${current.build.dir}"
       workingdir="${current.build.dir}" 
-      program="NUnitLiteTests.exe" 
+      program="nunitlite.tests.exe" 
       managed="Strict"/>
-
-    <!--<echo message="*"/>
-    <echo message="* Testing with NUnitLite included in the test assembly"/>
-    <echo message="*"/>
-
-    <exec basedir="${current.build.dir}"
-      workingdir="${current.build.dir}" 
-      program="NUnitLiteCombined.exe" 
-      managed="Strict"/>-->
 
   </target>
 
   <target name="test-all"
       description="Build and test all runtimes for current config">
+	  
     <foreach item="String" delim="," 
         property="framework" in="${installed.frameworks}">
       <call target="set-${framework}-runtime-config"/>
       <call target="test" />
     </foreach>
+	  
   </target>
 
   <target name="test-each-runtime" depends="build"

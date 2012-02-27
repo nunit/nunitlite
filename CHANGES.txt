@@ -1,3 +1,17 @@
+NUnitLite Version 0.7 - March 1, 2012
+
+New Features and Enhancements
+
+* New Asserts
+
+* New Syntax Helpers:
+
+Bug Fixes
+
+*
+*
+*
+
 NUnitLite Version 0.6 - January 13, 2010
 
 This is the first release of NUnitLite under the MIT license.

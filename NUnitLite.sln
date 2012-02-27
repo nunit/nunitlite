@@ -1,13 +1,41 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLite", "src\NUnitLite\NUnitLite.csproj", "{C24A3FC4-2541-4E9C-BADD-564777610B75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite-2.0", "src\framework\nunitlite-2.0.csproj", "{C24A3FC4-2541-4E9C-BADD-564777610B75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLiteTests", "src\NUnitLiteTests\NUnitLiteTests.csproj", "{C8FA4073-B24E-4178-93A1-5E1256C8B528}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.tests-2.0", "src\tests\nunitlite.tests-2.0.csproj", "{C8FA4073-B24E-4178-93A1-5E1256C8B528}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestResultConsole", "src\TestResultConsole\TestResultConsole.csproj", "{8CB31CE4-639A-4A34-B04D-A8CE3FEBECB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.testdata-2.0", "src\testdata\nunitlite.testdata-2.0.csproj", "{442DAB16-3063-4FE3-90B6-C29C3D85360D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET-2.0", "NET-2.0", "{A466054B-B601-46A2-8D7B-03DE10A94F09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET-3.5", "NET-3.5", "{08B11E56-AB8C-4374-8709-45631094B29B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET-4.0", "NET-4.0", "{D0ED3F4D-113E-4858-8042-C657CAC0CF46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite-3.5", "src\framework\nunitlite-3.5.csproj", "{43B24DC5-16D6-45EF-93F1-B021B785A892}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.testdata-3.5", "src\testdata\nunitlite.testdata-3.5.csproj", "{652AFEEB-B19C-4C67-A014-2248EA72F229}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.tests-3.5", "src\tests\nunitlite.tests-3.5.csproj", "{94A4E298-F324-4531-856F-127505F766E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite-4.0", "src\framework\nunitlite-4.0.csproj", "{1567BCCE-7BE9-4815-84D7-7F794DB39081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.testdata-4.0", "src\testdata\nunitlite.testdata-4.0.csproj", "{5C77A144-3CD1-42FC-B622-410E1945CA1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.tests-4.0", "src\tests\nunitlite.tests-4.0.csproj", "{497A578E-EF93-4190-96E0-B7F22E08027B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{601BC853-DE7B-47EB-A92B-AEDE16A17FCF}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGES.txt = CHANGES.txt
+		LICENSE.txt = LICENSE.txt
+		nunitlite.build = nunitlite.build
+		nunitlite.build.include = nunitlite.build.include
+		NUnitLite.nuspec = NUnitLite.nuspec
+		README.txt = README.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,9 +59,44 @@ Global
 		{442DAB16-3063-4FE3-90B6-C29C3D85360D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{442DAB16-3063-4FE3-90B6-C29C3D85360D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{442DAB16-3063-4FE3-90B6-C29C3D85360D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B24DC5-16D6-45EF-93F1-B021B785A892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B24DC5-16D6-45EF-93F1-B021B785A892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B24DC5-16D6-45EF-93F1-B021B785A892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B24DC5-16D6-45EF-93F1-B021B785A892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{652AFEEB-B19C-4C67-A014-2248EA72F229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652AFEEB-B19C-4C67-A014-2248EA72F229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652AFEEB-B19C-4C67-A014-2248EA72F229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652AFEEB-B19C-4C67-A014-2248EA72F229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94A4E298-F324-4531-856F-127505F766E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A4E298-F324-4531-856F-127505F766E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A4E298-F324-4531-856F-127505F766E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A4E298-F324-4531-856F-127505F766E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1567BCCE-7BE9-4815-84D7-7F794DB39081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1567BCCE-7BE9-4815-84D7-7F794DB39081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1567BCCE-7BE9-4815-84D7-7F794DB39081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1567BCCE-7BE9-4815-84D7-7F794DB39081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C77A144-3CD1-42FC-B622-410E1945CA1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C77A144-3CD1-42FC-B622-410E1945CA1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C77A144-3CD1-42FC-B622-410E1945CA1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C77A144-3CD1-42FC-B622-410E1945CA1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497A578E-EF93-4190-96E0-B7F22E08027B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497A578E-EF93-4190-96E0-B7F22E08027B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497A578E-EF93-4190-96E0-B7F22E08027B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497A578E-EF93-4190-96E0-B7F22E08027B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8FA4073-B24E-4178-93A1-5E1256C8B528} = {A466054B-B601-46A2-8D7B-03DE10A94F09}
+		{442DAB16-3063-4FE3-90B6-C29C3D85360D} = {A466054B-B601-46A2-8D7B-03DE10A94F09}
+		{C24A3FC4-2541-4E9C-BADD-564777610B75} = {A466054B-B601-46A2-8D7B-03DE10A94F09}
+		{43B24DC5-16D6-45EF-93F1-B021B785A892} = {08B11E56-AB8C-4374-8709-45631094B29B}
+		{652AFEEB-B19C-4C67-A014-2248EA72F229} = {08B11E56-AB8C-4374-8709-45631094B29B}
+		{94A4E298-F324-4531-856F-127505F766E5} = {08B11E56-AB8C-4374-8709-45631094B29B}
+		{1567BCCE-7BE9-4815-84D7-7F794DB39081} = {D0ED3F4D-113E-4858-8042-C657CAC0CF46}
+		{5C77A144-3CD1-42FC-B622-410E1945CA1E} = {D0ED3F4D-113E-4858-8042-C657CAC0CF46}
+		{497A578E-EF93-4190-96E0-B7F22E08027B} = {D0ED3F4D-113E-4858-8042-C657CAC0CF46}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = NUnitLiteTests\NUnitLiteTests.csproj
