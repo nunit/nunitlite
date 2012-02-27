@@ -120,7 +120,7 @@
     <Compile Include="Constraints\CollectionConstraints.cs" />
     <Compile Include="Constraints\CollectionTally.cs" />
     <Compile Include="Constraints\ComparisonAdapter.cs" />
-    <Compile Include="Constraints\ComparisonConstraints.cs" />
+    <Compile Include="Constraints\ComparisonConstraint.cs" />
     <Compile Include="Constraints\Constraint.cs" />
     <Compile Include="Constraints\ConstraintBuilder.cs" />
     <Compile Include="Constraints\ConstraintExpression.cs" />
@@ -137,7 +137,11 @@
     <Compile Include="Constraints\ExceptionTypeConstraint.cs" />
     <Compile Include="Constraints\FalseConstraint.cs" />
     <Compile Include="Constraints\FloatingPointNumerics.cs" />
+    <Compile Include="Constraints\GreaterThanConstraint.cs" />
+    <Compile Include="Constraints\GreaterThanOrEqualConstraint.cs" />
     <Compile Include="Constraints\IResolveConstraint.cs" />
+    <Compile Include="Constraints\LessThanConstraint.cs" />
+    <Compile Include="Constraints\LessThanOrEqualConstraint.cs" />
     <Compile Include="Constraints\MessageWriter.cs" />
     <Compile Include="Constraints\MsgUtils.cs" />
     <Compile Include="Constraints\NaNConstraint.cs" />
