@@ -56,10 +56,15 @@ namespace NUnit.Framework.Internal
 
         #region Properties
 
+        private RunState runState;
         /// <summary>
         /// The RunState for this set of parameters.
         /// </summary>
-        public RunState RunState { get; set; }
+        public RunState RunState 
+        {
+            get { return runState; }
+            set { runState = value; }
+        }
 
         /// <summary>
         /// The arguments to be used in running the test,
@@ -124,12 +129,17 @@ namespace NUnit.Framework.Internal
             get { return hasExpectedResult; }
         }
 
+        private string testName;
         /// <summary>
         /// A name to be used for this test case in lieu
         /// of the standard generated name containing
         /// the argument list.
         /// </summary>
-        public string TestName { get; set; }
+        public string TestName
+        {
+            get { return testName; }
+            set { testName = value; }
+        }
 
         /// <summary>
         /// Gets the property dictionary for this test

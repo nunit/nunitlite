@@ -28,7 +28,7 @@ namespace NUnit.Framework.Api
     /// <summary>
     /// The ITestResult interface represents the result of a test.
     /// </summary>
-    public interface ITestResult //: IXmlNodeBuilder
+    public interface ITestResult : IXmlNodeBuilder
     {
         /// <summary>
         /// Gets the ResultState of the test result, which 

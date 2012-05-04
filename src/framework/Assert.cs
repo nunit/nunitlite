@@ -347,6 +347,7 @@ namespace NUnit.Framework
 
         #region Assert.That<T>
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
@@ -434,6 +435,7 @@ namespace NUnit.Framework
                 throw new AssertionException(writer.ToString());
             }
         }
+#endif
 
         #endregion
 
@@ -573,6 +575,7 @@ namespace NUnit.Framework
 
         #region Throws<T>
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
@@ -605,6 +608,7 @@ namespace NUnit.Framework
         {
             return Throws<T>(code, string.Empty, null);
         }
+#endif
 
         #endregion
 
@@ -681,6 +685,7 @@ namespace NUnit.Framework
 
         #region Catch<T>
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Verifies that a delegate throws an exception of a certain Type
         /// or one derived from it when called and returns it.
@@ -713,6 +718,7 @@ namespace NUnit.Framework
         {
             return (T)Throws(new InstanceOfTypeConstraint(typeof(T)), code);
         }
+#endif
 
         #endregion
 
@@ -1283,6 +1289,7 @@ namespace NUnit.Framework
             AssertDoublesAreEqual(expected, actual, delta, null, null);
         }
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Verifies that two doubles are equal considering a delta. If the
         /// expected value is infinity then the delta value is ignored. If 
@@ -1328,6 +1335,7 @@ namespace NUnit.Framework
         {
             AssertDoublesAreEqual(expected, (double)actual, delta, null, null);
         }
+#endif
 
         #endregion
 

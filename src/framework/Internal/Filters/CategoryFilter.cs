@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.Text;
 using NUnit.Framework.Api;
 
@@ -37,7 +39,11 @@ namespace NUnit.Framework.Internal.Filters
 	[Serializable]
 	public class CategoryFilter : TestFilter
 	{
+#if CLR_2_0 || CLR_4_0
         List<string> categories = new List<string>();
+#else
+        ArrayList categories = new ArrayList();
+#endif
 
 		/// <summary>
 		/// Construct an empty CategoryFilter
@@ -107,14 +113,6 @@ namespace NUnit.Framework.Internal.Filters
 				sb.Append( categories[i] );
 			}
 			return sb.ToString();
-		}
-
-		/// <summary>
-		/// Gets the list of categories from this filter
-		/// </summary>
-		public IList<string> Categories
-		{
-			get { return categories; }
 		}
 	}
 }

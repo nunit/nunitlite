@@ -71,6 +71,7 @@
     <Compile Include="Api\ITestFilter.cs" />
     <Compile Include="Api\ITestListener.cs" />
     <Compile Include="Api\ITestResult.cs" />
+    <Compile Include="Api\IXmlNodeBuilder.cs" />
     <Compile Include="Api\PropertyEntry.cs" />
     <Compile Include="Api\ResultState.cs" />
     <Compile Include="Api\RunState.cs" />
@@ -259,7 +260,9 @@
     <Compile Include="Internal\OSPlatform.cs" />
     <Compile Include="Internal\ParameterSet.cs" />
     <Compile Include="Internal\PlatformHelper.cs" />
-    <Compile Include="Internal\PropertyBag.cs" />
+    <Compile Include="Internal\PropertyBag.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Internal\PropertyNames.cs" />
     <Compile Include="Internal\Randomizer.cs" />
     <Compile Include="Internal\Reflect.cs" />

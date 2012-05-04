@@ -22,7 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.Reflection;
 using System.Threading;
 using System.Text;
@@ -53,7 +55,11 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// A list of all decorators applied to the test by attributes or parameterset arguments
         /// </summary>
-        private List<ICommandDecorator> decorators = new System.Collections.Generic.List<ICommandDecorator>();
+#if CLR_2_0 || CLR_4_0
+        private List<ICommandDecorator> decorators = new List<ICommandDecorator>();
+#else
+        private System.Collections.ArrayList decorators = new System.Collections.ArrayList();
+#endif
 
         /// <summary>
         /// Indicated whether the method has an expected result.
@@ -119,7 +125,11 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// Gets a list of custom decorators for this test.
         /// </summary>
+#if CLR_2_0 || CLR_4_0
         public IList<ICommandDecorator> CustomDecorators
+#else
+        public System.Collections.IList CustomDecorators
+#endif
         {
             get { return decorators; }
         }
@@ -170,13 +180,42 @@ namespace NUnit.Framework.Internal
         }
 #endif
 
-		/// <summary>
+        /// <summary>
+        /// Returns an XmlNode representing the current result after
+        /// adding it as a child of the supplied parent node.
+        /// </summary>
+        /// <param name="parentNode">The parent node.</param>
+        /// <param name="recursive">If true, descendant results are included</param>
+        /// <returns></returns>
+        public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
+        {
+            XmlNode thisNode = XmlHelper.AddElement(parentNode, XmlElementName);
+
+            PopulateTestNode(thisNode, recursive);
+
+            return thisNode;
+        }
+
+        /// <summary>
         /// Gets this test's child tests
         /// </summary>
         /// <value>A list of child tests</value>
+#if CLR_2_0 || CLR_4_0
         public override IList<ITest> Tests
+#else
+        public override System.Collections.IList Tests
+#endif
         {
             get { return new ITest[0]; }
+        }
+
+        /// <summary>
+        /// Gets the name used for the top-level element in the
+        /// XML representation of this test
+        /// </summary>
+        public override string XmlElementName
+        {
+            get { return "test-case"; }
         }
 
         protected override TestCommand MakeTestCommand(ITestFilter filter)

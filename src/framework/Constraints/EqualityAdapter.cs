@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints
 {
@@ -84,6 +86,7 @@ namespace NUnit.Framework.Constraints
 
         #endregion
 
+#if CLR_2_0 || CLR_4_0
         #region Nested IEqualityComparer Adapter
 
         /// <summary>
@@ -138,7 +141,7 @@ namespace NUnit.Framework.Constraints
         #endregion
 
         #region Nested IEqualityComparer<T> Adapter
-
+        
         /// <summary>
         /// Returns an EqualityAdapter that wraps an IEqualityComparer&lt;T&gt;.
         /// </summary>
@@ -223,5 +226,6 @@ namespace NUnit.Framework.Constraints
         }
 
         #endregion
+#endif
     }
 }

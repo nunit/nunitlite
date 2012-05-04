@@ -22,9 +22,11 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
+using System.Collections.Generic;
+#endif
+using System.Reflection;
 
 namespace NUnit.Framework.Internal
 {
@@ -62,7 +64,7 @@ namespace NUnit.Framework.Internal
         /// <returns>The array of methods found</returns>
         public static MethodInfo[] GetMethodsWithAttribute(Type fixtureType, Type attributeType, bool inherit)
         {
-            List<MethodInfo> list = new List<MethodInfo>();
+            MethodInfoList list = new MethodInfoList();
 
             foreach (MethodInfo method in fixtureType.GetMethods(AllMembers))
             {
@@ -75,14 +77,11 @@ namespace NUnit.Framework.Internal
             return list.ToArray();
         }
 
+#if CLR_2_0 || CLR_4_0
         private class BaseTypesFirstComparer : IComparer<MethodInfo>
         {
-            #region IComparer Members
-            public int Compare(MethodInfo x, MethodInfo y)
+            public int Compare(MethodInfo m1, MethodInfo m2)
             {
-                MethodInfo m1 = x as MethodInfo;
-                MethodInfo m2 = y as MethodInfo;
-
                 if (m1 == null || m2 == null) return 0;
 
                 Type m1Type = m1.DeclaringType;
@@ -93,9 +92,27 @@ namespace NUnit.Framework.Internal
 
                 return 1;
             }
-
-            #endregion
         }
+#else
+        private class BaseTypesFirstComparer : IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                MethodInfo m1 = x as MethodInfo;
+                MethodInfo m2 = y as MethodInfo;
+
+                if (m1 == null || m2 == null) return 0;
+
+                Type m1Type = m1.DeclaringType;
+                Type m2Type = m2.DeclaringType;
+
+                if (m1Type == m2Type) return 0;
+                if (m1Type.IsAssignableFrom(m2Type)) return -1;
+
+                return 1;
+            }
+        }
+#endif
 
         /// <summary>
         /// Examine a fixture type and return true if it has a method with
@@ -216,5 +233,17 @@ namespace NUnit.Framework.Internal
 		private Reflect() { }
 
 		#endregion
+
+#if CLR_2_0 || CLR_4_0
+        class MethodInfoList : List<MethodInfo> { }
+#else
+        class MethodInfoList : ArrayList
+        {
+            public new MethodInfo[] ToArray()
+            {
+                return (MethodInfo[])base.ToArray(typeof(MethodInfo));
+            }
+        }
+#endif
 	}
 }

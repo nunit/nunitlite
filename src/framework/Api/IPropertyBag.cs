@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace NUnit.Framework.Api
 {
@@ -41,7 +39,7 @@ namespace NUnit.Framework.Api
     ///     Assert.That(bag.GetSetting("Priority", "low"),
     ///       Is.EqualTo("high"));
     /// </summary>
-    public interface IPropertyBag : /*IXmlNodeBuilder,*/ IEnumerable
+    public interface IPropertyBag : IXmlNodeBuilder, System.Collections.IEnumerable
     {
         /// <summary>
         /// Get the number of key/value pairs in the property bag
@@ -150,11 +148,15 @@ namespace NUnit.Framework.Api
         /// Gets or sets the list of values for a particular key
         /// </summary>
         /// <param name="key">The key for which the values are to be retrieved or set</param>
-        IList this[string key] { get; set; }
+        System.Collections.IList this[string key] { get; set; }
 
         /// <summary>
         /// Gets a collection containing all the keys in the property set
         /// </summary>
-        ICollection<string> Keys { get; }
+#if CLR_2_0 || CLR_4_0
+        System.Collections.Generic.ICollection<string> Keys { get; }
+#else
+        System.Collections.ICollection Keys { get; }
+#endif
     }
 }

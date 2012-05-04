@@ -31,7 +31,7 @@ namespace NUnit.Framework.Api
 	/// The Run method is specifically excluded to allow
 	/// for data-only representations of a test.
 	/// </summary>
-	public interface ITest //: IXmlNodeBuilder
+	public interface ITest : IXmlNodeBuilder
     {
         /// <summary>
         /// Gets or sets the id of the test
@@ -86,7 +86,11 @@ namespace NUnit.Framework.Api
         /// Gets this test's child tests
         /// </summary>
         /// <value>A list of child tests</value>
+#if CLR_2_0 || CLR_4_0
         System.Collections.Generic.IList<ITest> Tests { get; }
+#else
+        System.Collections.IList Tests { get; }
+#endif
     }
 }
 

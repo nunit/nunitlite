@@ -22,7 +22,11 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#else
+using System.Collections;
+#endif
 using System.Text;
 using System.Threading;
 using System.Reflection;
@@ -42,7 +46,11 @@ namespace NUnit.Framework.Internal
 		/// <summary>
 		/// Our collection of child tests
 		/// </summary>
+#if CLR_2_0 || CLR_4_0
         private List<ITest> tests = new List<ITest>();
+#else
+        private ArrayList tests = new ArrayList();
+#endif
 
         /// <summary>
         /// Set to true to suppress sorting this suite's contents
@@ -184,7 +192,11 @@ namespace NUnit.Framework.Internal
         /// Gets this test's child tests
         /// </summary>
         /// <value>The list of child tests</value>
+#if CLR_2_0 || CLR_4_0
         public override IList<ITest> Tests 
+#else
+        public override IList Tests
+#endif
 		{
 			get { return tests; }
 		}
@@ -273,6 +285,38 @@ namespace NUnit.Framework.Internal
             }
         }
 
-		#endregion
+        /// <summary>
+        /// Gets the name used for the top-level element in the
+        /// XML representation of this test
+        /// </summary>
+        public override string XmlElementName
+        {
+            get { return "test-suite"; }
+        }
+
+        /// <summary>
+        /// Returns an XmlNode representing the current result after
+        /// adding it as a child of the supplied parent node.
+        /// </summary>
+        /// <param name="parentNode">The parent node.</param>
+        /// <param name="recursive">If true, descendant results are included</param>
+        /// <returns></returns>
+        public override System.Xml.XmlNode AddToXml(XmlNode parentNode, bool recursive)
+        {
+            XmlNode thisNode = XmlHelper.AddElement(parentNode, "test-suite");
+            XmlHelper.AddAttribute(thisNode, "type", this.TestType);
+
+            PopulateTestNode(thisNode, recursive);
+            XmlHelper.AddAttribute(thisNode, "testcasecount", this.TestCaseCount.ToString());
+
+
+            if (recursive)
+                foreach (Test test in this.Tests)
+                    test.AddToXml(thisNode, recursive);
+
+            return thisNode;
+        }
+
+        #endregion
     }
 }

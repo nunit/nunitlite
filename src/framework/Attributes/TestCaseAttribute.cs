@@ -43,6 +43,7 @@ namespace NUnit.Framework
         private object expectedResult;
         private bool hasExpectedResult;
         private IPropertyBag properties;
+        private RunState runState;
 
         #endregion
 
@@ -55,7 +56,7 @@ namespace NUnit.Framework
         /// <param name="arguments"></param>
         public TestCaseAttribute(params object[] arguments)
         {
-			this.RunState = RunState.Runnable;
+			this.runState = RunState.Runnable;
 			
          	if (arguments == null)
          		this.arguments = new object[] { null };
@@ -69,7 +70,7 @@ namespace NUnit.Framework
         /// <param name="arg"></param>
         public TestCaseAttribute(object arg)
         {
-			this.RunState = RunState.Runnable;			
+			this.runState = RunState.Runnable;			
             this.arguments = new object[] { arg };
         }
 
@@ -80,7 +81,7 @@ namespace NUnit.Framework
         /// <param name="arg2"></param>
         public TestCaseAttribute(object arg1, object arg2)
         {
-			this.RunState = RunState.Runnable;			
+			this.runState = RunState.Runnable;			
             this.arguments = new object[] { arg1, arg2 };
         }
 
@@ -92,7 +93,7 @@ namespace NUnit.Framework
         /// <param name="arg3"></param>
         public TestCaseAttribute(object arg1, object arg2, object arg3)
         {
-			this.RunState = RunState.Runnable;			
+			this.runState = RunState.Runnable;			
             this.arguments = new object[] { arg1, arg2, arg3 };
         }
 
@@ -187,11 +188,16 @@ namespace NUnit.Framework
             set { this.Properties.Set(PropertyNames.Description, value); }
         }
 
+        private string testName;
         /// <summary>
         /// Gets or sets the name of the test.
         /// </summary>
         /// <value>The name of the test.</value>
-        public string TestName { get; set; }
+        public string TestName 
+        {
+            get { return testName; }
+            set { testName = value; }
+        }
 
         /// <summary>
         /// Gets or sets the ignored status of the test
@@ -199,7 +205,7 @@ namespace NUnit.Framework
         public bool Ignore 
 		{ 
 			get { return this.RunState == RunState.Ignored; }
-			set { this.RunState = value ? RunState.Ignored : RunState.Runnable; } 
+			set { this.runState = value ? RunState.Ignored : RunState.Runnable; } 
 		}
 		
 		/// <summary>
@@ -211,13 +217,16 @@ namespace NUnit.Framework
 		public bool Explicit 
 		{ 
 			get { return this.RunState == RunState.Explicit; }
-			set { this.RunState = value ? RunState.Explicit : RunState.Runnable; }
+			set { this.runState = value ? RunState.Explicit : RunState.Runnable; }
 		}
 
 		/// <summary>
-		/// Gets or sets the RunState of this test case.
+		/// Gets the RunState of this test case.
 		/// </summary>
-		public RunState RunState { get; private set; }
+		public RunState RunState 
+        {
+            get { return runState; } 
+        }
 		
 		/// <summary>
 		/// Gets or sets the reason for not running the test.
@@ -239,7 +248,7 @@ namespace NUnit.Framework
             get { return this.Reason; }
             set
             {
-				this.RunState = RunState.Ignored;
+				this.runState = RunState.Ignored;
                 this.Reason = value;
             }
         }
@@ -291,7 +300,11 @@ namespace NUnit.Framework
         /// </summary>
         /// <param name="method">The method for which data is being provided</param>
         /// <returns></returns>
+#if CLR_2_0 || CLR_4_0
         public System.Collections.Generic.IEnumerable<ITestCaseData> GetTestCasesFor(System.Reflection.MethodInfo method)
+#else
+        public System.Collections.IEnumerable GetTestCasesFor(System.Reflection.MethodInfo method)
+#endif
         {
             ParameterSet parms;
 

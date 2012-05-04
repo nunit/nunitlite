@@ -22,7 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.Reflection;
 
 namespace NUnit.Framework.Internal
@@ -36,7 +38,11 @@ namespace NUnit.Framework.Internal
         #region Static Members
         private static Random seedGenerator = new Random();
 
+#if CLR_2_0 || CLR_4_0
         private static Dictionary<MemberInfo, Randomizer> randomizers = new Dictionary<MemberInfo, Randomizer>();
+#else
+        private static System.Collections.Hashtable randomizers = new System.Collections.Hashtable();
+#endif
 
         /// <summary>
         /// Get a random seed for use in creating a randomizer.

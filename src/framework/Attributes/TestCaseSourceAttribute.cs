@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.Reflection;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
@@ -85,11 +87,16 @@ namespace NUnit.Framework
             get { return sourceType;  }
         }
 
+        private string category;
         /// <summary>
         /// Gets or sets the category associated with this test.
         /// May be a single category or a comma-separated list.
         /// </summary>
-        public string Category { get; set; }
+        public string Category 
+        {
+            get { return category; }
+            set { category = value; }
+        }
 
         #region ITestCaseSource Members
         /// <summary>
@@ -98,9 +105,15 @@ namespace NUnit.Framework
         /// </summary>
         /// <param name="method">The method for which data is needed.</param>
         /// <returns></returns>
+#if CLR_2_0 || CLR_4_0
         public IEnumerable<ITestCaseData> GetTestCasesFor(MethodInfo method)
         {
             List<ITestCaseData> data = new List<ITestCaseData>();
+#else
+        public IEnumerable GetTestCasesFor(MethodInfo method)
+        {
+            ArrayList data = new ArrayList();
+#endif
             IEnumerable source = GetTestCaseSource(method);
 
             if (source != null)

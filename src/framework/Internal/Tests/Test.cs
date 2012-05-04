@@ -183,6 +183,16 @@ namespace NUnit.Framework.Internal
             set { runState = value; }
         }
 
+        /// </summary>
+        /// <summary>
+        /// Gets the name used for the top-level element in the
+        /// XML representation of this test
+        /// </summary>
+        public abstract string XmlElementName
+        {
+            get;
+        }
+
         /// <summary>
         /// Gets a string representing the type of test. Used as an attribute
         /// value in the XML representation of a test and has no other
@@ -236,7 +246,39 @@ namespace NUnit.Framework.Internal
         /// Gets this test's child tests
         /// </summary>
         /// <value>A list of child tests</value>
+        
+#if CLR_2_0 || CLR_4_0
         public abstract System.Collections.Generic.IList<ITest> Tests { get; }
+#else
+        public abstract System.Collections.IList Tests { get; }
+#endif
+
+        #endregion
+
+        #region IXmlNodeBuilder Members
+
+        /// <summary>
+        /// Returns the Xml representation of the test
+        /// </summary>
+        /// <param name="recursive">If true, include child tests recursively</param>
+        /// <returns></returns>
+        public XmlNode ToXml(bool recursive)
+        {
+            XmlNode topNode = XmlHelper.CreateTopLevelElement("dummy");
+
+            XmlNode thisNode = AddToXml(topNode, recursive);
+
+            return thisNode;
+        }
+
+        /// <summary>
+        /// Returns an XmlNode representing the current result after
+        /// adding it as a child of the supplied parent node.
+        /// </summary>
+        /// <param name="parentNode">The parent node.</param>
+        /// <param name="recursive">If true, descendant results are included</param>
+        /// <returns></returns>
+        public abstract XmlNode AddToXml(XmlNode parentNode, bool recursive);
 
         #endregion
 
@@ -325,6 +367,21 @@ namespace NUnit.Framework.Internal
         /// <param name="filter">A test filter used to select child tests for inclusion.</param>
         /// <returns>A TestCommand, which runs the test when executed.</returns>
         protected abstract TestCommand MakeTestCommand(ITestFilter filter);
+
+        /// <summary>
+        /// Add standard attributes and members to a test node.
+        /// </summary>
+        /// <param name="thisNode"></param>
+        /// <param name="recursive"></param>
+        protected void PopulateTestNode(XmlNode thisNode, bool recursive)
+        {
+            XmlHelper.AddAttribute(thisNode, "id", this.Id.ToString());
+            XmlHelper.AddAttribute(thisNode, "name", this.Name);
+            XmlHelper.AddAttribute(thisNode, "fullname", this.FullName);
+
+            if (Properties.Count > 0)
+                Properties.AddToXml(thisNode, recursive);
+        }
 
         #endregion
 

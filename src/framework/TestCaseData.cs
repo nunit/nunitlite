@@ -141,10 +141,15 @@ namespace NUnit.Framework
 			}
         }
 
+        private bool hasExpectedResult;
         /// <summary>
         /// Returns true if the expected result has been set
         /// </summary>
-        public bool HasExpectedResult { get; set; }
+        public bool HasExpectedResult 
+        {
+            get { return hasExpectedResult; }
+            set { hasExpectedResult = value; }
+        }
 
         /// <summary>
         /// Gets data about any expected exception.
@@ -154,15 +159,25 @@ namespace NUnit.Framework
             get { return exceptionData; }
         }
 
+        private string testName;
         /// <summary>
         /// Gets the name to be used for the test
         /// </summary>
-        public string TestName { get; set; }
-	
-		/// <summary>
+        public string TestName 
+        {
+            get { return testName; }
+            set { testName = value; }
+        }
+
+        private RunState runState;
+        /// <summary>
 		/// Gets the RunState for this test case.
 		/// </summary>
-		public RunState RunState { get; set; }
+		public RunState RunState 
+        {
+            get { return runState; }
+            set { runState = value; }
+        }
 
         /// <summary>
         /// Gets the property dictionary for this test

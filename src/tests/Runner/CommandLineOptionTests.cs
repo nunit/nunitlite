@@ -31,11 +31,11 @@ namespace NUnitLite.Runner.Tests
         }
 
         [Test]
-        public void TestNologoOption()
+        public void TestNoheaderOption()
         {
-            options.Parse("-nologo");
+            options.Parse("-noheader");
             Assert.That(options.Error, Is.False);
-            Assert.That(options.Nologo, Is.True);
+            Assert.That(options.NoHeader, Is.True);
         }
 
         [Test]

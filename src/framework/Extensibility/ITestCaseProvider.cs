@@ -46,6 +46,10 @@ namespace NUnit.Framework.Extensibility
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
+#if CLR_2_0 || CLR_4_0
         System.Collections.Generic.IEnumerable<ITestCaseData> GetTestCasesFor(MethodInfo method);
+#else
+        System.Collections.IEnumerable GetTestCasesFor(MethodInfo method);
+#endif
     }
 }

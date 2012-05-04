@@ -159,6 +159,7 @@ namespace NUnit.Framework
 
         #region ref Object
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Apply a constraint to a referenced value, succeeding if the constraint
         /// is satisfied and throwing an InconclusiveException on failure.
@@ -201,6 +202,7 @@ namespace NUnit.Framework
                 throw new InconclusiveException(writer.ToString());
             }
         }
+#endif
 
         #endregion
 

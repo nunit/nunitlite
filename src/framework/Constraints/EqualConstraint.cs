@@ -24,7 +24,9 @@
 using System;
 using System.IO;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints
 {
@@ -265,6 +267,7 @@ namespace NUnit.Framework.Constraints
             return this;
         }
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Flag the constraint to use the supplied IComparer object.
         /// </summary>
@@ -308,6 +311,7 @@ namespace NUnit.Framework.Constraints
             this.comparer.ExternalComparers.Add(EqualityAdapter.For(comparer));
             return this;
         }
+#endif
 
         #endregion
 

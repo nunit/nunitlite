@@ -22,7 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
@@ -210,7 +212,7 @@ namespace NUnit.Framework.Internal
             {
                 if (availableFrameworks == null)
                 {
-                    List<RuntimeFramework> frameworks = new List<RuntimeFramework>();
+                    FrameworkList frameworks = new FrameworkList();
 
                     AppendDotNetFrameworks(frameworks);
 #if !NETCF
@@ -432,7 +434,7 @@ namespace NUnit.Framework.Internal
         }
 
 #if !NETCF
-        private static void AppendMonoFrameworks(List<RuntimeFramework> frameworks)
+        private static void AppendMonoFrameworks(FrameworkList frameworks)
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 AppendAllMonoFrameworks(frameworks);
@@ -440,7 +442,7 @@ namespace NUnit.Framework.Internal
                 AppendDefaultMonoFramework(frameworks);
         }
 
-        private static void AppendAllMonoFrameworks(List<RuntimeFramework> frameworks)
+        private static void AppendAllMonoFrameworks(FrameworkList frameworks)
         {
             // TODO: Find multiple installed Mono versions under Linux
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -463,7 +465,7 @@ namespace NUnit.Framework.Internal
 
         // This method works for Windows and Linux but currently
         // is only called under Linux.
-        private static void AppendDefaultMonoFramework(List<RuntimeFramework> frameworks)
+        private static void AppendDefaultMonoFramework(FrameworkList frameworks)
         {
             string monoPrefix = null;
             string version = null;
@@ -491,7 +493,7 @@ namespace NUnit.Framework.Internal
             AppendMonoFramework(frameworks, monoPrefix, version);
         }
 
-        private static void AppendMonoFramework(List<RuntimeFramework> frameworks, string monoPrefix, string version)
+        private static void AppendMonoFramework(FrameworkList frameworks, string monoPrefix, string version)
         {
             if (monoPrefix != null)
             {
@@ -523,7 +525,7 @@ namespace NUnit.Framework.Internal
         }
 #endif
 
-        private static void AppendDotNetFrameworks(List<RuntimeFramework> frameworks)
+        private static void AppendDotNetFrameworks(FrameworkList frameworks)
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -542,6 +544,18 @@ namespace NUnit.Framework.Internal
                 }
             }
         }
+
+#if CLR_2_0 || CLR_4_0
+        class FrameworkList : System.Collections.Generic.List<RuntimeFramework> { }
+#else
+        class FrameworkList : System.Collections.ArrayList 
+        {
+            public new RuntimeFramework[] ToArray()
+            {
+                return (RuntimeFramework[])base.ToArray(typeof(RuntimeFramework));
+            }
+        }
+#endif
 
 		#endregion
     }

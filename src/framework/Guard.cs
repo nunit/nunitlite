@@ -2,7 +2,7 @@
 
 namespace NUnit.Framework
 {
-    static class Guard
+    public class Guard
     {
         public static void ArgumentNotNull(object value, string name)
         {

@@ -22,7 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal.Filters
@@ -34,7 +36,11 @@ namespace NUnit.Framework.Internal.Filters
 	[Serializable]
 	public class AndFilter : TestFilter
 	{
+#if CLR_2_0 || CLR_4_0
 		private List<ITestFilter> filters = new List<ITestFilter>();
+#else
+        private System.Collections.ArrayList filters = new System.Collections.ArrayList();
+#endif
 
 		/// <summary>
 		/// Constructs an empty AndFilter
@@ -57,17 +63,6 @@ namespace NUnit.Framework.Internal.Filters
 		public void Add( ITestFilter filter )
 		{
 			this.filters.Add( filter );
-		}
-
-		/// <summary>
-		/// Return an array of the composing filters
-		/// </summary>
-		public ITestFilter[] Filters
-		{
-			get
-			{
-				return filters.ToArray();
-			}
 		}
 
 		/// <summary>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using System.Xml;
 using NUnit.Framework.Api;
 
@@ -16,7 +18,25 @@ namespace NUnit.Framework.Internal
     /// </summary>
     public class PropertyBag : IPropertyBag
     {
+#if CLR_2_0 || CLR_4_0
         private Dictionary<string, IList> inner = new Dictionary<string, IList>();
+
+        private bool TryGetValue(string key, out IList list)
+        {
+            return inner.TryGetValue(key, out list);
+        }
+#else
+        private Hashtable inner = new Hashtable();
+
+        private bool TryGetValue(string key, out IList list)
+        {
+            list = inner.ContainsKey(key)
+                ? (IList)inner[key]
+                : null;
+
+            return list != null;
+        }
+#endif
 
         /// <summary>
         /// Adds a key/value pair to the property set
@@ -26,7 +46,7 @@ namespace NUnit.Framework.Internal
         public void Add(string key, object value)
         {
             IList list;
-            if (!inner.TryGetValue(key, out list))
+            if (!TryGetValue(key, out list))
             {
                 list = new ObjectList();
                 inner.Add(key, list);
@@ -57,7 +77,7 @@ namespace NUnit.Framework.Internal
         public object Get(string key)
         {
             IList list;
-            return inner.TryGetValue(key, out list) && list.Count > 0
+            return TryGetValue(key, out list) && list.Count > 0
                 ? list[0]
                 : null;
         }
@@ -152,7 +172,7 @@ namespace NUnit.Framework.Internal
         public void Remove(string key, object value)
         {
             IList list;
-            if (inner.TryGetValue(key, out list))
+            if (TryGetValue(key, out list))
                 list.Remove(value);
         }
 
@@ -208,7 +228,7 @@ namespace NUnit.Framework.Internal
         public bool Contains(string key, object value)
         {
             IList list;
-            return inner.TryGetValue(key, out list) && list.Contains(value);
+            return TryGetValue(key, out list) && list.Contains(value);
         }
 
         /// <summary>
@@ -228,7 +248,11 @@ namespace NUnit.Framework.Internal
         /// Gets a collection containing all the keys in the property set
         /// </summary>
         /// <value></value>
+#if CLR_2_0 || CLR_4_0
         public ICollection<string> Keys
+#else
+        public ICollection Keys
+#endif
         {
             get { return inner.Keys; }
         }
@@ -250,7 +274,7 @@ namespace NUnit.Framework.Internal
             get
             {
                 IList list;
-                if (!inner.TryGetValue(key, out list))
+                if (!TryGetValue(key, out list))
                 {
                     list = new ObjectList();
                     inner.Add(key, list);
@@ -263,14 +287,64 @@ namespace NUnit.Framework.Internal
             }
         }
 
+        #region IXmlNodeBuilder Members
+
+        /// <summary>
+        /// Returns an XmlNode representating the current PropertyBag.
+        /// </summary>
+        /// <param name="recursive">Not used</param>
+        /// <returns>An XmlNode representing the PropertyBag</returns>
+        public System.Xml.XmlNode ToXml(bool recursive)
+        {
+            XmlNode topNode = XmlHelper.CreateTopLevelElement("dummy");
+
+            XmlNode thisNode = AddToXml(topNode, recursive);
+
+            return thisNode;
+        }
+
+        /// <summary>
+        /// Returns an XmlNode representing the PropertyBag after
+        /// adding it as a child of the supplied parent node.
+        /// </summary>
+        /// <param name="parentNode">The parent node.</param>
+        /// <param name="recursive">Not used</param>
+        /// <returns></returns>
+        public System.Xml.XmlNode AddToXml(System.Xml.XmlNode parentNode, bool recursive)
+        {
+            XmlNode properties = XmlHelper.AddElement(parentNode, "properties");
+
+            foreach (string key in Keys)
+            {
+                foreach (object value in this[key])
+                {
+                    XmlNode prop = XmlHelper.AddElement(properties, "property");
+
+                    // TODO: Format as string
+                    XmlHelper.AddAttribute(prop, "name", key.ToString());
+                    XmlHelper.AddAttribute(prop, "value", value.ToString());
+                }
+            }
+
+            return properties;
+        }
+
+        #endregion
+
         #region Nested PropertyBagEnumerator Class
 
         /// <summary>
         /// TODO: Documentation needed for class
         /// </summary>
+#if CLR_2_0 || CLR_4_0
         public class PropertyBagEnumerator : IEnumerator<PropertyEntry>
         {
             private IEnumerator<KeyValuePair<string, IList>> innerEnum;
+#else
+        public class PropertyBagEnumerator : IEnumerator
+        {
+            private IEnumerator innerEnum;
+#endif
             private PropertyBag bag;
             private IEnumerator valueEnum;
 
@@ -292,7 +366,12 @@ namespace NUnit.Framework.Internal
 
                 if (innerEnum.MoveNext())
                 {
+#if CLR_2_0 || CLR_4_0
                     valueEnum = innerEnum.Current.Value.GetEnumerator();
+#else
+                    DictionaryEntry entry = (DictionaryEntry)innerEnum.Current;
+                    valueEnum = ((IList)entry.Value).GetEnumerator();
+#endif
                 }
             }
 
@@ -301,7 +380,12 @@ namespace NUnit.Framework.Internal
                 if (valueEnum == null)
                     throw new InvalidOperationException();
 
+#if CLR_2_0 || CLR_4_0
                 string key = innerEnum.Current.Key;
+#else
+                DictionaryEntry entry = (DictionaryEntry)innerEnum.Current;
+                string key = (string)entry.Key;
+#endif
 
                 object value = valueEnum.Current;
 
@@ -310,6 +394,7 @@ namespace NUnit.Framework.Internal
 
             #region IEnumerator<PropertyEntry> Members
 
+#if CLR_2_0 || CLR_4_0
             PropertyEntry IEnumerator<PropertyEntry>.Current
             {
                 get 
@@ -317,14 +402,17 @@ namespace NUnit.Framework.Internal
                     return GetCurrentEntry();
                 }
             }
+#endif
 
             #endregion
 
             #region IDisposable Members
 
+#if CLR_2_0 || CLR_4_0
             void IDisposable.Dispose()
             {
             }
+#endif
 
             #endregion
 
@@ -351,7 +439,12 @@ namespace NUnit.Framework.Internal
                         return false;
                     }
 
+#if CLR_2_0 || CLR_4_0
                     valueEnum = innerEnum.Current.Value.GetEnumerator();
+#else
+                    DictionaryEntry entry = (DictionaryEntry)innerEnum.Current;
+                    valueEnum = ((IList)entry.Value).GetEnumerator();
+#endif
                 }
 
                 return true;
