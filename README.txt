@@ -1,4 +1,4 @@
-NUnitLite Version 0.5 - June 14, 2009
+NUnitLite Version 0.7 - May 4, 2012
 
 NUnitLite is a small-footprint implementation of much of the current NUnit framework. It is distributed in source form and is intended for use in situations where NUnit is too large or complex. In particular, it targets mobile and embedded environments as well as testing of applications that require "embedding" the framework in another piece of software, as when testing plugin architectures.
 
@@ -6,7 +6,7 @@ This file provides basic information about NUnitLite. For more info see the NUni
 
 COPYRIGHT AND LICENSE
 
-NUnitLite is Copyright © 2009, Charlie Poole and is licensed under the MIT license.
+NUnitLite is Copyright © 2012, Charlie Poole and is licensed under the MIT license.
 
 A copy of the license is distributed with the program in the file LICENSE.txt and is also available at http://www.opensource.org/licenses/mit-license.php.
 
@@ -27,12 +27,27 @@ The PropertyAttribute may be used to assign name/value pairs to any test. The De
 ASSERTS
 
 The programmer expresses expected test conditions using the Assert class. The existing functionality of most current NUnit Assert methods is supported, but the syntax has been changed to use the more extensible constraint-based format. The following methods are supported:
+	   Assert.Pass
+	   Assert.Fail
+	   Assert.Ignore
+	   Assert.Inconclusive
+       Assert.That
+	   Assert.ByVal
+	   Assert.Throws
+	   Assert.DoesNotThrow
+	   Assert.Catch
        Assert.Null
        Assert.NotNull
        Assert.True
        Assert.False
-       Assert.Fail
-       Assert.That
+	   Assert.AreEqual
+	   Assert.AreNotEqual
+	   Assert.AreSame
+	   Assert.AreNotSame
+
+ASSUMPTIONS
+
+The programmer may express assumptions in the test using Assume.That() A failure in Assume.That causes an Inconclusive result.
 
 CONSTRAINTS
 
@@ -51,10 +66,13 @@ NUnitLite supports most of the same built-in constraints as NUnit. Users may als
        ContainsConstraint
        EmptyCollectionConstraint
        EmptyConstraint
+	   EmptyDirectoryConstraint
        EmptyStringConstraint
        EndsWithConstraint
        EqualConstraint
+	   ExactCountConstraint
        ExactTypeConstraint
+	   ExceptionTypeConstraint
        FalseConstraint
        GreaterThanConstraint
        GreaterThanOrEqualConstraint

@@ -1,16 +1,83 @@
-NUnitLite Version 0.7 - March 1, 2012
+NUnitLite Version 0.7 - May 4, 2012
+
+This release brings NUnitLite to a point where it is functionally 
+equivalent to the NUnit 3.0 build of NUnitLite and has most of the 
+same capabilities as the full version of NUnit. 
+
+Obsolete methods and classes have been removed and the code has been
+reorganized to facilitate code sharing with NUnit 3.0. 
+
+NUnitLite is now built using Visual Studio 2010.
+
+Separate builds are now created for .NET 2.0, 3.5 and 4.0
+
+A nuspec file is now provided and NUnitLite is distributed under NuGet.
 
 New Features and Enhancements
 
+* An XML result file may be saved using the --result option of the runner.
+
+* The runner --explore option will create a list of tests contained in the assembly. 
+
+* Assume.That is now supported
+
+* ExpectedExceptionAttribute now supports the same properties as for full NUnit.
+
+* New Constraints
+          DelayedConstraint
+		  EmptyDirectoryConstraint
+		  ExceptionTypeConstraint
+		  PredicateConstraint
+		  ExactCountConstraint
+
 * New Asserts
+          ByVal
+		  Throws
+		  DoesNotThrow
+		  Catch
+		  AreEqual
+		  AreNotEqual
+		  AreSame
+		  AreNotSame
 
 * New Syntax Helpers:
 
+  Is:     Positive
+          Negative
+
+  Has:    Exactly
+
+* New Attributes
+          CategoryAttribute
+          CombinatorialAttribute
+		  CultureAttribute
+		  DataAttribute
+		  ExplicitAttribute
+		  IncludeExcludeAttribute
+		  MaxTimeAttribute
+		  NUnitAttribute
+		  PairwiseAttribute
+		  PlatformAttribute
+		  RandomAttribute
+		  RangeAttribute
+		  RepeatAttribute
+		  SequentialAttribute
+		  SetCultureAttribute
+		  SetUICultureAttribute
+		  TestCaseAttribute
+		  TestCaseSourceAttribute
+		  TestFixtureSetUpAttribute
+		  TestFixtureTearDownAttribute
+		  TestModificationAttribute
+		  ValueSourceAttribute
+		  ValuesAttribute
+
+
 Bug Fixes
 
-*
-*
-*
+* 742473 Assert.Pass is treated as a test failure
+* 554633 NUnitLite.csproj doesn't have required constants for Release
+* 742625 TestLoader.Load fails when run under Unity's web-player
 
 NUnitLite Version 0.6 - January 13, 2010
 
