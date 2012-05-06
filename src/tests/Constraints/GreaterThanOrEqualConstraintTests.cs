@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -52,6 +54,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(actual, Is.GreaterThanOrEqualTo(expected));
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void CanCompareIComparablesOfT()
         {
@@ -59,5 +62,6 @@ namespace NUnit.Framework.Constraints.Tests
             ClassWithIComparableOfT actual = new ClassWithIComparableOfT(42);
             Assert.That(actual, Is.GreaterThanOrEqualTo(expected));
         }
+#endif
     }
 }

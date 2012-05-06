@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if CLR_2_0 || CLR_4_0
 using System;
 
 namespace NUnit.Framework.Internal
@@ -37,3 +38,4 @@ namespace NUnit.Framework.Internal
         }
     }
 }
+#endif

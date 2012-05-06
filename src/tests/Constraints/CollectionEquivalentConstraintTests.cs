@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 using NUnit.Framework.Internal;
 using NUnit.TestUtilities;
 
@@ -103,6 +105,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(new CollectionEquivalentConstraint(set1).IgnoreCase.Matches(set2));
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void EquivalentHonorsUsing()
         {
@@ -113,6 +116,7 @@ namespace NUnit.Framework.Constraints.Tests
                 .Using<string>((x, y) => String.Compare(x, y, true))
                 .Matches(set2));
         }
+#endif
 
 #if NET_3_5 || NET_4_0
         [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0")]

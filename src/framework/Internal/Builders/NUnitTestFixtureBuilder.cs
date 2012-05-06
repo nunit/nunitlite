@@ -75,9 +75,11 @@ namespace NUnit.Framework.Builders
             if (type.IsDefined(typeof(TestFixtureAttribute), true))
                 return true;
 
+#if CLR_2_0 || CLR_4_0
             // Generics must have a TestFixtureAttribute
             if (type.IsGenericTypeDefinition)
                 return false;
+#endif
 
 #if NUNITLITE
             return Reflect.HasMethodWithAttribute(type, typeof(NUnit.Framework.TestAttribute), true) ||
@@ -100,8 +102,10 @@ namespace NUnit.Framework.Builders
 		{
             TestFixtureAttribute[] attrs = GetTestFixtureAttributes(type);
 
+#if CLR_2_0 || CLR_4_0
             if (type.IsGenericType)
                 return BuildMultipleFixtures(type, attrs);
+#endif
 
             switch (attrs.Length)
             {
@@ -146,6 +150,7 @@ namespace NUnit.Framework.Builders
             {
                 arguments = (object[])attr.Arguments;
 
+#if CLR_2_0 || CLR_4_0
                 if (type.ContainsGenericParameters)
                 {
                     Type[] typeArgs = (Type[])attr.TypeArgs;
@@ -155,6 +160,7 @@ namespace NUnit.Framework.Builders
                         type = TypeHelper.MakeGenericType(type, typeArgs);
                     }
                 }
+#endif
             }
 
             this.fixture = new TestFixture(type, arguments);
@@ -286,11 +292,13 @@ namespace NUnit.Framework.Builders
         /// <returns>True if the fixture is valid, false if not</returns>
         private bool IsValidFixtureType(Type fixtureType, ref string reason)
         {
+#if CLR_2_0 || CLR_4_0
             if ( fixtureType.ContainsGenericParameters )
             {
                 reason = NO_TYPE_ARGS_MSG;
                 return false;
             }
+#endif
 
             return true;
         }

@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -132,6 +134,8 @@ namespace NUnit.Framework.Constraints.Tests
         }
 
         #region Dictionary Tests
+
+#if CLR_2_0 || CLR_4_0
         // TODO: Move these to a separate fixture
         [Test]
         public void CanMatchHashtables_SameOrder()
@@ -181,6 +185,8 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.AreEqual(new Hashtable { { 0, 0 }, { 1, 1 }, { 2, 2 } },
                             new Dictionary<int, int> { { 0, 0 }, { 2, 2 }, { 1, 1 } });
         }
+#endif
+
         #endregion
 
 #if !NETCF_1_0
@@ -344,6 +350,7 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void UsesProvidedEqualityComparer()
         {
@@ -493,5 +500,6 @@ namespace NUnit.Framework.Constraints.Tests
                 return obj.Length.GetHashCode();
             }
         }
+#endif
     }
 }

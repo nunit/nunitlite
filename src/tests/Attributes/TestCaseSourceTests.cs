@@ -94,6 +94,7 @@ namespace NUnit.Framework.Tests
         static object[] InstanceField =
             { new object[] { "InstanceField" } };
 
+#if CLR_2_0 || CLR_4_0
         [Test, TestCaseSource(typeof(DataSourceClass))]
         public void SourceCanBeInstanceOfIEnumerable(string source)
         {
@@ -107,6 +108,7 @@ namespace NUnit.Framework.Tests
                 yield return "DataSourceClass";
             }
         }
+#endif
 
         [Test, TestCaseSource("MyData")]
         public void SourceMayReturnArgumentsAsObjectArray(int n, int d, int q)
@@ -154,12 +156,14 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual(r, n % d);
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test, TestCaseSource(typeof(DivideDataProvider), "HereIsTheData")]
         //[Category("Top")]
         public void SourceMayBeInAnotherClass(int n, int d, int q)
         {
             Assert.AreEqual(q, n / d);
         }
+#endif
 
         [Test, TestCaseSource(typeof(DivideDataProviderWithReturnValue), "TestCases")]
         public int SourceMayBeInAnotherClassWithReturn(int n, int d)
@@ -170,7 +174,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException()
         {
-            ITestResult result = TestBuilder.RunTestCase(
+            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsExpectedException").Children[0];
             Assert.AreEqual(ResultState.Success, result.ResultState);
         }
@@ -178,7 +182,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException_WrongException()
         {
-            ITestResult result = TestBuilder.RunTestCase(
+            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsWrongException").Children[0];
             Assert.AreEqual(ResultState.Failure, result.ResultState);
             Assert.That(result.Message, Is.StringStarting("An unexpected exception type was thrown"));
@@ -187,7 +191,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException_NoneThrown()
         {
-            ITestResult result = TestBuilder.RunTestCase(
+            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsNoException").Children[0];
             Assert.AreEqual(ResultState.Failure, result.ResultState);
             Assert.AreEqual("System.ArgumentNullException was expected", result.Message);
@@ -196,7 +200,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void IgnoreTakesPrecedenceOverExpectedException()
         {
-            ITestResult result = TestBuilder.RunTestCase(
+            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodCallsIgnore").Children[0];
             Assert.AreEqual(ResultState.Ignored, result.ResultState);
             Assert.AreEqual("Ignore this", result.Message);
@@ -236,6 +240,7 @@ namespace NUnit.Framework.Tests
             Assert.That(testCase.Properties.GetSetting(PropertyNames.SkipReason, ""), Is.EqualTo("Connection failing"));
 		}
 
+#if CLR_2_0 || CLR_4_0
 		[Test]
         public void HandlesExceptionInTestCaseSource()
         {
@@ -246,6 +251,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual(ResultState.NotRunnable, result.ResultState);
             Assert.AreEqual("System.Exception : my message", result.Message);
         }
+#endif
 
 #if !NUNITLITE
         [TestCaseSource("exception_source"), Explicit]
@@ -295,6 +301,7 @@ namespace NUnit.Framework.Tests
             new TestCaseData(24, 3).Returns(8),
             new TestCaseData(24, 2).Returns(12) };
 
+#if CLR_2_0 || CLR_4_0
         private class DivideDataProvider
         {
             public static IEnumerable HereIsTheData
@@ -312,6 +319,7 @@ namespace NUnit.Framework.Tests
                 }
             }
         }
+#endif
 
         public class DivideDataProviderWithReturnValue
         {
@@ -328,6 +336,7 @@ namespace NUnit.Framework.Tests
             }
         }
 
+#if CLR_2_0 || CLR_4_0
         private static IEnumerable exception_source
         {
             get
@@ -338,6 +347,8 @@ namespace NUnit.Framework.Tests
                 throw new System.Exception("my message");
             }
         }
+#endif
+
         #endregion
     }
 }

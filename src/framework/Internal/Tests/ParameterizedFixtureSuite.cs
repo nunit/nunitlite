@@ -59,8 +59,10 @@ namespace NUnit.Framework.Internal
         {
             get
             {
+#if CLR_2_0 || CLR_4_0
                 if (this.ParameterizedType.ContainsGenericParameters)
                     return "GenericFixture";
+#endif
                 
                 return "ParameterizedFixture";
             }

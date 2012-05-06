@@ -22,7 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Syntax
 {
@@ -77,10 +79,12 @@ namespace NUnit.Framework.Syntax
             Assert.That(i3, Is.EqualTo(d3));
             Assert.That(2 + 2, Is.Not.EqualTo(5));
             Assert.That(i3, Is.Not.EqualTo(iunequal));
+#if CLR_2_0 || CLR_4_0
             List<string> list = new List<string>();
             list.Add("foo");
             list.Add("bar");
             Assert.That(list, Is.EqualTo(new string[] { "foo", "bar" }));
+#endif
         }
 
         [Test]

@@ -39,10 +39,12 @@ namespace NUnit.Framework.Constraints.Tests
 
         static object[] SuccessData = new object[] 
         {
+#if CLR_2_0 || CLR_4_0
+            new System.Collections.Generic.List<int>(),
+#endif
             string.Empty,
             new object[0],
-            new ArrayList(),
-            new System.Collections.Generic.List<int>()
+            new ArrayList()
         };
 
         static object[] FailureData = new object[]

@@ -76,7 +76,7 @@ namespace NUnit.Framework.Internal
 #if CLR_2_0 || CLR_4_0
         private System.Collections.Generic.List<ITestResult> children;
 #else
-        private ArrayList results;
+        private ArrayList children;
 #endif
 
         #endregion
@@ -220,10 +220,10 @@ namespace NUnit.Framework.Internal
         {
             get 
             {
-                if (results == null)
-                    results = new ArrayList();
+                if (children == null)
+                    children = new ArrayList();
 
-                return results;
+                return children;
             }
         }
 #endif
@@ -304,7 +304,7 @@ namespace NUnit.Framework.Internal
 #if CLR_2_0 || CLR_4_0
                 children = new System.Collections.Generic.List<ITestResult>();
 #else
-                results = new ArrayList();
+                children = new ArrayList();
 #endif
 
             children.Add(result);

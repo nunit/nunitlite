@@ -285,7 +285,13 @@ namespace NUnitLite.Runner
 #if CLR_2_0 || CLR_4_0
         class StringList : List<string> { }
 #else
-        class StringList : ArrayList { }
+        class StringList : ArrayList 
+        {
+            public string[] ToArray()
+            {
+                return (string[])ToArray(typeof(string));
+            }
+        }
 #endif
     }
 }

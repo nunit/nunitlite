@@ -96,11 +96,13 @@ namespace NUnit.TestData.TestFixtureData
     }
 #endif
  
+#if CLR_2_0 || CLR_4_0
     public static class StaticFixtureWithoutTestFixtureAttribute
     {
         [Test]
         public static void StaticTest() { }
     }
+#endif
 
     [TestFixture]
 	public class MultipleSetUpAttributes
@@ -401,6 +403,7 @@ namespace NUnit.TestData.TestFixtureData
     }
 #endif
 
+#if CLR_2_0 || CLR_4_0
 #if !NETCF
     [TestFixture(typeof(int))]
     [TestFixture(typeof(string))]
@@ -439,5 +442,6 @@ namespace NUnit.TestData.TestFixtureData
     public class GenericFixtureDerivedFromAbstractFixtureWithArgsProvided<T> : AbstractFixtureBase
     {
     }
+#endif
 #endif
 }

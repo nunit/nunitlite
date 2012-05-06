@@ -45,6 +45,48 @@ namespace NUnit.Framework
 
         #region Expect
 
+        #region Object
+
+#if !CLR_2_0 && !CLR_4_0
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        public void Expect(object actual, IResolveConstraint expression)
+        {
+            Assert.That(actual, expression, null, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message to be displayed in case of failure</param>
+        public void Expect(object actual, IResolveConstraint expression, string message)
+        {
+            Assert.That(actual, expression, message, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message to be displayed in case of failure</param>
+        /// <param name="args">Arguments to use in formatting the message</param>
+        public void Expect(object actual, IResolveConstraint expression, string message, params object[] args)
+        {
+            Assert.That(actual, expression, message, args);
+        }
+#endif
+
+        #endregion
+
         #region Boolean
 
         /// <summary>

@@ -186,7 +186,6 @@ namespace NUnit.Framework.Constraints
             return Matches(del());
         }
 
-#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Test whether the constraint is satisfied by a given reference.
         /// The default implementation simply dereferences the value but
@@ -194,11 +193,14 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="actual">A reference to the value to be tested</param>
         /// <returns>True for success, false for failure</returns>
+#if CLR_2_0 || CLR_4_0
         public virtual bool Matches<T>(ref T actual)
+#else
+        public virtual bool Matches(ref bool actual)
+#endif
         {
             return Matches(actual);
         }
-#endif
 
         /// <summary>
         /// Write the constraint description to a MessageWriter

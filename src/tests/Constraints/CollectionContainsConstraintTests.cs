@@ -75,11 +75,13 @@ namespace NUnit.Framework.Constraints.Tests
                 new CollectionContainsConstraint("WORLD").IgnoreCase);
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void UsingIsHonored()
         {
             Assert.That(new string[] { "Hello", "World" },
                 new CollectionContainsConstraint("WORLD").Using<string>((x, y) => String.Compare(x, y, true)));
         }
+#endif
     }
 }

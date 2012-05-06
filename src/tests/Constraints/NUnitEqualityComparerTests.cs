@@ -48,7 +48,9 @@ namespace NUnit.Framework.Constraints
         [TestCase(4.0f, 4)]
         [TestCase(4.0f, 4.0d)]
         [TestCase(SpecialValue.Null, SpecialValue.Null)]
+#if CLR_2_0 || CLR_4_0
         [TestCase(null, null)]
+#endif
         public void EqualItems(object x, object y)
         {
             Assert.That(comparer.AreEqual(x, y, ref tolerance));
@@ -63,10 +65,10 @@ namespace NUnit.Framework.Constraints
         [TestCase(4.0d, 2.0f)]
         [TestCase(4.0f, 2)]
         [TestCase(4.0f, 2.0d)]
-#if !NUNITLITE
         [TestCase(4, SpecialValue.Null)]
-#endif
+#if CLR_2_0 || CLR_4_0
         [TestCase(4, null)]
+#endif
         public void UnequalItems(object greater, object lesser)
         {
             Assert.False(comparer.AreEqual(greater, lesser, ref tolerance));
@@ -93,6 +95,7 @@ namespace NUnit.Framework.Constraints
             Assert.True(comparer.AreEqual(array, array, ref tolerance));
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void IEquatableSuccess()
         {
@@ -140,8 +143,10 @@ namespace NUnit.Framework.Constraints
 
             Assert.IsFalse(comparer.AreEqual(x, y, ref tolerance));
         }
+#endif
     }
 
+#if CLR_2_0 || CLR_4_0
     public class NeverEqualIEquatableWithOverriddenAlwaysTrueEquals : IEquatable<NeverEqualIEquatableWithOverriddenAlwaysTrueEquals>
     {
         public bool Equals(NeverEqualIEquatableWithOverriddenAlwaysTrueEquals other)
@@ -197,4 +202,5 @@ namespace NUnit.Framework.Constraints
             return value.Equals(other.value);
         }
     }
+#endif
 }

@@ -528,7 +528,11 @@ namespace NUnit.Framework.Builders
 					{
 						int d = dimensionOrder[i];
 
+#if CLR_2_0 || CLR_4_0
 						List<int> bestFeatures = new List<int>();
+#else
+                        ArrayList bestFeatures = new ArrayList();
+#endif
 
 						int bestCoverage = this.CountTuplesCovered(test, d, test.Features[d]);
 
@@ -593,7 +597,11 @@ namespace NUnit.Framework.Builders
 					immutableDimensions[tuple[i].Dimension] = true;
 				}
 
+#if CLR_2_0 || CLR_4_0
 				List<int> mutableDimensions = new List<int>();
+#else
+                ArrayList mutableDimensions = new ArrayList();
+#endif
 
 				for (int i = 0; i < this.dimensions.Length; i++)
 				{
@@ -603,7 +611,11 @@ namespace NUnit.Framework.Builders
 					}
 				}
 
+#if CLR_2_0 || CLR_4_0
 				return mutableDimensions.ToArray();
+#else
+                return (int[])mutableDimensions.ToArray(typeof(int));
+#endif
 			}
 
 			private int CountTuplesCovered(TestCase test, int dimension, int feature)

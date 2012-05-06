@@ -306,6 +306,7 @@ namespace NUnit.Framework.Assertions
 			Assert.AreEqual( 35, i21  );
 			Assert.AreEqual( 35, i22  );
 
+#if CLR_2_0 || CLR_4_0
             byte? b23 = 35;
             sbyte? sb24 = 35;
             decimal? d25 = 35;
@@ -327,6 +328,7 @@ namespace NUnit.Framework.Assertions
             Assert.AreEqual(35, l30);
             Assert.AreEqual(35, s31);
             Assert.AreEqual(35, us32);
+#endif
         }
 
 		[Test]
@@ -526,6 +528,7 @@ namespace NUnit.Framework.Assertions
             Assert.That(message.IndexOf("+/-") == -1);
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void IEquatableSuccess_OldSyntax()
         {
@@ -543,8 +546,10 @@ namespace NUnit.Framework.Assertions
             Assert.That(a, Is.EqualTo(1));
             Assert.That(1, Is.EqualTo(a));
         }
+#endif
     }
 
+#if CLR_2_0 || CLR_4_0
     public class IntEquatable : IEquatable<int>
     {
         private int i;
@@ -559,5 +564,6 @@ namespace NUnit.Framework.Assertions
             return i.Equals(other);
         }
     }
+#endif
 }
 

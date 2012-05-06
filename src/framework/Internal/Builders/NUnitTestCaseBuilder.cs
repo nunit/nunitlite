@@ -314,6 +314,7 @@ namespace NUnit.Framework.Builders
                 return MarkAsNotRunnable(testMethod, "Wrong number of arguments provided");
             }
 
+#if CLR_2_0 || CLR_4_0
 #if !NETCF
             if (testMethod.Method.IsGenericMethodDefinition)
             {
@@ -328,6 +329,7 @@ namespace NUnit.Framework.Builders
                 parameters = testMethod.Method.GetParameters();
            }
 #endif
+#endif
 
            if (arglist != null && parameters != null)
                TypeHelper.ConvertArgumentList(arglist, parameters);
@@ -335,6 +337,7 @@ namespace NUnit.Framework.Builders
             return true;
         }
 
+#if CLR_2_0 || CLR_4_0
 #if !NETCF
         private static Type[] GetTypeArgumentsForMethod(MethodInfo method, object[] arglist)
         {
@@ -357,6 +360,7 @@ namespace NUnit.Framework.Builders
 
             return typeArguments;
         }
+#endif
 #endif
 
         private static MethodInfo GetExceptionHandler(Type fixtureType, string name)

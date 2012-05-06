@@ -6,13 +6,16 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Attributes
 {
     [TestFixture]
     public class ValueSourceTests
     {
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void ValueSourceCanBeStaticProperty(
             [ValueSource("StaticProperty")] string source)
@@ -27,6 +30,7 @@ namespace NUnit.Framework.Attributes
                 yield return "StaticProperty";
             }
         }
+#endif
 
         [Test]
         public void ValueSourceCanBeInstanceProperty(
@@ -111,6 +115,7 @@ namespace NUnit.Framework.Attributes
             internal static int[] Quotients = new int[] { 4, 3, 2 };
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void ValueSourceMayBeGeneric(
             [ValueSourceAttribute(typeof(ValueProvider), "IntegerProvider")] int val)
@@ -132,5 +137,6 @@ namespace NUnit.Framework.Attributes
                 return dataList;
             }
         }
+#endif
     }
 }

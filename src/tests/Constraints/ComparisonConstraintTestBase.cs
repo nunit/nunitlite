@@ -23,7 +23,9 @@
 
 using System;
 using System.Collections;
+#if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+#endif
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -52,6 +54,7 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void UsesProvidedComparerOfT()
         {
@@ -96,6 +99,7 @@ namespace NUnit.Framework.Constraints.Tests
             Comparison<int> comparer = (x, y) => x.CompareTo(y);
             comparisonConstraint.Using(comparer).Matches(0);
         }
+#endif
     }
 
     #endregion
@@ -121,6 +125,7 @@ namespace NUnit.Framework.Constraints.Tests
         }
     }
 
+#if CLR_2_0 || CLR_4_0
     class ClassWithIComparableOfT : IComparable<ClassWithIComparableOfT>
     {
         private int val;
@@ -135,6 +140,7 @@ namespace NUnit.Framework.Constraints.Tests
             return val.CompareTo(other.val);
         }
     }
+#endif
 
     #endregion
 }

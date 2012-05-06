@@ -29,10 +29,14 @@ namespace NUnit.Framework.Assertions
 	[TestFixture]
 	public class AssertThrowsTests
 	{
-		[Test]
+        [Test]
 		public void CorrectExceptionThrown()
 		{
+            Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsArgumentException));
+
+#if CLR_2_0 || CLR_4_0
             Assert.Throws(typeof(ArgumentException), TestDelegates.ThrowsArgumentException);
+
             Assert.Throws(typeof(ArgumentException),
                 delegate { throw new ArgumentException(); });
 
@@ -45,9 +49,10 @@ namespace NUnit.Framework.Assertions
                     Throws.Exception.TypeOf<ArgumentException>() );
             //Assert.Throws( Is.TypeOf(typeof(ArgumentException)),
             //        delegate { throw new ArgumentException(); } );
+#endif
         }
 
-		[Test]
+        [Test]
 		public void CorrectExceptionIsReturnedToMethod()
 		{
 			ArgumentException ex = Assert.Throws(typeof(ArgumentException),
@@ -59,6 +64,7 @@ namespace NUnit.Framework.Assertions
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));
 #endif
 
+#if CLR_2_0 || CLR_4_0
             ex = Assert.Throws<ArgumentException>(
                 delegate { throw new ArgumentException("myMessage", "myParam"); }) as ArgumentException;
 
@@ -84,12 +90,17 @@ namespace NUnit.Framework.Assertions
 #if !NETCF
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));
 #endif
+#endif
 		}
 
 		[Test, ExpectedException(typeof(AssertionException))]
 		public void NoExceptionThrown()
 		{
+#if CLR_2_0 || CLR_4_0
             ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsNothing);
+#else
+            Exception ex = Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsNothing));
+#endif
             Assert.That(ex.Message, Is.EqualTo(
 				"  Expected: <System.ArgumentException>" + Env.NewLine +
 				"  But was:  null" + Env.NewLine));
@@ -108,7 +119,11 @@ namespace NUnit.Framework.Assertions
         [Test, ExpectedException(typeof(AssertionException))]
         public void BaseExceptionThrown()
         {
+#if CLR_2_0x || CLR_4_0
             ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsSystemException);
+#else
+            Exception ex = Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsSystemException));
+#endif
             Assert.That(ex.Message, Is.StringStarting(
                 "  Expected: <System.ArgumentException>" + Env.NewLine +
                 "  But was:  <System.Exception> (my message)" + Env.NewLine));
@@ -118,7 +133,11 @@ namespace NUnit.Framework.Assertions
         [Test,ExpectedException(typeof(AssertionException))]
         public void DerivedExceptionThrown()
         {
+#if CLR_2_0 || CLR_4_0
             Exception ex = Assert.Throws<Exception>(TestDelegates.ThrowsArgumentException);
+#else
+            Exception ex = Assert.Throws(typeof(Exception), new TestDelegate(TestDelegates.ThrowsArgumentException));
+#endif
             Assert.That(ex.Message, Is.StringStarting(
                 "  Expected: <System.Exception>" + Env.NewLine +
                 "  But was:  <System.ArgumentException> (myMessage" + Env.NewLine +
@@ -129,13 +148,13 @@ namespace NUnit.Framework.Assertions
         [Test]
         public void DoesNotThrowSuceeds()
         {
-            Assert.DoesNotThrow(TestDelegates.ThrowsNothing);
+            Assert.DoesNotThrow(new TestDelegate(TestDelegates.ThrowsNothing));
         }
 
         [Test, ExpectedException(typeof(AssertionException))]
         public void DoesNotThrowFails()
         {
-            Assert.DoesNotThrow(TestDelegates.ThrowsArgumentException);
+            Assert.DoesNotThrow(new TestDelegate(TestDelegates.ThrowsArgumentException));
         }
     }
 }

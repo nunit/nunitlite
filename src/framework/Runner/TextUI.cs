@@ -238,10 +238,10 @@ namespace NUnitLite.Runner
         {
             ResultSummary summary = new ResultSummary(result);
 
-            writer.WriteLine("{0} Tests : {1} Failures, {2} Not Run",
-                summary.TestCount, summary.FailureCount, summary.NotRunCount);
+            writer.WriteLine("{0} Tests : {1} Failures, {2} Errors, {3} Not Run",
+                summary.TestCount, summary.FailureCount, summary.ErrorCount, summary.NotRunCount);
 
-            if (summary.FailureCount > 0)
+            if (summary.FailureCount > 0 || summary.ErrorCount > 0)
                 PrintErrorReport(result);
 
             if (summary.NotRunCount > 0)

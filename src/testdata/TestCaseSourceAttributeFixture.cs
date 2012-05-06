@@ -90,6 +90,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
             }
         }
 
+#if CLR_2_0 || CLR_4_0
         [TestCaseSource("exception_source")]
         public void MethodWithSourceThrowingException(string lhs, string rhs)
         {
@@ -105,5 +106,6 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
                 throw new System.Exception("my message");
             }
         }
+#endif
     }
 }

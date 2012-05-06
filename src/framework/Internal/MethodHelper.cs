@@ -42,6 +42,7 @@ namespace NUnit.Framework.Internal
         {
             StringBuilder sb = new StringBuilder(method.Name);
 
+#if CLR_2_0 || CLR_4_0
             if (method.IsGenericMethod)
             {
                 sb.Append("<");
@@ -53,6 +54,7 @@ namespace NUnit.Framework.Internal
                 }
                 sb.Append(">");
             }
+#endif
 
             if (arglist != null)
             {
