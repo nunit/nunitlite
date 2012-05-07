@@ -287,7 +287,7 @@ namespace NUnitLite.Runner
 #else
         class StringList : ArrayList 
         {
-            public string[] ToArray()
+            public new string[] ToArray()
             {
                 return (string[])ToArray(typeof(string));
             }
