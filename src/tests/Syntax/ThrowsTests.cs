@@ -119,6 +119,7 @@ namespace NUnit.Framework.Syntax
                 Throws.Exception);
         }
 
+#if !NETCF
         [Test]
         public void LambdaThrowsExcepton()
         {
@@ -127,7 +128,6 @@ namespace NUnit.Framework.Syntax
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
-#if !NETCF
         [Test]
         public void LambdaThrowsExceptionWithMessage()
         {

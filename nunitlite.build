@@ -212,13 +212,15 @@
         define="${build.defines}">
       <sources basedir="${project.src.dir}/framework">
         <include name="**/*.cs"/>
-      </sources>
+		  <exclude name="Api/ITestCaseSourceProvider.cs"/>
+		  <exclude name="Attributes/SetCultureAttribute.cs" if="${runtime.platform == 'netcf'}"/>
+		  <exclude name="Attributes/SetUICultureAttribute.cs" if="${runtime.platform == 'netcf'}"/>
+	  </sources>
       <references>
         <include name="mscorlib.dll"/>
-        <include name="System.dll"/>
-        <include name="System.Drawing.dll"/>
-        <include name="System.Xml.dll"/>
-      </references>
+		  <include name="System.dll"/>
+		  <include name="System.Xml.dll"/>
+	  </references>
     </csc>
 
 
@@ -236,7 +238,7 @@
       <references basedir="${current.build.dir}">
         <include name="mscorlib.dll"/>
         <include name="nunitlite.dll"/>
-      </references>
+	  </references>
     </csc>
 
     <echo message="*"/>
@@ -249,10 +251,12 @@
         define="${build.defines}">
       <sources basedir="${project.src.dir}/tests">
         <include name="**/*.cs"/>
+		  <exclude name="Attributes/SetCultureAttributeTests.cs" if ="${runtime.platform == 'netcf'}"/>
       </sources>
       <references basedir="${current.build.dir}">
         <include name="mscorlib.dll"/>
         <include name="System.Drawing.dll"/>
+		<include name="System.Xml.dll"/>
         <include name="nunitlite.dll"/>
         <include name="nunitlite.testdata.dll"/>
       </references>

@@ -106,12 +106,14 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
+#if !NETCF_2_0
         [Test]
         public void UsesProvidedLambda()
         {
             Comparison<int> comparer = (x, y) => x.CompareTo(y);
             Assert.That(rangeConstraint.Using(comparer).Matches(19));
         }
+#endif
 #endif
     }
 }

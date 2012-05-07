@@ -42,9 +42,9 @@ namespace NUnit.Framework.Internal
 	public class TestExecutionContextTests
 	{
 		string currentDirectory;
-		CultureInfo currentCulture;
-        CultureInfo currentUICulture;
 #if !NETCF
+        CultureInfo currentCulture;
+        CultureInfo currentUICulture;
         IPrincipal currentPrincipal;
 #endif
 
@@ -55,9 +55,9 @@ namespace NUnit.Framework.Internal
 		[SetUp]
 		public void SaveContext()
 		{
-			currentCulture = CultureInfo.CurrentCulture;
-            currentUICulture = CultureInfo.CurrentUICulture;
 #if !NETCF
+            currentCulture = CultureInfo.CurrentCulture;
+            currentUICulture = CultureInfo.CurrentUICulture;
 			currentDirectory = Environment.CurrentDirectory;
             currentPrincipal = Thread.CurrentPrincipal;
 #endif
@@ -100,6 +100,7 @@ namespace NUnit.Framework.Internal
             Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Properties.Get("Answer"), Is.EqualTo(42));
         }
 
+#if !NETCF
         [Test]
         public void SetAndRestoreCurrentCulture()
         {
@@ -147,5 +148,6 @@ namespace NUnit.Framework.Internal
             Assert.AreEqual(currentUICulture, CultureInfo.CurrentUICulture, "UICulture was not restored");
             Assert.AreEqual(currentUICulture, TestExecutionContext.CurrentContext.CurrentUICulture, "UICulture not in final context");
         }
+#endif
     }
 }

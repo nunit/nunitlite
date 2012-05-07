@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Threading;
 
@@ -528,7 +527,7 @@ namespace NUnit.Framework.Assertions
             Assert.That(message.IndexOf("+/-") == -1);
         }
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF_2_0
         [Test]
         public void IEquatableSuccess_OldSyntax()
         {

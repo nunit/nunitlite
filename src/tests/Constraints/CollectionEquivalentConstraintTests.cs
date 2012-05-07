@@ -105,7 +105,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(new CollectionEquivalentConstraint(set1).IgnoreCase.Matches(set2));
         }
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF_2_0
         [Test]
         public void EquivalentHonorsUsing()
         {

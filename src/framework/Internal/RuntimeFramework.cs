@@ -405,7 +405,18 @@ namespace NUnit.Framework.Internal
         private static bool IsRuntimeTypeName(string name)
         {
 #if NETCF
-            return Enum.IsDefined(typeof(RuntimeType), name);
+            //return Enum.IsDefined(typeof(RuntimeType), name);
+            switch (name.ToUpper())
+            {
+                case "NET":
+                case "MONO":
+                case "SSCLI":
+                case "NETCF":
+                case "ANY":
+                    return true;
+                default:
+                    return false;
+            }
 #else
             foreach (string item in Enum.GetNames(typeof(RuntimeType)))
                 if (item.ToLower() == name.ToLower())

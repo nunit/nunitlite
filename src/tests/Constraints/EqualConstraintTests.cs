@@ -135,7 +135,7 @@ namespace NUnit.Framework.Constraints.Tests
 
         #region Dictionary Tests
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF_2_0
         // TODO: Move these to a separate fixture
         [Test]
         public void CanMatchHashtables_SameOrder()
@@ -437,6 +437,7 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
+#if !NETCF_2_0
         [Test]
         public void UsesProvidedLambda_IntArgs()
         {
@@ -461,6 +462,7 @@ namespace NUnit.Framework.Constraints.Tests
 
             Assert.That(list11, new CollectionEquivalentConstraint(list22).Using(comparer));
         }
+#endif
 
         public class IntListEqualComparer : IEqualityComparer<List<int>>
         {
@@ -475,6 +477,7 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
+#if !NETCF_2_0
         [Test]
         public void UsesProvidedArrayComparer()
         {
@@ -500,6 +503,7 @@ namespace NUnit.Framework.Constraints.Tests
                 return obj.Length.GetHashCode();
             }
         }
+#endif
 #endif
     }
 }

@@ -49,6 +49,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// The test that this result pertains to
         /// </summary>
+        [CLSCompliant(false)]
         protected readonly ITest test;
 
 #if !NETCF_1_0

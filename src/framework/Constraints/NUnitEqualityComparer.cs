@@ -172,7 +172,7 @@ namespace NUnit.Framework.Constraints
                     return ((TimeSpan)x - (TimeSpan)y).Duration() <= amount;
             }
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF
             if (FirstImplementsIEquatableOfSecond(xType, yType))
                 return InvokeFirstIEquatableEqualsSecond(x, y);
             else if (FirstImplementsIEquatableOfSecond(yType, xType))
@@ -182,7 +182,7 @@ namespace NUnit.Framework.Constraints
             return x.Equals(y);
         }
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF
         private static bool FirstImplementsIEquatableOfSecond(Type first, Type second)
         {
             Type[] equatableArguments = GetEquatableGenericArguments(first);

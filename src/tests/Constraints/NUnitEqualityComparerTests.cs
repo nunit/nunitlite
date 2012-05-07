@@ -96,6 +96,7 @@ namespace NUnit.Framework.Constraints
         }
 
 #if CLR_2_0 || CLR_4_0
+#if !NETCF_2_0
         [Test]
         public void IEquatableSuccess()
         {
@@ -128,20 +129,21 @@ namespace NUnit.Framework.Constraints
         }
 
         [Test]
-        public void ReferenceEqualityHasPrecedenceOverIEquatable()
-        {
-            NeverEqualIEquatable z = new NeverEqualIEquatable();
-
-            Assert.IsTrue(comparer.AreEqual(z, z, ref tolerance));
-        }
-
-        [Test]
         public void IEquatableHasPrecedenceOverDefaultEquals()
         {
             NeverEqualIEquatableWithOverriddenAlwaysTrueEquals x = new NeverEqualIEquatableWithOverriddenAlwaysTrueEquals();
             NeverEqualIEquatableWithOverriddenAlwaysTrueEquals y = new NeverEqualIEquatableWithOverriddenAlwaysTrueEquals();
 
             Assert.IsFalse(comparer.AreEqual(x, y, ref tolerance));
+        }
+#endif
+
+        [Test]
+        public void ReferenceEqualityHasPrecedenceOverIEquatable()
+        {
+            NeverEqualIEquatable z = new NeverEqualIEquatable();
+
+            Assert.IsTrue(comparer.AreEqual(z, z, ref tolerance));
         }
 #endif
     }

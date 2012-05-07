@@ -70,22 +70,25 @@ namespace NUnitLite.Tests
         //
         static void Main(string[] args)
         {
-
-#if PocketPC || WindowsCE || NETCF
-            // On these platforms, we write to My Documents
-#if NETCF_1_0
-            string myDocs = @"\My Documents";
-#else
-            string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-#endif
-            string path = System.IO.Path.Combine(myDocs, "TestResult.txt");
-            System.IO.TextWriter writer = new System.IO.StreamWriter(path);
-            new TextUI(writer).Execute(args);
-            writer.Close();
-#else
-            // Write output to the console
+            // For the time being, we only use ConsoleUI
+            // TODO: Base this decision on command-line options
             new ConsoleUI().Execute(args);
-#endif
+
+//#if PocketPC || WindowsCE || NETCF
+//            // On these platforms, we write to My Documents
+//#if NETCF_1_0
+//            string myDocs = @"\My Documents";
+//#else
+//            string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+//#endif
+//            string path = System.IO.Path.Combine(myDocs, "TestResult.txt");
+//            System.IO.TextWriter writer = new System.IO.StreamWriter(path);
+//            new TextUI(writer).Execute(args);
+//            writer.Close();
+//#else
+//            // Write output to the console
+//            new ConsoleUI().Execute(args);
+//#endif
         }
     }
 }

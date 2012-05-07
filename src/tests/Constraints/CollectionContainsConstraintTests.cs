@@ -75,7 +75,7 @@ namespace NUnit.Framework.Constraints.Tests
                 new CollectionContainsConstraint("WORLD").IgnoreCase);
         }
 
-#if CLR_2_0 || CLR_4_0
+#if (CLR_2_0 || CLR_4_0) && !NETCF_2_0
         [Test]
         public void UsingIsHonored()
         {
