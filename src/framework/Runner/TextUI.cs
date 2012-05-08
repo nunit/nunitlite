@@ -33,84 +33,16 @@ using NUnit.Framework.Internal;
 namespace NUnitLite.Runner
 {
     /// <summary>
-    /// A version of TextUI that outputs to the console.
-    /// If you use it on a device without a console like
-    /// PocketPC or SmartPhone you won't see anything!
-    /// 
-    /// Call it from your Main like this:
-    ///   new ConsoleUI().Execute(args);
-    /// </summary>
-    public class ConsoleUI : TextUI
-    {
-        /// <summary>
-        /// Construct an instance of ConsoleUI
-        /// </summary>
-#if NETCF_1_0
-        public ConsoleUI() : base(ConsoleWriter.Out) { }
-#else
-        public ConsoleUI() : base(Console.Out) { }
-#endif
-    }
-
-    /// <summary>
-    /// A version of TextUI that writes to a file.
-    /// 
-    /// Call it from your Main like this:
-    ///   new FileUI(filePath).Execute(args);
-    /// </summary>
-    public class FileUI : TextUI
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileUI"/> class.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        public FileUI(string path) : base(new StreamWriter(path)) { }
-    }
-
-    /// <summary>
-    /// A version of TextUI that displays to debug.
-    /// 
-    /// Call it from your Main like this:
-    ///   new DebugUI().Execute(args);
-    /// </summary>
-    public class DebugUI : TextUI
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DebugUI"/> class.
-        /// </summary>
-        public DebugUI() : base(DebugWriter.Out) { }
-    }
-
-    /// <summary>
-    /// A version of TextUI that writes to a TcpWriter
-    /// </summary>
-    public class TcpUI : TextUI
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TcpUI"/> class.
-        /// </summary>
-        /// <param name="hostName">Name of the host.</param>
-        /// <param name="port">The port.</param>
-        public TcpUI(string hostName, int port) : base( new TcpWriter(hostName, port) ) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TcpUI"/> class.
-        /// </summary>
-        /// <param name="hostName">Name of the host.</param>
-        public TcpUI(string hostName) : this(hostName, 9000) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TcpUI"/> class.
-        /// </summary>
-        public TcpUI() : this("localhost", 9000) { }
-    }
-
-    /// <summary>
     /// TextUI is a general purpose class that runs tests and
     /// outputs to a TextWriter.
     /// 
     /// Call it from your Main like this:
     ///   new TextUI(textWriter).Execute(args);
+    ///     OR
+    ///   new TextUI().Execute(args);
+    /// The provided TextWriter is used by default, unless the
+    /// arguments to Execute override it using -out. The second
+    /// form uses the Console, provided it exists on the platform.
     /// </summary>
     public class TextUI
     {
@@ -124,15 +56,23 @@ namespace NUnitLite.Runner
         private ITestAssemblyRunner runner;
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextUI"/> class.
+        /// </summary>
+        public TextUI() : this(ConsoleWriter.Out) { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextUI"/> class.
         /// </summary>
         /// <param name="writer">The TextWriter to use.</param>
         public TextUI(TextWriter writer)
         {
+            // Set the default writer - may be overridden by the args specified
             this.writer = writer;
             this.runner = new NUnitLiteTestAssemblyRunner(new NUnitLiteTestAssemblyBuilder());
         }
+
         #endregion
 
         #region Public Methods
@@ -151,7 +91,7 @@ namespace NUnitLite.Runner
 
             if (!commandLineOptions.ShowHelp && !commandLineOptions.Error)
             {
-                if (commandLineOptions.Wait && !(this is ConsoleUI))
+                if (commandLineOptions.Wait && commandLineOptions.OutFile != null)
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
 
                 IDictionary loadOptions = new Hashtable();
@@ -194,10 +134,17 @@ namespace NUnitLite.Runner
                 }
                 finally
                 {
-                    if (commandLineOptions.Wait && this is ConsoleUI)
+                    if (commandLineOptions.OutFile == null)
                     {
-                        Console.WriteLine("Press Enter key to continue . . .");
-                        Console.ReadLine();
+                        if (commandLineOptions.Wait)
+                        {
+                            Console.WriteLine("Press Enter key to continue . . .");
+                            Console.ReadLine();
+                        }
+                    }
+                    else
+                    {
+                        writer.Close();
                     }
                 }
             }
@@ -257,6 +204,11 @@ namespace NUnitLite.Runner
         {
             this.commandLineOptions = new CommandLineOptions();
             commandLineOptions.Parse(args);
+
+            if (commandLineOptions.OutFile != null)
+                this.writer = new StreamWriter(commandLineOptions.OutFile);
+            else
+                this.writer = ConsoleWriter.Out;
 
             if (!commandLineOptions.NoHeader)
                 WriteCopyright();

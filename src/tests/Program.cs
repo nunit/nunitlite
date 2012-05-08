@@ -29,8 +29,7 @@ namespace NUnitLite.Tests
     class Program
     {
         // The main program executes the tests. Output may be routed to
-        // various locations, depending on the sub class of TextUI
-        // that is created and any arument passed.
+        // various locations, depending on the arguments passed.
         //
         // Arguments:
         //
@@ -43,7 +42,17 @@ namespace NUnitLite.Tests
         //                      May be repeated. If this option is not used,
         //                      all tests are run.
         //
-        //    -nologo           Suppress display of the initial message.
+        //    -out:PATH         Path to a file to which output is written.
+        //                      If omitted, Console is used, which means the
+        //                      output is lost on a platform with no Console.
+        //
+        //    -full             Print full report of all tests.
+        //
+        //    -result:PATH      Path to a file to which the XML test result is written.
+        //
+        //    -explore:Path     Path to a file to which a list of tests is written.
+        //
+        //    -noheader,noh     Suppress display of the initial message.
         //
         //    -wait             Wait for a keypress before exiting.
         //
@@ -70,25 +79,7 @@ namespace NUnitLite.Tests
         //
         static void Main(string[] args)
         {
-            // For the time being, we only use ConsoleUI
-            // TODO: Base this decision on command-line options
-            new ConsoleUI().Execute(args);
-
-//#if PocketPC || WindowsCE || NETCF
-//            // On these platforms, we write to My Documents
-//#if NETCF_1_0
-//            string myDocs = @"\My Documents";
-//#else
-//            string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-//#endif
-//            string path = System.IO.Path.Combine(myDocs, "TestResult.txt");
-//            System.IO.TextWriter writer = new System.IO.StreamWriter(path);
-//            new TextUI(writer).Execute(args);
-//            writer.Close();
-//#else
-//            // Write output to the console
-//            new ConsoleUI().Execute(args);
-//#endif
+            new TextUI().Execute(args);
         }
     }
 }

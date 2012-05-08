@@ -47,6 +47,7 @@ namespace NUnitLite.Runner
 
         private string exploreFile;
         private string resultFile;
+        private string outFile;
 
         private bool error = false;
 
@@ -119,6 +120,14 @@ namespace NUnitLite.Runner
         public string ResultFile
         {
             get { return resultFile; }
+        }
+
+        /// <summary>
+        /// Gets the name of the file to be used for output
+        /// </summary>
+        public string OutFile
+        {
+            get { return outFile; }
         }
 
         /// <summary>
@@ -208,6 +217,9 @@ namespace NUnitLite.Runner
                 case "result":
                     resultFile = val;
                     break;
+                case "out":
+                    outFile = val;
+                    break;
                 default:
                     error = true;
                     invalidOptions.Add(opt);
@@ -269,14 +281,26 @@ namespace NUnitLite.Runner
                 sb.Append("Options:" + NL);
                 sb.Append("  -test:testname  Provides the name of a test to run. This option may be" + NL);
                 sb.Append("                  repeated. If no test names are given, all tests are run." + NL + NL);
-                sb.Append("  -help           Displays this help" + NL + NL);
-                sb.Append("  -nologo         Suppresses display of the initial message" + NL + NL);
-                sb.Append("  -wait           Waits for a key press before exiting" + NL + NL);
+                sb.Append("  -out:PATH       Path to a file to which output is redirected. If this option" + NL);
+                sb.Append("                  is not used, output is to the Console, which means it is lost" + NL);
+                sb.Append("                  on devices without a Console." + NL + NL);
                 sb.Append("  -full           Prints full report of all test results." + NL + NL);
+                sb.Append("  -result:PATH    Path to a file to which the xml test result is written." + NL + NL);
+                sb.Append("  -explore[:PATH] If provided, this option indicates that the tests in the" + NL);
+                sb.Append("                  should be listed rather than executed. If a path is given" + NL);
+                sb.Append("                  it represents the file to which the listing is directed." + NL);
+                sb.Append("                  If no path is given, the listing displays on the Console." + NL + NL);
+                sb.Append("  -help,-h        Displays this help" + NL + NL);
+                sb.Append("  -noheader,-noh  Suppresses display of the initial message" + NL + NL);
+                sb.Append("  -wait           Waits for a key press before exiting" + NL + NL);
+
+                sb.Append("Notes:" + NL);
+                sb.Append(" * Any relative path is based on the current directory or on the Documents" + NL);
+                sb.Append("   folder if running on a device under the compact framework." + NL + NL);
                 if (System.IO.Path.DirectorySeparatorChar != '/')
-                    sb.Append("On Windows, options may be prefixed by a '/' character if desired" + NL + NL);
-                sb.Append("Options that take values may use an equal sign or a colon" + NL);
-                sb.Append("to separate the option from its value." + NL + NL);
+                    sb.Append(" * On Windows, options may be prefixed by a '/' character if desired" + NL + NL);
+                sb.Append(" * Options that take values may use an equal sign or a colon" + NL);
+                sb.Append("   to separate the option from its value." + NL + NL);
 
                 return sb.ToString();
             }

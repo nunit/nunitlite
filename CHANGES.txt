@@ -62,8 +62,8 @@ New Features and Enhancements
 		  RangeAttribute
 		  RepeatAttribute
 		  SequentialAttribute
-		  SetCultureAttribute
-		  SetUICultureAttribute
+		  SetCultureAttribute (not available on compact framework)
+		  SetUICultureAttribute (not available on compact framework)
 		  TestCaseAttribute
 		  TestCaseSourceAttribute
 		  TestFixtureSetUpAttribute
