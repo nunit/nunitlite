@@ -18,17 +18,25 @@ namespace NUnit.Framework.Internal
             StringReader sr = new StringReader(rawTrace);
             StringWriter sw = new StringWriter();
 
-            string line;
-            while ((line = sr.ReadLine()) != null && line.IndexOf("NUnit.Framework.Assert")>=0) 
-                /*Skip*/;
-
-            while (line != null)
+            try
             {
-                sw.WriteLine(line);
-                line = sr.ReadLine();
+                string line;
+                while ((line = sr.ReadLine()) != null && line.IndexOf("NUnit.Framework.Assert") >= 0)
+                    /*Skip*/
+                    ;
+
+                while (line != null)
+                {
+                    sw.WriteLine(line);
+                    line = sr.ReadLine();
+                }
+            }
+            catch (Exception)
+            {
+                return rawTrace;
             }
 
-            return sw.ToString();;
+            return sw.ToString();
         }
     }
 }

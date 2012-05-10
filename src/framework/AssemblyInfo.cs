@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -34,7 +34,7 @@ using System;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NUnit Software")]
 [assembly: AssemblyProduct("NUnitLite")]
-[assembly: AssemblyCopyright("Copyright 2007, Charlie Poole")]
+[assembly: AssemblyCopyright("Copyright 2012, Charlie Poole")]
 [assembly: AssemblyTrademark("NUnitLite")]
 [assembly: AssemblyCulture("")]
 

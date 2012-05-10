@@ -50,13 +50,13 @@ namespace NUnit.Framework.Internal
             Assert.That(RuntimeFramework.CurrentFramework.ClrVersion.Build, Is.GreaterThan(0));
         }
 
-        [Test]
+        [Test, Platform(Exclude="NETCF", Reason="NYI")]
         public void CurrentFrameworkMustBeAvailable()
         {
             Assert.That(RuntimeFramework.CurrentFramework.IsAvailable);
         }
 
-        [Test]
+        [Test, Platform(Exclude="NETCF", Reason="NYI")]
         public void CanListAvailableFrameworks()
         {
             RuntimeFramework[] available = RuntimeFramework.AvailableFrameworks;

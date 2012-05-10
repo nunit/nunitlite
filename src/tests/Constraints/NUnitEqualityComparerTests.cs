@@ -96,7 +96,7 @@ namespace NUnit.Framework.Constraints
         }
 
 #if CLR_2_0 || CLR_4_0
-#if !NETCF_2_0
+#if !NETCF
         [Test]
         public void IEquatableSuccess()
         {

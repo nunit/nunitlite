@@ -265,9 +265,10 @@ namespace NUnit.Framework.Builders
             }
 
 #if NETCF
+            // TODO: Get this to work
             if (testMethod.Method.IsGenericMethodDefinition)
             {
-                return MarkAsNotRunnable(testMethod, "Generic test methods are not supported under .NET CF");
+                return MarkAsNotRunnable(testMethod, "Generic test methods are not yet supported under .NET CF");
             }
 #endif
 

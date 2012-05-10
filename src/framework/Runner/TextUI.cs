@@ -230,7 +230,7 @@ namespace NUnitLite.Runner
             string title = "NUNit Framework";
 #endif
             System.Version version = executingAssembly.GetName().Version;
-            string copyright = "Copyright (C) 2011, Charlie Poole";
+            string copyright = "Copyright (C) 2012, Charlie Poole";
             string build = "";
 
 #if !NETCF_1_0

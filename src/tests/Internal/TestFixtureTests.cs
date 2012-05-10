@@ -206,8 +206,7 @@ namespace NUnit.Framework.Internal
             TestAssert.IsRunnable(typeof(StaticFixtureWithoutTestFixtureAttribute));
         }
 
-#if !NETCF
-        [Test]
+        [Test, Platform(Exclude = "NETCF", Reason = "NYI")]
         public void CanRunGenericFixtureWithProperArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
@@ -228,7 +227,7 @@ namespace NUnit.Framework.Internal
 //                Is.StringStarting("Fixture type contains generic parameters"));
 //        }
 
-        [Test]
+        [Test, Platform(Exclude = "NETCF", Reason = "NYI")]
         public void CannotRunGenericFixtureWithNoArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
@@ -239,7 +238,7 @@ namespace NUnit.Framework.Internal
             Assert.That((string)fixture.Properties.Get(PropertyNames.SkipReason), Is.StringStarting("Fixture type contains generic parameters"));
         }
 
-        [Test]
+        [Test, Platform(Exclude = "NETCF", Reason = "NYI")]
         public void CannotRunGenericFixtureDerivedFromAbstractFixtureWithNoArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
@@ -247,7 +246,7 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable((Test)suite.Tests[0]);
         }
 
-        [Test]
+        [Test, Platform(Exclude = "NETCF", Reason = "NYI")]
         public void CanRunGenericFixtureDerivedFromAbstractFixtureWithArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
@@ -256,7 +255,6 @@ namespace NUnit.Framework.Internal
             Assert.That(suite is ParameterizedFixtureSuite);
             Assert.That(suite.Tests.Count, Is.EqualTo(2));
         }
-#endif
 #endif
 
         #region SetUp Signature

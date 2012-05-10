@@ -56,232 +56,232 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\src\NUnitLite\AssemblyInfo.cs">
+    <Compile Include="..\..\..\src\framework\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Assert.cs">
+    <Compile Include="..\..\..\src\framework\Assert.cs">
       <Link>Assert.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\AssertionHelper.cs">
+    <Compile Include="..\..\..\src\framework\AssertionHelper.cs">
       <Link>AssertionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\DescriptionAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\DescriptionAttribute.cs">
       <Link>Attributes\DescriptionAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\ExpectedExceptionAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\ExpectedExceptionAttribute.cs">
       <Link>Attributes\ExpectedExceptionAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\IgnoreAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\IgnoreAttribute.cs">
       <Link>Attributes\IgnoreAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\PropertyAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\PropertyAttribute.cs">
       <Link>Attributes\PropertyAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\RequiredAddinAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\RequiredAddinAttribute.cs">
       <Link>Attributes\RequiredAddinAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\SetUpAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\SetUpAttribute.cs">
       <Link>Attributes\SetUpAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\TearDownAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\TearDownAttribute.cs">
       <Link>Attributes\TearDownAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\TestAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\TestAttribute.cs">
       <Link>Attributes\TestAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Attributes\TestFixtureAttribute.cs">
+    <Compile Include="..\..\..\src\framework\Attributes\TestFixtureAttribute.cs">
       <Link>Attributes\TestFixtureAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\AttributeConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\AttributeConstraints.cs">
       <Link>Constraints\AttributeConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\BasicConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\BasicConstraints.cs">
       <Link>Constraints\BasicConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\BinaryOperations.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\BinaryOperations.cs">
       <Link>Constraints\BinaryOperations.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\CollectionConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\CollectionConstraints.cs">
       <Link>Constraints\CollectionConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ComparisonAdapter.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ComparisonAdapter.cs">
       <Link>Constraints\ComparisonAdapter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ComparisonConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ComparisonConstraints.cs">
       <Link>Constraints\ComparisonConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\Constraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\Constraint.cs">
       <Link>Constraints\Constraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintBuilder.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ConstraintBuilder.cs">
       <Link>Constraints\ConstraintBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintExpression.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ConstraintExpression.cs">
       <Link>Constraints\ConstraintExpression.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintExpressionBase.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ConstraintExpressionBase.cs">
       <Link>Constraints\ConstraintExpressionBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintFactory.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ConstraintFactory.cs">
       <Link>Constraints\ConstraintFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ConstraintOperators.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ConstraintOperators.cs">
       <Link>Constraints\ConstraintOperators.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ContainsConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ContainsConstraint.cs">
       <Link>Constraints\ContainsConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\EmptyConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\EmptyConstraint.cs">
       <Link>Constraints\EmptyConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\EqualConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\EqualConstraint.cs">
       <Link>Constraints\EqualConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\EqualityAdapter.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\EqualityAdapter.cs">
       <Link>Constraints\EqualityAdapter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\FloatingPointNumerics.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\FloatingPointNumerics.cs">
       <Link>Constraints\FloatingPointNumerics.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\IResolveConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\IResolveConstraint.cs">
       <Link>Constraints\IResolveConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\MessageWriter.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\MessageWriter.cs">
       <Link>Constraints\MessageWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\MsgUtils.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\MsgUtils.cs">
       <Link>Constraints\MsgUtils.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\Numerics.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\Numerics.cs">
       <Link>Constraints\Numerics.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\NUnitComparer.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\NUnitComparer.cs">
       <Link>Constraints\NUnitComparer.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\NUnitEqualityComparer.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\NUnitEqualityComparer.cs">
       <Link>Constraints\NUnitEqualityComparer.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\PathConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\PathConstraints.cs">
       <Link>Constraints\PathConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\PrefixConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\PrefixConstraints.cs">
       <Link>Constraints\PrefixConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\PropertyConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\PropertyConstraint.cs">
       <Link>Constraints\PropertyConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\RangeConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\RangeConstraint.cs">
       <Link>Constraints\RangeConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ResolvableConstraintExpression.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ResolvableConstraintExpression.cs">
       <Link>Constraints\ResolvableConstraintExpression.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\SameAsConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\SameAsConstraint.cs">
       <Link>Constraints\SameAsConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\SerializableConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\SerializableConstraints.cs">
       <Link>Constraints\SerializableConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\StringConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\StringConstraints.cs">
       <Link>Constraints\StringConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\ThrowsConstraint.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\ThrowsConstraint.cs">
       <Link>Constraints\ThrowsConstraint.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\Tolerance.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\Tolerance.cs">
       <Link>Constraints\Tolerance.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Constraints\TypeConstraints.cs">
+    <Compile Include="..\..\..\src\framework\Constraints\TypeConstraints.cs">
       <Link>Constraints\TypeConstraints.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Contains.cs">
+    <Compile Include="..\..\..\src\framework\Contains.cs">
       <Link>Contains.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Env.cs">
+    <Compile Include="..\..\..\src\framework\Env.cs">
       <Link>Env.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Exceptions\AssertionException.cs">
+    <Compile Include="..\..\..\src\framework\Exceptions\AssertionException.cs">
       <Link>Exceptions\AssertionException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Exceptions\IgnoreException.cs">
+    <Compile Include="..\..\..\src\framework\Exceptions\IgnoreException.cs">
       <Link>Exceptions\IgnoreException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Exceptions\InconclusiveException.cs">
+    <Compile Include="..\..\..\src\framework\Exceptions\InconclusiveException.cs">
       <Link>Exceptions\InconclusiveException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Exceptions\SuccessException.cs">
+    <Compile Include="..\..\..\src\framework\Exceptions\SuccessException.cs">
       <Link>Exceptions\SuccessException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\GlobalSettings.cs">
+    <Compile Include="..\..\..\src\framework\GlobalSettings.cs">
       <Link>GlobalSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Has.cs">
+    <Compile Include="..\..\..\src\framework\Has.cs">
       <Link>Has.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\IExpectException.cs">
+    <Compile Include="..\..\..\src\framework\IExpectException.cs">
       <Link>IExpectException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Internal\NUnitLiteException.cs">
+    <Compile Include="..\..\..\src\framework\Internal\NUnitLiteException.cs">
       <Link>Internal\NUnitLiteException.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Internal\TextMessageWriter.cs">
+    <Compile Include="..\..\..\src\framework\Internal\TextMessageWriter.cs">
       <Link>Internal\TextMessageWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Is.cs">
+    <Compile Include="..\..\..\src\framework\Is.cs">
       <Link>Is.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Iz.cs">
+    <Compile Include="..\..\..\src\framework\Iz.cs">
       <Link>Iz.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\ITest.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\ITest.cs">
       <Link>NUnitLite\ITest.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\NullListener.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\NullListener.cs">
       <Link>NUnitLite\NullListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\Reflect.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\Reflect.cs">
       <Link>NUnitLite\Reflect.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\StackFilter.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\StackFilter.cs">
       <Link>NUnitLite\StackFilter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\TestCase.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\TestCase.cs">
       <Link>NUnitLite\TestCase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\TestListener.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\TestListener.cs">
       <Link>NUnitLite\TestListener.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\TestResult.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\TestResult.cs">
       <Link>NUnitLite\TestResult.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\NUnitLite\TestSuite.cs">
+    <Compile Include="..\..\..\src\framework\NUnitLite\TestSuite.cs">
       <Link>NUnitLite\TestSuite.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\CommandLineOptions.cs">
+    <Compile Include="..\..\..\src\framework\Runner\CommandLineOptions.cs">
       <Link>Runner\CommandLineOptions.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\ConsoleWriter.cs">
+    <Compile Include="..\..\..\src\framework\Runner\ConsoleWriter.cs">
       <Link>Runner\ConsoleWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\DebugWriter.cs">
+    <Compile Include="..\..\..\src\framework\Runner\DebugWriter.cs">
       <Link>Runner\DebugWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\ResultSummary.cs">
+    <Compile Include="..\..\..\src\framework\Runner\ResultSummary.cs">
       <Link>Runner\ResultSummary.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\TcpWriter.cs">
+    <Compile Include="..\..\..\src\framework\Runner\TcpWriter.cs">
       <Link>Runner\TcpWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\TestLoader.cs">
+    <Compile Include="..\..\..\src\framework\Runner\TestLoader.cs">
       <Link>Runner\TestLoader.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\TestRunner.cs">
+    <Compile Include="..\..\..\src\framework\Runner\TestRunner.cs">
       <Link>Runner\TestRunner.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Runner\TextUI.cs">
+    <Compile Include="..\..\..\src\framework\Runner\TextUI.cs">
       <Link>Runner\TextUI.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\NUnitLite\Throws.cs">
+    <Compile Include="..\..\..\src\framework\Throws.cs">
       <Link>Throws.cs</Link>
     </Compile>
   </ItemGroup>

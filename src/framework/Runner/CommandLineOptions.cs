@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
 using System.Text;
 using System.Collections;
 #if CLR_2_0 || CLR_4_0
@@ -111,7 +112,7 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ExploreFile
         {
-            get { return exploreFile; }
+            get { return ExpandToFullPath(exploreFile); }
         }
 
         /// <summary>
@@ -119,15 +120,29 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ResultFile
         {
-            get { return resultFile; }
+            get { return ExpandToFullPath(resultFile); }
         }
 
         /// <summary>
-        /// Gets the name of the file to be used for output
+        /// Gets the full path of the file to be used for output
         /// </summary>
         public string OutFile
         {
-            get { return outFile; }
+            get 
+            {
+                return ExpandToFullPath(outFile);
+            }
+        }
+
+        private string ExpandToFullPath(string path)
+        {
+            if (path == null) return null;
+
+#if NETCF
+            return Path.Combine(NUnit.Env.DocumentFolder, path);
+#else
+            return Path.GetFullPath(path); 
+#endif
         }
 
         /// <summary>

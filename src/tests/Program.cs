@@ -50,7 +50,9 @@ namespace NUnitLite.Tests
         //
         //    -result:PATH      Path to a file to which the XML test result is written.
         //
-        //    -explore:Path     Path to a file to which a list of tests is written.
+        //    -explore[:Path]   If specified, list tests rather than executing them. If a
+        //                      path is given, an XML file representing the tests is written
+        //                      to that location. If not, output is to the Console.
         //
         //    -noheader,noh     Suppress display of the initial message.
         //
