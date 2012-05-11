@@ -12,8 +12,8 @@
   <!-- Other directories are derived from base -->
   <property name="project.src.dir" 
     value="${path::combine(project.base.dir,'src')}"/>
-  <property name="project.solutions.dir" 
-    value="${path::combine(project.base.dir,'solutions')}"/>
+  <property name="project.tools.dir" 
+    value="${path::combine(project.base.dir,'tools')}"/>
   <property name="project.build.dir" 
     value="${path::combine(project.base.dir,'build')}"/>
   <property name="project.package.dir" 
@@ -28,8 +28,8 @@
     value="${path::combine(project.package.dir,package.name)}"/>
   <property name="package.src.dir" 
     value="${path::combine(package.working.dir,'src')}"/>
-  <property name="package.solutions.dir" 
-    value="${path::combine(package.working.dir,'solutions')}"/>
+  <property name="package.tools.dir" 
+    value="${path::combine(package.working.dir,'tools')}"/>
 
   <!-- Default build configuration -->
   <property name="build.config" value="debug"/>
@@ -369,14 +369,13 @@
 
   </target>
 
-  <target name="copy-solutions">
-    <delete dir="${package.solutions.dir}" />
-    <mkdir dir="${package.solutions.dir}"/>
+  <target name="copy-tools">
+    <delete dir="${package.tools.dir}" />
+    <mkdir dir="${package.tools.dir}"/>
 
-    <copy todir="${package.solutions.dir}">
-      <fileset basedir="${project.solutions.dir}">
-        <include name="**/*.sln"/>
-        <include name="**/*.csproj"/>
+    <copy todir="${package.tools.dir}">
+      <fileset basedir="${project.tools.dir}">
+        <include name="**/*"/>
       </fileset>
     </copy>
 

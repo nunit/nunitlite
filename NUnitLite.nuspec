@@ -17,7 +17,14 @@
 	</metadata>
 	<files>
 		<file src="LICENSE.txt" />
-		<file src="NUnitLite.dll"  target="lib" />
-		<file src="Program.cs" target="content" />
+                <file src="README.txt" />
+                <file src="CHANGES.txt" />
+		<file src="package\NUnitLite-0.7.0\net-4.0\*"  target="lib/net40" />
+		<file src="package\NUnitLite-0.7.0\net-3.5\*"  target="lib/net35" />
+		<file src="package\NUnitLite-0.7.0\net-2.0\*"  target="lib/net20" />
+		<file src="package\NUnitLite-0.7.0\net-1.1\*"  target="lib/net11" />
+		<file src="package\NUnitLite-0.7.0\netcf-3.5\*"  target="lib/net35-cf" />
+		<file src="package\NUnitLite-0.7.0\netcf-2.0\*"  target="lib/net20-cf" />
+		<file src="src\tests\Program.cs" target="content" />
 	</files>
 </package>
