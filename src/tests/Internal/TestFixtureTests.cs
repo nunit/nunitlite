@@ -206,6 +206,7 @@ namespace NUnit.Framework.Internal
             TestAssert.IsRunnable(typeof(StaticFixtureWithoutTestFixtureAttribute));
         }
 
+#if !NETCF
         [Test, Platform(Exclude = "NETCF", Reason = "NYI")]
         public void CanRunGenericFixtureWithProperArgsProvided()
         {
@@ -255,6 +256,7 @@ namespace NUnit.Framework.Internal
             Assert.That(suite is ParameterizedFixtureSuite);
             Assert.That(suite.Tests.Count, Is.EqualTo(2));
         }
+#endif
 #endif
 
         #region SetUp Signature
