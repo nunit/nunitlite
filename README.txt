@@ -1,4 +1,4 @@
-NUnitLite Version 0.7 - May 4, 2012
+NUnitLite Version 0.7 - May 11, 2012
 
 NUnitLite is a small-footprint implementation of much of the current NUnit framework. It is distributed in source form and is intended for use in situations where NUnit is too large or complex. In particular, it targets mobile and embedded environments as well as testing of applications that require "embedding" the framework in another piece of software, as when testing plugin architectures.
 
@@ -27,23 +27,23 @@ The PropertyAttribute may be used to assign name/value pairs to any test. The De
 ASSERTS
 
 The programmer expresses expected test conditions using the Assert class. The existing functionality of most current NUnit Assert methods is supported, but the syntax has been changed to use the more extensible constraint-based format. The following methods are supported:
-	   Assert.Pass
-	   Assert.Fail
-	   Assert.Ignore
-	   Assert.Inconclusive
-       Assert.That
-	   Assert.ByVal
-	   Assert.Throws
-	   Assert.DoesNotThrow
-	   Assert.Catch
-       Assert.Null
-       Assert.NotNull
-       Assert.True
-       Assert.False
-	   Assert.AreEqual
-	   Assert.AreNotEqual
-	   Assert.AreSame
-	   Assert.AreNotSame
+	Assert.Pass
+	Assert.Fail
+	Assert.Ignore
+	Assert.Inconclusive
+	Assert.That
+	Assert.ByVal
+	Assert.Throws
+	Assert.DoesNotThrow
+	Assert.Catch
+	Assert.Null
+	Assert.NotNull
+	Assert.True
+	Assert.False
+	Assert.AreEqual
+	Assert.AreNotEqual
+	Assert.AreSame
+	Assert.AreNotSame
 
 ASSUMPTIONS
 
@@ -52,54 +52,54 @@ The programmer may express assumptions in the test using Assume.That() A failure
 CONSTRAINTS
 
 NUnitLite supports most of the same built-in constraints as NUnit. Users may also derive custom constraints from the abstract Constraint class. The following built-in constraints are provided:
-       AllItemsConstraint
-       AndConstraint
-       AssignableFromConstraint
-       AssignableToConstraint
-       AttributeConstraint
-       AttributeExistsConstraint
-       BinarySerializableConstraint (not available on compact framework)
-       CollectionContainsConstraint
-       CollectionEquivalentConstraint
-       CollectionOrderedConstraint
-       CollectionSubsetConstraint
-       ContainsConstraint
-       EmptyCollectionConstraint
-       EmptyConstraint
-	   EmptyDirectoryConstraint
-       EmptyStringConstraint
-       EndsWithConstraint
-       EqualConstraint
-	   ExactCountConstraint
-       ExactTypeConstraint
-	   ExceptionTypeConstraint
-       FalseConstraint
-       GreaterThanConstraint
-       GreaterThanOrEqualConstraint
-       InstanceOfTypeConstraint
-       LessThanConstraint
-       LessThanOrEqualConstraint
-       NaNConstraint
-       NoItemConstraint
-       NotConstraint
-       NullConstraint
-       NullOrEmptyStringConstraint
-       OrConstraint
-       PropertyConstraint
-       PropertyExistsConstraint
-       RangeConstraint
-       RegexConstraint (not available on compact framework)
-       SameAsConstraint
-       SamePathConstraint
-       SamePathOrUnderConstraint
-       SomeItemsConstraint
-       StartsWithConstraint
-       SubstringConstraint
-       ThrowsConstraint
-       ThrowsNothingConstraint
-       TrueConstraint
-       UniqueItemsConstraint
-       XmlSerializableConstraint (not available on compact framework 1.0)
+	AllItemsConstraint
+	AndConstraint
+	AssignableFromConstraint
+	AssignableToConstraint
+	AttributeConstraint
+	AttributeExistsConstraint
+	BinarySerializableConstraint (not available on compact framework)
+	CollectionContainsConstraint
+	CollectionEquivalentConstraint
+	CollectionOrderedConstraint
+	CollectionSubsetConstraint
+	ContainsConstraint
+	EmptyCollectionConstraint
+	EmptyConstraint
+	EmptyDirectoryConstraint
+	EmptyStringConstraint
+	EndsWithConstraint
+	EqualConstraint
+	ExactCountConstraint
+	ExactTypeConstraint
+	ExceptionTypeConstraint
+	FalseConstraint
+	GreaterThanConstraint
+	GreaterThanOrEqualConstraint
+	InstanceOfTypeConstraint
+	LessThanConstraint
+	LessThanOrEqualConstraint
+	NaNConstraint
+	NoItemConstraint
+	NotConstraint
+	NullConstraint
+	NullOrEmptyStringConstraint
+	OrConstraint
+	PropertyConstraint
+	PropertyExistsConstraint
+	RangeConstraint
+	RegexConstraint (not available on compact framework)
+	SameAsConstraint
+	SamePathConstraint
+	SamePathOrUnderConstraint
+	SomeItemsConstraint
+	StartsWithConstraint
+	SubstringConstraint
+	ThrowsConstraint
+	ThrowsNothingConstraint
+	TrueConstraint
+	UniqueItemsConstraint
+	XmlSerializableConstraint (not available on compact framework 1.0)
 
 Although constraints may be created using their constructors, the more usual approach is to make use of one or more of the NUnitLite SyntaxHelpers. The following helpers are provided: 
 
@@ -118,9 +118,9 @@ Tests are loaded as a list of fixtures, without any additional hierarchy. Each f
 
 USAGE
 
-NUnitLite is not "installed" in your system. Instead, you should make the NUnitLite files - those in the src/NUnitLite directory and subdirectories - part of your own project. If you wish to compile NUnitLite as a separate assembly, you may do so. Alternatively, make it part of your test project.
-
-In either case, your tests should be created in an exe project, which is run in order to execute them. If the NUnitLite files are included in the project, the Main program will locate your tests automatically and execute them. If you place NUnitLite in a separate assembly, you will need to create a small stub that starts NUnitLite. For an example of how to do this, take a look at NUnitLite's own tests.
+NUnitLite is not "installed" in your system. Instead, you should include nunitlite.dll in your project. Your test assembly should be an exe file and should reference the nunitlite assembly. If you place a call like this in your Main
+    new TextUI().Execute(args);
+then NUnitLite will run all the tests in the test project, using the args provided. Use -help to see the available options.
 
 NUnitLite uses the NUnit.Framework namespace, which allows relatively easy portability between NUnit and NUnitLite. Test assemblies built using NUnitLite may be opened using NUnit version 2.4 or later, provided that all tests are identified using attributes rather than inheritance.
 
