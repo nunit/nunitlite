@@ -29,6 +29,7 @@ using System.Xml;
 using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Filters;
 
 namespace NUnitLite.Runner
 {
@@ -98,9 +99,13 @@ namespace NUnitLite.Runner
                 //if (options.Load.Count > 0)
                 //    loadOptions["LOAD"] = options.Load;
 
-                IDictionary runOptions = new Hashtable();
-                if (commandLineOptions.TestCount > 0)
-                    runOptions["RUN"] = commandLineOptions.Tests;
+                //IDictionary runOptions = new Hashtable();
+                //if (commandLineOptions.TestCount > 0)
+                //    runOptions["RUN"] = commandLineOptions.Tests;
+
+                ITestFilter filter = commandLineOptions.TestCount > 0
+                    ? new SimpleNameFilter(commandLineOptions.Tests)
+                    : TestFilter.Empty;
 
                 try
                 {
@@ -122,7 +127,7 @@ namespace NUnitLite.Runner
                     if (commandLineOptions.Explore)
                         ExploreTests();
                     else
-                        RunTests();
+                        RunTests(filter);
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -150,9 +155,9 @@ namespace NUnitLite.Runner
             }
         }
 
-        private void RunTests()
+        private void RunTests(ITestFilter filter)
         {
-            ITestResult result = runner.Run(TestListener.NULL, TestFilter.Empty);
+            ITestResult result = runner.Run(TestListener.NULL, filter);
             ReportResults(result);
             string resultFile = commandLineOptions.ResultFile;
             if (resultFile != null)

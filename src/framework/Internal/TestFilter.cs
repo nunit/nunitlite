@@ -93,6 +93,7 @@ namespace NUnit.Framework.Internal
             return false;
 		}
 
+#if !NUNITLITE
         public static TestFilter FromXml(string xmlText)
         {
             XmlDocument doc = new XmlDocument();
@@ -153,6 +154,7 @@ namespace NUnit.Framework.Internal
 
             return result;
         }
+#endif
 
 		/// <summary>
 		/// Nested class provides an empty filter - one that always

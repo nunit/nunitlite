@@ -89,7 +89,7 @@ namespace NUnit.Framework.Constraints
         /// <returns>The path in standardized form</returns>
         protected string Canonicalize(string path)
         {
-#if CLR_2_0x || CLR_4_0
+#if (CLR_2_0x || CLR_4_0) && !NETCF
             string[] parts = path.Split(DirectorySeparatorChars, StringSplitOptions.RemoveEmptyEntries);
 #else
             string[] parts = path.Split(DirectorySeparatorChars);

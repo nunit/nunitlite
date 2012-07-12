@@ -45,17 +45,27 @@ namespace NUnit.Framework.Internal.Filters
 		/// Construct an empty SimpleNameFilter
 		/// </summary>
         public SimpleNameFilter() { }
-        
+
         /// <summary>
         /// Construct a SimpleNameFilter for a single name
         /// </summary>
-        /// <param name="namesToAdd">The name the filter will recognize. Separate multiple names with commas.</param>
-		public SimpleNameFilter( string namesToAdd )
+        /// <param name="namesToAdd">The name the filter will recognize.</param>
+        public SimpleNameFilter(string nameToAdd)
         {
-            Add(namesToAdd);
+            Add(nameToAdd);
         }
 
-		/// <summary>
+        /// <summary>
+        /// Construct a SimpleNameFilter for an array of names
+        /// </summary>
+        /// <param name="namesToAdd">The names the filter will recognize.</param>
+        public SimpleNameFilter(string[] namesToAdd)
+        {
+            foreach (string name in namesToAdd)
+                Add(name);
+        }
+
+        /// <summary>
 		/// Add a name to a SimpleNameFilter
 		/// </summary>
         /// <param name="name">The name to be added.</param>
