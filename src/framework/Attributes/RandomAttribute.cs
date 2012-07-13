@@ -48,6 +48,7 @@ namespace NUnit.Framework
         private double dmin, dmax;
 
         /// <summary>
+        /// Construct a set of Enums if the type is an Enum otherwise
         /// Construct a set of doubles from 0.0 to 1.0,
         /// specifying only the count.
         /// </summary>
@@ -98,7 +99,14 @@ namespace NUnit.Framework
             {
                 default:
                 case SampleType.Raw:
-                    values = r.GetDoubles(count);
+                    if (parameter.ParameterType.IsEnum)
+                    {
+                        values = r.GetEnums(count,parameter.ParameterType);
+                    }
+                    else
+                    {
+                        values = r.GetDoubles(count);
+                    }
                     break;
                 case SampleType.IntRange:
                     values = r.GetInts(min, max, count);
