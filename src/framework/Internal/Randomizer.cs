@@ -110,6 +110,19 @@ namespace NUnit.Framework.Internal
 
             return rvals;
         }
+        /// <summary>
+        /// Return an array of random Enums
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public object[] GetEnums(int count, Type enumType)
+        {
+            object[] rvals = new Enum[count];
+            for (int index = 0; index < count; index++)
+                rvals[index] = NextEnum(enumType);
+            return rvals;
+        }
 
         /// <summary>
         /// Return an array of random doubles with values in a specified range.
@@ -136,6 +149,25 @@ namespace NUnit.Framework.Internal
                 ivals[index] = Next(min, max);
 
             return ivals;
+        }
+        #endregion
+        #region Private Methods
+        /// <summary>
+        /// gets the next enum for the enumType
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        private object NextEnum(Type enumType)
+        {
+            if (enumType.IsEnum)
+            {
+                Array values = Enum.GetValues(enumType);
+                return values.GetValue(Next(values.Length));
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("The specified type: {0} was not an enum", enumType));
+            }
         }
         #endregion
     }
