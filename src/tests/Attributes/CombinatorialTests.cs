@@ -85,7 +85,7 @@ namespace NUnit.Framework.Attributes
         {
             Assert.That(x,Is.InRange(32,212));
             Assert.That(y,Is.InRange(0.0,1.0));
-            Assert.That(z, Is.TypeOf<AttributeTargets>());
+            Assert.That(z, Is.TypeOf(typeof(AttributeTargets)));
         }
 
         [Test, Sequential]
