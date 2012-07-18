@@ -58,27 +58,6 @@ namespace NUnitLite.Tests
         //
         //    -wait             Wait for a keypress before exiting.
         //
-        // Examples:
-        //
-        //  Sending output to the console works on desktop Windows and Windows CE.
-        //
-        //      new ConsoleUI().Execute( args );
-        //
-        //  Debug output works on all platforms.
-        //
-        //      new DebugUI().Execute( args );
-        //
-        //  Sending output to a file works on all platforms, but care must be taken
-        //  to write to an accessible location on some platforms.
-        //
-        //      string myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        //      string path = System.IO.Path.Combine( myDocs, "TestResult.txt" );
-        //      System.IO.TextWriter writer = new System.IO.StreamWriter(output);
-        //      new TextUI( writer ).Execute( args );
-        //      writer.Close();
-        //
-        //  NOTE: Sending output to TCP doesn't work yet
-        //
         static void Main(string[] args)
         {
             new TextUI().Execute(args);
