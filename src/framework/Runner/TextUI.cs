@@ -160,12 +160,20 @@ namespace NUnitLite.Runner
             ITestResult result = runner.Run(TestListener.NULL, filter);
             ReportResults(result);
             string resultFile = commandLineOptions.ResultFile;
-            if (resultFile != null)
+            string resultFormat = commandLineOptions.ResultFormat;
+                    
+            if (resultFile != null || commandLineOptions.ResultFormat != null)
             {
-                XmlTextWriter resultWriter = new XmlTextWriter(resultFile, System.Text.Encoding.UTF8);
-                resultWriter.Formatting = Formatting.Indented;
-                result.ToXml(true).WriteTo(resultWriter);
-                resultWriter.Close();
+                if (resultFile == null)
+                    resultFile = "TestResult.xml";
+
+                if (resultFormat == "nunit2")
+                    new NUnit2XmlOutputWriter().WriteResultFile(result, resultFile);
+                else
+                    new NUnit3XmlOutputWriter().WriteResultFile(result, resultFile);
+
+                Console.WriteLine();
+                Console.WriteLine("Results saved as {0}.", resultFile);
             }
         }
 

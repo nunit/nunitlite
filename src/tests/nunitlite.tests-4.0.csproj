@@ -63,6 +63,10 @@
       <Project>{C24A3FC4-2541-4E9C-BADD-564777610B75}</Project>
       <Name>nunitlite-2.0</Name>
     </ProjectReference>
+    <ProjectReference Include="..\mock-assembly\mock-assembly-4.0.csproj">
+      <Project>{961F4A5A-CAC4-4A53-9EF0-C6EE26A6429A}</Project>
+      <Name>mock-assembly-4.0</Name>
+    </ProjectReference>
     <ProjectReference Include="..\testdata\nunitlite.testdata-2.0.csproj">
       <Project>{442DAB16-3063-4FE3-90B6-C29C3D85360D}</Project>
       <Name>nunitlite.testdata-2.0</Name>
@@ -178,6 +182,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="RecordingTestListener.cs" />
     <Compile Include="Runner\CommandLineOptionTests.cs" />
+    <Compile Include="Runner\NUnit2XmlOutputWriterTests.cs" />
     <Compile Include="Syntax\CollectionTests.cs" />
     <Compile Include="Syntax\ComparisonTests.cs" />
     <Compile Include="Syntax\EqualityTests.cs" />

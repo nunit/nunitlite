@@ -48,6 +48,7 @@ namespace NUnitLite.Runner
 
         private string exploreFile;
         private string resultFile;
+        private string resultFormat;
         private string outFile;
 
         private bool error = false;
@@ -121,6 +122,11 @@ namespace NUnitLite.Runner
         public string ResultFile
         {
             get { return ExpandToFullPath(resultFile); }
+        }
+
+        public string ResultFormat
+        {
+            get { return resultFormat; }
         }
 
         /// <summary>
@@ -232,6 +238,11 @@ namespace NUnitLite.Runner
                 case "result":
                     resultFile = val;
                     break;
+                case "format":
+                    resultFormat = val;
+                    if (resultFormat != "nunit3" && resultFormat != "nunit2")
+                        error = true;
+                    break;
                 case "out":
                     outFile = val;
                     break;
@@ -267,6 +278,8 @@ namespace NUnitLite.Runner
                 StringBuilder sb = new StringBuilder();
                 foreach (string opt in invalidOptions)
                     sb.Append( "Invalid option: " + opt + NL );
+                if (resultFormat != null && resultFormat != "nunit3" && resultFormat != "nunit2")
+                    sb.Append("Invalid result format: " + resultFormat + NL);
                 return sb.ToString();
             }
         }
@@ -301,6 +314,8 @@ namespace NUnitLite.Runner
                 sb.Append("                  on devices without a Console." + NL + NL);
                 sb.Append("  -full           Prints full report of all test results." + NL + NL);
                 sb.Append("  -result:PATH    Path to a file to which the xml test result is written." + NL + NL);
+                sb.Append("  -format:FORMAT  Format in which the result is to be written. FORMAT must be" + NL);
+                sb.Append("                  either nunit3 or nunit2. The default is nunit3." + NL + NL);
                 sb.Append("  -explore[:PATH] If provided, this option indicates that the tests in the" + NL);
                 sb.Append("                  should be listed rather than executed. If a path is given" + NL);
                 sb.Append("                  it represents the file to which the listing is directed." + NL);

@@ -110,6 +110,8 @@ namespace NUnit.Framework.Internal
 
             return rvals;
         }
+
+#if !NETCF
         /// <summary>
         /// Return an array of random Enums
         /// </summary>
@@ -123,6 +125,7 @@ namespace NUnit.Framework.Internal
                 rvals[index] = NextEnum(enumType);
             return rvals;
         }
+#endif
 
         /// <summary>
         /// Return an array of random doubles with values in a specified range.
@@ -151,7 +154,10 @@ namespace NUnit.Framework.Internal
             return ivals;
         }
         #endregion
+
         #region Private Methods
+
+#if !NETCF
         /// <summary>
         /// gets the next enum for the enumType
         /// </summary>
@@ -169,6 +175,8 @@ namespace NUnit.Framework.Internal
                 throw new ArgumentException(string.Format("The specified type: {0} was not an enum", enumType));
             }
         }
+#endif
+
         #endregion
     }
 }

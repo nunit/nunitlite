@@ -229,24 +229,41 @@
     </csc>
 
 
-    <echo message="*"/>
-    <echo message="* Building nunitlite.testdata.dll"/>
-    <echo message="*"/>
+	  <echo message="*"/>
+	  <echo message="* Building nunitlite.testdata.dll"/>
+	  <echo message="*"/>
 
-    <csc target="library"
-        output="${current.build.dir}/nunitlite.testdata.dll"
-        debug="${build.debug}" 
-        define="${build.defines}">
-      <sources basedir="${project.src.dir}/testdata">
-        <include name="**/*.cs"/>
-      </sources>
-      <references basedir="${current.build.dir}">
-        <include name="mscorlib.dll"/>
-        <include name="nunitlite.dll"/>
-	  </references>
-    </csc>
+	  <csc target="library"
+		  output="${current.build.dir}/nunitlite.testdata.dll"
+		  debug="${build.debug}"
+		  define="${build.defines}">
+		  <sources basedir="${project.src.dir}/testdata">
+			  <include name="**/*.cs"/>
+		  </sources>
+		  <references basedir="${current.build.dir}">
+			  <include name="mscorlib.dll"/>
+			  <include name="nunitlite.dll"/>
+		  </references>
+	  </csc>
 
-    <echo message="*"/>
+	  <echo message="*"/>
+	  <echo message="* Building mock-assembly.dll"/>
+	  <echo message="*"/>
+
+	  <csc target="library"
+		  output="${current.build.dir}/mock-assembly.dll"
+		  debug="${build.debug}"
+		  define="${build.defines}">
+		  <sources basedir="${project.src.dir}/mock-assembly">
+			  <include name="**/*.cs"/>
+		  </sources>
+		  <references basedir="${current.build.dir}">
+			  <include name="mscorlib.dll"/>
+			  <include name="nunitlite.dll"/>
+		  </references>
+	  </csc>
+
+	  <echo message="*"/>
     <echo message="* Building nunitlite.tests.exe"/>
     <echo message="*"/>
 
@@ -264,6 +281,7 @@
 		<include name="System.Xml.dll"/>
         <include name="nunitlite.dll"/>
         <include name="nunitlite.testdata.dll"/>
+		<include name="mock-assembly.dll"/>
       </references>
     </csc>
 

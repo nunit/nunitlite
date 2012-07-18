@@ -37,6 +37,10 @@ namespace NUnitLite
         private int errorCount;
         private int failureCount;
         private int notRunCount;
+        private int inconclusiveCount;
+        private int ignoreCount;
+        private int skipCount;
+        private int invalidCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResultSummary"/> class.
@@ -83,6 +87,38 @@ namespace NUnitLite
             get { return notRunCount; }
         }
 
+        /// <summary>
+        /// Gets the ignore count
+        /// </summary>
+        public int IgnoreCount
+        {
+            get { return ignoreCount; }
+        }
+
+        /// <summary>
+        /// Gets the skip count
+        /// </summary>
+        public int SkipCount
+        {
+            get { return skipCount; }
+        }
+
+        /// <summary>
+        /// Gets the invalid count
+        /// </summary>
+        public int InvalidCount
+        {
+            get { return invalidCount; }
+        }
+
+        /// <summary>
+        /// Gets the count of inconclusive results
+        /// </summary>
+        public int InconclusiveCount
+        {
+            get { return inconclusiveCount; }
+        }
+
         private void Visit(ITestResult result)
         {
             if (result.Test is TestSuite)
@@ -93,9 +129,16 @@ namespace NUnitLite
             else
             {
                 testCount++;
+
                 switch (result.ResultState.Status)
                 {
                     case TestStatus.Skipped:
+                        if (result.ResultState == ResultState.Ignored)
+                            ignoreCount++;
+                        else if (result.ResultState == ResultState.Skipped)
+                            skipCount++;
+                        else if (result.ResultState == ResultState.NotRunnable)
+                            invalidCount++;
                         notRunCount++;
                         break;
                     case TestStatus.Failed:
@@ -103,6 +146,9 @@ namespace NUnitLite
                             failureCount++;
                         else
                             errorCount++;
+                        break;
+                    case TestStatus.Inconclusive:
+                        inconclusiveCount++;
                         break;
                     default:
                         break;

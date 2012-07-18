@@ -362,6 +362,8 @@
         <include name="tests/**/*.cs"/>
 		<include name="testdata/*.csproj"/>
         <include name="testdata/**/*.cs"/>
+		<include name="mock-assembly/*.csproj"/>
+		<include name="mock-assembly/**/*.cs"/>
 		<include name="TestResultConsole/*.csproj"/>
 		<include name="TestResultConsole/**/*.cs"/>
       </fileset>
