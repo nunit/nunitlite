@@ -309,24 +309,25 @@ namespace NUnitLite.Runner
                 sb.Append("Options:" + NL);
                 sb.Append("  -test:testname  Provides the name of a test to run. This option may be" + NL);
                 sb.Append("                  repeated. If no test names are given, all tests are run." + NL + NL);
-                sb.Append("  -out:PATH       Path to a file to which output is redirected. If this option" + NL);
-                sb.Append("                  is not used, output is to the Console, which means it is lost" + NL);
+                sb.Append("  -out:FILE       File to which output is redirected. If this option is not" + NL);
+                sb.Append("                  used, output is to the Console, which means it is lost" + NL);
                 sb.Append("                  on devices without a Console." + NL + NL);
                 sb.Append("  -full           Prints full report of all test results." + NL + NL);
-                sb.Append("  -result:PATH    Path to a file to which the xml test result is written." + NL + NL);
+                sb.Append("  -result:FILE    File to which the xml test result is written." + NL + NL);
                 sb.Append("  -format:FORMAT  Format in which the result is to be written. FORMAT must be" + NL);
                 sb.Append("                  either nunit3 or nunit2. The default is nunit3." + NL + NL);
-                sb.Append("  -explore[:PATH] If provided, this option indicates that the tests in the" + NL);
-                sb.Append("                  should be listed rather than executed. If a path is given" + NL);
-                sb.Append("                  it represents the file to which the listing is directed." + NL);
-                sb.Append("                  If no path is given, the listing displays on the Console." + NL + NL);
+                sb.Append("  -explore:FILE  If provided, this option indicates that the tests" + NL);
+                sb.Append("                  should be listed rather than executed. They are listed" + NL);
+                sb.Append("                  to the specified file in XML format." + NL);
                 sb.Append("  -help,-h        Displays this help" + NL + NL);
                 sb.Append("  -noheader,-noh  Suppresses display of the initial message" + NL + NL);
                 sb.Append("  -wait           Waits for a key press before exiting" + NL + NL);
 
                 sb.Append("Notes:" + NL);
-                sb.Append(" * Any relative path is based on the current directory or on the Documents" + NL);
-                sb.Append("   folder if running on a device under the compact framework." + NL + NL);
+                sb.Append(" * File names may be listed by themselves, with a relative path or " + NL);
+                sb.Append("   using an absolute path. Any relative path is based on the current " + NL);
+                sb.Append("   directory or on the Documents folder if running on a under the " +NL);
+                sb.Append("   compact framework." + NL + NL);
                 if (System.IO.Path.DirectorySeparatorChar != '/')
                     sb.Append(" * On Windows, options may be prefixed by a '/' character if desired" + NL + NL);
                 sb.Append(" * Options that take values may use an equal sign or a colon" + NL);
