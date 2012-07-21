@@ -172,7 +172,7 @@ namespace NUnit.Framework.Internal
     {
         protected override void SimulateTestRun()
         {
-            testResult.SetResult(ResultState.Success);
+            testResult.SetResult(ResultState.Success, "Test passed!");
             testResult.Time = 0.125;
             suiteResult.Time = 0.125;
             testResult.AssertCount = 2;
@@ -185,6 +185,7 @@ namespace NUnit.Framework.Internal
             Assert.True(testResult.ResultState == ResultState.Success);
             Assert.AreEqual(TestStatus.Passed, testResult.ResultState.Status);
             Assert.That(testResult.ResultState.Label, Is.Empty);
+            Assert.AreEqual("Test passed!", testResult.Message);
             Assert.AreEqual(0.125, testResult.Time);
         }
 
@@ -210,6 +211,12 @@ namespace NUnit.Framework.Internal
             Assert.AreEqual("Passed", testNode.Attributes["result"].Value);
             Assert.AreEqual("0.125", testNode.Attributes["time"].Value);
             Assert.AreEqual("2", testNode.Attributes["asserts"].Value);
+
+            XmlNode reason = testNode.SelectSingleNode("reason");
+            Assert.NotNull(reason);
+            Assert.NotNull(reason.SelectSingleNode("message"));
+            Assert.AreEqual("Test passed!", reason.SelectSingleNode("message").InnerText);
+            Assert.Null(reason.SelectSingleNode("stack-trace"));
         }
 
         [Test]
@@ -244,8 +251,8 @@ namespace NUnit.Framework.Internal
         }
 
         [Test]
-		public void TestResultIsIgnored()
-		{
+        public void TestResultIsIgnored()
+        {
             Assert.AreEqual(ResultState.Ignored, testResult.ResultState);
             Assert.AreEqual(TestStatus.Skipped, testResult.ResultState.Status);
             Assert.AreEqual("Ignored", testResult.ResultState.Label);
@@ -382,6 +389,74 @@ namespace NUnit.Framework.Internal
             Assert.AreEqual("0", suiteNode.Attributes["skipped"].Value);
             Assert.AreEqual("0", suiteNode.Attributes["inconclusive"].Value);
             Assert.AreEqual("3", suiteNode.Attributes["asserts"].Value);
+        }
+
+        [Test]
+        public void SuiteResultXmlNodeHasOneChildTest()
+        {
+            XmlNode suiteNode = suiteResult.ToXml(true);
+
+            Assert.AreEqual(1, suiteNode.SelectNodes("test-case").Count);
+        }
+    }
+
+    public class InconclusiveResultTests : TestResultTests
+    {
+        protected override void SimulateTestRun()
+        {
+            testResult.SetResult(ResultState.Inconclusive, "because");
+            suiteResult.AddResult(testResult);
+        }
+
+        [Test]
+        public void TestResultIsInconclusive()
+        {
+            Assert.AreEqual(ResultState.Inconclusive, testResult.ResultState);
+            Assert.AreEqual(TestStatus.Inconclusive, testResult.ResultState.Status);
+            Assert.That(testResult.ResultState.Label, Is.Empty);
+            Assert.AreEqual("because", testResult.Message);
+        }
+
+        [Test]
+        public void SuiteResultIsInconclusive()
+        {
+            Assert.AreEqual(ResultState.Inconclusive, suiteResult.ResultState);
+            Assert.AreEqual(TestStatus.Inconclusive, suiteResult.ResultState.Status);
+            Assert.Null(suiteResult.Message);
+
+            Assert.AreEqual(0, suiteResult.PassCount);
+            Assert.AreEqual(0, suiteResult.FailCount);
+            Assert.AreEqual(0, suiteResult.SkipCount);
+            Assert.AreEqual(1, suiteResult.InconclusiveCount);
+            Assert.AreEqual(0, suiteResult.AssertCount);
+        }
+
+        [Test]
+        public void TestResultXmlNodeIsInconclusive()
+        {
+            XmlNode testNode = testResult.ToXml(true);
+
+            Assert.AreEqual("Inconclusive", testNode.Attributes["result"].Value);
+            Assert.Null(testNode.Attributes["label"]);
+            XmlNode reason = testNode.SelectSingleNode("reason");
+            Assert.NotNull(reason);
+            Assert.NotNull(reason.SelectSingleNode("message"));
+            Assert.AreEqual("because", reason.SelectSingleNode("message").InnerText);
+            Assert.Null(reason.SelectSingleNode("stack-trace"));
+        }
+
+        [Test]
+        public void SuiteResultXmlNodeIsInconclusive()
+        {
+            XmlNode suiteNode = suiteResult.ToXml(true);
+
+            Assert.AreEqual("Inconclusive", suiteNode.Attributes["result"].Value);
+            Assert.IsNull(suiteNode.Attributes["label"]);
+            Assert.AreEqual("0", suiteNode.Attributes["passed"].Value);
+            Assert.AreEqual("0", suiteNode.Attributes["failed"].Value);
+            Assert.AreEqual("0", suiteNode.Attributes["skipped"].Value);
+            Assert.AreEqual("1", suiteNode.Attributes["inconclusive"].Value);
+            Assert.AreEqual("0", suiteNode.Attributes["asserts"].Value);
         }
 
         [Test]
