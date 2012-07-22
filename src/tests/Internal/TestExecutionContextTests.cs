@@ -41,8 +41,8 @@ namespace NUnit.Framework.Internal
 	[TestFixture]
 	public class TestExecutionContextTests
 	{
-		string currentDirectory;
 #if !NETCF
+        string currentDirectory;
         CultureInfo currentCulture;
         CultureInfo currentUICulture;
         IPrincipal currentPrincipal;

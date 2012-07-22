@@ -35,7 +35,8 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// Initializes a new instance of the <see cref="TestAssembly"/> class.
         /// </summary>
-        /// <param name="path">The path.</param>
+        /// <param name="assembly">The assembly containing the tests.</param>
+        /// <param name="path">The path used to load the assembly.</param>
         public TestAssembly(Assembly assembly, string path) : base(path) 
         {
             this.Name = Path.GetFileName(path);

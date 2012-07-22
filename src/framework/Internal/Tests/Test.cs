@@ -183,7 +183,6 @@ namespace NUnit.Framework.Internal
             set { runState = value; }
         }
 
-        /// </summary>
         /// <summary>
         /// Gets the name used for the top-level element in the
         /// XML representation of this test

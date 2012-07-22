@@ -51,8 +51,7 @@ namespace NUnit.Framework.Internal.Commands
         /// <summary>
         /// TODO: Documentation needed for method
         /// </summary>
-        /// <param name="testObject">The object on which the test should run.</param>
-        /// <param name="arguments">The arguments to be used in running the test or null.</param>
+        /// <param name="context">The execution context in which the test should run.</param>
         /// <returns>A TestResult</returns>
         public override TestResult Execute(TestExecutionContext context)
         {

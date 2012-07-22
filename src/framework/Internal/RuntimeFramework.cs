@@ -381,7 +381,7 @@ namespace NUnit.Framework.Internal
         /// are equal. Negative (i.e. unspecified) version
         /// components are ignored.
         /// </summary>
-        /// <param name="other">The RuntimeFramework to be matched.</param>
+        /// <param name="target">The RuntimeFramework to be matched.</param>
         /// <returns>True on match, otherwise false</returns>
         public bool Supports(RuntimeFramework target)
         {

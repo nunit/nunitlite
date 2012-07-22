@@ -39,6 +39,7 @@ namespace NUnit.Framework
         #region Instance variables
 
         private object[] arguments;
+        // NOTE: Ignore unsupressed warning about exceptionData in .NET 1.1 build
         private ExpectedExceptionData exceptionData;
         private object expectedResult;
         private bool hasExpectedResult;

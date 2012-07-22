@@ -176,6 +176,7 @@ namespace NUnit.Framework.Internal
         public void EnumeratorReturnsAllEntries()
         {
             int count = 0;
+            // NOTE: Ignore unsuppressed warning about entry in .NET 1.1 build
             foreach (PropertyEntry entry in bag)
                 ++count;
             Assert.That(count, Is.EqualTo(3));

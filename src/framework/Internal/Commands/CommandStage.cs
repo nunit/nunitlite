@@ -69,6 +69,9 @@ namespace NUnit.Framework.Internal.Commands
         /// </summary>
         CreateThread,
 
+        /// <summary>
+        /// Run the test repeatedly, returning a single result
+        /// </summary>
         Repeat,
 
         /// <summary>

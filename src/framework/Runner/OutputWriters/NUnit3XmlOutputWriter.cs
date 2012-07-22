@@ -28,8 +28,17 @@ using NUnit.Framework.Api;
 
 namespace NUnitLite.Runner
 {
+    /// <summary>
+    /// NUnit3XmlOutputWriter is responsible for writing the results
+    /// of a test to a file in NUnit 3.0 format.
+    /// </summary>
     public class NUnit3XmlOutputWriter : OutputWriter
     {
+        /// <summary>
+        /// Writes the test result to the specified TextWriter
+        /// </summary>
+        /// <param name="result">The result to be written to a file</param>
+        /// <param name="writer">A TextWriter to which the result is written</param>
         public override void WriteResultFile(ITestResult result, TextWriter writer)
         {
             // NOTE: Under .NET 1.1, XmlTextWriter does not implement IDisposable,

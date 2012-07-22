@@ -34,7 +34,7 @@ namespace NUnit.Framework.Internal.Commands
         private readonly object[] arguments;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TestCaseCommand"/> class.
+        /// Initializes a new instance of the <see cref="TestMethodCommand"/> class.
         /// </summary>
         /// <param name="test">The test.</param>
         public TestMethodCommand(Test test) : base(test)
@@ -44,10 +44,9 @@ namespace NUnit.Framework.Internal.Commands
         }
 
         /// <summary>
-        /// Runs the test, saving a TestResult in
-        /// TestExecutionContext.CurrentContext.CurrentResult
+        /// Runs the test, saving a TestResult in the execution context.
         /// </summary>
-        /// <param name="testObject"></param>
+        /// <param name="context">The execution context</param>
         public override TestResult Execute(TestExecutionContext context)
         {
             object result = Reflect.InvokeMethod(testMethod.Method, context.TestObject, arguments);

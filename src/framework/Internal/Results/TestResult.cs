@@ -98,6 +98,9 @@ namespace NUnit.Framework.Internal
 
         #region ITestResult Members
 
+        /// <summary>
+        /// Gets the test with which this result is associated.
+        /// </summary>
         public ITest Test
         {
             get { return test; }
@@ -300,6 +303,11 @@ namespace NUnit.Framework.Internal
 
         #endregion
 
+        /// <summary>
+        /// Adds a child result to this result, setting this result's
+        /// ResultState to Failure if the child result failed.
+        /// </summary>
+        /// <param name="result">The result to be added</param>
         public void AddResult(ITestResult result)
         {
             if (children == null)

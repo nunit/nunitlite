@@ -257,6 +257,12 @@ namespace NUnit.Framework.Internal
             return new TestSuiteResult(this);
         }
 
+        /// <summary>
+        /// Creates a test command for this suite, including any child
+        /// tests that jpass the provided filter.
+        /// </summary>
+        /// <param name="filter">Filter to be used for child tests</param>
+        /// <returns></returns>
         protected override TestCommand MakeTestCommand(ITestFilter filter)
         {
             TestCommand command = new TestSuiteCommand(this);

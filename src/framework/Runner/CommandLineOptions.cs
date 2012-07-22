@@ -124,6 +124,9 @@ namespace NUnitLite.Runner
             get { return ExpandToFullPath(resultFile); }
         }
 
+        /// <summary>
+        /// Gets the format to be used for test results
+        /// </summary>
         public string ResultFormat
         {
             get { return resultFormat; }

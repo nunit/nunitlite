@@ -218,6 +218,13 @@ namespace NUnit.Framework.Internal
             get { return "test-case"; }
         }
 
+        /// <summary>
+        /// Creates and returns a test command for use in running
+        /// this test. Child tests are included in the command only
+        /// if they pass the supplied filter.
+        /// </summary>
+        /// <param name="filter">A test filter to be applied to any child tests.</param>
+        /// <returns></returns>
         protected override TestCommand MakeTestCommand(ITestFilter filter)
         {
             TestCommand command = new TestMethodCommand(this);

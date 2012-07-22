@@ -37,6 +37,10 @@ using System.Collections.Specialized;
 
 namespace NUnitLite.Runner
 {
+    /// <summary>
+    /// NUnit2XmlOutputWriter is able to create an xml file representing
+    /// the result of a test run in NUnit 2.x format.
+    /// </summary>
     public class NUnit2XmlOutputWriter : OutputWriter
     {
         private XmlWriter xmlWriter;
@@ -59,6 +63,11 @@ namespace NUnitLite.Runner
             resultStates["Skipped:Invalid"] = "NotRunnable";
         }
 
+        /// <summary>
+        /// Writes the result of a test run to a specified TextWriter.
+        /// </summary>
+        /// <param name="result">The test result for the run</param>
+        /// <param name="writer">The TextWriter to which the xml will be written</param>
         public override void WriteResultFile(ITestResult result, TextWriter writer)
         {
             // NOTE: Under .NET 1.1, XmlTextWriter does not implement IDisposable,

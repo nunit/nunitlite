@@ -49,7 +49,7 @@ namespace NUnit.Framework.Internal.Filters
         /// <summary>
         /// Construct a SimpleNameFilter for a single name
         /// </summary>
-        /// <param name="namesToAdd">The name the filter will recognize.</param>
+        /// <param name="nameToAdd">The name the filter will recognize.</param>
         public SimpleNameFilter(string nameToAdd)
         {
             Add(nameToAdd);

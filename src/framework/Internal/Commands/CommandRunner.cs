@@ -4,15 +4,15 @@ using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal.Commands
 {
+    /// <summary>
+    /// CommandRunner class is used to execute test commands.
+    /// </summary>
     public class CommandRunner
     {
-        private ITestListener listener;
-
         /// <summary>
-        /// Runs a TestCommand, sending notifications to a listener.
+        /// Runs a TestCommand and returns the result.
         /// </summary>
         /// <param name="command">A TestCommand to be executed.</param>
-        /// <param name="context">The context in which to execute the command.</param>
         /// <returns>A TestResult.</returns>
         public static TestResult Execute(TestCommand command)
         {
@@ -20,7 +20,6 @@ namespace NUnit.Framework.Internal.Commands
 
             TestExecutionContext.Save();
             TestExecutionContext context = TestExecutionContext.CurrentContext;
-            //context = new TestExecutionContext(context);
 
             context.CurrentTest = command.Test;
             context.CurrentResult = command.Test.MakeTestResult();
@@ -62,8 +61,6 @@ namespace NUnit.Framework.Internal.Commands
             finally
             {
                 TestExecutionContext.Restore();
-                //context.ReverseChanges();
-                //context = context.prior;
             }
 
             return testResult;
@@ -71,7 +68,6 @@ namespace NUnit.Framework.Internal.Commands
 
         private static TestResult ExecuteSuiteCommand(TestSuiteCommand command, TestExecutionContext context)
         {
-            //return command.Execute(context);
             TestSuiteResult suiteResult = context.CurrentResult as TestSuiteResult;
             System.Diagnostics.Debug.Assert(suiteResult != null);
 
@@ -108,6 +104,12 @@ namespace NUnit.Framework.Internal.Commands
             return suiteResult;
         }
 
+        /// <summary>
+        /// Runs the child commands for a TestSuiteCommand, using the context provided.
+        /// </summary>
+        /// <param name="command">The TestSuiteCommand whose child tests are to be run</param>
+        /// <param name="context">The context in which to run the tests</param>
+        /// <returns></returns>
         public static TestSuiteResult RunChildCommands(TestSuiteCommand command, TestExecutionContext context)
         {
             TestSuiteResult suiteResult = TestExecutionContext.CurrentContext.CurrentResult as TestSuiteResult;

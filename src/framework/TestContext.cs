@@ -157,7 +157,8 @@ namespace NUnit.Framework
             }
 
             /// <summary>
-            /// The name of the test.
+            /// The name of the test, which may or may not be 
+            /// the same as the method name.
             /// </summary>
             public string Name
             {
@@ -167,6 +168,9 @@ namespace NUnit.Framework
                 }
             }
 			
+            /// <summary>
+            /// The name of the method representing the test.
+            /// </summary>
 			public string MethodName
 			{
 				get
