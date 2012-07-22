@@ -111,7 +111,6 @@ namespace NUnit.Framework.Internal
             return rvals;
         }
 
-#if !NETCF
         /// <summary>
         /// Return an array of random Enums
         /// </summary>
@@ -120,12 +119,21 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         public object[] GetEnums(int count, Type enumType)
         {
+            if (!enumType.IsEnum)
+                throw new ArgumentException(string.Format("The specified type: {0} was not an enum", enumType));
+
+#if !NETCF
+            Array values = Enum.GetValues(enumType);
+#else
+            Array values = GetEnumValues(enumType);
+#endif
             object[] rvals = new Enum[count];
+
             for (int index = 0; index < count; index++)
-                rvals[index] = NextEnum(enumType);
+                rvals[index] = values.GetValue(Next(values.Length));
+
             return rvals;
         }
-#endif
 
         /// <summary>
         /// Return an array of random doubles with values in a specified range.
@@ -153,27 +161,22 @@ namespace NUnit.Framework.Internal
 
             return ivals;
         }
+
         #endregion
 
         #region Private Methods
 
-#if !NETCF
-        /// <summary>
-        /// gets the next enum for the enumType
-        /// </summary>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
-        private object NextEnum(Type enumType)
+#if NETCF
+        private Array GetEnumValues(Type enumType)
         {
-            if (enumType.IsEnum)
-            {
-                Array values = Enum.GetValues(enumType);
-                return values.GetValue(Next(values.Length));
-            }
-            else
-            {
-                throw new ArgumentException(string.Format("The specified type: {0} was not an enum", enumType));
-            }
+            FieldInfo[] fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            Array enumValues = Array.CreateInstance(enumType, fields.Length);
+
+            for (int index = 0; index < fields.Length; index++)
+                enumValues.SetValue(fields[index].GetValue(enumType), index);
+
+            return enumValues;
         }
 #endif
 

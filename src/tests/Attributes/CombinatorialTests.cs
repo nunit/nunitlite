@@ -80,20 +80,13 @@ namespace NUnit.Framework.Attributes
         
         [Test, Sequential]
         public void RandomTest(
-#if NETCF
-            [Random(32, 212, 5)] int x,
-            [Random(5)] double y)
-#else
             [Random(32, 212, 5)] int x,
             [Random(5)] double y,
             [Random(5)] AttributeTargets z)
-#endif
         {
             Assert.That(x,Is.InRange(32,212));
             Assert.That(y,Is.InRange(0.0,1.0));
-#if !NETCF
             Assert.That(z, Is.TypeOf(typeof(AttributeTargets)));
-#endif
         }
 
         [Test, Sequential]

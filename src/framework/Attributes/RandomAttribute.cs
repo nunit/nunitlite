@@ -37,6 +37,7 @@ namespace NUnit.Framework
     {
         enum SampleType
         {
+            Auto,
             Raw,
             IntRange,
             DoubleRange
@@ -99,11 +100,9 @@ namespace NUnit.Framework
             {
                 default:
                 case SampleType.Raw:
-#if !NETCF
                     if (parameter.ParameterType.IsEnum)
                         values = r.GetEnums(count,parameter.ParameterType);
                     else
-#endif
                         values = r.GetDoubles(count);
                     break;
                 case SampleType.IntRange:
