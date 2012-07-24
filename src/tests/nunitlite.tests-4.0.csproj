@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Constraints\BinarySerializableTest.cs" />
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
+    <Compile Include="Constraints\PredicateConstraintTests.cs" />
     <Compile Include="Constraints\UniqueItemsConstraintTests.cs">
       <SubType>Code</SubType>
     </Compile>

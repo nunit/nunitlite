@@ -181,6 +181,7 @@
     <Compile Include="Constraints\Operators\WithOperator.cs" />
     <Compile Include="Constraints\OrConstraint.cs" />
     <Compile Include="Constraints\PathConstraint.cs" />
+    <Compile Include="Constraints\PredicateConstraint.cs" />
     <Compile Include="Constraints\PrefixConstraint.cs" />
     <Compile Include="Constraints\PropertyConstraint.cs" />
     <Compile Include="Constraints\PropertyExistsConstraint.cs" />
