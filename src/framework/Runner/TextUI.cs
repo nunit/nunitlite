@@ -220,8 +220,6 @@ namespace NUnitLite.Runner
 
             if (commandLineOptions.OutFile != null)
                 this.writer = new StreamWriter(commandLineOptions.OutFile);
-            else
-                this.writer = ConsoleWriter.Out;
 
             if (!commandLineOptions.NoHeader)
                 WriteCopyright();
