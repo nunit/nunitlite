@@ -191,6 +191,7 @@
     <Compile Include="Constraints\RangeConstraint.cs" />
     <Compile Include="Constraints\RegexConstraint.cs" />
     <Compile Include="Constraints\ResolvableConstraintExpression.cs" />
+    <Compile Include="Constraints\ReusableConstraint.cs" />
     <Compile Include="Constraints\SameAsConstraint.cs" />
     <Compile Include="Constraints\SamePathConstraint.cs" />
     <Compile Include="Constraints\SamePathOrUnderConstraint.cs" />

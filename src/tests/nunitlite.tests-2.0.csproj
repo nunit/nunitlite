@@ -127,6 +127,7 @@
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
     <Compile Include="Constraints\ExactCountConstraintTests.cs" />
     <Compile Include="Constraints\PredicateConstraintTests.cs" />
+    <Compile Include="Constraints\ReusableConstraintTests.cs" />
     <Compile Include="Constraints\UniqueItemsConstraintTests.cs">
       <SubType>Code</SubType>
     </Compile>
