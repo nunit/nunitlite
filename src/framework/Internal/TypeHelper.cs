@@ -292,5 +292,27 @@ namespace NUnit.Framework.Internal
             return false;
         }
 #endif
+
+        /// <summary>
+        /// Gets the values for an enumeration, using Enum.GetTypes
+        /// where available, otherwise through reflection.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static Array GetEnumValues(Type enumType)
+        {
+#if NETCF
+            FieldInfo[] fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            Array enumValues = Array.CreateInstance(enumType, fields.Length);
+
+            for (int index = 0; index < fields.Length; index++)
+                enumValues.SetValue(fields[index].GetValue(enumType), index);
+
+            return enumValues;
+#else
+            return Enum.GetValues(enumType);
+#endif
+        }
     }
 }

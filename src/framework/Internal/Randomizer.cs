@@ -125,7 +125,7 @@ namespace NUnit.Framework.Internal
 #if !NETCF
             Array values = Enum.GetValues(enumType);
 #else
-            Array values = GetEnumValues(enumType);
+            Array values = TypeHelper.GetEnumValues(enumType);
 #endif
             object[] rvals = new Enum[count];
 
@@ -161,24 +161,6 @@ namespace NUnit.Framework.Internal
 
             return ivals;
         }
-
-        #endregion
-
-        #region Private Methods
-
-#if NETCF
-        private Array GetEnumValues(Type enumType)
-        {
-            FieldInfo[] fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
-
-            Array enumValues = Array.CreateInstance(enumType, fields.Length);
-
-            for (int index = 0; index < fields.Length; index++)
-                enumValues.SetValue(fields[index].GetValue(enumType), index);
-
-            return enumValues;
-        }
-#endif
 
         #endregion
     }
