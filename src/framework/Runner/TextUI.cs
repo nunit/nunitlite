@@ -25,8 +25,6 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Reflection;
-using System.Xml;
-using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Filters;
@@ -182,10 +180,10 @@ namespace NUnitLite.Runner
             XmlNode testNode = runner.LoadedTest.ToXml(true);
 
             string listFile = commandLineOptions.ExploreFile;
-            XmlTextWriter testWriter = listFile != null && listFile.Length > 0
-                ? new XmlTextWriter(listFile, System.Text.Encoding.UTF8)
-                : new XmlTextWriter(Console.Out);
-            testWriter.Formatting = Formatting.Indented;
+            System.Xml.XmlTextWriter testWriter = listFile != null && listFile.Length > 0
+                ? new System.Xml.XmlTextWriter(listFile, System.Text.Encoding.UTF8)
+                : new System.Xml.XmlTextWriter(Console.Out);
+            testWriter.Formatting = System.Xml.Formatting.Indented;
             testNode.WriteTo(testWriter);
             testWriter.Close();
         }

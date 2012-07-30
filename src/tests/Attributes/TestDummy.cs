@@ -124,12 +124,12 @@ namespace NUnit.Framework.Attributes
 
         #region IXmlNodeBuilder Members
 
-        public System.Xml.XmlNode ToXml(bool recursive)
+        public XmlNode ToXml(bool recursive)
         {
             throw new NotImplementedException();
         }
 
-        public System.Xml.XmlNode AddToXml(System.Xml.XmlNode parentNode, bool recursive)
+        public XmlNode AddToXml(XmlNode parentNode, bool recursive)
         {
             throw new NotImplementedException();
         }

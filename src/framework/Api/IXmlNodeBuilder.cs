@@ -4,7 +4,9 @@ namespace NUnit.Framework.Api
 {
     /// <summary>
     /// An object implementing IXmlNodeBuilder is able to build 
-    /// an XmlNode representation of itself and any children.
+    /// an XmlResult representation of itself and any children.
+    /// Note that the interface refers to the implementation
+    /// of XmlNode in the NUnit.Framework.Api namespace.
     /// </summary>
     public interface IXmlNodeBuilder
     {
@@ -13,7 +15,7 @@ namespace NUnit.Framework.Api
         /// </summary>
         /// <param name="recursive">If true, children are included where applicable</param>
         /// <returns>An XmlNode representing the result</returns>
-        System.Xml.XmlNode ToXml(bool recursive);
+        XmlNode ToXml(bool recursive);
 
         /// <summary>
         /// Returns an XmlNode representing the current object after 
@@ -22,6 +24,6 @@ namespace NUnit.Framework.Api
         /// <param name="parentNode">The parent node.</param>
         /// <param name="recursive">If true, children are included, where applicable</param>
         /// <returns></returns>
-        System.Xml.XmlNode AddToXml(System.Xml.XmlNode parentNode, bool recursive);
+        XmlNode AddToXml(XmlNode parentNode, bool recursive);
     }
 }

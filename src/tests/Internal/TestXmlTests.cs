@@ -1,6 +1,4 @@
-﻿using System;
-using System.Xml;
-using NUnit.Framework.Api;
+﻿using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal
 {
@@ -109,9 +107,9 @@ namespace NUnit.Framework.Internal
             //}
 
             Assert.That(topNode.Name, Is.EqualTo(test.XmlElementName));
-            Assert.That(topNode.Attributes["id"].Value, Is.EqualTo(test.Id.ToString()));
-            Assert.That(topNode.Attributes["name"].Value, Is.EqualTo(test.Name));
-            Assert.That(topNode.Attributes["fullname"].Value, Is.EqualTo(test.FullName));
+            Assert.That(topNode.Attributes["id"], Is.EqualTo(test.Id.ToString()));
+            Assert.That(topNode.Attributes["name"], Is.EqualTo(test.Name));
+            Assert.That(topNode.Attributes["fullname"], Is.EqualTo(test.FullName));
 
             // TODO: Replace SelectSingleNode to allow testing under CF 1.0
 #if !NETCF_1_0
@@ -123,16 +121,16 @@ namespace NUnit.Framework.Internal
                 foreach (PropertyEntry entry in test.Properties)
                     expectedProps[count++] = entry.ToString();
 
-                XmlNode propsNode = topNode.SelectSingleNode("properties");
+                XmlNode propsNode = topNode.FindDescendant("properties");
                 Assert.NotNull(propsNode);
 
                 int actualCount = propsNode.ChildNodes.Count;
                 string[] actualProps = new string[actualCount];
                 for (int i = 0; i < actualCount; i++)
                 {
-                    XmlNode node = propsNode.ChildNodes[i];
-                    string name = node.Attributes["name"].Value;
-                    string value = node.Attributes["value"].Value;
+                    XmlNode node = propsNode.ChildNodes[i] as XmlNode;
+                    string name = node.Attributes["name"];
+                    string value = node.Attributes["value"];
                     actualProps[i] = name + "=" + value.ToString();
                 }
 
@@ -147,7 +145,7 @@ namespace NUnit.Framework.Internal
                     foreach (Test child in suite.Tests)
                     {
                         string xpathQuery = string.Format("{0}[@id={1}]", child.XmlElementName, child.Id);
-                        XmlNode childNode = topNode.SelectSingleNode(xpathQuery);
+                        XmlNode childNode = topNode.FindDescendant(xpathQuery);
                         Assert.NotNull(childNode, "Expected node for test with ID={0}, Name={1}", child.Id, child.Name);
 
                         CheckXmlForTest(child, childNode, recursive);

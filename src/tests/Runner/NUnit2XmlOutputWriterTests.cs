@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using NUnit.Framework;
-using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 using NUnit.Tests.Assemblies;
 
@@ -211,14 +208,6 @@ namespace NUnitLite.Runner.Tests
             Assert.That(attr, Is.Not.Null, "Missing attribute {0} on element {1}", name, node.Name);
 
             return attr.Value;
-        }
-
-        private XmlNode RequiredElement(string name)
-        {
-            XmlNode element = topNode.SelectSingleNode(name);
-            Assert.That(element, Is.Not.Null, "Missing element {0}", name);
-            Assert.That(element.NodeType, Is.EqualTo(XmlNodeType.Element));
-            return element;
         }
 
         #endregion

@@ -22,8 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
-using System.Xml;
 using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal
@@ -77,7 +75,7 @@ namespace NUnit.Framework.Internal
 #if CLR_2_0 || CLR_4_0
         private System.Collections.Generic.List<ITestResult> children;
 #else
-        private ArrayList children;
+        private System.Collections.ArrayList children;
 #endif
 
         #endregion
@@ -220,12 +218,12 @@ namespace NUnit.Framework.Internal
             }
         }
 #else
-        public IList Children
+        public System.Collections.IList Children
         {
             get 
             {
                 if (children == null)
-                    children = new ArrayList();
+                    children = new System.Collections.ArrayList();
 
                 return children;
             }
@@ -243,7 +241,7 @@ namespace NUnit.Framework.Internal
         /// <returns>An XmlNode representing the result</returns>
         public XmlNode ToXml(bool recursive)
         {
-            XmlNode topNode = XmlHelper.CreateTopLevelElement("dummy");
+            XmlNode topNode = XmlNode.CreateTopLevelElement("dummy");
 
             AddToXml(topNode, recursive);
 
@@ -262,22 +260,22 @@ namespace NUnit.Framework.Internal
             // A result node looks like a test node with extra info added
             XmlNode thisNode = this.test.AddToXml(parentNode, false);
 
-            XmlHelper.AddAttribute(thisNode, "result", ResultState.Status.ToString());
+            thisNode.AddAttribute("result", ResultState.Status.ToString());
             if (ResultState.Label != string.Empty) // && ResultState.Label != ResultState.Status.ToString())
-                XmlHelper.AddAttribute(thisNode, "label", ResultState.Label);
+                thisNode.AddAttribute("label", ResultState.Label);
 
-            XmlHelper.AddAttribute(thisNode, "time", this.Time.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture));
+            thisNode.AddAttribute("time", this.Time.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture));
 
             if (this.test is TestSuite)
             {
-                XmlHelper.AddAttribute(thisNode, "total", (PassCount + FailCount + SkipCount + InconclusiveCount).ToString());
-                XmlHelper.AddAttribute(thisNode, "passed", PassCount.ToString());
-                XmlHelper.AddAttribute(thisNode, "failed", FailCount.ToString());
-                XmlHelper.AddAttribute(thisNode, "inconclusive", InconclusiveCount.ToString());
-                XmlHelper.AddAttribute(thisNode, "skipped", SkipCount.ToString());
+                thisNode.AddAttribute("total", (PassCount + FailCount + SkipCount + InconclusiveCount).ToString());
+                thisNode.AddAttribute("passed", PassCount.ToString());
+                thisNode.AddAttribute("failed", FailCount.ToString());
+                thisNode.AddAttribute("inconclusive", InconclusiveCount.ToString());
+                thisNode.AddAttribute("skipped", SkipCount.ToString());
             }
 
-            XmlHelper.AddAttribute(thisNode, "asserts", this.AssertCount.ToString());
+            thisNode.AddAttribute("asserts", this.AssertCount.ToString());
 
             switch (ResultState.Status)
             {
@@ -314,7 +312,7 @@ namespace NUnit.Framework.Internal
 #if CLR_2_0 || CLR_4_0
                 children = new System.Collections.Generic.List<ITestResult>();
 #else
-                children = new ArrayList();
+                children = new System.Collections.ArrayList();
 #endif
 
             children.Add(result);
@@ -412,8 +410,8 @@ namespace NUnit.Framework.Internal
         /// <returns>The new reason element.</returns>
         private XmlNode AddReasonElement(XmlNode targetNode)
         {
-            XmlNode reasonNode = XmlHelper.AddElement(targetNode, "reason");
-            XmlHelper.AddElementWithCDataSection(reasonNode, "message", this.Message);
+            XmlNode reasonNode = targetNode.AddElement("reason");
+            reasonNode.AddElement("message").TextContent = this.Message;
             return reasonNode;
         }
 
@@ -424,17 +422,17 @@ namespace NUnit.Framework.Internal
         /// <returns>The new failure element.</returns>
         private XmlNode AddFailureElement(XmlNode targetNode)
         {
-            XmlNode failureNode = XmlHelper.AddElement(targetNode, "failure");
+            XmlNode failureNode = targetNode.AddElement("failure");
 
             if (this.Message != null)
             {
-                XmlHelper.AddElementWithCDataSection(failureNode, "message", this.Message);
+                failureNode.AddElement("message").TextContent = this.Message;
             }
 
 #if !NETCF_1_0
             if (this.StackTrace != null)
             {
-                XmlHelper.AddElementWithCDataSection(failureNode, "stack-trace", this.StackTrace);
+                failureNode.AddElement("stack-trace").TextContent = this.StackTrace;
             }
 #endif
 

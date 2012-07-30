@@ -24,7 +24,6 @@
 using System;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
 using System.Xml;
 using System.IO;
 using NUnit.Framework.Api;
