@@ -105,9 +105,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\framework\nunitlite-2.0.csproj">
-      <Project>{C24A3FC4-2541-4E9C-BADD-564777610B75}</Project>
-      <Name>nunitlite-2.0</Name>
+    <ProjectReference Include="..\framework\nunitlite-3.5.csproj">
+      <Project>{43B24DC5-16D6-45EF-93F1-B021B785A892}</Project>
+      <Name>nunitlite-3.5</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
