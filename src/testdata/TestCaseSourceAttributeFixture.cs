@@ -53,7 +53,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
             Assert.Ignore("Ignore this");
         }
 
-        private static object[] source = new object[] {
+        static object[] source = new object[] {
             new TestCaseData( 2, 3, 4 ).Throws(typeof(ArgumentNullException)) };
 
         [TestCaseSource("ignored_source")]
@@ -66,7 +66,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
         {
         }
 
-        private static IEnumerable ignored_source
+        static IEnumerable ignored_source
         {
             get
             {
@@ -78,7 +78,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
             }
         }
 
-        private static IEnumerable explicit_source
+        static IEnumerable explicit_source
         {
             get
             {
@@ -96,7 +96,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
         {
         }
 
-        private static IEnumerable exception_source
+        static IEnumerable exception_source
         {
             get
             {

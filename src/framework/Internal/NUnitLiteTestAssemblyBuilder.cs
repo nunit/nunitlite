@@ -50,8 +50,12 @@ namespace NUnit.Framework.Internal
             IList fixtureNames = options["LOAD"] as IList;
 
             IList fixtures = GetFixtures(assembly, fixtureNames);
+
             if (fixtures.Count > 0)
-                return BuildTestAssembly(assembly.GetName().Name, fixtures);
+            {
+                AssemblyName assemblyName = new AssemblyName(assembly.FullName);
+                return BuildTestAssembly(assemblyName.Name, fixtures);
+            }
 
             return null;
         }
@@ -83,7 +87,7 @@ namespace NUnit.Framework.Internal
 
         private Assembly Load(string path)
         {
-#if NETCF
+#if NETCF || SILVERLIGHT
             return Assembly.Load(path);
 #else
             // Throws if this isn't a managed assembly or if it was built
@@ -171,8 +175,10 @@ namespace NUnit.Framework.Internal
             }
 
             testAssembly.ApplyCommonAttributes(assembly);
-
+            
+#if !SILVERLIGHT
             testAssembly.Properties.Set(PropertyNames.ProcessID, System.Diagnostics.Process.GetCurrentProcess().Id);
+#endif
             testAssembly.Properties.Set(PropertyNames.AppDomain, AppDomain.CurrentDomain.FriendlyName);
 
 

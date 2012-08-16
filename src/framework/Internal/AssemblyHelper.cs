@@ -46,7 +46,11 @@ namespace NUnit.Framework.Internal
             Uri uri = new Uri(path);
 
             // If it wasn't loaded locally, use the Location
+#if SILVERLIGHT
+            if (uri.Scheme != Uri.UriSchemeFile)
+#else
             if (!uri.IsFile)
+#endif
                 return assembly.Location;
 
             if (uri.IsUnc)

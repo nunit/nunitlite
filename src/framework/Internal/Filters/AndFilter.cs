@@ -32,9 +32,9 @@ namespace NUnit.Framework.Internal.Filters
 	/// <summary>
 	/// Combines multiple filters so that a test must pass all 
 	/// of them in order to pass this filter.
-	/// </summary>
+    /// </summary>
 	[Serializable]
-	public class AndFilter : TestFilter
+    public class AndFilter : TestFilter
 	{
 #if CLR_2_0 || CLR_4_0
 		private List<ITestFilter> filters = new List<ITestFilter>();

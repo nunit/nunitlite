@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework.Internal;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -58,21 +59,21 @@ namespace NUnit.Framework.Constraints.Tests
         public void AllItemsAreInRange_UsingIComparer()
         {
             int[] c = new int[] { 12, 27, 19, 32, 45, 99, 26 };
-            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(Comparer.Default)));
+            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(new SimpleObjectComparer())));
         }
 
         [Test]
         public void AllItemsAreInRange_UsingIComparerOfT()
         {
             int[] c = new int[] { 12, 27, 19, 32, 45, 99, 26 };
-            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(Comparer.Default)));
+            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(new SimpleObjectComparer())));
         }
 
         [Test]
         public void AllItemsAreInRange_UsingComparisonOfT()
         {
             int[] c = new int[] { 12, 27, 19, 32, 45, 99, 26 };
-            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(Comparer.Default)));
+            Assert.That(c, new AllItemsConstraint(new RangeConstraint(10, 100).Using(new SimpleObjectComparer())));
         }
 
         [Test, ExpectedException(typeof(AssertionException))]

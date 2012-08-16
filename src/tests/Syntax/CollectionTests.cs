@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Syntax
 {
@@ -67,8 +68,8 @@ namespace NUnit.Framework.Syntax
         [SetUp]
         public void SetUp()
         {
-            IComparer comparer = Comparer.Default;
-            parseTree = "<ordered System.Collections.Comparer>";
+            IComparer comparer = new SimpleObjectComparer();
+            parseTree = "<ordered NUnit.TestUtilities.SimpleObjectComparer>";
             staticSyntax = Is.Ordered.Using(comparer);
             inheritedSyntax = Helper().Ordered.Using(comparer);
             builderSyntax = Builder().Ordered.Using(comparer);
@@ -80,7 +81,7 @@ namespace NUnit.Framework.Syntax
         [SetUp]
         public void SetUp()
         {
-            IComparer comparer = Comparer.Default;
+            IComparer comparer = new SimpleObjectComparer();
             parseTree = "<ordered descending System.Collections.Comparer>";
             staticSyntax = Is.Ordered.Using(comparer).Descending;
             inheritedSyntax = Helper().Ordered.Using(comparer).Descending;
@@ -118,9 +119,9 @@ namespace NUnit.Framework.Syntax
         public void SetUp()
         {
             parseTree = "<orderedby SomePropertyName System.Collections.Comparer>";
-            staticSyntax = Is.Ordered.By("SomePropertyName").Using(Comparer.Default);
-            inheritedSyntax = Helper().Ordered.By("SomePropertyName").Using(Comparer.Default);
-            builderSyntax = Builder().Ordered.By("SomePropertyName").Using(Comparer.Default);
+            staticSyntax = Is.Ordered.By("SomePropertyName").Using(new SimpleObjectComparer());
+            inheritedSyntax = Helper().Ordered.By("SomePropertyName").Using(new SimpleObjectComparer());
+            builderSyntax = Builder().Ordered.By("SomePropertyName").Using(new SimpleObjectComparer());
         }
     }
 
@@ -130,9 +131,9 @@ namespace NUnit.Framework.Syntax
         public void SetUp()
         {
             parseTree = "<orderedby SomePropertyName descending System.Collections.Comparer>";
-            staticSyntax = Is.Ordered.By("SomePropertyName").Using(Comparer.Default).Descending;
-            inheritedSyntax = Helper().Ordered.By("SomePropertyName").Using(Comparer.Default).Descending;
-            builderSyntax = Builder().Ordered.By("SomePropertyName").Using(Comparer.Default).Descending;
+            staticSyntax = Is.Ordered.By("SomePropertyName").Using(new SimpleObjectComparer()).Descending;
+            inheritedSyntax = Helper().Ordered.By("SomePropertyName").Using(new SimpleObjectComparer()).Descending;
+            builderSyntax = Builder().Ordered.By("SomePropertyName").Using(new SimpleObjectComparer()).Descending;
         }
     }
 

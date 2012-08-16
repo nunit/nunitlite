@@ -49,7 +49,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Comparison objects used in comparisons for some constraints.
         /// </summary>
-        private ArrayList externalComparers = new ArrayList();
+        private ObjectList externalComparers = new ObjectList();
 
         /// <summary>
         /// List of points at which a failure occured.
@@ -196,6 +196,13 @@ namespace NUnit.Framework.Constraints
 
         private static Type[] GetEquatableGenericArguments(Type type)
         {
+#if SILVERLIGHT
+            foreach (Type @interface in type.GetInterfaces())
+                if (@interface.IsGenericType && @interface.GetGenericTypeDefinition().Equals(typeof(IEquatable<>)))
+                    return @interface.GetGenericArguments();
+
+            return new Type[0];
+#else
             return Array.ConvertAll(Array.FindAll(type.GetInterfaces(),
                                     delegate(Type @interface)
                                     {
@@ -206,6 +213,7 @@ namespace NUnit.Framework.Constraints
                                     {
                                         return iEquatableInterface.GetGenericArguments()[0];
                                     });
+#endif
         }
 
         private static bool InvokeFirstIEquatableEqualsSecond(object first, object second)

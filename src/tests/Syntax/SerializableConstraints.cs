@@ -23,7 +23,7 @@
 
 namespace NUnit.Framework.Syntax
 {
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
     [TestFixture]
     public class BinarySerializableTest : SyntaxTest
     {
@@ -38,7 +38,7 @@ namespace NUnit.Framework.Syntax
     }
 #endif
 
-#if !NETCF_1_0
+#if !NETCF_1_0 && ! SILVERLIGHT
     [TestFixture]
     public class XmlSerializableTest : SyntaxTest
     {

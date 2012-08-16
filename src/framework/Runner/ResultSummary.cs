@@ -34,6 +34,7 @@ namespace NUnitLite
     public class ResultSummary
     {
         private int testCount;
+        private int passCount;
         private int errorCount;
         private int failureCount;
         private int notRunCount;
@@ -58,6 +59,14 @@ namespace NUnitLite
         public int TestCount
         {
             get { return testCount; }
+        }
+
+        /// <summary>
+        /// Gets the count of passed tests
+        /// </summary>
+        public int PassCount
+        {
+            get { return passCount; }
         }
 
         /// <summary>
@@ -132,6 +141,9 @@ namespace NUnitLite
 
                 switch (result.ResultState.Status)
                 {
+                    case TestStatus.Passed:
+                        passCount++;
+                        break;
                     case TestStatus.Skipped:
                         if (result.ResultState == ResultState.Ignored)
                             ignoreCount++;
@@ -149,8 +161,6 @@ namespace NUnitLite
                         break;
                     case TestStatus.Inconclusive:
                         inconclusiveCount++;
-                        break;
-                    default:
                         break;
                 }
 

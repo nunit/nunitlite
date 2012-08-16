@@ -9,6 +9,7 @@ using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Env = NUnit.Env;
+using NUnit.TestUtilities;
 
 namespace NUnitLite.Tests
 {
@@ -18,8 +19,8 @@ namespace NUnitLite.Tests
         [Test]
         public void CanMatchTwoCollections()
         {
-            ArrayList expected = new ArrayList(new int[] { 1, 2, 3 });
-            ArrayList actual = new ArrayList(new int[] { 1, 2, 3 });
+            ICollection expected = new SimpleObjectCollection(1, 2, 3);
+            ICollection actual = new SimpleObjectCollection(1, 2, 3);
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -27,7 +28,7 @@ namespace NUnitLite.Tests
         [Test]
         public void CanMatchAnArrayWithACollection()
         {
-            ArrayList collection = new ArrayList(new int[] { 1, 2, 3 });
+            ICollection collection = new SimpleObjectCollection(1, 2, 3);
             int[] array = new int[] { 1, 2, 3 };
 
             Assert.That(collection, Is.EqualTo(array));
@@ -38,7 +39,7 @@ namespace NUnitLite.Tests
         public void FailureMatchingArrayAndCollection()
         {
             int[] expected = new int[] { 1, 2, 3 };
-            ArrayList actual = new ArrayList( new int[] { 1, 5, 3 } );
+            ICollection actual = new SimpleObjectCollection(1, 5, 3);
 
             Assert.That(actual, Is.EqualTo(expected));
         }

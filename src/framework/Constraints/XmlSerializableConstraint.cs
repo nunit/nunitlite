@@ -21,12 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if !NETCF_1_0
+#if !NETCF_1_0 && !SILVERLIGHT
 using System;
 using System.IO;
-#if !NETCF
-using System.Runtime.Serialization;
-#endif
 using System.Xml.Serialization;
 
 namespace NUnit.Framework.Constraints

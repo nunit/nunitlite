@@ -1,0 +1,7 @@
+<OutOfBrowserSettings ShortName="nunitlite.tests-sl-4.0 Application" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+  <OutOfBrowserSettings.Blurb>nunitlite.tests-sl-4.0 Application on your desktop; at home, at work or on the go.</OutOfBrowserSettings.Blurb>
+  <OutOfBrowserSettings.WindowSettings>
+    <WindowSettings Title="nunitlite.tests-sl-4.0 Application" />
+  </OutOfBrowserSettings.WindowSettings>
+  <OutOfBrowserSettings.Icons />
+</OutOfBrowserSettings>

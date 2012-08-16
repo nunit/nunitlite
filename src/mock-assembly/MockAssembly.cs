@@ -158,7 +158,7 @@ namespace NUnit.Tests
 
             private void MethodThrowsException()
             {
-                throw new ApplicationException("Intentional Exception");
+                throw new Exception("Intentional Exception");
             }
 		}
 	}

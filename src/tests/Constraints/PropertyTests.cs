@@ -21,9 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-// TODO: Remove conditional code
+// TODO: Remove NUNITLITE conditional code
 using System;
+using System.Collections;
 using NUnit.Framework.Internal;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -46,7 +48,7 @@ namespace NUnit.Framework.Constraints.Tests
 
         static object[] FailureData = new object[] { 
             new TestCaseData( 42, "<System.Int32>" ),
-            new TestCaseData( new System.Collections.ArrayList(), "<System.Collections.ArrayList>" ),
+            new TestCaseData( new SimpleObjectCollection(), "<NUnit.Framework.Internal.SimpleObjectCollection>" ),
             new TestCaseData( typeof(Int32), "<System.Int32>" ) };
 #if !NUNITLITE
         static object[] InvalidData = new TestCaseData[] 

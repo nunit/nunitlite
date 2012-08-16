@@ -60,6 +60,10 @@ namespace NUnit.Framework.Internal
                 {
                     OperatingSystem os = Environment.OSVersion;
 
+#if SILVERLIGHT
+                    // TODO: Runtime silverlight detection?
+                    currentPlatform = new OSPlatform(os.Platform, os.Version);
+#else
                     if (os.Platform == PlatformID.Win32NT && os.Version.Major >= 5)
                     {
                         OSVERSIONINFOEX osvi = new OSVERSIONINFOEX();
@@ -69,6 +73,7 @@ namespace NUnit.Framework.Internal
                     }
                     else
                         currentPlatform = new OSPlatform(os.Platform, os.Version);
+#endif
                 }
 
                 return currentPlatform;

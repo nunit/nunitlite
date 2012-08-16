@@ -27,20 +27,20 @@ using System.Collections;
 namespace NUnit.TestUtilities
 {
 	/// <summary>
-	/// ICollectionAdapter is used in testing to wrap an array or
-	/// ArrayList, ensuring that only methods of the ICollection
+	/// SimpleObjectCollection is used in testing to wrap an array or
+	/// other collection, ensuring that only methods of the ICollection
 	/// interface are accessible.
 	/// </summary>
-	class ICollectionAdapter : ICollection
+	class SimpleObjectCollection : ICollection
 	{
 		private readonly ICollection inner;
 
-		public ICollectionAdapter(ICollection inner)
+		public SimpleObjectCollection(ICollection inner)
 		{
 			this.inner = inner;
 		}
 
-		public ICollectionAdapter(params object[] inner)
+		public SimpleObjectCollection(params object[] inner)
 		{
 			this.inner = inner;
 		}

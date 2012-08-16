@@ -115,7 +115,7 @@ namespace NUnit.Framework.Syntax
         public void DelegateThrowsException()
         {
             Assert.That(
-                delegate { throw new ApplicationException(); },
+                delegate { throw new ArgumentException(); },
                 Throws.Exception);
         }
 

@@ -23,10 +23,6 @@
 
 #if !NETCF_1_0
 
-using System;
-using System.IO;
-using System.Drawing;
-
 namespace NUnit.Framework.Constraints.Tests
 {
     [TestFixture]

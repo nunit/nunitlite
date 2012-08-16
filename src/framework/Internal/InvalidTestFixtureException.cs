@@ -32,10 +32,8 @@ namespace NUnit.Framework.Internal
     /// InvalidTestFixtureException is thrown when an appropriate test
     /// fixture constructor using the provided arguments cannot be found.
     /// </summary>
-#if !NETCF
 	[Serializable]
-#endif
-	public class InvalidTestFixtureException : ApplicationException
+	public class InvalidTestFixtureException : Exception
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidTestFixtureException"/> class.
@@ -57,7 +55,7 @@ namespace NUnit.Framework.Internal
 		public InvalidTestFixtureException(string message, Exception inner) : base(message, inner)
 		{}
 
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 		/// <summary>
 		/// Serialization Constructor
 		/// </summary>

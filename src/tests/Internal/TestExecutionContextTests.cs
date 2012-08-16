@@ -25,7 +25,7 @@ using System;
 using System.Threading;
 using System.Globalization;
 using NUnit.Framework;
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 using System.Security.Principal;
 #endif
 #if !NUNITLITE
@@ -45,6 +45,7 @@ namespace NUnit.Framework.Internal
         string currentDirectory;
         CultureInfo currentCulture;
         CultureInfo currentUICulture;
+#if !SILVERLIGHT
         IPrincipal currentPrincipal;
 #endif
 
@@ -55,10 +56,10 @@ namespace NUnit.Framework.Internal
 		[SetUp]
 		public void SaveContext()
 		{
-#if !NETCF
             currentCulture = CultureInfo.CurrentCulture;
             currentUICulture = CultureInfo.CurrentUICulture;
 			currentDirectory = Environment.CurrentDirectory;
+#if !SILVERLIGHT
             currentPrincipal = Thread.CurrentPrincipal;
 #endif
 		}
@@ -66,13 +67,14 @@ namespace NUnit.Framework.Internal
 		[TearDown]
 		public void RestoreContext()
 		{
-#if !NETCF
-			Environment.CurrentDirectory = currentDirectory;
 			Thread.CurrentThread.CurrentCulture = currentCulture;
             Thread.CurrentThread.CurrentUICulture = currentUICulture;
+#if !SILVERLIGHT
+			Environment.CurrentDirectory = currentDirectory;
             Thread.CurrentPrincipal = currentPrincipal;
 #endif
-		}
+        }
+#endif
 
         [Test]
         public void TestCanAccessItsOwnName()

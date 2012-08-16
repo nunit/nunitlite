@@ -45,7 +45,6 @@ namespace NUnit.Framework.Constraints.Tests
 
         static object[] FailureData = new object[]
         {
-            new TestCaseData( new TestDelegate( TestDelegates.ThrowsApplicationException ), "<System.ApplicationException>" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsNothing ), "no exception thrown" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsSystemException ), "<System.Exception>" )
         };
@@ -58,15 +57,15 @@ namespace NUnit.Framework.Constraints.Tests
         public void SetUp()
         {
             theConstraint = new ThrowsConstraint(
-                new InstanceOfTypeConstraint(typeof(ApplicationException)));
-            expectedDescription = "instance of <System.ApplicationException>";
-            stringRepresentation = "<throws <instanceof System.ApplicationException>>";
+                new InstanceOfTypeConstraint(typeof(TestDelegates.CustomException)));
+            expectedDescription = "instance of <NUnit.TestUtilities.TestDelegates+CustomException>";
+            stringRepresentation = "<throws <instanceof NUnit.TestUtilities.TestDelegates+CustomException>>";
         }
 
         static object[] SuccessData = new object[]
         {
-            new TestDelegate( TestDelegates.ThrowsApplicationException ),
-            new TestDelegate( TestDelegates.ThrowsDerivedApplicationException )
+            new TestDelegate( TestDelegates.ThrowsCustomException ),
+            new TestDelegate( TestDelegates.ThrowsDerivedCustomException )
         };
 
         static object[] FailureData = new object[]
@@ -99,7 +98,7 @@ namespace NUnit.Framework.Constraints.Tests
 
         static object[] FailureData = new object[]
         {
-            new TestCaseData( new TestDelegate( TestDelegates.ThrowsApplicationException ), "<System.ApplicationException>" ),
+            new TestCaseData( new TestDelegate( TestDelegates.ThrowsCustomException ), "<NUnit.TestUtilities.TestDelegates+CustomException>" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsNothing ), "no exception thrown" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsSystemException ), "<System.Exception>" )
         };

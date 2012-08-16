@@ -34,12 +34,12 @@ namespace NUnit.Framework.Attributes
         [TestFixture]
         public class LiveTest
         {
-            public Hashtable pairsTested = new Hashtable();
+            private PairCounter pairsTested = new PairCounter();
 
             [TestFixtureSetUp]
             public void TestFixtureSetUp()
             {
-                pairsTested = new Hashtable();
+                pairsTested = new PairCounter();
             }
 
             [TestFixtureTearDown]
@@ -109,7 +109,7 @@ namespace NUnit.Framework.Attributes
 
             CombiningStrategy strategy = new PairwiseStrategy(sources);
 
-            Hashtable pairs = new Hashtable();
+            PairCounter pairs = new PairCounter();
             int cases = 0;
             foreach (NUnit.Framework.Internal.ParameterSet parms in strategy.GetTestCases())
             {
@@ -135,5 +135,11 @@ namespace NUnit.Framework.Attributes
             //Assert.That(cases, Is.AtMost(targetCases), "Number of test cases exceeded target");
 #endif
         }
+
+#if CLR_2_0 || CLR_4_0
+        class PairCounter : System.Collections.Generic.Dictionary<string, object> {}
+#else
+        class PairCounter : Hashtable() { }
+#endif
     }
 }

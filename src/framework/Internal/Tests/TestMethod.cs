@@ -21,16 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
+
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
 #endif
 using System.Reflection;
-using System.Threading;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal.Commands;
 
@@ -189,7 +184,7 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
         {
-            XmlNode thisNode = XmlHelper.AddElement(parentNode, XmlElementName);
+            XmlNode thisNode = parentNode.AddElement(XmlElementName);
 
             PopulateTestNode(thisNode, recursive);
 

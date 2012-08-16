@@ -142,12 +142,14 @@ namespace NUnit.Framework.Attributes
         [Test]
         public void FixtureInstancesAreNamedCorrectly()
         {
-            ArrayList names = new ArrayList();
-            ArrayList fullnames = new ArrayList();
+            string[] names = new string[fixture.Tests.Count];
+            string[] fullnames = new string[fixture.Tests.Count];
+            int index = 0;
             foreach (Test test in fixture.Tests)
             {
-                names.Add(test.Name);
-                fullnames.Add(test.FullName);
+                names[index] = test.Name;
+                fullnames[index] = test.FullName;
+                index++;
             }
 
             Assert.That(names, Is.EquivalentTo(new string[] {

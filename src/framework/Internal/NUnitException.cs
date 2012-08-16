@@ -32,10 +32,8 @@ namespace NUnit.Framework.Internal
 	/// Thrown when an assertion failed. Here to preserve the inner
 	/// exception and hence its stack trace.
 	/// </summary>
-#if !NETCF 
 	[Serializable]
-#endif
-	public class NUnitException : ApplicationException 
+	public class NUnitException : Exception 
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="NUnitException"/> class.
@@ -62,7 +60,7 @@ namespace NUnit.Framework.Internal
 			base(message, inner) 
 		{}
 
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 		/// <summary>
 		/// Serialization Constructor
 		/// </summary>

@@ -26,6 +26,8 @@ using System.Collections;
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
 #endif
+using NUnit.Framework.Internal;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -136,6 +138,7 @@ namespace NUnit.Framework.Constraints.Tests
         #region Dictionary Tests
 
 #if (CLR_2_0 || CLR_4_0) && !NETCF_2_0
+#if !SILVERLIGHT
         // TODO: Move these to a separate fixture
         [Test]
         public void CanMatchHashtables_SameOrder()
@@ -157,6 +160,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.AreEqual(new Hashtable { { 0, 0 }, { 1, 1 }, { 2, 2 } },
                             new Hashtable { { 0, 0 }, { 2, 2 }, { 1, 1 } });
         }
+#endif
 
         [Test]
         public void CanMatchDictionaries_SameOrder()
@@ -179,12 +183,14 @@ namespace NUnit.Framework.Constraints.Tests
                             new Dictionary<int, int> { { 0, 0 }, { 2, 2 }, { 1, 1 } });
         }
 
+#if !SILVERLIGHT
         [Test]
         public void CanMatchHashtableWithDictionary()
         {
             Assert.AreEqual(new Hashtable { { 0, 0 }, { 1, 1 }, { 2, 2 } },
                             new Dictionary<int, int> { { 0, 0 }, { 2, 2 }, { 1, 1 } });
         }
+#endif
 #endif
 
         #endregion
@@ -334,88 +340,34 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedIComparer()
         {
-            MyComparer comparer = new MyComparer();
+            SimpleObjectComparer comparer = new SimpleObjectComparer();
             Assert.That(2 + 2, Is.EqualTo(4).Using(comparer));
             Assert.That(comparer.Called, "Comparer was not called");
-        }
-
-        class MyComparer : IComparer
-        {
-            public bool Called;
-
-            public int Compare(object x, object y)
-            {
-                Called = true;
-                return Comparer.Default.Compare(x, y);
-            }
         }
 
 #if CLR_2_0 || CLR_4_0
         [Test]
         public void UsesProvidedEqualityComparer()
         {
-            MyEqualityComparer comparer = new MyEqualityComparer();
+            SimpleEqualityComparer comparer = new SimpleEqualityComparer();
             Assert.That(2 + 2, Is.EqualTo(4).Using(comparer));
             Assert.That(comparer.Called, "Comparer was not called");
-        }
-
-        class MyEqualityComparer : IEqualityComparer
-        {
-            public bool Called;
-
-            bool IEqualityComparer.Equals(object x, object y)
-            {
-                Called = true;
-                return Comparer.Default.Compare(x, y) == 0;
-            }
-
-            int IEqualityComparer.GetHashCode(object x)
-            {
-                return x.GetHashCode();
-            }
         }
 
         [Test]
         public void UsesProvidedEqualityComparerOfT()
         {
-            MyEqualityComparerOfT<int> comparer = new MyEqualityComparerOfT<int>();
+            SimpleEqualityComparer<int> comparer = new SimpleEqualityComparer<int>();
             Assert.That(2 + 2, Is.EqualTo(4).Using(comparer));
             Assert.That(comparer.Called, "Comparer was not called");
-        }
-
-        class MyEqualityComparerOfT<T> : IEqualityComparer<T>
-        {
-            public bool Called;
-
-            bool IEqualityComparer<T>.Equals(T x, T y)
-            {
-                Called = true;
-                return Comparer<T>.Default.Compare(x, y) == 0;
-            }
-
-            int IEqualityComparer<T>.GetHashCode(T x)
-            {
-                return x.GetHashCode();
-            }
         }
 
         [Test]
         public void UsesProvidedComparerOfT()
         {
-            MyComparer<int> comparer = new MyComparer<int>();
+            SimpleEqualityComparer<int> comparer = new SimpleEqualityComparer<int>();
             Assert.That(2 + 2, Is.EqualTo(4).Using(comparer));
             Assert.That(comparer.Called, "Comparer was not called");
-        }
-
-        class MyComparer<T> : IComparer<T>
-        {
-            public bool Called;
-
-            public int Compare(T x, T y)
-            {
-                Called = true;
-                return Comparer<T>.Default.Compare(x, y);
-            }
         }
 
         [Test]
@@ -447,7 +399,7 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedLambda_StringArgs()
         {
-            Assert.That("hello", Is.EqualTo("HELLO").Using<string>((x, y) => String.Compare(x, y, true)));
+            Assert.That("hello", Is.EqualTo("HELLO").Using<string>((x, y) => StringUtil.Compare(x, y, true)));
         }
 
         [Test]

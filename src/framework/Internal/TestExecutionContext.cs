@@ -331,7 +331,7 @@ namespace NUnit.Framework.Internal
             get { return assertCount; }
         }
 
-#if !NETCF_1_0
+#if !NETCF_1_0 && !SL_5_0
         /// <summary>
 		/// Controls where Console.Out is directed
 		/// </summary>
@@ -368,6 +368,7 @@ namespace NUnit.Framework.Internal
 #endif
 
 #if !NETCF
+#if !SILVERLIGHT
         /// <summary>
         /// Controls whether trace and debug output are written
         /// to the standard output.
@@ -421,6 +422,7 @@ namespace NUnit.Framework.Internal
 		{
 			System.Diagnostics.Trace.Listeners.Add( new TextWriterTraceListener( traceWriter, "NUnit" ) );
 		}
+#endif
 
         /// <summary>
         /// Saves or restores the CurrentCulture
@@ -525,13 +527,15 @@ namespace NUnit.Framework.Internal
 			if ( prior == null )
 				throw new InvalidOperationException( "TestContext: too many Restores" );
 
-#if !NETCF_1_0
+#if !NETCF_1_0 && !SL_5_0
 			this.Out = prior.Out;
 			this.Error = prior.Error;
 #endif
 
 #if !NETCF
+#if !SILVERLIGHT
             this.Tracing = prior.Tracing;
+#endif
 			this.CurrentCulture = prior.CurrentCulture;
             this.CurrentUICulture = prior.CurrentUICulture;
 #endif

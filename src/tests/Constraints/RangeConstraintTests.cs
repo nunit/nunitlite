@@ -25,6 +25,7 @@ using System;
 using System.Collections;
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
+using NUnit.TestUtilities;
 #endif
 
 namespace NUnit.Framework.Constraints.Tests
@@ -51,20 +52,9 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedIComparer()
         {
-            MyComparer comparer = new MyComparer();
+            SimpleObjectComparer comparer = new SimpleObjectComparer();
             Assert.That(rangeConstraint.Using(comparer).Matches(19));
             Assert.That(comparer.Called, "Comparer was not called");
-        }
-
-        class MyComparer : IComparer
-        {
-            public bool Called;
-
-            public int Compare(object x, object y)
-            {
-                Called = true;
-                return Comparer.Default.Compare(x, y);
-            }
         }
 
 #if CLR_2_0 || CLR_4_0

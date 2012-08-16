@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {
@@ -44,7 +45,7 @@ namespace NUnit.Framework.Constraints.Tests
 #endif
             string.Empty,
             new object[0],
-            new ArrayList()
+            new SimpleObjectCollection()
         };
 
         static object[] FailureData = new object[]

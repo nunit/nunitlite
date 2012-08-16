@@ -14,11 +14,6 @@ namespace NUnitLite.Tests
             throw new ArgumentException("myMessage", "myParam");
         }
 
-        public static void ThrowsApplicationException()
-        {
-            throw new ApplicationException();
-        }
-
         public static void ThrowsSystemException()
         {
             throw new Exception();
@@ -28,12 +23,12 @@ namespace NUnitLite.Tests
         {
         }
 
-        public static void ThrowsDerivedApplicationException()
+        public static void ThrowsDerivedException()
         {
-            throw new DerivedApplicationException();
+            throw new DerivedException();
         }
 
-        public class DerivedApplicationException : ApplicationException
+        public class DerivedException : Exception
         {
         }
     }

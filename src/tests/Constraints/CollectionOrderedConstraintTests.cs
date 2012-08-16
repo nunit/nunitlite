@@ -37,126 +37,74 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void IsOrdered()
         {
-            ArrayList al = new ArrayList();
-            al.Add("x");
-            al.Add("y");
-            al.Add("z");
-
-            Assert.That(al, Is.Ordered);
-        }
-
-        [Test]
-        public void IsOrdered_2()
-        {
-            ArrayList al = new ArrayList();
-            al.Add(1);
-            al.Add(2);
-            al.Add(3);
-
-            Assert.That(al, Is.Ordered);
+            ICollection collection = new SimpleObjectCollection("x", "y", "z");
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test]
         public void IsOrderedDescending()
         {
-            ArrayList al = new ArrayList();
-            al.Add("z");
-            al.Add("y");
-            al.Add("x");
-
-            Assert.That(al, Is.Ordered.Descending);
-        }
-
-        [Test]
-        public void IsOrderedDescending_2()
-        {
-            ArrayList al = new ArrayList();
-            al.Add(3);
-            al.Add(2);
-            al.Add(1);
-
-            Assert.That(al, Is.Ordered.Descending);
+            ICollection collection = new SimpleObjectCollection("z", "y", "x");
+            Assert.That(collection, Is.Ordered.Descending);
         }
 
         [Test, ExpectedException(typeof(AssertionException))]
         public void IsOrdered_Fails()
         {
-            ArrayList al = new ArrayList();
-            al.Add("x");
-            al.Add("z");
-            al.Add("y");
-
+            ICollection collection = new SimpleObjectCollection("x", "z", "y");
             expectedMessage =
                 "  Expected: collection ordered" + NL +
                 "  But was:  < \"x\", \"z\", \"y\" >" + NL;
 
-            Assert.That(al, Is.Ordered);
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test]
         public void IsOrdered_Allows_adjacent_equal_values()
         {
-            ArrayList al = new ArrayList();
-            al.Add("x");
-            al.Add("x");
-            al.Add("z");
-
-            Assert.That(al, Is.Ordered);
+            ICollection collection = new SimpleObjectCollection("x", "x", "z");
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException),
             ExpectedMessage = "index 1", MatchType = MessageMatch.Contains)]
         public void IsOrdered_Handles_null()
         {
-            ArrayList al = new ArrayList();
-            al.Add("x");
-            al.Add(null);
-            al.Add("z");
-
-            Assert.That(al, Is.Ordered);
+            ICollection collection = new SimpleObjectCollection("x", null, "z");
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
         public void IsOrdered_TypesMustBeComparable()
         {
-            ArrayList al = new ArrayList();
-            al.Add(1);
-            al.Add("x");
-
-            Assert.That(al, Is.Ordered);
+            ICollection collection = new SimpleObjectCollection(1, "x");
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
         public void IsOrdered_AtLeastOneArgMustImplementIComparable()
         {
-            ArrayList al = new ArrayList();
-            al.Add(new object());
-            al.Add(new object());
-
-            Assert.That(al, Is.Ordered);
+            ICollection collection = new SimpleObjectCollection(new object(), new object());
+            Assert.That(collection, Is.Ordered);
         }
 
         [Test]
         public void IsOrdered_Handles_custom_comparison()
         {
-            ArrayList al = new ArrayList();
-            al.Add(new object());
-            al.Add(new object());
+            ICollection collection = new SimpleObjectCollection(new object(), new object());
 
             AlwaysEqualComparer comparer = new AlwaysEqualComparer();
-            Assert.That(al, Is.Ordered.Using(comparer));
+            Assert.That(collection, Is.Ordered.Using(comparer));
             Assert.That(comparer.Called, "TestComparer was not called");
         }
 
         [Test]
         public void IsOrdered_Handles_custom_comparison2()
         {
-            ArrayList al = new ArrayList();
-            al.Add(2);
-            al.Add(1);
+            ICollection collection = new SimpleObjectCollection(2, 1);
 
             TestComparer comparer = new TestComparer();
-            Assert.That(al, Is.Ordered.Using(comparer));
+            Assert.That(collection, Is.Ordered.Using(comparer));
             Assert.That(comparer.Called, "TestComparer was not called");
         }
 
@@ -164,9 +112,7 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedComparerOfT()
         {
-            ArrayList al = new ArrayList();
-            al.Add(1);
-            al.Add(2);
+            ICollection al = new SimpleObjectCollection(1, 2);
 
             MyComparer<int> comparer = new MyComparer<int>();
             Assert.That(al, Is.Ordered.Using(comparer));
@@ -187,9 +133,7 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedComparisonOfT()
         {
-            ArrayList al = new ArrayList();
-            al.Add(1);
-            al.Add(2);
+            ICollection al = new SimpleObjectCollection(1, 2);
 
             MyComparison<int> comparer = new MyComparison<int>();
             Assert.That(al, Is.Ordered.Using(new Comparison<int>(comparer.Compare)));
@@ -211,9 +155,7 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void UsesProvidedLambda()
         {
-            ArrayList al = new ArrayList();
-            al.Add(1);
-            al.Add(2);
+            ICollection al = new SimpleObjectCollection(1, 2);
 
             Comparison<int> comparer = (x, y) => x.CompareTo(y);
             Assert.That(al, Is.Ordered.Using(comparer));
@@ -224,34 +166,34 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void IsOrderedBy()
         {
-            ArrayList al = new ArrayList();
-            al.Add(new OrderedByTestClass(1));
-            al.Add(new OrderedByTestClass(2));
+            ICollection collection = new SimpleObjectCollection(
+                new OrderedByTestClass(1),
+                new OrderedByTestClass(2));
 
-            Assert.That(al, Is.Ordered.By("Value"));
+            Assert.That(collection, Is.Ordered.By("Value"));
         }
 
         [Test]
         public void IsOrderedBy_Comparer()
         {
-            ArrayList al = new ArrayList();
-            al.Add(new OrderedByTestClass(1));
-            al.Add(new OrderedByTestClass(2));
+            ICollection collection = new SimpleObjectCollection(
+                new OrderedByTestClass(1),
+                new OrderedByTestClass(2));
 
-            Assert.That(al, Is.Ordered.By("Value").Using(Comparer.Default));
+            Assert.That(collection, Is.Ordered.By("Value").Using(new SimpleObjectComparer()));
         }
 
         [Test]
         public void IsOrderedBy_Handles_heterogeneous_classes_as_long_as_the_property_is_of_same_type()
         {
-            ArrayList al = new ArrayList();
-            al.Add(new OrderedByTestClass(1));
-            al.Add(new OrderedByTestClass2(2));
+            ICollection al = new SimpleObjectCollection(
+                new OrderedByTestClass(1),
+                new OrderedByTestClass2(2));
 
             Assert.That(al, Is.Ordered.By("Value"));
         }
 
-        class OrderedByTestClass
+        public class OrderedByTestClass
         {
             private int myValue;
 
@@ -267,7 +209,7 @@ namespace NUnit.Framework.Constraints.Tests
             }
         }
 
-        class OrderedByTestClass2
+        public class OrderedByTestClass2
         {
             private int myValue;
             public int Value

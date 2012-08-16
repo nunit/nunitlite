@@ -96,10 +96,12 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         public ITestResult Run(ITestListener listener, ITestFilter filter)
         {
+            TestExecutionContext.CurrentContext.Listener = listener;
+
             if (this.settings.Contains("WorkDirectory"))
                 TestExecutionContext.CurrentContext.WorkDirectory = (string)this.settings["WorkDirectory"];
             else
-#if NETCF
+#if NETCF || SILVERLIGHT
                 TestExecutionContext.CurrentContext.WorkDirectory = Env.DocumentFolder;
 #else
                 TestExecutionContext.CurrentContext.WorkDirectory = Environment.CurrentDirectory;

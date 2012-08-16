@@ -64,7 +64,7 @@ namespace NUnit.Framework.Internal.Commands
             }
             catch (Exception ex)
             {
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
                 if (ex is ThreadAbortException)
                     Thread.ResetAbort();
 #endif

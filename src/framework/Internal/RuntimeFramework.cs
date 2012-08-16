@@ -65,7 +65,7 @@ namespace NUnit.Framework.Internal
         public static readonly Version DefaultVersion = new Version(0,0);
 
 		private static RuntimeFramework currentFramework;
-		private static RuntimeFramework[] availableFrameworks;
+
         private static Version[] knownVersions = new Version[] {
             new Version(1, 0, 3705),
             new Version(1, 1, 4322),
@@ -163,6 +163,7 @@ namespace NUnit.Framework.Internal
 							break;
 						}
 					}
+#if !SILVERLIGHT
 					else /* It's windows */
 					if (major == 2)
                     {
@@ -185,6 +186,7 @@ namespace NUnit.Framework.Internal
                             }
                         }
                     }
+#endif
 
                     currentFramework = new RuntimeFramework(runtime, new Version(major, minor));
                     currentFramework.clrVersion = Environment.Version;
@@ -199,50 +201,6 @@ namespace NUnit.Framework.Internal
                 }
 
                 return currentFramework;
-            }
-        }
-
-        /// <summary>
-        /// Gets an array of all available frameworks
-        /// </summary>
-        // TODO: Special handling for netcf
-        public static RuntimeFramework[] AvailableFrameworks
-        {
-            get
-            {
-                if (availableFrameworks == null)
-                {
-                    FrameworkList frameworks = new FrameworkList();
-
-                    AppendDotNetFrameworks(frameworks);
-#if !NETCF
-                    AppendDefaultMonoFramework(frameworks);
-#endif
-                    // NYI
-                    //AppendMonoFrameworks(frameworks);
-
-                    availableFrameworks = frameworks.ToArray();
-                }
-
-                return availableFrameworks;
-            }
-        }
-
-        /// <summary>
-        /// Returns true if the current RuntimeFramework is available.
-        /// In the current implementation, only Mono and Microsoft .NET
-        /// are supported.
-        /// </summary>
-        /// <returns>True if it's available, false if not</returns>
-        public bool IsAvailable
-        {
-            get
-            {
-                foreach (RuntimeFramework framework in AvailableFrameworks)
-                    if (this.Supports(framework))
-                        return true;
-
-                return false;
             }
         }
 
@@ -287,10 +245,66 @@ namespace NUnit.Framework.Internal
             get { return displayName; }
         }
 
-		#endregion
-		
+        public bool IsSilverlight
+        {
+#if SILVERLIGHT
+            get { return true; }
+#else
+            get { return false; }
+#endif
+        }
+
+#if !NUNITLITE
+		private static RuntimeFramework[] availableFrameworks;
+
+        /// <summary>
+        /// Gets an array of all available frameworks
+        /// </summary>
+        // TODO: Special handling for netcf
+        public static RuntimeFramework[] AvailableFrameworks
+        {
+            get
+            {
+                if (availableFrameworks == null)
+                {
+                    FrameworkList frameworks = new FrameworkList();
+
+                    AppendDotNetFrameworks(frameworks);
+                    AppendDefaultMonoFramework(frameworks);
+
+                    // NYI
+                    //AppendMonoFrameworks(frameworks);
+
+                    availableFrameworks = frameworks.ToArray();
+                }
+
+                return availableFrameworks;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the current RuntimeFramework is available.
+        /// In the current implementation, only Mono and Microsoft .NET
+        /// are supported.
+        /// </summary>
+        /// <returns>True if it's available, false if not</returns>
+        public bool IsAvailable
+        {
+            get
+            {
+                foreach (RuntimeFramework framework in AvailableFrameworks)
+                    if (this.Supports(framework))
+                        return true;
+
+                return false;
+            }
+        }
+#endif
+
+        #endregion
+
         #region Public Methods
-		
+
         /// <summary>
         /// Parses a string representing a RuntimeFramework.
         /// The string may be just a RuntimeType name or just
@@ -328,6 +342,7 @@ namespace NUnit.Framework.Internal
             return new RuntimeFramework(runtime, version);
         }
 
+#if !NUNITLITE
         /// <summary>
         /// Returns the best available framework that matches a target framework.
         /// If the target framework has a build number specified, then an exact
@@ -352,6 +367,7 @@ namespace NUnit.Framework.Internal
 
             return result;
         }
+#endif
 
         /// <summary>
         /// Overridden to return the short name of the framework
@@ -404,8 +420,9 @@ namespace NUnit.Framework.Internal
 
         private static bool IsRuntimeTypeName(string name)
         {
-#if NETCF
-            //return Enum.IsDefined(typeof(RuntimeType), name);
+#if SILVERLIGHT
+            return Enum.IsDefined(typeof(RuntimeType), name);
+#elif NETCF
             switch (name.ToUpper())
             {
                 case "NET":
@@ -444,7 +461,7 @@ namespace NUnit.Framework.Internal
                   (v1.Revision < 0 || v2.Revision < 0 || v1.Revision == v2.Revision);
         }
 
-#if !NETCF
+#if !NUNITLITE
         private static void AppendMonoFrameworks(FrameworkList frameworks)
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -534,7 +551,6 @@ namespace NUnit.Framework.Internal
                 }
             }
         }
-#endif
 
         private static void AppendDotNetFrameworks(FrameworkList frameworks)
         {
@@ -555,6 +571,7 @@ namespace NUnit.Framework.Internal
                 }
             }
         }
+#endif
 
 #if CLR_2_0 || CLR_4_0
         class FrameworkList : System.Collections.Generic.List<RuntimeFramework> { }

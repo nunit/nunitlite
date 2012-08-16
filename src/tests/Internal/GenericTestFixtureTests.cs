@@ -26,11 +26,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Internal
 {
     [TestFixture(typeof(List<int>))]
-    [TestFixture(TypeArgs=new Type[] {typeof(ArrayList)} )]
+    [TestFixture(TypeArgs = new Type[] { typeof(List<object>) })]
+#if !SILVERLIGHT
+    [TestFixture(typeof(ArrayList))]
+#endif
+    // TODO: Why doesn't this work?
+    //[TestFixture(TypeArgs = new Type[] { typeof(SimpleObjectList) })]
     public class GenericTestFixture_IList<T> where T : IList, new()
     {
         [Test]

@@ -149,13 +149,15 @@ namespace NUnit.Framework.Internal
             TestSuite suite = TestBuilder.MakeParameterizedMethodSuite(fixtureType, name);
             Assert.That(suite.TestCaseCount, Is.EqualTo(3));
 
-            ArrayList names = new ArrayList();
-            ArrayList fullNames = new ArrayList();
+            string[] names = new string[suite.Tests.Count];
+            string[] fullNames = new string[suite.Tests.Count];
 
+            int index = 0;
             foreach (Test test in suite.Tests)
             {
-                names.Add(test.Name);
-                fullNames.Add(test.FullName);
+                names[index] = test.Name;
+                fullNames[index] = test.FullName;
+                index++;
             }
 
             Assert.That(names, Has.Member(name + "(12,3,4)"));

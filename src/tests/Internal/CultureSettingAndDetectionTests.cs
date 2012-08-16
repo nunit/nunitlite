@@ -168,9 +168,13 @@ namespace NUnit.Framework.Internal
             ITestResult result = TestBuilder.RunTestCase(typeof(FixtureWithInvalidSetCultureAttributeOnTest), "InvalidCultureSet");
             Assert.AreEqual(ResultState.Error, result.ResultState);
             RuntimeFramework current = RuntimeFramework.CurrentFramework;
+#if SILVERLIGHT
+            string expectedException = "System.Globalization.CultureNotFoundException";
+#else
             string expectedException = current.Runtime != RuntimeType.Mono && current.ClrVersion.Major == 4
               ? "System.Globalization.CultureNotFoundException"
               : "System.ArgumentException";
+#endif
             Assert.That(result.Message, Is.StringStarting(expectedException));
             Assert.That(result.Message, Is.StringContaining("xx-XX").IgnoreCase);
         }

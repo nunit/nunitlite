@@ -8,8 +8,8 @@
     <ProjectGuid>{497A578E-EF93-4190-96E0-B7F22E08027B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NUnitLiteTests</RootNamespace>
-    <AssemblyName>NUnitLiteTests</AssemblyName>
+    <RootNamespace>NUnitLite.Tests</RootNamespace>
+    <AssemblyName>nunitlite.tests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -59,17 +59,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\framework\nunitlite-2.0.csproj">
-      <Project>{C24A3FC4-2541-4E9C-BADD-564777610B75}</Project>
-      <Name>nunitlite-2.0</Name>
+    <ProjectReference Include="..\framework\nunitlite-4.0.csproj">
+      <Project>{1567BCCE-7BE9-4815-84D7-7F794DB39081}</Project>
+      <Name>nunitlite-4.0</Name>
     </ProjectReference>
     <ProjectReference Include="..\mock-assembly\mock-assembly-4.0.csproj">
       <Project>{961F4A5A-CAC4-4A53-9EF0-C6EE26A6429A}</Project>
       <Name>mock-assembly-4.0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\testdata\nunitlite.testdata-2.0.csproj">
-      <Project>{442DAB16-3063-4FE3-90B6-C29C3D85360D}</Project>
-      <Name>nunitlite.testdata-2.0</Name>
+    <ProjectReference Include="..\testdata\nunitlite.testdata-4.0.csproj">
+      <Project>{5C77A144-3CD1-42FC-B622-410E1945CA1E}</Project>
+      <Name>nunitlite.testdata-4.0</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +126,7 @@
     </Compile>
     <Compile Include="Constraints\BinarySerializableTest.cs" />
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
+    <Compile Include="Constraints\ExactCountConstraintTests.cs" />
     <Compile Include="Constraints\PredicateConstraintTests.cs" />
     <Compile Include="Constraints\ReusableConstraintTests.cs" />
     <Compile Include="Constraints\UniqueItemsConstraintTests.cs">
@@ -200,8 +201,11 @@
     <Compile Include="Syntax\SyntaxTest.cs" />
     <Compile Include="Syntax\ThrowsTests.cs" />
     <Compile Include="Syntax\TypeConstraints.cs" />
-    <Compile Include="TestUtilities\AlwaysEqualComparer.cs" />
-    <Compile Include="TestUtilities\CollectionAdapter.cs" />
+    <Compile Include="TestUtilities\Collections\SimpleObjectCollection.cs" />
+    <Compile Include="TestUtilities\Collections\SimpleObjectList.cs" />
+    <Compile Include="TestUtilities\Comparers\AlwaysEqualComparer.cs" />
+    <Compile Include="TestUtilities\Comparers\SimpleEqualityComparer.cs" />
+    <Compile Include="TestUtilities\Comparers\SimpleObjectComparer.cs" />
     <Compile Include="TestUtilities\ResultSummary.cs" />
     <Compile Include="TestUtilities\TestAssert.cs" />
     <Compile Include="TestUtilities\TestBuilder.cs" />

@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using NUnitLite.Runner;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {

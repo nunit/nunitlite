@@ -297,7 +297,7 @@ namespace NUnitLite.Runner
             {
                 StringBuilder sb = new StringBuilder();
 
-#if PocketPC || WindowsCE || NETCF
+#if PocketPC || WindowsCE || NETCF || SILVERLIGHT
                 string name = "NUnitLite";
 #else
                 string name = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;

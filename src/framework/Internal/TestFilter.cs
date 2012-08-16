@@ -22,9 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Xml;
 using NUnit.Framework.Api;
-using NUnit.Framework.Internal.Filters;
 
 namespace NUnit.Framework.Internal
 {

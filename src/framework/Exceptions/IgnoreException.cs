@@ -28,9 +28,7 @@ namespace NUnit.Framework
 	/// <summary>
 	/// Thrown when an assertion failed.
 	/// </summary>
-#if !NETCF_1_0
 	[Serializable]
-#endif
 	public class IgnoreException : System.Exception
 	{
 		/// <param name="message"></param>
@@ -45,7 +43,7 @@ namespace NUnit.Framework
 			base(message, inner) 
 		{}
 
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 		/// <summary>
 		/// Serialization Constructor
 		/// </summary>

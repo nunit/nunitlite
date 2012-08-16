@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Text;
 using System.Xml;
 using System.IO;
 using NUnit.Framework.Api;
@@ -44,8 +43,10 @@ namespace NUnitLite.Runner
             // NOTE: Under .NET 1.1, XmlTextWriter does not implement IDisposable,
             // but does implement Close(). Hence we cannot use a 'using' clause.
             //using (XmlTextWriter xmlWriter = new XmlTextWriter(writer))
-            XmlTextWriter xmlWriter = new XmlTextWriter(writer);
-            xmlWriter.Formatting = Formatting.Indented;
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            XmlWriter xmlWriter = XmlWriter.Create(writer, settings);
+            //xmlWriter.Formatting = Formatting.Indented;
 
             try
             {

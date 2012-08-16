@@ -25,8 +25,6 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Reflection;
-using System.Xml;
-using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Filters;
@@ -54,6 +52,8 @@ namespace NUnitLite.Runner
 
         private TextWriter writer;
 
+        private ITestListener listener;
+
         private ITestAssemblyRunner runner;
 
         #region Constructors
@@ -61,17 +61,25 @@ namespace NUnitLite.Runner
         /// <summary>
         /// Initializes a new instance of the <see cref="TextUI"/> class.
         /// </summary>
-        public TextUI() : this(ConsoleWriter.Out) { }
+        public TextUI() : this(ConsoleWriter.Out, TestListener.NULL) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextUI"/> class.
         /// </summary>
         /// <param name="writer">The TextWriter to use.</param>
-        public TextUI(TextWriter writer)
+        public TextUI(TextWriter writer) : this(writer, TestListener.NULL) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextUI"/> class.
+        /// </summary>
+        /// <param name="writer">The TextWriter to use.</param>
+        /// <param name="listener">The Test listener to use.</param>
+        public TextUI(TextWriter writer, ITestListener listener)
         {
             // Set the default writer - may be overridden by the args specified
             this.writer = writer;
             this.runner = new NUnitLiteTestAssemblyRunner(new NUnitLiteTestAssemblyBuilder());
+            this.listener = listener;
         }
 
         #endregion
@@ -95,7 +103,11 @@ namespace NUnitLite.Runner
                 if (commandLineOptions.Wait && commandLineOptions.OutFile != null)
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
 
+#if SILVERLIGHT
+                IDictionary loadOptions = new System.Collections.Generic.Dictionary<string, string>();
+#else
                 IDictionary loadOptions = new Hashtable();
+#endif
                 //if (options.Load.Count > 0)
                 //    loadOptions["LOAD"] = options.Load;
 
@@ -120,14 +132,15 @@ namespace NUnitLite.Runner
 
                     if (!runner.Load(assembly, loadOptions))
                     {
-                        Console.WriteLine("No tests found in assembly {0}", assembly.GetName().Name);
+                        AssemblyName assemblyName = new AssemblyName(assembly.FullName);
+                        Console.WriteLine("No tests found in assembly {0}", assemblyName.Name);
                         return;
                     }
 
                     if (commandLineOptions.Explore)
                         ExploreTests();
                     else
-                        RunTests(filter);
+                        RunTests(this.listener, filter);
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -155,10 +168,10 @@ namespace NUnitLite.Runner
             }
         }
 
-        private void RunTests(ITestFilter filter)
+        private void RunTests(ITestListener listener, ITestFilter filter)
         {
-            ITestResult result = runner.Run(TestListener.NULL, filter);
-            ReportResults(result);
+            ITestResult result = runner.Run(listener, filter);
+            new ResultReporter(result, writer).ReportResults();
             string resultFile = commandLineOptions.ResultFile;
             string resultFormat = commandLineOptions.ResultFormat;
                     
@@ -182,34 +195,29 @@ namespace NUnitLite.Runner
             XmlNode testNode = runner.LoadedTest.ToXml(true);
 
             string listFile = commandLineOptions.ExploreFile;
-            XmlTextWriter testWriter = listFile != null && listFile.Length > 0
-                ? new XmlTextWriter(listFile, System.Text.Encoding.UTF8)
-                : new XmlTextWriter(Console.Out);
-            testWriter.Formatting = Formatting.Indented;
+            System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+            settings.Indent = true;
+            System.Xml.XmlWriter testWriter = null;
+            if (listFile != null && listFile.Length > 0)
+            {
+                TextWriter textWriter = new StreamWriter(listFile);
+                settings.Encoding = System.Text.Encoding.UTF8;
+                testWriter = System.Xml.XmlWriter.Create(textWriter, settings);
+            }
+            else
+            {
+                testWriter = System.Xml.XmlWriter.Create(Console.Out, settings);
+            }
+#if false
+            System.Xml.XmlWriter testWriter = listFile != null && listFile.Length > 0
+                ? System.Xml.XmlWriter.Create(listFile, System.Text.Encoding.UTF8)
+                : System.Xml.XmlWriter.Create(Console.Out);
+            testWriter.Formatting = System.Xml.Formatting.Indented;
+#endif
             testNode.WriteTo(testWriter);
             testWriter.Close();
         }
 
-        /// <summary>
-        /// Reports the results.
-        /// </summary>
-        /// <param name="result">The result.</param>
-        private void ReportResults( ITestResult result )
-        {
-            ResultSummary summary = new ResultSummary(result);
-
-            writer.WriteLine("{0} Tests : {1} Failures, {2} Errors, {3} Not Run",
-                summary.TestCount, summary.FailureCount, summary.ErrorCount, summary.NotRunCount);
-
-            if (summary.FailureCount > 0 || summary.ErrorCount > 0)
-                PrintErrorReport(result);
-
-            if (summary.NotRunCount > 0)
-                PrintNotRunReport(result);
-
-            if (commandLineOptions.Full)
-                PrintFullReport(result);
-        }
         #endregion
 
         #region Helper Methods
@@ -240,7 +248,8 @@ namespace NUnitLite.Runner
 #else
             string title = "NUNit Framework";
 #endif
-            System.Version version = executingAssembly.GetName().Version;
+            AssemblyName assemblyName = new AssemblyName(executingAssembly.FullName);
+            System.Version version = assemblyName.Version;
             string copyright = "Copyright (C) 2012, Charlie Poole";
             string build = "";
 
@@ -263,7 +272,8 @@ namespace NUnitLite.Runner
             if (attrs.Length > 0)
             {
                 AssemblyConfigurationAttribute configAttr = (AssemblyConfigurationAttribute)attrs[0];
-                build = string.Format("({0})", configAttr.Configuration); 
+                if (configAttr.Configuration.Length > 0)
+                    build = string.Format("({0})", configAttr.Configuration); 
             }
 #endif
 
@@ -278,94 +288,6 @@ namespace NUnitLite.Runner
             writer.WriteLine();
         }
 
-        private void PrintErrorReport(ITestResult result)
-        {
-            reportCount = 0;
-            writer.WriteLine();
-            writer.WriteLine("Errors and Failures:");
-            PrintErrorResults(result);
-        }
-
-        private void PrintErrorResults(ITestResult result)
-        {
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintErrorResults(r);
-            else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Name, result.FullName);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-                writer.WriteLine(result.Message);
-#if !NETCF_1_0
-                writer.WriteLine(result.StackTrace);
-#endif
-            }
-        }
-
-        private void PrintNotRunReport(ITestResult result)
-        {
-            reportCount = 0;
-            writer.WriteLine();
-            writer.WriteLine("Tests Not Run:");
-            PrintNotRunResults(result);
-        }
-
-        private void PrintNotRunResults(ITestResult result)
-        {
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintNotRunResults(r);
-            else if (result.ResultState == ResultState.Ignored || result.ResultState == ResultState.NotRunnable || result.ResultState == ResultState.Skipped)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Name, result.FullName, result.Message);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-            }
-        }
-
-        private void PrintTestProperties(ITest test)
-        {
-            foreach (PropertyEntry entry in test.Properties)
-                writer.WriteLine("  {0}: {1}", entry.Name, entry.Value);            
-        }
-
-        private void PrintFullReport(ITestResult result)
-        {
-            writer.WriteLine();
-            writer.WriteLine("All Test Results:");
-            PrintAllResults(result, " ");
-        }
-
-        private void PrintAllResults(ITestResult result, string indent)
-        {
-            string status = null;
-            switch (result.ResultState.Status)
-            {
-                case TestStatus.Failed:
-                    status = "FAIL";
-                    break;
-                case TestStatus.Skipped:
-                    status = "SKIP";
-                    break;
-                case TestStatus.Inconclusive:
-                    status = "INC ";
-                    break;
-                case TestStatus.Passed:
-                    status = "OK  ";
-                    break;
-            }
-
-            writer.Write(status);
-            writer.Write(indent);
-            writer.WriteLine(result.Name);
-
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintAllResults(r, indent + "  ");
-        }
         #endregion
     }
 }

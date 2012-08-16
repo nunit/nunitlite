@@ -8,8 +8,8 @@
     <ProjectGuid>{C8FA4073-B24E-4178-93A1-5E1256C8B528}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NUnitLiteTests</RootNamespace>
-    <AssemblyName>NUnitLiteTests</AssemblyName>
+    <RootNamespace>NUnitLite.Tests</RootNamespace>
+    <AssemblyName>nunitlite.tests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -201,8 +201,11 @@
     <Compile Include="Syntax\SyntaxTest.cs" />
     <Compile Include="Syntax\ThrowsTests.cs" />
     <Compile Include="Syntax\TypeConstraints.cs" />
-    <Compile Include="TestUtilities\AlwaysEqualComparer.cs" />
-    <Compile Include="TestUtilities\CollectionAdapter.cs" />
+    <Compile Include="TestUtilities\Collections\SimpleObjectCollection.cs" />
+    <Compile Include="TestUtilities\Collections\SimpleObjectList.cs" />
+    <Compile Include="TestUtilities\Comparers\AlwaysEqualComparer.cs" />
+    <Compile Include="TestUtilities\Comparers\SimpleEqualityComparer.cs" />
+    <Compile Include="TestUtilities\Comparers\SimpleObjectComparer.cs" />
     <Compile Include="TestUtilities\ResultSummary.cs" />
     <Compile Include="TestUtilities\TestAssert.cs" />
     <Compile Include="TestUtilities\TestBuilder.cs" />

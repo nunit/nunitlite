@@ -47,11 +47,17 @@ namespace NUnit.Framework.Constraints
             if (dirInfo == null)
                 throw new ArgumentException("The actual value must be a DirectoryInfo", "actual");
 
+#if SL_4_0 || SL_5_0
+            foreach (FileInfo file in dirInfo.EnumerateFiles())
+                files++;
+            foreach (DirectoryInfo dir in dirInfo.EnumerateDirectories())
+                subdirs++;
+#else
             files = dirInfo.GetFiles().Length;
             subdirs = dirInfo.GetDirectories().Length;
-            bool hasSucceeded = files == 0 && subdirs == 0;
+#endif
 
-            return hasSucceeded;
+            return files == 0 && subdirs == 0;
         }
 
         /// <summary>

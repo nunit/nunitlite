@@ -28,9 +28,7 @@ namespace NUnit.Framework
 	/// <summary>
 	/// Thrown when an assertion failed.
 	/// </summary>
-#if !NETCF_1_0
 	[Serializable]
-#endif
 	public class AssertionException : System.Exception
 	{
 		/// <param name="message">The error message that explains 
@@ -46,7 +44,7 @@ namespace NUnit.Framework
 			base(message, inner) 
 		{}
 
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 		/// <summary>
 		/// Serialization Constructor
 		/// </summary>

@@ -369,7 +369,7 @@ namespace NUnit.Framework.Attributes
 				base(message, inner) 
 			{}
 
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
 			protected MyAppException(SerializationInfo info, 
 				StreamingContext context) : base(info,context)
 			{}
@@ -419,7 +419,7 @@ namespace NUnit.Framework.Attributes
 		public void ExceptionHandlerIsNotCalledWhenExceptionDoesNotMatch()
 		{
 			ExceptionHandlerCalledClass fixture = new ExceptionHandlerCalledClass();
-			TestBuilder.RunTestCase( fixture, "ThrowsApplicationException" );
+			TestBuilder.RunTestCase( fixture, "ThrowsCustomException" );
 			Assert.IsFalse( fixture.HandlerCalled, "Base Handler should not be called" );
 			Assert.IsFalse( fixture.AlternateHandlerCalled, "Alternate Handler should not be called" );
 		}
@@ -428,7 +428,7 @@ namespace NUnit.Framework.Attributes
 		public void ExceptionHandlerIsNotCalledWhenExceptionDoesNotMatch_AlternateHandler()
 		{
 			ExceptionHandlerCalledClass fixture = new ExceptionHandlerCalledClass();
-            TestBuilder.RunTestCase(fixture, "ThrowsApplicationException_AlternateHandler");
+            TestBuilder.RunTestCase(fixture, "ThrowsCustomException_AlternateHandler");
 			Assert.IsFalse(fixture.HandlerCalled, "Base Handler should not be called");
 			Assert.IsFalse(fixture.AlternateHandlerCalled, "Alternate Handler should not be called");
 		}

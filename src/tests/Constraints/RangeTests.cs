@@ -37,7 +37,6 @@ namespace NUnit.Framework.Constraints.Tests
 				Is.InRange(DateTime.Parse("1-October-2008"), DateTime.Parse("31-December-2008")));
 		}
 
-
 		[Test]
 		public void InRangeFails()
 		{

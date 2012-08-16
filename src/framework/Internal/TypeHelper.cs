@@ -301,7 +301,7 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         public static Array GetEnumValues(Type enumType)
         {
-#if NETCF
+#if NETCF || SILVERLIGHT
             FieldInfo[] fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
 
             Array enumValues = Array.CreateInstance(enumType, fields.Length);

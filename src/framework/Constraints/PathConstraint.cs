@@ -23,6 +23,7 @@
 
 using System;
 using System.IO;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Constraints
 {
@@ -130,7 +131,7 @@ namespace NUnit.Framework.Constraints
         /// <returns></returns>
         protected bool IsSamePath(string path1, string path2)
         {
-            return string.Compare(Canonicalize(expected), Canonicalize((string)actual), caseInsensitive) == 0;
+            return StringUtil.StringsEqual(Canonicalize(expected), Canonicalize((string)actual), caseInsensitive);
         }
 
         /// <summary>
@@ -153,16 +154,17 @@ namespace NUnit.Framework.Constraints
 
             // if lengths are the same, check for equality
             if (length1 == length2)
-                return string.Compare(path1, path2, caseInsensitive) == 0;
+                return StringUtil.StringsEqual(path1, path2, caseInsensitive); 
 
             // path 2 is longer than path 1: see if initial parts match
-            if (string.Compare(path1, path2.Substring(0, length1), caseInsensitive) != 0)
+            if (!StringUtil.StringsEqual(path1, path2.Substring(0, length1), caseInsensitive))
                 return false;
 
             // must match through or up to a directory separator boundary
             return path2[length1 - 1] == Path.DirectorySeparatorChar ||
                 path2[length1] == Path.DirectorySeparatorChar;
         }
+
         #endregion
     }
     #endregion
