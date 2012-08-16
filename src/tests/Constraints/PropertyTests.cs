@@ -48,7 +48,7 @@ namespace NUnit.Framework.Constraints.Tests
 
         static object[] FailureData = new object[] { 
             new TestCaseData( 42, "<System.Int32>" ),
-            new TestCaseData( new SimpleObjectCollection(), "<NUnit.Framework.Internal.SimpleObjectCollection>" ),
+            new TestCaseData( new SimpleObjectCollection(), "<NUnit.TestUtilities.SimpleObjectCollection>" ),
             new TestCaseData( typeof(Int32), "<System.Int32>" ) };
 #if !NUNITLITE
         static object[] InvalidData = new TestCaseData[] 
