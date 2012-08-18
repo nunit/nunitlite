@@ -37,9 +37,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<endswith \"hello\">";
         }
 
-        object[] SuccessData = new object[] { "hello", "I said hello" };
+        internal object[] SuccessData = new object[] { "hello", "I said hello" };
 
-        object[] FailureData = new object[] {
+        internal object[] FailureData = new object[] {
             new TestCaseData( "goodbye", "\"goodbye\"" ), 
             new TestCaseData( "hello there", "\"hello there\"" ),
             new TestCaseData( "say hello to Fred", "\"say hello to Fred\"" ),
@@ -58,9 +58,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<endswith \"hello\">";
         }
 
-        object[] SuccessData = new object[] { "HELLO", "I said Hello" };
+        internal object[] SuccessData = new object[] { "HELLO", "I said Hello" };
 
-        object[] FailureData = new object[] {
+        internal object[] FailureData = new object[] {
             new TestCaseData( "goodbye", "\"goodbye\"" ), 
             new TestCaseData( "What the hell?", "\"What the hell?\"" ),
             new TestCaseData( "hello there", "\"hello there\"" ),

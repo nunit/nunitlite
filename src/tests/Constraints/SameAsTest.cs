@@ -37,9 +37,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<sameas System.Object>";
         }
 
-        static object[] SuccessData = new object[] { obj1 };
+        internal static object[] SuccessData = new object[] { obj1 };
 
-        static object[] FailureData = new object[] { 
+        internal static object[] FailureData = new object[] { 
             new TestCaseData( obj2, "<System.Object>" ),
             new TestCaseData( 3, "3" ),
             new TestCaseData( "Hello", "\"Hello\"" ) };

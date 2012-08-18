@@ -39,3 +39,9 @@ using System.Runtime.InteropServices;
 #if !PocketPC && !WindowsCE && !NETCF
 [assembly: AssemblyFileVersion("1.0.0.0")]
 #endif
+
+// Under Silverlight, it's only possible to reflect
+// over members that would be accessible normally.
+#if SILVERLIGHT
+[assembly: InternalsVisibleTo("nunitlite")]
+#endif

@@ -34,9 +34,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = string.Format("<assignablefrom {0}>", typeof(D1));
         }
 
-        object[] SuccessData = new object[] { new D1(), new B() };
+        internal object[] SuccessData = new object[] { new D1(), new B() };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new TestCaseData( new D2(), "<NUnit.Framework.Constraints.Tests.AssignableFromConstraintTests+D2>" ) };
 
         class B { }

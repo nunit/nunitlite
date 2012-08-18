@@ -25,6 +25,8 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("nunitlite")]
+
 namespace NUnit.TestData.TestCaseSourceAttributeFixture
 {
     [TestFixture]
@@ -53,7 +55,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
             Assert.Ignore("Ignore this");
         }
 
-        static object[] source = new object[] {
+        internal static object[] source = new object[] {
             new TestCaseData( 2, 3, 4 ).Throws(typeof(ArgumentNullException)) };
 
         [TestCaseSource("ignored_source")]
@@ -66,7 +68,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
         {
         }
 
-        static IEnumerable ignored_source
+        internal static IEnumerable ignored_source
         {
             get
             {
@@ -78,7 +80,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
             }
         }
 
-        static IEnumerable explicit_source
+        internal static IEnumerable explicit_source
         {
             get
             {
@@ -96,7 +98,7 @@ namespace NUnit.TestData.TestCaseSourceAttributeFixture
         {
         }
 
-        static IEnumerable exception_source
+        internal static IEnumerable exception_source
         {
             get
             {

@@ -36,7 +36,7 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "all items unique";
         }
 
-            object[] SuccessData = new object[] { new int[] { 1, 3, 17, -2, 34 }, new object[0] };
-            object[] FailureData = new object[] { new object[] { new int[] { 1, 3, 17, 3, 34 }, "< 1, 3, 17, 3, 34 >" } };
+        internal object[] SuccessData = new object[] { new int[] { 1, 3, 17, -2, 34 }, new object[0] };
+        internal object[] FailureData = new object[] { new object[] { new int[] { 1, 3, 17, 3, 34 }, "< 1, 3, 17, 3, 34 >" } };
     }
 }

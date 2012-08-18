@@ -42,9 +42,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<xmlserializable>";
         }
 
-        object[] SuccessData = new object[] { 1, "a", new ArrayList() };
+        internal object[] SuccessData = new object[] { 1, "a", new ArrayList() };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
 #if CLR_2_0 || CLR_4_0
             new TestCaseData( new Dictionary<string, string>(), "<Dictionary`2>" ),
 #endif
@@ -52,7 +52,7 @@ namespace NUnit.Framework.Constraints.Tests
             new TestCaseData( new InternalWithSerializableAttributeClass(), "<InternalWithSerializableAttributeClass>" )
         };
 
-        object[] InvalidData = new object[] { null };
+        internal object[] InvalidData = new object[] { null };
     }
 
     internal class InternalClass

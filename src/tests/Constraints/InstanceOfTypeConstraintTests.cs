@@ -34,9 +34,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = string.Format("<instanceof {0}>", typeof(D1));
         }
 
-        object[] SuccessData = new object[] { new D1(), new D2() };
+        internal object[] SuccessData = new object[] { new D1(), new D2() };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new TestCaseData( new B(), "<NUnit.Framework.Constraints.Tests.InstanceOfTypeConstraintTests+B>" ) 
         };
 

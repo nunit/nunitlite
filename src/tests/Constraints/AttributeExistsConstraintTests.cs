@@ -34,9 +34,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<attributeexists NUnit.Framework.TestFixtureAttribute>";
         }
 
-        object[] SuccessData = new object[] { typeof(AttributeExistsConstraintTests) };
+        internal object[] SuccessData = new object[] { typeof(AttributeExistsConstraintTests) };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new TestCaseData( typeof(D2), "<NUnit.Framework.Constraints.Tests.AttributeExistsConstraintTests+D2>" ) };
 
         [Test, ExpectedException(typeof(System.ArgumentException))]

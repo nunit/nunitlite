@@ -46,7 +46,9 @@ namespace NUnit.Framework.Internal
 		/// <summary>Microsoft Shared Source CLI</summary>
 		SSCLI,
 		/// <summary>Mono</summary>
-		Mono
+		Mono,
+        /// <summary>Silverlight</summary>
+        Silverlight
 	}
 
 	/// <summary>
@@ -138,6 +140,11 @@ namespace NUnit.Framework.Internal
             {
                 if (currentFramework == null)
                 {
+#if SILVERLIGHT
+                    RuntimeType runtime = RuntimeType.Silverlight;
+                    int major = 4;
+                    int minor = 0;
+#else
                     Type monoRuntimeType = Type.GetType("Mono.Runtime", false);
 					bool isMono = monoRuntimeType != null;
 					
@@ -163,7 +170,6 @@ namespace NUnit.Framework.Internal
 							break;
 						}
 					}
-#if !SILVERLIGHT
 					else /* It's windows */
 					if (major == 2)
                     {
@@ -191,6 +197,7 @@ namespace NUnit.Framework.Internal
                     currentFramework = new RuntimeFramework(runtime, new Version(major, minor));
                     currentFramework.clrVersion = Environment.Version;
 
+#if !SILVERLIGHT
                     if (isMono)
                     {
                         MethodInfo getDisplayNameMethod = monoRuntimeType.GetMethod(
@@ -198,6 +205,7 @@ namespace NUnit.Framework.Internal
                         if (getDisplayNameMethod != null)
                             currentFramework.displayName = (string)getDisplayNameMethod.Invoke(null, new object[0]);
                     }
+#endif
                 }
 
                 return currentFramework;
@@ -420,27 +428,11 @@ namespace NUnit.Framework.Internal
 
         private static bool IsRuntimeTypeName(string name)
         {
-#if SILVERLIGHT
-            return Enum.IsDefined(typeof(RuntimeType), name);
-#elif NETCF
-            switch (name.ToUpper())
-            {
-                case "NET":
-                case "MONO":
-                case "SSCLI":
-                case "NETCF":
-                case "ANY":
-                    return true;
-                default:
-                    return false;
-            }
-#else
-            foreach (string item in Enum.GetNames(typeof(RuntimeType)))
+            foreach (string item in TypeHelper.GetEnumNames(typeof(RuntimeType)))
                 if (item.ToLower() == name.ToLower())
                     return true;
 
             return false;
-#endif
         }
 
         private static string GetDefaultDisplayName(RuntimeType runtime, Version version)

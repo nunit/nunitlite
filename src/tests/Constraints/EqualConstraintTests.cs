@@ -42,9 +42,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<equal 4>";
         }
 
-        object[] SuccessData = new object[] { 4, 4.0f, 4.0d, 4.0000m };
+        internal object[] SuccessData = new object[] { 4, 4.0f, 4.0d, 4.0000m };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new TestCaseData( 5, "5" ), 
             new TestCaseData( null, "null" ),
             new TestCaseData( "Hello", "\"Hello\"" ),

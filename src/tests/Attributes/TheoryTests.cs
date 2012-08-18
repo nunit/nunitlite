@@ -61,7 +61,7 @@ namespace NUnit.Framework.Tests
         }
 
         [Datapoint]
-        object nullObj = null;
+        internal object nullObj = null;
 
         [Theory]
         public void NullDatapointIsOK(object o)
@@ -102,7 +102,7 @@ namespace NUnit.Framework.Tests
         }
 
         [Datapoints]
-        string[] vals = new string[] { "xyz1", "xyz2", "xyz3" };
+        internal string[] vals = new string[] { "xyz1", "xyz2", "xyz3" };
 
         [Theory]
         public void ArrayWithDatapointsAttributeIsUsed(string s)

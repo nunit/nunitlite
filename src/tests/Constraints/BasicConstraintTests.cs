@@ -36,9 +36,9 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "null";
         }
 
-        object[] SuccessData = new object[] { null };
+        internal object[] SuccessData = new object[] { null };
 
-        object[] FailureData = new object[] { new object[] { "hello", "\"hello\"" } };
+        internal object[] FailureData = new object[] { new object[] { "hello", "\"hello\"" } };
     }
 
     [TestFixture]
@@ -52,9 +52,9 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "True";
         }
 
-        object[] SuccessData = new object[] { true, 2 + 2 == 4 };
+        internal object[] SuccessData = new object[] { true, 2 + 2 == 4 };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new object[] { null, "null" }, 
             new object[] { "hello", "\"hello\"" },
             new object[] { false, "False" },
@@ -72,9 +72,9 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "False";
         }
 
-        object[] SuccessData = new object[] { false, 2 + 2 == 5 };
+        internal object[] SuccessData = new object[] { false, 2 + 2 == 5 };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new object[] { null, "null" },
             new object[] { "hello", "\"hello\"" },
             new object[] { true, "True" },
@@ -92,9 +92,9 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "NaN";
         }
 
-        object[] SuccessData = new object[] { double.NaN, float.NaN };
+        internal object[] SuccessData = new object[] { double.NaN, float.NaN };
 
-        object[] FailureData = new object[] { 
+        internal object[] FailureData = new object[] { 
             new object[] { null, "null" },
             new object[] { "hello", "\"hello\"" },
             new object[] { 42, "42" },

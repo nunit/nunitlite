@@ -58,11 +58,11 @@ namespace NUnit.Framework.Internal
 		{
             currentCulture = CultureInfo.CurrentCulture;
             currentUICulture = CultureInfo.CurrentUICulture;
-			currentDirectory = Environment.CurrentDirectory;
 #if !SILVERLIGHT
+			currentDirectory = Environment.CurrentDirectory;
             currentPrincipal = Thread.CurrentPrincipal;
 #endif
-		}
+        }
 
 		[TearDown]
 		public void RestoreContext()

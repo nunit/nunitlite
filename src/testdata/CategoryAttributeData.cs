@@ -45,7 +45,7 @@ namespace NUnit.TestData.CategoryAttributeData
         [Test, Category("A-B")]
         public void Test4() { }
 
-        private TestCaseData[] Test3Data = new TestCaseData[] {
+        internal TestCaseData[] Test3Data = new TestCaseData[] {
             new TestCaseData(5).SetCategory("Bottom")
         };
     }

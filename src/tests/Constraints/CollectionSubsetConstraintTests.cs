@@ -34,9 +34,9 @@ namespace NUnit.Framework.Constraints.Tests
             expectedDescription = "subset of < 1, 2, 3, 4, 5 >";
         }
 
-            object[] SuccessData = new object[] { new int[] { 1, 3, 5 }, new int[] { 1, 2, 3, 4, 5 } };
-            object[] FailureData = new object[] { 
-                new object[] { new int[] { 1, 3, 7 }, "< 1, 3, 7 >" },
-                new object[] { new int[] { 1, 2, 2, 2, 5 }, "< 1, 2, 2, 2, 5 >" } };
+        internal object[] SuccessData = new object[] { new int[] { 1, 3, 5 }, new int[] { 1, 2, 3, 4, 5 } };
+        internal object[] FailureData = new object[] { 
+            new object[] { new int[] { 1, 3, 7 }, "< 1, 3, 7 >" },
+            new object[] { new int[] { 1, 2, 2, 2, 5 }, "< 1, 2, 2, 2, 5 >" } };
     }
 }

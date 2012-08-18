@@ -119,7 +119,7 @@ namespace NUnit.Framework.Constraints.Tests
 #endif
 
 #if NET_3_5 || NET_4_0 || SILVERLIGHT
-        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0")]
+        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0,Silverlight")]
         public void WorksWithHashSets()
         {
             var hash1 = new HashSet<string>(new string[] { "presto", "abracadabra", "hocuspocus" });
@@ -128,7 +128,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(new CollectionEquivalentConstraint(hash1).Matches(hash2));
         }
 
-        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0")]
+        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0,Silverlight")]
         public void WorksWithHashSetAndArray()
         {
             var hash = new HashSet<string>(new string[] { "presto", "abracadabra", "hocuspocus" });
@@ -138,7 +138,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(constraint.Matches(array));
         }
 
-        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0")]
+        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0,Silverlight")]
         public void WorksWithArrayAndHashSet()
         {
             var hash = new HashSet<string>(new string[] { "presto", "abracadabra", "hocuspocus" });
@@ -148,7 +148,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(constraint.Matches(hash));
         }
 
-        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0")]
+        [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0,Silverlight")]
         public void FailureMessageWithHashSetAndArray()
         {
             var hash = new HashSet<string>(new string[] { "presto", "abracadabra", "hocuspocus" });

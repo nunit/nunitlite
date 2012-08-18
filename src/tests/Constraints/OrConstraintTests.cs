@@ -34,9 +34,9 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<or <equal 42> <equal 99>>";
         }
 
-		object[] SuccessData = new object[] { 99, 42 };
+        internal object[] SuccessData = new object[] { 99, 42 };
 
-		object[] FailureData = new object[] { new object[] { 37, "37" } };
+        internal object[] FailureData = new object[] { new object[] { 37, "37" } };
 
 		[Test]
         public void CanCombineTestsWithOrOperator()

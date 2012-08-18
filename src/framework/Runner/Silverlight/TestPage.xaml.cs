@@ -24,7 +24,6 @@ namespace NUnitLite.Runner.Silverlight
         private Assembly callingAssembly;
         private ITestAssemblyRunner runner;
         private TextWriter writer;
-        private int reportCount = 0;
 
         public TestPage()
         {
@@ -35,150 +34,30 @@ namespace NUnitLite.Runner.Silverlight
             this.writer = new TextBlockWriter(this.ScratchArea);
         }
 
-        //private TestRunStatus Summary;
-
-        //private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    TextWriter writer = new TextBlockWriter(this.ScratchArea);
-        //    new TextUI(writer, this.Summary).Execute(new string[0]);
-        //}
-
-        //private void bntClicker_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //Execute();
-        //    new TextUI(new TextBlockWriter(this.ScratchArea)).Execute(new string[0]);
-        //}
-
-#if false
-        #region Nested TestRunStatus Class
-
-        public class TestRunStatus : ITestListener, INotifyPropertyChanged
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            #region Properties
+            DisplayApplicationHeader();
 
-            private int total = 0;
-            public int Total
-            {
-                get { return total; }
-                set
-                {
-                    total = value;
-                    NotifyPropertyChanged("Total");
-                }
-            }
-
-            private int passed = 0;
-            public int Passed
-            {
-                get { return passed; }
-                set
-                {
-                    passed = value;
-                    NotifyPropertyChanged("Passed");
-                }
-            }
-
-            private int failures = 0;
-            public int Failures
-            {
-                get { return failures; }
-                set
-                {
-                    failures = value;
-                    NotifyPropertyChanged("Failures");
-                }
-            }
-
-            private string currentFixture;
-            public string CurrentFixture
-            {
-                get { return currentFixture; }
-                set 
-                { 
-                    currentFixture = value;
-                    NotifyPropertyChanged("CurrentFixture");
-                }
-            }
-
-            private string currentTest;
-            public string CurrentTest 
-            {
-                get { return currentTest; }
-                set 
-                { 
-                    currentTest = value;
-                    NotifyPropertyChanged("CurrentTest");
-                }
-            }
-
-            private string scratchArea;
-            public string ScratchArea
-            {
-                get { return scratchArea; }
-                set
-                {
-                    scratchArea = value;
-                    NotifyPropertyChanged("ScratchArea");
-                }
-            }
-
-            #endregion
-
-            #region ITestListener Members
-
-            public void TestStarted(ITest test)
-            {
-                if (test.FixtureType != null)
-                    CurrentFixture = test.FixtureType.Name;
-                CurrentTest = test.FullName;
-            }
-
-            public void TestFinished(ITestResult result)
-            {
-                Total++;
-                Passed++;
-            }
-
-            public void TestOutput(TestOutput testOutput)
-            {
-                ScratchArea += testOutput.Text;
-            }
-
-            #endregion
-
-            #region INotifyPropertyChanged Interface
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            #endregion
-
-            #region Helper Methods
-
-            private void NotifyPropertyChanged(string propertyName)
-            {
-                if (PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-
-            #endregion
+            if (!LoadTestAssembly())
+                writer.WriteLine("No tests found in assembly {0}", GetAssemblyName(callingAssembly));
+            else
+                Dispatcher.BeginInvoke(() => ExecuteTests());
         }
 
-        #endregion
-#endif
+        #region Helper Methods
 
-        private void Execute()
+        private bool LoadTestAssembly()
         {
-            WriteCopyright();
+            return runner.Load(callingAssembly, new Dictionary<string, string>());
+        }
 
-            IDictionary loadOptions = new System.Collections.Generic.Dictionary<string, string>();
+        private string GetAssemblyName(Assembly assembly)
+        {
+            return new AssemblyName(assembly.FullName).Name;
+        }
 
-            if (!runner.Load(callingAssembly, loadOptions))
-            {
-                AssemblyName assemblyName = new AssemblyName(callingAssembly.FullName);
-                writer.WriteLine("No tests found in assembly {0}", assemblyName.Name);
-                return;
-            }
-
+        private void ExecuteTests()
+        {
             ITestResult result = runner.Run(TestListener.NULL, TestFilter.Empty);
             ResultReporter reporter = new ResultReporter(result, writer);
 
@@ -196,7 +75,7 @@ namespace NUnitLite.Runner.Silverlight
             this.Notice.Visibility = Visibility.Collapsed;
         }
 
-        private void WriteCopyright()
+        private void DisplayApplicationHeader()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
 #if NUNITLITE
@@ -244,9 +123,6 @@ namespace NUnitLite.Runner.Silverlight
             writer.WriteLine();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.BeginInvoke( () => Execute() );
-        }
+        #endregion
     }
 }

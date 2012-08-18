@@ -210,32 +210,32 @@ namespace NUnit.Framework.Syntax
 
     public class OperatorPrecedenceTests
     {
-        class A
+        public class A
         {
-            B B
+            public B B
             {
                 get { return new B(); }
             }
 
-            string X
+            public string X
             {
                 get { return "X in A"; }
             }
 
-            string Y
+            public string Y
             {
                 get { return "Y in A"; }
             }
         }
 
-        class B
+        public class B
         {
-            string X
+            public string X
             {
                 get { return "X in B"; }
             }
 
-            string Y
+            public string Y
             {
                 get { return "Y in B"; }
             }

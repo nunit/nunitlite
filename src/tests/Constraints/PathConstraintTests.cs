@@ -39,7 +39,7 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<samepath \"C:\\folder1\\file.tmp\" ignorecase>";
         }
 
-        object[] SuccessData = new object[] 
+        internal object[] SuccessData = new object[] 
             { 
                 @"C:\folder1\file.tmp", 
                 @"C:\Folder1\File.TMP",
@@ -48,7 +48,7 @@ namespace NUnit.Framework.Constraints.Tests
                 @"C:\FOLDER1\.\folder2\..\File.TMP",
                 @"C:/folder1/file.tmp"
             };
-        object[] FailureData = new object[] 
+        internal object[] FailureData = new object[] 
             { 
                 new TestCaseData( 123, "123" ),
                 new TestCaseData( @"C:\folder2\file.tmp", "\"C:\\folder2\\file.tmp\"" ),
@@ -67,7 +67,7 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = @"<samepath ""/folder1/folder2"" respectcase>";
         }
 
-        object[] SuccessData = new object[] 
+        internal object[] SuccessData = new object[] 
             { 
                 @"/folder1/folder2", 
 				@"/folder1/folder2/",
@@ -80,7 +80,7 @@ namespace NUnit.Framework.Constraints.Tests
                 @"\folder1\folder2",
                 @"\folder1\folder2\"
             };
-        object[] FailureData = new object[] 
+        internal object[] FailureData = new object[] 
             { 
                 new TestCaseData( 123, "123" ),
                 new TestCaseData( @"/junk/folder2", "\"/junk/folder2\"" ),
@@ -101,7 +101,7 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = @"<samepathorunder ""C:\folder1\folder2"" ignorecase>";
         }
 
-        object[] SuccessData = new object[]
+        internal object[] SuccessData = new object[]
             {
                 @"C:\folder1\folder2",
                 @"C:\Folder1\Folder2",
@@ -115,7 +115,7 @@ namespace NUnit.Framework.Constraints.Tests
                 @"C:\FOLDER1\.\junk\..\Folder2\temp\..\Folder3",
                 @"C:/folder1/folder2/folder3",
             };
-        object[] FailureData = new object[]
+        internal object[] FailureData = new object[]
             {
                 new TestCaseData( 123, "123" ),
                 new TestCaseData( @"C:\folder1\folder3", "\"C:\\folder1\\folder3\"" ),
@@ -134,7 +134,7 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = @"<samepathorunder ""/folder1/folder2"" respectcase>";
         }
 
-        object[] SuccessData = new object[]
+        internal object[] SuccessData = new object[]
             {
                 @"/folder1/folder2",
                 @"/folder1/./folder2",
@@ -145,7 +145,7 @@ namespace NUnit.Framework.Constraints.Tests
                 @"/folder1/junk/../folder2/folder3",
                 @"\folder1\folder2\folder3",
             };
-        object[] FailureData = new object[]
+        internal object[] FailureData = new object[]
             {
                 new TestCaseData( 123, "123" ),
                 new TestCaseData( "/Folder1/Folder2", "\"/Folder1/Folder2\"" ),

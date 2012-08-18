@@ -54,13 +54,6 @@ namespace NUnit.Framework.Internal
             Assert.AreEqual(fixtureType.FullName, fixture.FullName);
         }
 
-        private static Type GetTestDataType(string typeName)
-        {
-            string qualifiedName = string.Format("{0},{1}", typeName, dataAssembly);
-            Type type = Type.GetType(qualifiedName);
-            return type;
-        }
-
         [Test]
 		public void ConstructFromType()
 		{
@@ -211,7 +204,7 @@ namespace NUnit.Framework.Internal
         public void CanRunGenericFixtureWithProperArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
-                GetTestDataType("NUnit.TestData.TestFixtureData.GenericFixtureWithProperArgsProvided`1"));
+                typeof(NUnit.TestData.TestFixtureData.GenericFixtureWithProperArgsProvided<>));
             Assert.That(suite.RunState, Is.EqualTo(RunState.Runnable));
             Assert.That(suite is ParameterizedFixtureSuite);
             Assert.That(suite.Tests.Count, Is.EqualTo(2));
@@ -232,7 +225,7 @@ namespace NUnit.Framework.Internal
         public void CannotRunGenericFixtureWithNoArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
-                GetTestDataType("NUnit.TestData.TestFixtureData.GenericFixtureWithNoArgsProvided`1"));
+                typeof(NUnit.TestData.TestFixtureData.GenericFixtureWithNoArgsProvided<>));
 
             Test fixture = (Test)suite.Tests[0];
             Assert.That(fixture.RunState, Is.EqualTo(RunState.NotRunnable));
@@ -243,7 +236,7 @@ namespace NUnit.Framework.Internal
         public void CannotRunGenericFixtureDerivedFromAbstractFixtureWithNoArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
-                GetTestDataType("NUnit.TestData.TestFixtureData.GenericFixtureDerivedFromAbstractFixtureWithNoArgsProvided`1"));
+                typeof(NUnit.TestData.TestFixtureData.GenericFixtureDerivedFromAbstractFixtureWithNoArgsProvided<>));
             TestAssert.IsNotRunnable((Test)suite.Tests[0]);
         }
 
@@ -251,7 +244,7 @@ namespace NUnit.Framework.Internal
         public void CanRunGenericFixtureDerivedFromAbstractFixtureWithArgsProvided()
         {
             TestSuite suite = TestBuilder.MakeFixture(
-                GetTestDataType("NUnit.TestData.TestFixtureData.GenericFixtureDerivedFromAbstractFixtureWithArgsProvided`1"));
+                typeof(NUnit.TestData.TestFixtureData.GenericFixtureDerivedFromAbstractFixtureWithArgsProvided<>));
             Assert.That(suite.RunState, Is.EqualTo(RunState.Runnable));
             Assert.That(suite is ParameterizedFixtureSuite);
             Assert.That(suite.Tests.Count, Is.EqualTo(2));
@@ -266,11 +259,19 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateSetUp));
 		}
 
+#if SILVERLIGHT
+		[Test] 
+		public void ProtectedSetUpFailsUnderSilverlight()
+		{
+            TestAssert.IsRunnable(typeof(ProtectedSetUp), ResultState.Failure);
+		}
+#else
 		[Test] 
 		public void CanRunProtectedSetUp()
 		{
             TestAssert.IsRunnable(typeof(ProtectedSetUp));
 		}
+#endif
 
         /// <summary>
         /// Determines whether this instance [can run static set up].
@@ -301,11 +302,19 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateTearDown));
 		}
 
-		[Test] 
-		public void CanRunProtectedTearDown()
-		{
+#if SILVERLIGHT
+        [Test]
+        public void ProtectedTearDownFailsUnderSilverlight()
+        {
+            TestAssert.IsRunnable(typeof(ProtectedTearDown), ResultState.Failure);
+        }
+#else
+        [Test]
+        public void CanRunProtectedTearDown()
+        {
             TestAssert.IsRunnable(typeof(ProtectedTearDown));
-		}
+        }
+#endif
 
 		[Test] 
 		public void CanRunStaticTearDown()
@@ -333,11 +342,19 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateFixtureSetUp));
 		}
 
-		[Test] 
-		public void CanRunProtectedFixtureSetUp()
-		{
+#if SILVERLIGHT
+        [Test]
+        public void ProtectedFixtureSetUpFailsUnderSilverlight()
+        {
+            TestAssert.IsRunnable(typeof(ProtectedFixtureSetUp), ResultState.Error);
+        }
+#else
+        [Test]
+        public void CanRunProtectedFixtureSetUp()
+        {
             TestAssert.IsRunnable(typeof(ProtectedFixtureSetUp));
-		}
+        }
+#endif
 
 		[Test] 
 		public void CanRunStaticFixtureSetUp()
@@ -365,11 +382,19 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateFixtureTearDown));
 		}
 
-		[Test] 
-		public void CanRunProtectedFixtureTearDown()
-		{
+#if SILVERLIGHT
+        [Test]
+        public void ProtectedFixtureTearDownFailsUnderSilverlight()
+        {
+            TestAssert.IsRunnable(typeof(ProtectedFixtureTearDown), ResultState.Error);
+        }
+#else
+        [Test]
+        public void CanRunProtectedFixtureTearDown()
+        {
             TestAssert.IsRunnable(typeof(ProtectedFixtureTearDown));
-		}
+        }
+#endif
 
 		[Test] 
 		public void CanRunStaticFixtureTearDown()

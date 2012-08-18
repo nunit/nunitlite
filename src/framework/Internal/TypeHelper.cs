@@ -314,5 +314,21 @@ namespace NUnit.Framework.Internal
             return Enum.GetValues(enumType);
 #endif
         }
+
+        public static string[] GetEnumNames(Type enumType)
+        {
+#if NETCF || SILVERLIGHT
+            FieldInfo[] fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            string[] names = new string[fields.Length];
+
+            for (int index = 0; index < fields.Length; index++)
+                names[index] = fields[index].Name;
+
+            return names;
+#else
+            return Enum.GetNames(enumType);
+#endif
+        }
     }
 }

@@ -35,14 +35,17 @@ namespace NUnit.TestUtilities
         {
             Assert.AreEqual(RunState.Runnable, test.RunState);
         }
-
         public static void IsRunnable(Type type)
+        {
+            IsRunnable(type, ResultState.Success);
+        }
+        public static void IsRunnable(Type type, ResultState resultState)
         {
             TestSuite suite = TestBuilder.MakeFixture(type);
 			Assert.NotNull(suite, "Unable to construct fixture");
             Assert.AreEqual(RunState.Runnable, suite.RunState);
             ITestResult result = TestBuilder.RunTestFixture(suite);
-            Assert.AreEqual(ResultState.Success, result.ResultState);
+            Assert.AreEqual(resultState, result.ResultState);
         }
 
         public static void IsRunnable(Type type, string name)

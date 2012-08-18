@@ -260,6 +260,9 @@ namespace NUnit.Framework.Internal
                 case "MONO":
                     return IsRuntimeSupported(RuntimeType.Mono, versionSpecification);
 
+                case "SILVERLIGHT":
+                    return IsRuntimeSupported(RuntimeType.Silverlight, versionSpecification);
+
                 default:
                     throw new ArgumentException("Invalid platform name", platformName);
             }

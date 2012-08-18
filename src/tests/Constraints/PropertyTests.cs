@@ -44,14 +44,14 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<propertyexists Length>";
         }
 
-        static object[] SuccessData = new object[] { new int[0], "hello", typeof(Array) };
+        internal static object[] SuccessData = new object[] { new int[0], "hello", typeof(Array) };
 
-        static object[] FailureData = new object[] { 
+        internal static object[] FailureData = new object[] { 
             new TestCaseData( 42, "<System.Int32>" ),
             new TestCaseData( new SimpleObjectCollection(), "<NUnit.TestUtilities.SimpleObjectCollection>" ),
             new TestCaseData( typeof(Int32), "<System.Int32>" ) };
 #if !NUNITLITE
-        static object[] InvalidData = new TestCaseData[] 
+        internal static object[] InvalidData = new TestCaseData[] 
         { 
             new TestCaseData(null).Throws(typeof(ArgumentNullException))
         };
@@ -73,13 +73,13 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<property Length <equal 5>>";
         }
 
-        static object[] SuccessData = new object[] { new int[5], "hello" };
+        internal static object[] SuccessData = new object[] { new int[5], "hello" };
 
-        static object[] FailureData = new object[] { 
+        internal static object[] FailureData = new object[] { 
             new TestCaseData( new int[3], "3" ),
             new TestCaseData( "goodbye", "7" ) };
 #if !NUNITLITE
-        static object[] InvalidData = new object[] 
+        internal static object[] InvalidData = new object[] 
         { 
             new TestCaseData(null).Throws(typeof(ArgumentNullException)),
             new TestCaseData(42).Throws(typeof(ArgumentException)), 

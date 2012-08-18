@@ -43,11 +43,11 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<range 5 42>";
         }
 
-        object[] SuccessData = new object[] { 5, 23, 42 };
+        internal object[] SuccessData = new object[] { 5, 23, 42 };
 
-        object[] FailureData = new object[] { new object[] { 4, "4" }, new object[] { 43, "43" } };
+        internal object[] FailureData = new object[] { new object[] { 4, "4" }, new object[] { 43, "43" } };
 
-        object[] InvalidData = new object[] { null, "xxx" };
+        internal object[] InvalidData = new object[] { null, "xxx" };
 
         [Test]
         public void UsesProvidedIComparer()

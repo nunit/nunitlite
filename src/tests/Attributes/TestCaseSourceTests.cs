@@ -38,7 +38,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("StaticProperty", source);
         }
 
-        static IEnumerable StaticProperty
+        internal static IEnumerable StaticProperty
         {
             get { return new object[] { new object[] { "StaticProperty" } }; }
         }
@@ -49,7 +49,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("InstanceProperty", source);
         }
 
-        IEnumerable InstanceProperty
+        internal IEnumerable InstanceProperty
         {
             get { return new object[] { new object[] { "InstanceProperty" } }; }
         }
@@ -60,7 +60,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("StaticMethod", source);
         }
 
-        static IEnumerable StaticMethod()
+        internal static IEnumerable StaticMethod()
         {
             return new object[] { new object[] { "StaticMethod" } };
         }
@@ -71,7 +71,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("InstanceMethod", source);
         }
 
-        IEnumerable InstanceMethod()
+        internal IEnumerable InstanceMethod()
         {
             return new object[] { new object[] { "InstanceMethod" } };
         }
@@ -82,7 +82,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("StaticField", source);
         }
 
-        static object[] StaticField =
+        internal static object[] StaticField =
             { new object[] { "StaticField" } };
 
         [Test, TestCaseSource("InstanceField")]
@@ -91,7 +91,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("InstanceField", source);
         }
 
-        static object[] InstanceField =
+        internal static object[] InstanceField =
             { new object[] { "InstanceField" } };
 
 #if CLR_2_0 || CLR_4_0
@@ -101,7 +101,7 @@ namespace NUnit.Framework.Tests
             Assert.AreEqual("DataSourceClass", source);
         }
 
-        class DataSourceClass : IEnumerable
+        internal class DataSourceClass : IEnumerable
         {
             public IEnumerator GetEnumerator()
             {
@@ -261,7 +261,7 @@ namespace NUnit.Framework.Tests
         }
 #endif
 
-        object[] testCases =
+        internal object[] testCases =
         {
             new TestCaseData(
                 new string[] { "A" },
@@ -276,33 +276,33 @@ namespace NUnit.Framework.Tests
         }
 
         #region Sources used by the tests
-        static object[] MyData = new object[] {
+        internal static object[] MyData = new object[] {
             new object[] { 12, 3, 4 },
             new object[] { 12, 4, 3 },
             new object[] { 12, 6, 2 } };
 
-        static object[] MyIntData = new object[] {
+        internal static object[] MyIntData = new object[] {
             new int[] { 12, 3, 4 },
             new int[] { 12, 4, 3 },
             new int[] { 12, 6, 2 } };
 
-        static object[] FourArgs = new object[] {
+        internal static object[] FourArgs = new object[] {
             new TestCaseData( 12, 3, 4, 0 ),
             new TestCaseData( 12, 4, 3, 0 ),
             new TestCaseData( 12, 5, 2, 2 ) };
 
-        static int[] EvenNumbers = new int[] { 2, 4, 6, 8 };
+        internal static int[] EvenNumbers = new int[] { 2, 4, 6, 8 };
 
-        static object[] MoreData = new object[] {
+        internal static object[] MoreData = new object[] {
             new object[] { 12, 1, 12 },
             new object[] { 12, 2, 6 } };
 
-        static object[] Params = new object[] {
+        internal static object[] Params = new object[] {
             new TestCaseData(24, 3).Returns(8),
             new TestCaseData(24, 2).Returns(12) };
 
 #if CLR_2_0 || CLR_4_0
-        private class DivideDataProvider
+        public class DivideDataProvider
         {
             public static IEnumerable HereIsTheData
             {
@@ -337,7 +337,7 @@ namespace NUnit.Framework.Tests
         }
 
 #if CLR_2_0 || CLR_4_0
-        private static IEnumerable exception_source
+        internal static IEnumerable exception_source
         {
             get
             {

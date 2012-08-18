@@ -40,11 +40,11 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<greaterthan 5>";
         }
 
-        object[] SuccessData = new object[] { 6, 5.001 };
+        internal object[] SuccessData = new object[] { 6, 5.001 };
 
-        object[] FailureData = new object[] { new object[] { 4, "4" }, new object[] { 5, "5" } };
+        internal object[] FailureData = new object[] { new object[] { 4, "4" }, new object[] { 5, "5" } };
 
-        object[] InvalidData = new object[] { null, "xxx" };
+        internal object[] InvalidData = new object[] { null, "xxx" };
 
         [Test]
         public void CanCompareIComparables()

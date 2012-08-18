@@ -38,12 +38,12 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<throws <typeof System.ArgumentException>>";
         }
 
-        static object[] SuccessData = new object[]
+        internal static object[] SuccessData = new object[]
         {
             new TestDelegate( TestDelegates.ThrowsArgumentException )
         };
 
-        static object[] FailureData = new object[]
+        internal static object[] FailureData = new object[]
         {
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsNothing ), "no exception thrown" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsSystemException ), "<System.Exception>" )
@@ -62,13 +62,13 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = "<throws <instanceof NUnit.TestUtilities.TestDelegates+CustomException>>";
         }
 
-        static object[] SuccessData = new object[]
+        internal static object[] SuccessData = new object[]
         {
             new TestDelegate( TestDelegates.ThrowsCustomException ),
             new TestDelegate( TestDelegates.ThrowsDerivedCustomException )
         };
 
-        static object[] FailureData = new object[]
+        internal static object[] FailureData = new object[]
         {
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsArgumentException ), "<System.ArgumentException>" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsNothing ), "no exception thrown" ),
@@ -77,7 +77,7 @@ namespace NUnit.Framework.Constraints.Tests
     }
 
 // TODO: Find a different example for use with NETCF - ArgumentException does not have a ParamName member
-#if !NETCF
+#if !NETCF && !SILVERLIGHT
     public class ThrowsConstraintTest_WithConstraint : ConstraintTestBase
     {
         [SetUp]
@@ -91,12 +91,12 @@ namespace NUnit.Framework.Constraints.Tests
             stringRepresentation = @"<throws <and <typeof System.ArgumentException> <property ParamName <equal ""myParam"">>>>";
         }
 
-        static object[] SuccessData = new object[]
+        internal static object[] SuccessData = new object[]
         {
             new TestDelegate( TestDelegates.ThrowsArgumentException )
         };
 
-        static object[] FailureData = new object[]
+        internal static object[] FailureData = new object[]
         {
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsCustomException ), "<NUnit.TestUtilities.TestDelegates+CustomException>" ),
             new TestCaseData( new TestDelegate( TestDelegates.ThrowsNothing ), "no exception thrown" ),

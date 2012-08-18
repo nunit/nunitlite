@@ -30,9 +30,9 @@ namespace NUnit.TestData.TheoryFixture
     public class TheoryFixture
     {
         [Datapoint]
-        private int i0 = 0;
+        internal int i0 = 0;
         [Datapoint]
-        static int i1 = 1;
+        internal static int i1 = 1;
         [Datapoint]
         public int i100 = 100;
 

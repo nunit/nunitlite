@@ -23,7 +23,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("StaticProperty", source);
         }
 
-        static IEnumerable StaticProperty
+        internal static IEnumerable StaticProperty
         {
             get
             {
@@ -39,7 +39,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("InstanceProperty", source);
         }
 
-        IEnumerable InstanceProperty
+        internal IEnumerable InstanceProperty
         {
             get { return new object[] { "InstanceProperty" }; }
         }
@@ -51,7 +51,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("StaticMethod", source);
         }
 
-        static IEnumerable StaticMethod()
+        internal static IEnumerable StaticMethod()
         {
             return new object[] { "StaticMethod" };
         }
@@ -63,7 +63,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("InstanceMethod", source);
         }
 
-        IEnumerable InstanceMethod()
+        internal IEnumerable InstanceMethod()
         {
             return new object[] { "InstanceMethod" };
         }
@@ -84,7 +84,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("InstanceField", source);
         }
 
-        internal static object[] InstanceField = { "InstanceField" };
+        internal object[] InstanceField = { "InstanceField" };
 
         [Test, Sequential]
         public void MultipleArguments(
@@ -108,7 +108,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual(q, n / d);
         }
 
-        private class DivideDataProvider
+        public class DivideDataProvider
         {
             internal static int[] Numerators = new int[] { 12, 12, 12 };
             internal static int[] Denominators = new int[] { 3, 4, 6 };
