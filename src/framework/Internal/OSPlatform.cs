@@ -225,6 +225,22 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
+        /// Return true if the platform is Xbox
+        /// </summary>
+        public bool IsXbox
+        {
+            get { return platform == PlatformID.Xbox; }
+        }
+
+        /// <summary>
+        /// Return true if the platform is MacOSX
+        /// </summary>
+        public bool IsMacOSX
+        {
+            get { return platform == PlatformID.MacOSX; }
+        }
+
+        /// <summary>
         /// Return true if the platform is Windows 95
         /// </summary>
         public bool IsWin95

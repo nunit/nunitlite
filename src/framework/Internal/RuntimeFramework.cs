@@ -46,7 +46,9 @@ namespace NUnit.Framework.Internal
 		/// <summary>Microsoft Shared Source CLI</summary>
 		SSCLI,
 		/// <summary>Mono</summary>
-		Mono
+		Mono,
+        /// <summary>MonoTouch</summary>
+        MonoTouch
 	}
 
 	/// <summary>
@@ -139,13 +141,17 @@ namespace NUnit.Framework.Internal
                 if (currentFramework == null)
                 {
                     Type monoRuntimeType = Type.GetType("Mono.Runtime", false);
+                    Type monoTouchType = Type.GetType("MonoTouch.UIKit.UIApplicationDelegate, monotouch");
+                    bool isMonoTouch = monoTouchType != null;
 					bool isMono = monoRuntimeType != null;
 					
-                    RuntimeType runtime = isMono
-                        ? RuntimeType.Mono 
-                        : Environment.OSVersion.Platform == PlatformID.WinCE
-                            ? RuntimeType.NetCF
-                            : RuntimeType.Net;
+                    RuntimeType runtime = isMonoTouch
+                        ? RuntimeType.MonoTouch
+                        : isMono
+                            ? RuntimeType.Mono 
+                            : Environment.OSVersion.Platform == PlatformID.WinCE
+                                ? RuntimeType.NetCF
+                                : RuntimeType.Net;
 
                     int major = Environment.Version.Major;
                     int minor = Environment.Version.Minor;
