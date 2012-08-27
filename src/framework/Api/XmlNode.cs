@@ -48,9 +48,9 @@ namespace NUnit.Framework.Api
         #region Constructors
 
         /// <summary>
-        /// Constructs a new instance of XmlResult
+        /// Constructs a new instance of XmlNode
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="name">The name of the node</param>
         public XmlNode(string name)
         {
             this.name = name;

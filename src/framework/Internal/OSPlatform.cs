@@ -224,6 +224,7 @@ namespace NUnit.Framework.Internal
             get { return (int)platform == 3; } // PlatformID.WinCE not defined in .NET 1.0
         }
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
         /// <summary>
         /// Return true if the platform is Xbox
         /// </summary>
@@ -239,6 +240,7 @@ namespace NUnit.Framework.Internal
         {
             get { return platform == PlatformID.MacOSX; }
         }
+#endif
 
         /// <summary>
         /// Return true if the platform is Windows 95

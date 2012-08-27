@@ -226,6 +226,7 @@ namespace NUnit.Framework.Internal
                 "UNIX,Linux");
         }
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
         [Test]
         public void DetectXbox()
         {
@@ -241,6 +242,7 @@ namespace NUnit.Framework.Internal
                 new OSPlatform(PlatformID.MacOSX, new Version(0, 0)),
                 "MacOSX");
         }
+#endif
 
         [Test]
 		public void DetectNet10()
