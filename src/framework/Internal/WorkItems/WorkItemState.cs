@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,35 +21,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework.Internal;
-
-namespace NUnit.Framework
+namespace NUnit.Framework.Internal.WorkItems
 {
     /// <summary>
-    /// Summary description for SetUICultureAttribute.
+    /// The current state of a work item
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly, AllowMultiple = true, Inherited=true)]
-    public class SetUICultureAttribute : PropertyAttribute, IApplyToContext
+    public enum WorkItemState
     {
-        private string _culture;
+        /// <summary>
+        /// Ready to run or continue
+        /// </summary>
+        Ready,
 
         /// <summary>
-        /// Construct given the name of a culture
+        /// Waiting for a dependency to complete
         /// </summary>
-        /// <param name="culture"></param>
-        public SetUICultureAttribute(string culture) : base("SetUICulture", culture)
-        {
-            _culture = culture;
-        }
+        Waiting,
 
-        #region IApplyToContext Members
-
-        void IApplyToContext.ApplyToContext(TestExecutionContext context)
-        {
-            context.CurrentUICulture = new System.Globalization.CultureInfo(_culture);
-        }
-
-        #endregion
+        /// <summary>
+        /// Complete
+        /// </summary>
+        Complete
     }
 }

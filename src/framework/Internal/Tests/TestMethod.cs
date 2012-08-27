@@ -21,13 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
 #endif
 using System.Reflection;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Internal.WorkItems;
 
 namespace NUnit.Framework.Internal
 {
@@ -57,16 +57,11 @@ namespace NUnit.Framework.Internal
 #endif
 
         /// <summary>
-        /// Indicated whether the method has an expected result.
+        /// The ParameterSet used to create this test method
         /// </summary>
-	    internal bool hasExpectedResult;
+        internal ParameterSet parms;
 
-        /// <summary>
-        /// The result that the test method is expected to return.
-        /// </summary>
-        internal object expectedResult;
-
-		#endregion
+        #endregion
 
 		#region Constructor
 
@@ -102,6 +97,7 @@ namespace NUnit.Framework.Internal
             }
 
             this.method = method;
+            this.attributeProvider = method;
         }
 
 		#endregion
@@ -127,6 +123,21 @@ namespace NUnit.Framework.Internal
 #endif
         {
             get { return decorators; }
+        }
+
+        internal bool HasExpectedResult
+        {
+            get { return parms != null && parms.HasExpectedResult; }
+        }
+
+        internal object ExpectedResult
+        {
+            get { return parms != null ? parms.ExpectedResult : null; }
+        }
+
+        internal object[] Arguments
+        {
+            get { return parms != null ? parms.Arguments : null; }
         }
 
         #endregion
@@ -214,19 +225,27 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
-        /// Creates and returns a test command for use in running
-        /// this test. Child tests are included in the command only
-        /// if they pass the supplied filter.
+        /// Creates a test command for use in running this test. 
         /// </summary>
-        /// <param name="filter">A test filter to be applied to any child tests.</param>
         /// <returns></returns>
-        protected override TestCommand MakeTestCommand(ITestFilter filter)
+        protected override TestCommand MakeTestCommand()
         {
             TestCommand command = new TestMethodCommand(this);
 
             command = ApplyDecoratorsToCommand(command);
 
             return command;
+        }
+
+        /// <summary>
+        /// Creates a WorkItem for executing this test.
+        /// </summary>
+        /// <param name="childFilter">A childFilter to be used in selecting child tests</param>
+        /// <returns>A new WorkItem</returns>
+        public override WorkItem CreateWorkItem(ITestFilter childFilter)
+        {
+            // For simple test cases, we ignore the filter
+            return new SimpleWorkItem(this);
         }
 
         #endregion

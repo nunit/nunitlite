@@ -21,9 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
+using NUnit.Framework.Api;
 
-namespace NUnit.Framework.Api
+namespace NUnit.Framework.Internal
 {
     /// <summary>
     /// The IApplyToTest interface is implemented by self-applying
@@ -35,6 +35,6 @@ namespace NUnit.Framework.Api
         /// Modifies a test as defined for the specific attribute.
         /// </summary>
         /// <param name="test">The test to modify</param>
-        void ApplyToTest(ITest test);
+        void ApplyToTest(Test test);
     }
 }

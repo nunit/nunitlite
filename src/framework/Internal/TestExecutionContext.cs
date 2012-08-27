@@ -64,6 +64,11 @@ namespace NUnit.Framework.Internal
         private Test currentTest;
 
         /// <summary>
+        /// The time the test began execution
+        /// </summary>
+        private DateTime startTime;
+
+        /// <summary>
         /// The active TestResult for the current test
         /// </summary>
         private TestResult currentResult;
@@ -274,6 +279,15 @@ namespace NUnit.Framework.Internal
         {
             get { return currentTest; }
             set { currentTest = value; }
+        }
+
+        /// <summary>
+        /// The time the current test started execution
+        /// </summary>
+        public DateTime StartTime
+        {
+            get { return startTime; }
+            set { startTime = value; }
         }
 
         /// <summary>

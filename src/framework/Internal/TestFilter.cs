@@ -62,7 +62,7 @@ namespace NUnit.Framework.Internal
 		public abstract bool Match(ITest test);
 
 		/// <summary>
-		/// Determine whether any ancestor of the test mateches the filter criteria
+		/// Determine whether any ancestor of the test matches the filter criteria
 		/// </summary>
 		/// <param name="test">The test to which the filter is applied</param>
 		/// <returns>True if the filter matches the an ancestor of the test</returns>

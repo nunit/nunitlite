@@ -42,6 +42,7 @@ namespace NUnit.Framework.Internal
         {
             this.method = method;
             this.maintainTestOrder = true;
+            this.attributeProvider = method;
         }
 
         /// <summary>

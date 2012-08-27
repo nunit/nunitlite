@@ -21,31 +21,34 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-#if CLR_2_0 || CLR_4_0
-using System.Collections.Generic;
-#endif
-using NUnit.Framework.Api;
-
 namespace NUnit.Framework.Internal.Commands
 {
     /// <summary>
-    /// TestCommand is the base class for all test commands
-    /// in the framework.
+    /// TestCommand is the abstract base class for all test commands
+    /// in the framework. A TestCommand represents a single stage in
+    /// the execution of a test, e.g.: SetUp/TearDown, checking for
+    /// Timeout, verifying the returned result from a method, etc.
+    /// 
+    /// TestCommands may decorate other test commands so that the
+    /// execution of a lower-level command is nested within that
+    /// of a higher level command. All nested commands are executed
+    /// synchronously, as a single unit. Scheduling test execution
+    /// on separate threads is handled at a higher level, using the
+    /// task dispatcher.
     /// </summary>
     public abstract class TestCommand
     {
         private Test test;
 #if CLR_2_0 || CLR_4_0
-        private IList<TestCommand> children;
+        private System.Collections.Generic.IList<TestCommand> children;
 #else
         private System.Collections.IList children;
 #endif
 
         /// <summary>
-        /// TODO: Documentation needed for constructor
+        /// Construct a TestCommand for a test.
         /// </summary>
-        /// <param name="test"></param>
+        /// <param name="test">The test to be executed</param>
         public TestCommand(Test test)
         {
             this.test = test;
@@ -54,7 +57,7 @@ namespace NUnit.Framework.Internal.Commands
         #region ITestCommandMembers
 
         /// <summary>
-        /// TODO: Documentation needed for property
+        /// Gets the test associated with this command.
         /// </summary>
         public Test Test
         {
@@ -66,7 +69,7 @@ namespace NUnit.Framework.Internal.Commands
         /// </summary>
         /// <value>A list of child TestCommands</value>
 #if CLR_2_0 || CLR_4_0
-        public IList<TestCommand> Children
+        public System.Collections.Generic.IList<TestCommand> Children
 #else
         public System.Collections.IList Children
 #endif
@@ -75,7 +78,7 @@ namespace NUnit.Framework.Internal.Commands
             {
                 if (children == null)
 #if CLR_2_0 || CLR_4_0
-                    children = new List<TestCommand>();
+                    children = new System.Collections.Generic.List<TestCommand>();
 #else
                     children = new System.Collections.ArrayList();
 #endif
@@ -85,7 +88,7 @@ namespace NUnit.Framework.Internal.Commands
         }
 
         /// <summary>
-        /// Runs the test, returning a TestResult.
+        /// Runs the test in a specified context, returning a TestResult.
         /// </summary>
         /// <param name="context">The TestExecutionContext to be used for running the test.</param>
         /// <returns>A TestResult</returns>

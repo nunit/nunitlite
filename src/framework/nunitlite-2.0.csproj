@@ -66,7 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ExpectedExceptionData.cs" />
-    <Compile Include="Api\IApplyToTest.cs" />
+    <Compile Include="Internal\IApplyToContext.cs" />
+    <Compile Include="Internal\IApplyToTest.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />
     <Compile Include="Api\IPropertyBag.cs" />
     <Compile Include="Api\ITest.cs" />
@@ -256,7 +257,6 @@
     <Compile Include="Internal\Builders\ProviderCache.cs" />
     <Compile Include="Internal\Builders\SequentialStrategy.cs" />
     <Compile Include="Internal\Commands\CommandDecoratorList.cs" />
-    <Compile Include="Internal\Commands\CommandRunner.cs" />
     <Compile Include="Internal\Commands\CommandStage.cs" />
     <Compile Include="Internal\Commands\DelegatingTestCommand.cs" />
     <Compile Include="Internal\Commands\ExpectedExceptionCommand.cs" />
@@ -310,6 +310,10 @@
     <Compile Include="Internal\Tests\TestSuite.cs" />
     <Compile Include="Internal\TextMessageWriter.cs" />
     <Compile Include="Internal\TypeHelper.cs" />
+    <Compile Include="Internal\WorkItems\CompositeWorkItem.cs" />
+    <Compile Include="Internal\WorkItems\SimpleWorkItem.cs" />
+    <Compile Include="Internal\WorkItems\WorkItem.cs" />
+    <Compile Include="Internal\WorkItems\WorkItemState.cs" />
     <Compile Include="Is.cs" />
     <Compile Include="Iz.cs" />
     <Compile Include="ListMapper.cs" />

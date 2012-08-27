@@ -28,6 +28,7 @@ using NUnit.Framework.Api;
 using NUnit.Framework.Builders;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Internal.WorkItems;
 using NUnit.Framework.Extensibility;
 
 namespace NUnit.TestUtilities
@@ -79,12 +80,12 @@ namespace NUnit.TestUtilities
         public static TestResult RunTestFixture(Type type)
         {
             TestSuite suite = MakeFixture(type);
-            TestCommand command = suite.GetTestCommand(TestFilter.Empty);
             TestExecutionContext.Save();
             TestExecutionContext.CurrentContext.TestObject = null;
+            CompositeWorkItem workitem = new CompositeWorkItem(suite, TestFilter.Empty);
             try
             {
-                return CommandRunner.Execute(command);
+                return workitem.Execute();
             }
             finally
             {
@@ -95,14 +96,12 @@ namespace NUnit.TestUtilities
         public static TestResult RunTestFixture(object fixture)
         {
             TestSuite suite = MakeFixture(fixture);
-            TestCommand command = suite.GetTestCommand(TestFilter.Empty);
-            //TestExecutionContext context = new TestExecutionContext();
-            //context.TestObject = fixture;
             TestExecutionContext.Save();
             TestExecutionContext.CurrentContext.TestObject = fixture;
+            WorkItem workitem = suite.CreateWorkItem(TestFilter.Empty);
             try
             {
-                return CommandRunner.Execute(command);
+                return workitem.Execute();
             }
             finally
             {
@@ -134,14 +133,12 @@ namespace NUnit.TestUtilities
 
         public static ITestResult RunTest(Test test, object testObject)
         {
-            TestCommand command = test.GetTestCommand(TestFilter.Empty);
-            //TestExecutionContext context = new TestExecutionContext();
-            //context.TestObject = testObject;
             TestExecutionContext.Save();
             TestExecutionContext.CurrentContext.TestObject = testObject;
+            WorkItem workItem = test.CreateWorkItem(TestFilter.Empty);
             try
             {
-                return CommandRunner.Execute(command);
+                return workItem.Execute();
             }
             finally
             {

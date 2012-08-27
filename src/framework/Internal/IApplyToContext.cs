@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,35 +21,19 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework.Internal;
-
-namespace NUnit.Framework
+namespace NUnit.Framework.Internal
 {
     /// <summary>
-    /// Summary description for SetUICultureAttribute.
+    /// The IApplyToContext interface is implemented by attributes
+    /// that want to make changes to the execution context before
+    /// a test is run.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly, AllowMultiple = true, Inherited=true)]
-    public class SetUICultureAttribute : PropertyAttribute, IApplyToContext
+    public interface IApplyToContext
     {
-        private string _culture;
-
         /// <summary>
-        /// Construct given the name of a culture
+        /// Apply changes to the execution context
         /// </summary>
-        /// <param name="culture"></param>
-        public SetUICultureAttribute(string culture) : base("SetUICulture", culture)
-        {
-            _culture = culture;
-        }
-
-        #region IApplyToContext Members
-
-        void IApplyToContext.ApplyToContext(TestExecutionContext context)
-        {
-            context.CurrentUICulture = new System.Globalization.CultureInfo(_culture);
-        }
-
-        #endregion
+        /// <param name="context">The execution context</param>
+        void ApplyToContext(TestExecutionContext context);
     }
 }

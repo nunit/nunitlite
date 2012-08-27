@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,35 +21,34 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework.Internal;
-
-namespace NUnit.Framework
+namespace NUnit.Framework.Internal.WorkItems
 {
     /// <summary>
-    /// Summary description for SetUICultureAttribute.
+    /// A SimpleWorkItem represents a single test case and is
+    /// marked as completed immediately upon execution. This
+    /// class is also used for skipped or ignored test suites.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly, AllowMultiple = true, Inherited=true)]
-    public class SetUICultureAttribute : PropertyAttribute, IApplyToContext
+    public class SimpleWorkItem : WorkItem
     {
-        private string _culture;
+        /// <summary>
+        /// Construct a simple work item for a test.
+        /// </summary>
+        /// <param name="test">The test to be executed</param>
+        public SimpleWorkItem(Test test) : base(test) { }
 
         /// <summary>
-        /// Construct given the name of a culture
+        /// Method that performs actually performs the work.
         /// </summary>
-        /// <param name="culture"></param>
-        public SetUICultureAttribute(string culture) : base("SetUICulture", culture)
+        protected override void PerformWork()
         {
-            _culture = culture;
+            try
+            {
+                testResult = Command.Execute(Context);
+            }
+            finally
+            {
+                WorkItemComplete();
+            }
         }
-
-        #region IApplyToContext Members
-
-        void IApplyToContext.ApplyToContext(TestExecutionContext context)
-        {
-            context.CurrentUICulture = new System.Globalization.CultureInfo(_culture);
-        }
-
-        #endregion
     }
 }

@@ -27,72 +27,18 @@ using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Attributes
 {
-    public class TestDummy : ITest
+    public class TestDummy : Test
     {
-        private int id = 1234;
-        private RunState runState;
-        private IPropertyBag properties = new PropertyBag();
+        public TestDummy() : base("TestDummy") { }
 
-        #region ITest Members
-
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-            }
-        }
-
-        public string Name
-        {
-            get { return "TestDummy"; }
-        }
-
-        public string FullName
-        {
-            get { return "NUnit.Framework.Attributes.TestDummy"; }
-        }
-
-        public Type FixtureType
-        {
-            get { return null; }
-        }
-
-        public RunState RunState
-        {
-            get
-            {
-                return runState;
-            }
-            set
-            {
-                runState = value;
-            }
-        }
+        #region Overrides
 
         public string TestKind
         {
             get { return "dummy-test"; }
         }
 
-        public int TestCaseCount
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IPropertyBag Properties
-        {
-            get 
-            { 
-                return properties;
-            }
-        }
-
-        public bool HasChildren
+        public override bool HasChildren
         {
             get
             {
@@ -100,18 +46,10 @@ namespace NUnit.Framework.Attributes
             }
         }
 
-        public ITest Parent
-        {
-            get
-            {
-                return null;
-            }
-        }
-
 #if CLR_2_0 || CLR_4_0
-        public System.Collections.Generic.IList<ITest> Tests
+        public override System.Collections.Generic.IList<ITest> Tests
 #else
-        public System.Collections.IList Tests
+        public override System.Collections.IList Tests
 #endif
         {
             get
@@ -120,18 +58,29 @@ namespace NUnit.Framework.Attributes
             }
         }
 
-        #endregion
-
-        #region IXmlNodeBuilder Members
-
-        public XmlNode ToXml(bool recursive)
+        public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
         {
             throw new NotImplementedException();
         }
 
-        public XmlNode AddToXml(XmlNode parentNode, bool recursive)
+        public override Internal.WorkItems.WorkItem CreateWorkItem(ITestFilter childFilter)
         {
             throw new NotImplementedException();
+        }
+
+        protected override Internal.Commands.TestCommand MakeTestCommand()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override TestResult MakeTestResult()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string XmlElementName
+        {
+            get { throw new NotImplementedException(); }
         }
 
         #endregion
