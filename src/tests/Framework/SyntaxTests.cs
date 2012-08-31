@@ -16,7 +16,8 @@ namespace NUnitLite.Tests
         [Test]
         public void NullTests()
         {
-            Assert.That(null, Is.Null);
+            object myObject = null;
+            Assert.That(myObject, Is.Null);
             Assert.Null(null);
         }
 

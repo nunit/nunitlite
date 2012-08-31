@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using NUnit.Framework.Constraints;
 using NUnit.Framework.Internal;
@@ -379,7 +378,7 @@ namespace NUnit.Framework
         #endregion
 
         #region ActualValueDelegate
-#if !NUNITLITE
+
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
@@ -416,14 +415,14 @@ namespace NUnit.Framework
             Constraint constraint = expr.Resolve();
 
             TestExecutionContext.CurrentContext.IncrementAssertCount();
-            if (!constraint.Matches(del).HasSucceeded)
+            if (!constraint.Matches(del))
             {
                 MessageWriter writer = new TextMessageWriter(message, args);
                 constraint.WriteMessageTo(writer);
                 throw new AssertionException(writer.ToString());
             }
         }
-#endif
+
         #endregion
 
         #region TestDelegate
