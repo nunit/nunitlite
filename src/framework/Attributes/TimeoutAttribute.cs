@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2012 Charlie Poole
+// Copyright (c) 2008 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -22,36 +22,37 @@
 // ***********************************************************************
 
 using System;
-using System.Threading;
-namespace NUnit.Framework.Internal.WorkItems
+using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Api;
+
+namespace NUnit.Framework
 {
     /// <summary>
-    /// A SimpleWorkItem represents a single test case and is
-    /// marked as completed immediately upon execution. This
-    /// class is also used for skipped or ignored test suites.
+    /// Used on a method, marks the test with a timeout value in milliseconds. 
+    /// The test will be run in a separate thread and is cancelled if the timeout 
+    /// is exceeded. Used on a class or assembly, sets the default timeout 
+    /// for all contained test methods.
     /// </summary>
-    public class SimpleWorkItem : WorkItem
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Assembly, AllowMultiple = false, Inherited=false)]
+    public class TimeoutAttribute : PropertyAttribute, IApplyToContext
     {
-        /// <summary>
-        /// Construct a simple work item for a test.
-        /// </summary>
-        /// <param name="test">The test to be executed</param>
-        public SimpleWorkItem(Test test) : base(test) { }
+        private int _timeout;
 
         /// <summary>
-        /// Method that performs actually performs the work.
+        /// Construct a TimeoutAttribute given a time in milliseconds
         /// </summary>
-        protected override void PerformWork()
+        /// <param name="timeout">The timeout value in milliseconds</param>
+        public TimeoutAttribute(int timeout)
+            : base(timeout)
         {
-            try
-            {
-                testResult = Command.Execute(Context);
-            }
-            finally
-            {
-                WorkItemComplete();
-            }
+            _timeout = timeout;
         }
 
+        void IApplyToContext.ApplyToContext(TestExecutionContext context)
+        {
+            context.TestCaseTimeout = _timeout;
+        }
     }
 }
+

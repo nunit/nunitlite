@@ -37,11 +37,15 @@ namespace NUnit.Framework.Internal.WorkItems
         private TestSuite _suite;
         private TestSuiteResult _suiteResult;
 #if CLR_2_0 || CLR_4_0
-        private System.Collections.Generic.List<WorkItem> _children = new System.Collections.Generic.List<WorkItem>();
+        private System.Collections.Generic.Queue<WorkItem> _children = new System.Collections.Generic.Queue<WorkItem>();
 #else
-        private System.Collections.ArrayList _children = new System.Collections.ArrayList();
+        private System.Collections.Queue _children = new System.Collections.Queue();
 #endif
         private TestSuiteCommand _suiteCommand;
+
+        private int _waitCount;
+
+        private object _waitLock = new object();
 
         /// <summary>
         /// Construct a CompositeWorkItem for executing a test suite
@@ -57,7 +61,7 @@ namespace NUnit.Framework.Internal.WorkItems
             _suiteCommand = Command as TestSuiteCommand;
 
             foreach (Test test in _suite.Tests)
-                _children.Add(test.CreateWorkItem(childFilter));
+                _children.Enqueue(test.CreateWorkItem(childFilter));
         }
 
         /// <summary>
@@ -67,24 +71,32 @@ namespace NUnit.Framework.Internal.WorkItems
         /// </summary>
         protected override void PerformWork()
         {
+            // Assume success, since the result will be inconclusive
+            // if there is no setup method to run or if the
+            // context initialization fails.
+            Result.SetResult(ResultState.Success);
+
             PerformOneTimeSetUp();
 
-            if (Result.ResultState.Status == TestStatus.Passed)
+            if (Result.ResultState.Status == TestStatus.Passed && _children.Count > 0)
+            {
                 RunChildren();
 
-            PerformOneTimeTearDown();
-
-            WorkItemComplete();
+                // The following are run on completion of child tests
+                //   PerformOneTimeTearDown();
+                //   WorkItemComplete();
+            }
+            else
+            {
+                PerformOneTimeTearDown();
+                WorkItemComplete();
+            }
         }
 
         #region Helper Methods
 
         private void PerformOneTimeSetUp()
         {
-            // Assume success, since the result will be inconclusive
-            // if there is no setup method at all to run
-            Result.SetResult(ResultState.Success);
-
             try
             {
                 _suiteCommand.DoOneTimeSetUp(Context);
@@ -103,13 +115,40 @@ namespace NUnit.Framework.Internal.WorkItems
 
         private void RunChildren()
         {
-            foreach (WorkItem child in _children)
-                Result.AddResult(child.Execute());
+            _waitCount = _children.Count;
+
+            while (_children.Count > 0)
+            {
+                WorkItem child = _children.Dequeue();
+                child.Completed += new EventHandler(OnChildCompleted);
+                child.Execute(this.Context);
+            }
         }
 
         private void PerformOneTimeTearDown()
         {
             _suiteCommand.DoOneTimeTearDown(Context);
+        }
+
+        private void OnChildCompleted(object sender, EventArgs e)
+        {
+            WorkItem childTask = sender as WorkItem;
+            if (childTask != null)
+            {
+                childTask.Completed -= new EventHandler(OnChildCompleted);
+                Result.AddResult(childTask.Result);
+
+                lock (_waitLock)
+                {
+                    _waitCount--;
+
+                    if (_waitCount == 0)
+                    {
+                        PerformOneTimeTearDown();
+                        WorkItemComplete();
+                    }
+                }
+            }
         }
 
         #endregion

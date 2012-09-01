@@ -22,36 +22,23 @@
 // ***********************************************************************
 
 using System;
-using System.Threading;
-namespace NUnit.Framework.Internal.WorkItems
+using NUnit.Framework.Internal;
+
+namespace NUnit.Framework
 {
     /// <summary>
-    /// A SimpleWorkItem represents a single test case and is
-    /// marked as completed immediately upon execution. This
-    /// class is also used for skipped or ignored test suites.
+    /// Attribute used to mark a test method to be run asynchronously.
+    /// When the test is executed, control returns immediately, while
+    /// the test continues to run on a separate thread. When the test
+    /// terminates, NUnit is notified of  the result.
     /// </summary>
-    public class SimpleWorkItem : WorkItem
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public class AsynchronousAttribute : NUnitAttribute, IApplyToTest
     {
-        /// <summary>
-        /// Construct a simple work item for a test.
-        /// </summary>
-        /// <param name="test">The test to be executed</param>
-        public SimpleWorkItem(Test test) : base(test) { }
-
-        /// <summary>
-        /// Method that performs actually performs the work.
-        /// </summary>
-        protected override void PerformWork()
+        void IApplyToTest.ApplyToTest(Test test)
         {
-            try
-            {
-                testResult = Command.Execute(Context);
-            }
-            finally
-            {
-                WorkItemComplete();
-            }
+            test.RequiresThread = true;
+            test.IsAsynchronous = true;
         }
-
     }
 }

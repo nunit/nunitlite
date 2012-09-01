@@ -62,15 +62,12 @@ namespace NUnit.Framework.Internal
         /// </summary>
         public static readonly string Category = "Category";
 
-        /// <summary>
-        /// Indicates that the test should be run on a separate thread
-        /// </summary>
-        public static readonly string RequiresThread = "RequiresThread";
-
+#if !NUNITLITE
         /// <summary>
         /// The ApartmentState required for running the test
         /// </summary>
         public static readonly string ApartmentState = "ApartmentState";
+#endif
 
         /// <summary>
         /// The timeout value for the test

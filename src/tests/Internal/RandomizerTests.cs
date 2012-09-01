@@ -71,9 +71,6 @@ namespace NUnit.Framework.Internal
             Assert.That(ints.Length, Is.EqualTo(10));
             foreach (int i in ints)
                 Assert.That(i, Is.InRange(1, 100));
-
-            // Heuristic: Could fail occasionally
-            Assert.That(CountUniqueValues(ints), Is.GreaterThan(7));
         }
 
         [Test]
@@ -99,9 +96,6 @@ namespace NUnit.Framework.Internal
             Assert.That(enums.Length, Is.EqualTo(10));
             foreach (object e in enums)
                 Assert.That(e, Is.TypeOf(typeof(AttributeTargets)));
-
-            // Heuristic: Could fail occasionally
-            Assert.That(CountUniqueValues(enums), Is.GreaterThan(4));
         }
 
         [Test]

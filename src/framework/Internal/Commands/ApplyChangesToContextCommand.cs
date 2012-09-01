@@ -23,35 +23,43 @@
 
 using System;
 using System.Threading;
-namespace NUnit.Framework.Internal.WorkItems
+namespace NUnit.Framework.Internal.Commands
 {
     /// <summary>
-    /// A SimpleWorkItem represents a single test case and is
-    /// marked as completed immediately upon execution. This
-    /// class is also used for skipped or ignored test suites.
+    /// ContextSettingsCommand applies specified changes to the
+    /// TestExecutionContext prior to running a test. No special
+    /// action is needed after the test runs, since the prior
+    /// context will be restored automatically.
     /// </summary>
-    public class SimpleWorkItem : WorkItem
+    class ApplyChangesToContextCommand : DelegatingTestCommand
     {
-        /// <summary>
-        /// Construct a simple work item for a test.
-        /// </summary>
-        /// <param name="test">The test to be executed</param>
-        public SimpleWorkItem(Test test) : base(test) { }
+        private IApplyToContext[] _changes;
 
-        /// <summary>
-        /// Method that performs actually performs the work.
-        /// </summary>
-        protected override void PerformWork()
+        public ApplyChangesToContextCommand(TestCommand innerCommand, IApplyToContext[] changes)
+            : base(innerCommand)
+        {
+            _changes = changes;
+        }
+
+        public override TestResult Execute(TestExecutionContext context)
         {
             try
             {
-                testResult = Command.Execute(Context);
-            }
-            finally
-            {
-                WorkItemComplete();
-            }
-        }
+                foreach (IApplyToContext change in _changes)
+                    change.ApplyToContext(context);
 
+                context.CurrentResult = innerCommand.Execute(context);
+            }
+            catch (Exception ex)
+            {
+#if !NETCF
+                if (ex is ThreadAbortException)
+                    Thread.ResetAbort();
+#endif
+                context.CurrentResult.RecordException(ex);
+            }
+
+            return context.CurrentResult;
+        }
     }
 }

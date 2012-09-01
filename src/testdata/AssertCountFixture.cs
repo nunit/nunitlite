@@ -21,37 +21,31 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Threading;
-namespace NUnit.Framework.Internal.WorkItems
+using NUnit.Framework;
+
+namespace NUnit.TestData
 {
-    /// <summary>
-    /// A SimpleWorkItem represents a single test case and is
-    /// marked as completed immediately upon execution. This
-    /// class is also used for skipped or ignored test suites.
-    /// </summary>
-    public class SimpleWorkItem : WorkItem
+    [TestFixture]
+    public class AssertCountFixture
     {
-        /// <summary>
-        /// Construct a simple work item for a test.
-        /// </summary>
-        /// <param name="test">The test to be executed</param>
-        public SimpleWorkItem(Test test) : base(test) { }
+        public static readonly int ExpectedAssertCount = 5;
 
-        /// <summary>
-        /// Method that performs actually performs the work.
-        /// </summary>
-        protected override void PerformWork()
+        [Test]
+        public void BooleanAssert()
         {
-            try
-            {
-                testResult = Command.Execute(Context);
-            }
-            finally
-            {
-                WorkItemComplete();
-            }
+            Assert.That(2 + 2 == 4);
         }
-
+        [Test]
+        public void ConstraintAssert()
+        {
+            Assert.That(2 + 2, Is.EqualTo(4));
+        }
+        [Test]
+        public void ThreeAsserts()
+        {
+            Assert.That(2 + 2 == 4);
+            Assert.That(2 + 2, Is.EqualTo(4));
+            Assert.That(2 + 2, Is.EqualTo(5));
+        }
     }
 }

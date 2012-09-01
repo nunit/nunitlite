@@ -42,8 +42,12 @@ namespace NUnitLite.Runner
     /// The provided TextWriter is used by default, unless the
     /// arguments to Execute override it using -out. The second
     /// form uses the Console, provided it exists on the platform.
+    /// 
+    /// NOTE: When running on a platform without a Console, such
+    /// as Windows Phone, the results will simply not appear if
+    /// you fail to specify a file in the call itself or as an option.
     /// </summary>
-    public class TextUI
+    public class TextUI : ITestListener
     {
         private CommandLineOptions commandLineOptions;
         private int reportCount = 0;
@@ -75,6 +79,7 @@ namespace NUnitLite.Runner
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// Execute a test run based on the aruments passed
         /// from Main.
@@ -86,10 +91,26 @@ namespace NUnitLite.Runner
             // test assembly in order for the mechanism to work.
             Assembly callingAssembly = Assembly.GetCallingAssembly();
 
-            this.commandLineOptions = ProcessArguments( args );
+            this.commandLineOptions = new CommandLineOptions();
+            commandLineOptions.Parse(args);
 
-            if (!commandLineOptions.ShowHelp && !commandLineOptions.Error)
+            if (commandLineOptions.OutFile != null)
+                this.writer = new StreamWriter(commandLineOptions.OutFile);
+
+            if (!commandLineOptions.NoHeader)
+                WriteHeader();
+
+            if (commandLineOptions.ShowHelp)
+                writer.Write(commandLineOptions.HelpText);
+            else if (commandLineOptions.Error)
             {
+                writer.WriteLine(commandLineOptions.ErrorMessage);
+                writer.WriteLine(commandLineOptions.HelpText);
+            }
+            else
+            {
+                WriteRuntimeEnvironment();
+
                 if (commandLineOptions.Wait && commandLineOptions.OutFile != null)
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
 
@@ -153,9 +174,13 @@ namespace NUnitLite.Runner
             }
         }
 
+        #endregion
+
+        #region Helper Methods
+
         private void RunTests(ITestFilter filter)
         {
-            ITestResult result = runner.Run(TestListener.NULL, filter);
+            ITestResult result = runner.Run(this, filter);
             ReportResults(result);
             string resultFile = commandLineOptions.ResultFile;
             string resultFormat = commandLineOptions.ResultFormat;
@@ -208,29 +233,8 @@ namespace NUnitLite.Runner
             if (commandLineOptions.Full)
                 PrintFullReport(result);
         }
-        #endregion
 
-        #region Helper Methods
-        private CommandLineOptions ProcessArguments(string[] args)
-        {
-            this.commandLineOptions = new CommandLineOptions();
-            commandLineOptions.Parse(args);
-
-            if (commandLineOptions.OutFile != null)
-                this.writer = new StreamWriter(commandLineOptions.OutFile);
-
-            if (!commandLineOptions.NoHeader)
-                WriteCopyright();
-
-            if (commandLineOptions.ShowHelp)
-                writer.Write(commandLineOptions.HelpText);
-            else if (commandLineOptions.Error)
-                writer.WriteLine(commandLineOptions.ErrorMessage);
-
-            return commandLineOptions;
-        }
-
-        private void WriteCopyright()
+        private void WriteHeader()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
 #if NUNITLITE
@@ -268,7 +272,10 @@ namespace NUnitLite.Runner
             writer.WriteLine(String.Format("{0} {1} {2}", title, version.ToString(3), build));
             writer.WriteLine(copyright);
             writer.WriteLine();
+        }
 
+        private void WriteRuntimeEnvironment()
+        {
             string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
             writer.WriteLine("Runtime Environment -");
             writer.WriteLine("    OS Version: {0}", Environment.OSVersion);
@@ -364,6 +371,24 @@ namespace NUnitLite.Runner
                 foreach (ITestResult r in result.Children)
                     PrintAllResults(r, indent + "  ");
         }
+        #endregion
+
+        #region ITestListener Members
+
+        public void TestStarted(ITest test)
+        {
+            if (commandLineOptions.LabelTestsInOutput)
+                writer.WriteLine("***** {0}", test.Name);
+        }
+
+        public void TestFinished(ITestResult result)
+        {
+        }
+
+        public void TestOutput(TestOutput testOutput)
+        {
+        }
+
         #endregion
     }
 }

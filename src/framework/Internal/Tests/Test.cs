@@ -94,6 +94,13 @@ namespace NUnit.Framework.Internal
         /// </summary>
         protected MethodInfo[] tearDownMethods;
 
+        /// <summary>
+        /// True if the test should run on its own thread
+        /// </summary>
+        private bool requiresThread;
+
+        private bool isAsynchronous;
+
         ///// <summary>
         ///// Argument list for use in executing the test.
         ///// </summary>
@@ -410,27 +417,6 @@ namespace NUnit.Framework.Internal
             set { fixture = value; }
         }
 
-#if !NUNITLITE
-        /// <summary>
-        /// Gets a boolean value indicating whether this 
-        /// test should run on it's own thread.
-        /// </summary>
-        internal virtual bool ShouldRunOnOwnThread
-        {
-            get
-            {
-                if (Properties.GetSetting(PropertyNames.RequiresThread, false))
-                    return true;
-
-                ApartmentState state = (ApartmentState)Properties.GetSetting(PropertyNames.ApartmentState, ApartmentState.Unknown);
-                if (state == ApartmentState.Unknown)
-                    return false;
-
-                return state != Thread.CurrentThread.GetApartmentState();
-            }
-        }
-#endif
-
         /// <summary>
         /// Gets the set up methods.
         /// </summary>
@@ -472,6 +458,18 @@ namespace NUnit.Framework.Internal
         internal NUnitAttribute[] Attributes
         {
             get { return attributes; }
+        }
+
+        internal bool RequiresThread
+        {
+            get { return requiresThread; }
+            set { requiresThread = value; }
+        }
+
+        internal bool IsAsynchronous
+        {
+            get { return isAsynchronous; }
+            set { isAsynchronous = value; }
         }
 
         #endregion

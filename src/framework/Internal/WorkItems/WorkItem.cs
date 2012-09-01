@@ -24,6 +24,7 @@
 using System;
 using System.Threading;
 using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal.WorkItems
 {
@@ -124,27 +125,80 @@ namespace NUnit.Framework.Internal.WorkItems
         /// Execute the current work item, including any
         /// child work items.
         /// </summary>
-        /// <returns>A TestResult</returns>
-        public virtual TestResult Execute()
+        public virtual void Execute(TestExecutionContext context)
         {
+            _context = new TestExecutionContext(context);
+
+            // Timeout set at a higher level
+            int timeout = _context.TestCaseTimeout;
+
+            // Timeout set on this test
+            if (Test.Properties.ContainsKey(PropertyNames.Timeout))
+                timeout = (int)Test.Properties.Get(PropertyNames.Timeout);
+
+            if (Test.RequiresThread || Test is TestMethod && timeout > 0)
+                ExecuteOnOwnThread(timeout);
+            else
+                ExecuteProc();
+        }
+
+        private void ExecuteOnOwnThread(int timeout)
+        {
+            Thread thread = new Thread(new ThreadStart(ExecuteProc));
+
+            thread.Start();
+
+            if (!Test.IsAsynchronous || timeout > 0)
+            {
+                if (timeout <= 0)
+                    timeout = Timeout.Infinite;
+
+                thread.Join(timeout);
+
+                if (thread.IsAlive)
+                {
+                    ThreadUtility.Kill(thread);
+
+                    // NOTE: Without the use of Join, there is a race condition here.
+                    // The thread sets the result to Cancelled and our code below sets
+                    // it to Failure. In order for the result to be shown as a failure,
+                    // we need to ensure that the following code executes after the
+                    // thread has terminated. There is a risk here: the test code might
+                    // refuse to terminate. However, it's more important to deal with
+                    // the normal rather than a pathological case.
+                    thread.Join();
+
+                    Result.SetResult(ResultState.Failure,
+                        string.Format("Test exceeded Timeout value of {0}ms", timeout));
+
+                    WorkItemComplete();
+                }
+            }
+        }
+
+        private void ExecuteProc()
+        {
+            _context.CurrentTest = this.Test;
+            _context.CurrentResult = this.Result;
+            _context.Listener.TestStarted(this.Test);
+            _context.StartTime = DateTime.Now;
+
+            TestExecutionContext.SetCurrentContext(_context);
+
             try
             {
-                InitializeContext();
-
                 PerformWork();
             }
-            catch (Exception ex)
+            finally
             {
-#if !NETCF
-                if (ex is ThreadAbortException)
-                    Thread.ResetAbort();
-#endif
-                Result.RecordException(ex);
+                Result.AssertCount = _context.AssertCount;
+                Result.Time = (DateTime.Now - _context.StartTime).TotalSeconds;
+
+                _context.Listener.TestFinished(Result);
+
+                _context = _context.Restore();
+                _context.AssertCount += Result.AssertCount;
             }
-
-            UpdateResultAndRestoreContext();
-
-            return Result;
         }
 
         #endregion
@@ -165,47 +219,6 @@ namespace NUnit.Framework.Internal.WorkItems
             _state = WorkItemState.Complete;
             if (Completed != null)
                 Completed(this, EventArgs.Empty);
-        }
-
-        #endregion
-
-        #region Helper Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private void InitializeContext()
-        {
-            TestExecutionContext.Save();
-            _context = TestExecutionContext.CurrentContext;
-
-            _context.CurrentTest = this.Test;
-            _context.CurrentResult = this.Result;
-
-            foreach (Attribute attr in _test.Attributes)
-            {
-                IApplyToContext iApply = attr as IApplyToContext;
-                if (iApply != null)
-                    iApply.ApplyToContext(_context);
-            }
-
-            _context.StartTime = DateTime.Now;
-
-            _context.Listener.TestStarted(this.Test);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void UpdateResultAndRestoreContext()
-        {
-            Result.AssertCount = Context.AssertCount;
-
-            Result.Time = (DateTime.Now - Context.StartTime).TotalSeconds;
-            Context.Listener.TestFinished(Result);
-
-            TestExecutionContext.Restore();
         }
 
         #endregion

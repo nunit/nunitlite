@@ -21,11 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework;
-using NUnit.TestUtilities;
-using NUnit.TestData.AssertFailFixture;
 using NUnit.Framework.Internal;
+using NUnit.TestData;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Assertions
 {
@@ -185,6 +183,22 @@ namespace NUnit.Framework.Assertions
         public void FailureThrowsAssertionException_DelegateAndConstraintWithMessageAndArgs()
         {
             Assert.That(new Constraints.ActualValueDelegate(ReturnsFive), Is.EqualTo(4), "Should be {0}", 4);
+        }
+
+        [Test]
+        public void AssertionsAreCountedCorrectly()
+        {
+            TestResult result = TestBuilder.RunTestFixture(typeof(AssertCountFixture));
+
+            int totalCount = 0;
+            foreach (TestResult childResult in result.Children)
+            {
+                int expectedCount = childResult.Name == "ThreeAsserts" ? 3 : 1;
+                Assert.That(childResult.AssertCount, Is.EqualTo(expectedCount), "Bad count for {0}", childResult.Name);
+                totalCount += expectedCount;
+            }
+
+            Assert.That(result.AssertCount, Is.EqualTo(totalCount), "Fixture count is not correct");
         }
 
         private object ReturnsFive()

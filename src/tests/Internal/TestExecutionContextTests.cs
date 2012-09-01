@@ -41,6 +41,7 @@ namespace NUnit.Framework.Internal
 	[TestFixture]
 	public class TestExecutionContextTests
 	{
+        TestExecutionContext ec;
 #if !NETCF
         string currentDirectory;
         CultureInfo currentCulture;
@@ -53,8 +54,9 @@ namespace NUnit.Framework.Internal
 		/// restores contexts, we save manually here
 		/// </summary>
 		[SetUp]
-		public void SaveContext()
+		public void Initialize()
 		{
+            ec = new TestExecutionContext(TestExecutionContext.CurrentContext);
 #if !NETCF
             currentCulture = CultureInfo.CurrentCulture;
             currentUICulture = CultureInfo.CurrentUICulture;
@@ -64,7 +66,7 @@ namespace NUnit.Framework.Internal
 		}
 
 		[TearDown]
-		public void RestoreContext()
+		public void Cleanup()
 		{
 #if !NETCF
 			Environment.CurrentDirectory = currentDirectory;
@@ -77,76 +79,76 @@ namespace NUnit.Framework.Internal
         [Test]
         public void TestCanAccessItsOwnName()
         {
-            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Name, Is.EqualTo("TestCanAccessItsOwnName"));
+            Assert.That(ec.CurrentTest.Name, Is.EqualTo("TestCanAccessItsOwnName"));
         }
 
         [Test]
         public void TestCanAccessItsOwnFullName()
         {
-            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.FullName,
+            Assert.That(ec.CurrentTest.FullName,
                 Is.EqualTo("NUnit.Framework.Internal.TestExecutionContextTests.TestCanAccessItsOwnFullName"));
         }
 
         [Test]
         public void TestCanAccessItsOwnId()
         {
-            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Id, Is.GreaterThan(0));
+            Assert.That(ec.CurrentTest.Id, Is.GreaterThan(0));
         }
 
         [Test]
         [Property("Answer", 42)]
         public void TestCanAccessItsOwnProperties()
         {
-            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Properties.Get("Answer"), Is.EqualTo(42));
+            Assert.That(ec.CurrentTest.Properties.Get("Answer"), Is.EqualTo(42));
         }
 
 #if !NETCF
         [Test]
         public void SetAndRestoreCurrentCulture()
         {
-            Assert.AreEqual(currentCulture, TestExecutionContext.CurrentContext.CurrentCulture, "Culture not in initial context");
+            Assert.AreEqual(ec.CurrentCulture, CultureInfo.CurrentCulture, "Culture not in initial context");
 
-            TestExecutionContext.Save();
+            ec = ec.Save();
 
             try
             {
                 CultureInfo otherCulture =
                     new CultureInfo(currentCulture.Name == "fr-FR" ? "en-GB" : "fr-FR");
-                TestExecutionContext.CurrentContext.CurrentCulture = otherCulture;
+                ec.CurrentCulture = otherCulture;
                 Assert.AreEqual(otherCulture, CultureInfo.CurrentCulture, "Culture was not set");
-                Assert.AreEqual(otherCulture, TestExecutionContext.CurrentContext.CurrentCulture, "Culture not in new context");
+                Assert.AreEqual(otherCulture, ec.CurrentCulture, "Culture not in new context");
             }
             finally
             {
-                TestExecutionContext.Restore();
+                ec = ec.Restore();
             }
 
             Assert.AreEqual(currentCulture, CultureInfo.CurrentCulture, "Culture was not restored");
-            Assert.AreEqual(currentCulture, TestExecutionContext.CurrentContext.CurrentCulture, "Culture not in final context");
+            Assert.AreEqual(currentCulture, ec.CurrentCulture, "Culture not in final context");
         }
 
         [Test]
         public void SetAndRestoreCurrentUICulture()
         {
-            Assert.AreEqual(currentUICulture, TestExecutionContext.CurrentContext.CurrentUICulture, "UICulture not in initial context");
+            Assert.AreEqual(currentUICulture, ec.CurrentUICulture, "UICulture not in initial context");
 
-            TestExecutionContext.Save();
+            ec = ec.Save();
 
             try
             {
                 CultureInfo otherCulture =
                     new CultureInfo(currentUICulture.Name == "fr-FR" ? "en-GB" : "fr-FR");
-                TestExecutionContext.CurrentContext.CurrentUICulture = otherCulture;
+                ec.CurrentUICulture = otherCulture;
                 Assert.AreEqual(otherCulture, CultureInfo.CurrentUICulture, "UICulture was not set");
-                Assert.AreEqual(otherCulture, TestExecutionContext.CurrentContext.CurrentUICulture, "UICulture not in new context");
+                Assert.AreEqual(otherCulture, ec.CurrentUICulture, "UICulture not in new context");
             }
             finally
             {
-                TestExecutionContext.Restore();
+                ec = ec.Restore();
             }
 
             Assert.AreEqual(currentUICulture, CultureInfo.CurrentUICulture, "UICulture was not restored");
-            Assert.AreEqual(currentUICulture, TestExecutionContext.CurrentContext.CurrentUICulture, "UICulture not in final context");
+            Assert.AreEqual(currentUICulture, ec.CurrentUICulture, "UICulture not in final context");
         }
 #endif
     }

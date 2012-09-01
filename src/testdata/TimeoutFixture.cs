@@ -22,36 +22,42 @@
 // ***********************************************************************
 
 using System;
-using System.Threading;
-namespace NUnit.Framework.Internal.WorkItems
-{
-    /// <summary>
-    /// A SimpleWorkItem represents a single test case and is
-    /// marked as completed immediately upon execution. This
-    /// class is also used for skipped or ignored test suites.
-    /// </summary>
-    public class SimpleWorkItem : WorkItem
-    {
-        /// <summary>
-        /// Construct a simple work item for a test.
-        /// </summary>
-        /// <param name="test">The test to be executed</param>
-        public SimpleWorkItem(Test test) : base(test) { }
+using NUnit.Framework;
 
-        /// <summary>
-        /// Method that performs actually performs the work.
-        /// </summary>
-        protected override void PerformWork()
+namespace NUnit.TestData
+{
+    [TestFixture]
+    public class TimeoutFixture
+    {
+        public bool TearDownWasRun;
+
+        [SetUp]
+        public void SetUp()
         {
-            try
-            {
-                testResult = Command.Execute(Context);
-            }
-            finally
-            {
-                WorkItemComplete();
-            }
+            TearDownWasRun = false;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            TearDownWasRun = true;
+        }
+
+        [Test, Timeout(50)]
+        public void InfiniteLoopWith50msTimeout()
+        {
+            while (true) { }
+        }
+    }
+
+    [TestFixture, Timeout(50)]
+    public class ThreadingFixtureWithTimeout
+    {
+        [Test]
+        public void Test1() { }
+        [Test]
+        public void Test2WithInfiniteLoop() { while (true) { } }
+        [Test]
+        public void Test3() { }
     }
 }

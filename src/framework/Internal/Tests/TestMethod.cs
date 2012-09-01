@@ -162,30 +162,6 @@ namespace NUnit.Framework.Internal
             get { return false; }
         }
 
-#if !NUNITLITE
-        /// <summary>
-        /// Gets a boolean value indicating whether this 
-        /// test should run on it's own thread.
-        /// </summary>
-        internal override bool ShouldRunOnOwnThread
-        {
-            get
-            {
-                if (base.ShouldRunOnOwnThread)
-                    return true;
-
-                int timeout = TestExecutionContext.CurrentContext.TestCaseTimeout;
-                if (Properties.ContainsKey(PropertyNames.Timeout))
-                    timeout = (int)Properties.Get(PropertyNames.Timeout);
-                // TODO: Remove this kluge!
-                else if (Parent != null && Parent.Properties.ContainsKey(PropertyNames.Timeout))
-                    timeout = (int)Parent.Properties.Get(PropertyNames.Timeout);
-
-                return timeout > 0;
-            }
-        }
-#endif
-
         /// <summary>
         /// Returns an XmlNode representing the current result after
         /// adding it as a child of the supplied parent node.
@@ -233,6 +209,10 @@ namespace NUnit.Framework.Internal
             TestCommand command = new TestMethodCommand(this);
 
             command = ApplyDecoratorsToCommand(command);
+
+            IApplyToContext[] changes = (IApplyToContext[])this.Method.GetCustomAttributes(typeof(IApplyToContext), true);
+            if (changes.Length > 0)
+                command = new ApplyChangesToContextCommand(command, changes);
 
             return command;
         }

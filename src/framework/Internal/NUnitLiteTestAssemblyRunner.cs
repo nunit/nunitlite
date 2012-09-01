@@ -118,24 +118,24 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         public ITestResult Run(ITestListener listener, ITestFilter filter)
         {
+            TestExecutionContext context = new TestExecutionContext();
+
             if (this.settings.Contains("WorkDirectory"))
-                TestExecutionContext.CurrentContext.WorkDirectory = (string)this.settings["WorkDirectory"];
+                context.WorkDirectory = (string)this.settings["WorkDirectory"];
             else
 #if NETCF
-                TestExecutionContext.CurrentContext.WorkDirectory = Env.DocumentFolder;
+                context.WorkDirectory = Env.DocumentFolder;
 #else
-                TestExecutionContext.CurrentContext.WorkDirectory = Environment.CurrentDirectory;
+                context.WorkDirectory = Environment.CurrentDirectory;
 #endif
+            context.Listener = listener;
 
-#if true
             WorkItem workItem = loadedTest.CreateWorkItem(filter);
-            //while (workItem.RunNextStep()) /*loop*/;
-            return workItem.Execute();
-#else
-            TestCommand command = this.loadedTest.GetTestCommand(filter);
+            workItem.Execute(context);
 
-            return CommandRunner.Execute(command);
-#endif
+            while (workItem.State != WorkItemState.Complete)
+                System.Threading.Thread.Sleep(5);
+            return workItem.Result;
         }
 
         #endregion
