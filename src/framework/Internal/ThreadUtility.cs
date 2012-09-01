@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
 using System;
 using System.Threading;
 
@@ -65,3 +66,4 @@ namespace NUnit.Framework.Internal
         private ThreadUtility() { }
     }
 }
+#endif

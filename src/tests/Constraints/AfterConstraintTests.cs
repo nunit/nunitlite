@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -182,3 +183,4 @@ namespace NUnit.Framework.Constraints.Tests
         private ThreadStart SetValueTrueDelegate = new ThreadStart(MethodSetsValueTrue);
     }
 }
+#endif

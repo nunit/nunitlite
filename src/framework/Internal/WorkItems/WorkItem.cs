@@ -129,6 +129,7 @@ namespace NUnit.Framework.Internal.WorkItems
         {
             _context = new TestExecutionContext(context);
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
             // Timeout set at a higher level
             int timeout = _context.TestCaseTimeout;
 
@@ -137,14 +138,18 @@ namespace NUnit.Framework.Internal.WorkItems
                 timeout = (int)Test.Properties.Get(PropertyNames.Timeout);
 
             if (Test.RequiresThread || Test is TestMethod && timeout > 0)
-                ExecuteOnOwnThread(timeout);
+                RunTestOnOwnThread(timeout);
             else
-                ExecuteProc();
+                RunTest();
+#else
+            RunTest();
+#endif
         }
 
-        private void ExecuteOnOwnThread(int timeout)
+#if (CLR_2_0 || CLR_4_0) && !NETCF
+        private void RunTestOnOwnThread(int timeout)
         {
-            Thread thread = new Thread(new ThreadStart(ExecuteProc));
+            Thread thread = new Thread(new ThreadStart(RunTest));
 
             thread.Start();
 
@@ -175,8 +180,9 @@ namespace NUnit.Framework.Internal.WorkItems
                 }
             }
         }
+#endif
 
-        private void ExecuteProc()
+        private void RunTest()
         {
             _context.CurrentTest = this.Test;
             _context.CurrentResult = this.Result;

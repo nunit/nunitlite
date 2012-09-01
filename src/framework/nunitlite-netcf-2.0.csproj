@@ -221,6 +221,7 @@
     <Compile Include="Internal\Builders\ParameterDataProvider.cs" />
     <Compile Include="Internal\Builders\ProviderCache.cs" />
     <Compile Include="Internal\Builders\SequentialStrategy.cs" />
+    <Compile Include="Internal\Commands\ApplyChangesToContextCommand.cs" />
     <Compile Include="Internal\Commands\CommandDecoratorList.cs" />
     <Compile Include="Internal\Commands\CommandStage.cs" />
     <Compile Include="Internal\Commands\DelegatingTestCommand.cs" />

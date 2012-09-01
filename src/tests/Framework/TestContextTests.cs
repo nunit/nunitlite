@@ -36,14 +36,16 @@ namespace NUnit.Framework.Tests
             Assert.That(TestContext.CurrentContext.Test.Properties.Get("Answer"), Is.EqualTo(42));
         }
 
+#if !NETCF
         [Test]
         public void TestCanAccessTestDirectory()
         {
             string testDirectory = TestContext.CurrentContext.TestDirectory;
             Assert.NotNull(testDirectory);
             Assert.That(Directory.Exists(testDirectory), "Directory not found: {0}", testDirectory);
-            Assert.That(File.Exists(Path.Combine(testDirectory, "NUnitLiteTests.exe")));
+            Assert.That(File.Exists(Path.Combine(testDirectory, "nunitlite.tests.exe")));
         }
+#endif
 
         [Test]
         public void TestCanAccessWorkDirectory()

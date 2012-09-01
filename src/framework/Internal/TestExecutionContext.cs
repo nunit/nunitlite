@@ -231,7 +231,9 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// The current context, head of the list of saved contexts.
         /// </summary>
+#if (CLR_2_0 || CLR_4_0) && !NETCF
         [ThreadStatic]
+#endif
         private static TestExecutionContext current;
 
         /// <summary>

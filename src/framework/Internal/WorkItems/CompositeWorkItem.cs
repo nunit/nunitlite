@@ -119,7 +119,7 @@ namespace NUnit.Framework.Internal.WorkItems
 
             while (_children.Count > 0)
             {
-                WorkItem child = _children.Dequeue();
+                WorkItem child = (WorkItem)_children.Dequeue();
                 child.Completed += new EventHandler(OnChildCompleted);
                 child.Execute(this.Context);
             }

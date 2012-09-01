@@ -350,6 +350,7 @@ namespace NUnit.Framework.Constraints
 
         #region After Modifier
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
         /// <summary>
         /// Returns a DelayedConstraint with the specified delay time.
         /// </summary>
@@ -376,6 +377,7 @@ namespace NUnit.Framework.Constraints
                 delayInMilliseconds,
                 pollingInterval);
         }
+#endif
 
         #endregion
 

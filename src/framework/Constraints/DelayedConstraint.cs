@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if CLR_2_0 || CLR_4_0
 using System;
 using System.Threading;
 
@@ -123,7 +124,11 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="actual">A reference to the value to be tested</param>
         /// <returns>True for success, false for failure</returns>
+#if CLR_2_0 || CLR_4_0
         public override bool Matches<T>(ref T actual)
+#else
+        public override bool Matches(ref bool actual)
+#endif
         {
             int remainingDelay = delayInMilliseconds;
 
@@ -178,3 +183,4 @@ namespace NUnit.Framework.Constraints
         }
     }
 }
+#endif
