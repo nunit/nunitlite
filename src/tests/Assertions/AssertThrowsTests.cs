@@ -106,15 +106,15 @@ namespace NUnit.Framework.Assertions
 				"  But was:  null" + Env.NewLine));
 		}
 
-        //[Test, ExpectedException(typeof(AssertionException)), Platform("Mono")]
-        //public void UnrelatedExceptionThrown()
-        //{
-        //    ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsApplicationException);
-        //    Assert.That(ex.Message, Is.StringStarting(
-        //        "  Expected: <System.ArgumentException>" + Env.NewLine +
-        //        "  But was:  <System.ApplicationException> (my message)" + Env.NewLine));
-        //    Assert.That(ex.Message, Contains.Substring("  at "));
-        //}
+        [Test, ExpectedException(typeof(AssertionException))]
+        public void UnrelatedExceptionThrown()
+        {
+            ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsApplicationException);
+            Assert.That(ex.Message, Is.StringStarting(
+                "  Expected: <System.ArgumentException>" + Env.NewLine +
+                "  But was:  <System.ApplicationException> (my message)" + Env.NewLine));
+            Assert.That(ex.Message, Contains.Substring("  at "));
+        }
 
         [Test, ExpectedException(typeof(AssertionException))]
         public void BaseExceptionThrown()

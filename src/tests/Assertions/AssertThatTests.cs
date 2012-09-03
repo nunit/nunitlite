@@ -24,25 +24,12 @@
 using NUnit.Framework.Internal;
 using NUnit.TestData;
 using NUnit.TestUtilities;
-using NUnit.Framework.Constraints;
 
 namespace NUnit.Framework.Assertions
 {
     [TestFixture]
     public class AssertThatTests
     {
-        [Test]
-        public void AssertPassesIfMatcherMatches()
-        {
-            Assert.That(4, new AlwaysMatcher());
-        }
-
-        [Test, ExpectedException(typeof(AssertionException))]
-        public void AssertFailsIfMatcherFails()
-        {
-            Assert.That(4, new NeverMatcher());
-        }
-
         [Test]
         public void AssertionPasses_Boolean()
         {
@@ -218,35 +205,5 @@ namespace NUnit.Framework.Assertions
         {
             return 5;
         }
-
-        #region Nested Constraint Classes
-
-        class AlwaysMatcher : Constraint
-        {
-            public override bool Matches(object actual)
-            {
-                return true;
-            }
-
-            public override void WriteDescriptionTo(MessageWriter writer)
-            {
-                writer.Write("always");
-            }
-        }
-
-        class NeverMatcher : Constraint
-        {
-            public override bool Matches(object actual)
-            {
-                return false;
-            }
-
-            public override void WriteDescriptionTo(MessageWriter writer)
-            {
-                writer.Write("never");
-            }
-        }
-
-        #endregion
     }
 }

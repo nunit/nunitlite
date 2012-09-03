@@ -34,13 +34,13 @@ namespace NUnit.Framework.Assertions
             Assert.Inconclusive();
         }
 
-        [Test, ExpectedException(typeof(InconclusiveException))]
+        [Test, ExpectedException(typeof(InconclusiveException), ExpectedMessage = "MESSAGE")]
         public void ThrowsInconclusiveExceptionWithMessage()
         {
             Assert.Inconclusive("MESSAGE");
         }
 
-        [Test, ExpectedException(typeof(InconclusiveException))]
+        [Test, ExpectedException(typeof(InconclusiveException), ExpectedMessage = "MESSAGE: 2+2=4")]
         public void ThrowsInconclusiveExceptionWithMessageAndArgs()
         {
             Assert.Inconclusive("MESSAGE: {0}+{1}={2}", 2, 2, 4);

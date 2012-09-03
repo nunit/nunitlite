@@ -174,7 +174,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException()
         {
-            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
+            ITestResult result = TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsExpectedException").Children[0];
             Assert.AreEqual(ResultState.Success, result.ResultState);
         }
@@ -182,7 +182,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException_WrongException()
         {
-            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
+            ITestResult result = TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsWrongException").Children[0];
             Assert.AreEqual(ResultState.Failure, result.ResultState);
             Assert.That(result.Message, Is.StringStarting("An unexpected exception type was thrown"));
@@ -191,7 +191,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void CanSpecifyExpectedException_NoneThrown()
         {
-            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
+            ITestResult result = TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodThrowsNoException").Children[0];
             Assert.AreEqual(ResultState.Failure, result.ResultState);
             Assert.AreEqual("System.ArgumentNullException was expected", result.Message);
@@ -200,7 +200,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void IgnoreTakesPrecedenceOverExpectedException()
         {
-            ITestResult result = (ITestResult)TestBuilder.RunTestCase(
+            ITestResult result = TestBuilder.RunTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodCallsIgnore").Children[0];
             Assert.AreEqual(ResultState.Ignored, result.ResultState);
             Assert.AreEqual("Ignore this", result.Message);
