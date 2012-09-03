@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Threading;
 using NUnit.Framework.Internal.Commands;
 using NUnit.Framework.Api;
 
@@ -43,9 +44,7 @@ namespace NUnit.Framework.Internal.WorkItems
 #endif
         private TestSuiteCommand _suiteCommand;
 
-        private int _waitCount;
-
-        private object _waitLock = new object();
+        private CountdownEvent _childTestCountdown;
 
         /// <summary>
         /// Construct a CompositeWorkItem for executing a test suite
@@ -81,16 +80,10 @@ namespace NUnit.Framework.Internal.WorkItems
             if (Result.ResultState.Status == TestStatus.Passed && _children.Count > 0)
             {
                 RunChildren();
+            }
 
-                // The following are run on completion of child tests
-                //   PerformOneTimeTearDown();
-                //   WorkItemComplete();
-            }
-            else
-            {
-                PerformOneTimeTearDown();
-                WorkItemComplete();
-            }
+            PerformOneTimeTearDown();
+            WorkItemComplete();
         }
 
         #region Helper Methods
@@ -115,7 +108,7 @@ namespace NUnit.Framework.Internal.WorkItems
 
         private void RunChildren()
         {
-            _waitCount = _children.Count;
+            _childTestCountdown = new CountdownEvent(_children.Count);
 
             while (_children.Count > 0)
             {
@@ -123,6 +116,8 @@ namespace NUnit.Framework.Internal.WorkItems
                 child.Completed += new EventHandler(OnChildCompleted);
                 child.Execute(this.Context);
             }
+
+            _childTestCountdown.Wait();
         }
 
         private void PerformOneTimeTearDown()
@@ -137,17 +132,7 @@ namespace NUnit.Framework.Internal.WorkItems
             {
                 childTask.Completed -= new EventHandler(OnChildCompleted);
                 Result.AddResult(childTask.Result);
-
-                lock (_waitLock)
-                {
-                    _waitCount--;
-
-                    if (_waitCount == 0)
-                    {
-                        PerformOneTimeTearDown();
-                        WorkItemComplete();
-                    }
-                }
+                _childTestCountdown.Signal();
             }
         }
 
