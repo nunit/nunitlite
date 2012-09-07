@@ -186,7 +186,7 @@ namespace NUnit.Framework.Internal
         {
             Assert.AreEqual(setupContext.CurrentCulture, CultureInfo.CurrentCulture, "Culture not in initial context");
 
-            var context = setupContext.Save();
+            TestExecutionContext context = setupContext.Save();
 
             try
             {
@@ -210,7 +210,7 @@ namespace NUnit.Framework.Internal
         {
             Assert.AreEqual(currentUICulture, setupContext.CurrentUICulture, "UICulture not in initial context");
 
-            var context = setupContext.Save();
+            TestExecutionContext context = setupContext.Save();
 
             try
             {

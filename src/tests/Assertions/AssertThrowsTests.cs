@@ -109,7 +109,11 @@ namespace NUnit.Framework.Assertions
         [Test, ExpectedException(typeof(AssertionException))]
         public void UnrelatedExceptionThrown()
         {
+#if CLR_2_0 || CLR_4_0
             ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsApplicationException);
+#else
+            ArgumentException ex = (ArgumentException)Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsApplicationException));
+#endif
             Assert.That(ex.Message, Is.StringStarting(
                 "  Expected: <System.ArgumentException>" + Env.NewLine +
                 "  But was:  <System.ApplicationException> (my message)" + Env.NewLine));
@@ -119,7 +123,7 @@ namespace NUnit.Framework.Assertions
         [Test, ExpectedException(typeof(AssertionException))]
         public void BaseExceptionThrown()
         {
-#if CLR_2_0x || CLR_4_0
+#if CLR_2_0 || CLR_4_0
             ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsSystemException);
 #else
             Exception ex = Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsSystemException));

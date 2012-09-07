@@ -111,6 +111,7 @@ namespace NUnit.Framework.Syntax
         }
 
 #if CLR_2_0 || CLR_4_0
+#if !NETCF_2_0 // Won't compile
         [Test]
         public void DelegateThrowsException()
         {
@@ -118,6 +119,7 @@ namespace NUnit.Framework.Syntax
                 delegate { throw new ApplicationException(); },
                 Throws.Exception);
         }
+#endif
 
 #if !NETCF
         [Test]
@@ -136,7 +138,6 @@ namespace NUnit.Framework.Syntax
                 Throws.InstanceOf<ArgumentNullException>()
                 .And.Message.Matches("null"));
         }
-#endif
 
         internal class MyClass
         {
@@ -148,6 +149,7 @@ namespace NUnit.Framework.Syntax
                 }
             }
         }
+#endif
 #endif
     }
 }

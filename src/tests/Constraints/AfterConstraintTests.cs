@@ -72,14 +72,20 @@ namespace NUnit.Framework.Constraints.Tests
         [Test, Asynchronous]
         public void SimpleTest()
         {
-            SetValueTrueAfterDelay(500);
+            var worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += delegate { value = true; };
+            worker.DoWork += delegate { Thread.Sleep(500); };
+            worker.RunWorkerAsync();
             Assert.That(DelegateReturningValue, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
         }
 
         [Test, Asynchronous]
         public void SimpleTestUsingReference()
         {
-            SetValueTrueAfterDelay(500);
+            var worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += delegate { value = true; };
+            worker.DoWork += delegate { Thread.Sleep(500); };
+            worker.RunWorkerAsync();
             Assert.That(ref value, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
         }
 
