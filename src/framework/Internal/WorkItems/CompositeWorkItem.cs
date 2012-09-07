@@ -102,7 +102,7 @@ namespace NUnit.Framework.Internal.WorkItems
                 if (ex is NUnitException || ex is System.Reflection.TargetInvocationException)
                     ex = ex.InnerException;
 
-                ((TestSuiteResult)Result).RecordException(ex, FailureSite.SetUp);
+                Result.RecordException(ex, FailureSite.SetUp);
             }
         }
 

@@ -55,11 +55,6 @@ namespace NUnit.Framework.Internal
         /// </summary>
         protected bool maintainTestOrder;
 
-        ///// <summary>
-        ///// Arguments for use in creating a parameterized fixture
-        ///// </summary>
-        //internal object[] arguments;
-
         /// <summary>
         /// The fixture setup methods for this suite
         /// </summary>
@@ -117,8 +112,6 @@ namespace NUnit.Framework.Internal
             if (nspace != null && nspace != "")
                 this.FullName = nspace + "." + name;
             this.arguments = arguments;
-
-            this.attributeProvider = fixtureType;
         }
 
         #endregion
@@ -268,20 +261,13 @@ namespace NUnit.Framework.Internal
         /// <returns></returns>
         protected override TestCommand MakeTestCommand()
         {
-            TestCommand command = new TestSuiteCommand(this);
-
-#if !NUNITLITE
-            if (ShouldRunOnOwnThread)
-                command = new ThreadedTestCommand(command);
-#endif
-
-            return command;
+            return new TestSuiteCommand(this);
         }
 
         /// <summary>
         /// Creates a WorkItem for executing this test.
         /// </summary>
-        /// <param name="childFilter">A childFilter to be used in selecting child tests</param>
+        /// <param name="childFilter">A filter to be used in selecting child tests</param>
         /// <returns>A new WorkItem</returns>
         public override WorkItem CreateWorkItem(ITestFilter childFilter)
         {

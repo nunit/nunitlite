@@ -186,23 +186,23 @@ namespace NUnit.Framework.Internal
         {
             Assert.AreEqual(setupContext.CurrentCulture, CultureInfo.CurrentCulture, "Culture not in initial context");
 
-            setupContext = setupContext.Save();
+            var context = setupContext.Save();
 
             try
             {
                 CultureInfo otherCulture =
                     new CultureInfo(currentCulture.Name == "fr-FR" ? "en-GB" : "fr-FR");
-                setupContext.CurrentCulture = otherCulture;
+                context.CurrentCulture = otherCulture;
                 Assert.AreEqual(otherCulture, CultureInfo.CurrentCulture, "Culture was not set");
-                Assert.AreEqual(otherCulture, setupContext.CurrentCulture, "Culture not in new context");
+                Assert.AreEqual(otherCulture, context.CurrentCulture, "Culture not in new context");
             }
             finally
             {
-                setupContext = setupContext.Restore();
+                context = context.Restore();
             }
 
             Assert.AreEqual(currentCulture, CultureInfo.CurrentCulture, "Culture was not restored");
-            Assert.AreEqual(currentCulture, setupContext.CurrentCulture, "Culture not in final context");
+            Assert.AreEqual(currentCulture, context.CurrentCulture, "Culture not in final context");
         }
 
         [Test]
@@ -210,23 +210,23 @@ namespace NUnit.Framework.Internal
         {
             Assert.AreEqual(currentUICulture, setupContext.CurrentUICulture, "UICulture not in initial context");
 
-            setupContext = setupContext.Save();
+            var context = setupContext.Save();
 
             try
             {
                 CultureInfo otherCulture =
                     new CultureInfo(currentUICulture.Name == "fr-FR" ? "en-GB" : "fr-FR");
-                setupContext.CurrentUICulture = otherCulture;
+                context.CurrentUICulture = otherCulture;
                 Assert.AreEqual(otherCulture, CultureInfo.CurrentUICulture, "UICulture was not set");
-                Assert.AreEqual(otherCulture, setupContext.CurrentUICulture, "UICulture not in new context");
+                Assert.AreEqual(otherCulture, context.CurrentUICulture, "UICulture not in new context");
             }
             finally
             {
-                setupContext = setupContext.Restore();
+                context = context.Restore();
             }
 
             Assert.AreEqual(currentUICulture, CultureInfo.CurrentUICulture, "UICulture was not restored");
-            Assert.AreEqual(currentUICulture, setupContext.CurrentUICulture, "UICulture not in final context");
+            Assert.AreEqual(currentUICulture, context.CurrentUICulture, "UICulture not in final context");
         }
 #endif
     }

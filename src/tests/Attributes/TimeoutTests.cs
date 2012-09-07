@@ -82,7 +82,7 @@ namespace NUnit.Framework.Attributes
         {
             TestResult suiteResult = TestBuilder.RunTestFixture(typeof(ThreadingFixtureWithTimeout));
             Assert.That(suiteResult.ResultState, Is.EqualTo(ResultState.Failure));
-            Assert.That(suiteResult.Message, Is.EqualTo("Component test failure"));
+            Assert.That(suiteResult.Message, Is.EqualTo("One or more child tests had errors"));
             ITestResult result = TestFinder.Find("Test2WithInfiniteLoop", suiteResult, false);
             Assert.That(result.ResultState, Is.EqualTo(ResultState.Failure));
             Assert.That(result.Message, Contains.Substring("50ms"));

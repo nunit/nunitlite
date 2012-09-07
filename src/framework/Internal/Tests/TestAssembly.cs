@@ -40,7 +40,6 @@ namespace NUnit.Framework.Internal
         public TestAssembly(Assembly assembly, string path) : base(path) 
         {
             this.Name = Path.GetFileName(path);
-            this.attributeProvider = assembly;
         }
 
         /// <summary>

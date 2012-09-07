@@ -276,9 +276,6 @@ namespace NUnit.Framework.Builders
             if (parms != null)
             {
                 testMethod.parms = parms;
-                //testMethod.arguments = parms.Arguments;
-                //testMethod.expectedResult = parms.ExpectedResult;
-                //testMethod.hasExpectedResult = parms.HasExpectedResult;
                 testMethod.RunState = parms.RunState;
 
                 arglist = parms.Arguments;

@@ -301,33 +301,70 @@ namespace NUnit.Framework.Internal
 
         #endregion
 
-        /// <summary>
-        /// Adds a child result to this result, setting this result's
-        /// ResultState to Failure if the child result failed.
-        /// </summary>
-        /// <param name="result">The result to be added</param>
-        public void AddResult(ITestResult result)
-        {
-            if (children == null)
-#if CLR_2_0 || CLR_4_0
-                children = new System.Collections.Generic.List<ITestResult>();
-#else
-                children = new System.Collections.ArrayList();
-#endif
+        #region Other Public Methods
 
-            children.Add(result);
+        /// <summary>
+        /// Add a child result
+        /// </summary>
+        /// <param name="result">The child result to be added</param>
+        public virtual void AddResult(TestResult result)
+        {
+            this.Children.Add(result);
+
+            this.assertCount += result.AssertCount;
 
             switch (result.ResultState.Status)
             {
-                case TestStatus.Failed:
-                    this.SetResult(ResultState.Failure, "Component test failure");
+                case TestStatus.Passed:
+
+                    if (this.resultState.Status == TestStatus.Inconclusive)
+                        SetResult(ResultState.Success);
+
                     break;
-                default:
+
+                case TestStatus.Failed:
+
+                    if (this.resultState.Status != TestStatus.Failed)
+                        SetResult(ResultState.Failure, "One or more child tests had errors");
+
+                    break;
+
+                case TestStatus.Skipped:
+
+                    switch (result.ResultState.Label)
+                    {
+                        case "Invalid":
+
+                            if (this.ResultState != ResultState.NotRunnable && this.ResultState.Status != TestStatus.Failed)
+                                SetResult(ResultState.Failure, "One or more child tests had errors");
+
+                            break;
+
+                        case "Ignored":
+
+                            if (this.ResultState.Status == TestStatus.Inconclusive || this.ResultState.Status == TestStatus.Passed)
+                                SetResult(ResultState.Ignored, "One or more child tests were ignored");
+
+                            break;
+
+                        default:
+
+                            // Tests skipped for other reasons do not change the outcome
+                            // of the containing suite when added.
+
+                            break;
+                    }
+
+                    break;
+
+                case TestStatus.Inconclusive:
+
+                    // An inconclusive result does not change the outcome
+                    // of the containing suite when added.
+
                     break;
             }
         }
-
-        #region Other Public Methods
 
         /// <summary>
         /// Set the result of the test
@@ -359,6 +396,17 @@ namespace NUnit.Framework.Internal
             this.resultState = resultState;
             this.message = message;
             this.stackTrace = stackTrace;
+        }
+
+        /// <summary>
+        /// Set the test result based on the type of exception thrown
+        /// and the site of the Failure.
+        /// </summary>
+        /// <param name="ex">The exception that was thrown</param>
+        /// <param name="site">The FailureSite</param>
+        public virtual void RecordException(Exception ex, FailureSite site)
+        {
+            RecordException(ex);
         }
 
         /// <summary>

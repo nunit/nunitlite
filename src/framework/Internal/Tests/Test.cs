@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -73,12 +73,6 @@ namespace NUnit.Framework.Internal
         private object fixture;
 
         /// <summary>
-        /// Source of attributes for this test. May be a
-        /// Type, MethodInfo or Assembly.
-        /// </summary>
-        protected ICustomAttributeProvider attributeProvider;
-
-        /// <summary>
         /// NUnitAttributes applied to the method, class or assembly
         /// used to implement this test.
         /// </summary>
@@ -100,11 +94,6 @@ namespace NUnit.Framework.Internal
         private bool requiresThread;
 
         private bool isAsynchronous;
-
-        ///// <summary>
-        ///// Argument list for use in executing the test.
-        ///// </summary>
-        //internal object[] arguments;
 
         #endregion
 
@@ -338,7 +327,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// Creates a WorkItem for executing this test.
         /// </summary>
-        /// <param name="childFilter">A childFilter to be used in selecting child tests</param>
+        /// <param name="childFilter">A filter to be used in selecting child tests</param>
         /// <returns>A new WorkItem</returns>
         public abstract WorkItem CreateWorkItem(ITestFilter childFilter);
 

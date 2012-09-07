@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -97,7 +97,6 @@ namespace NUnit.Framework.Internal
             }
 
             this.method = method;
-            this.attributeProvider = method;
         }
 
 		#endregion
@@ -220,7 +219,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// Creates a WorkItem for executing this test.
         /// </summary>
-        /// <param name="childFilter">A childFilter to be used in selecting child tests</param>
+        /// <param name="childFilter">A filter to be used in selecting child tests</param>
         /// <returns>A new WorkItem</returns>
         public override WorkItem CreateWorkItem(ITestFilter childFilter)
         {
@@ -238,11 +237,6 @@ namespace NUnit.Framework.Internal
 
             // Add Standard stuff
             decorators.Add(new SetUpTearDownDecorator());
-
-#if !NUNITLITE
-            if (ShouldRunOnOwnThread)
-                decorators.Add(new ThreadedTestDecorator());
-#endif
 
             // Add Decorators supplied by attributes and parameter sets
             foreach (ICommandDecorator decorator in CustomDecorators)
