@@ -114,7 +114,7 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ExploreFile
         {
-            get { return ExpandToFullPath(exploreFile); }
+            get { return ExpandToFullPath(exploreFile.Length < 1 ? "tests.xml" : exploreFile); }
         }
 
         /// <summary>
