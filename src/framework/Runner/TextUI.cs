@@ -211,6 +211,9 @@ namespace NUnitLite.Runner
             testWriter.Formatting = System.Xml.Formatting.Indented;
             testNode.WriteTo(testWriter);
             testWriter.Close();
+
+            Console.WriteLine();
+            Console.WriteLine("Test info saved as {0}.", listFile);
         }
 
         /// <summary>
