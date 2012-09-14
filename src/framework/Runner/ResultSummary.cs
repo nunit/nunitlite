@@ -26,7 +26,7 @@ using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 
-namespace NUnitLite
+namespace NUnitLite.Runner
 {
     /// <summary>
     /// Helper class used to summarize the result of a test run
@@ -121,7 +121,7 @@ namespace NUnitLite
 
         private void Visit(ITestResult result)
         {
-            if (result.Test is TestSuite)
+            if (result.HasChildren)
             {
                 foreach (ITestResult r in result.Children)
                     Visit(r);

@@ -31,12 +31,43 @@ using System;
 // associated with an assembly.
 [assembly: AssemblyTitle("NUnitLite")]
 [assembly: AssemblyDescription("NUnitLite unit-testing framework")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NUnit Software")]
 [assembly: AssemblyProduct("NUnitLite")]
 [assembly: AssemblyCopyright("Copyright 2012, Charlie Poole")]
 [assembly: AssemblyTrademark("NUnitLite")]
 [assembly: AssemblyCulture("")]
+
+// Set AssemblyConfiguration attribute depending on
+// how we are building the assembly.
+#if DEBUG
+#if NET_4_0
+[assembly: AssemblyConfiguration(".NET 4.0 Debug")]
+#elif NET_3_5
+[assembly: AssemblyConfiguration(".NET 3.5 Debug")]
+#elif NET_2_0
+[assembly: AssemblyConfiguration(".NET 2.0 Debug")]
+#elif NET_1_1
+[assembly: AssemblyConfiguration(".NET 1.1 Debug")]
+#elif NETCF_3_5
+[assembly: AssemblyConfiguration(".NET CF 3.5 Debug")]
+#elif NETCF_2_0
+[assembly: AssemblyConfiguration(".NET CF 2.0 Debug")]
+#endif
+#else
+#if NET_4_0
+[assembly: AssemblyConfiguration(".NET 4.0")]
+#elif NET_3_5
+[assembly: AssemblyConfiguration(".NET 3.5")]
+#elif NET_2_0
+[assembly: AssemblyConfiguration(".NET 2.0")]
+#elif NET_1_1
+[assembly: AssemblyConfiguration(".NET 1.1 Debug")]
+#elif NETCF_3_5
+[assembly: AssemblyConfiguration(".NET CF 3.5 Debug")]
+#elif NETCF_2_0
+[assembly: AssemblyConfiguration(".NET CF 2.0 Debug")]
+#endif
+#endif
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

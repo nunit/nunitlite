@@ -47,6 +47,16 @@ namespace NUnit.Framework.Internal.WorkItems
             _initialCount = _remainingCount = initialCount;
         }
 
+        public int InitialCount
+        {
+            get { return _initialCount; }
+        }
+
+        public int CurrentCount
+        {
+            get { return _remainingCount; }
+        }
+
         /// <summary>
         /// Decrement the count by one
         /// </summary>

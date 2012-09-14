@@ -324,13 +324,6 @@ namespace NUnit.Framework.Internal
                 : new SkipCommand(this);
         }
 
-        /// <summary>
-        /// Creates a WorkItem for executing this test.
-        /// </summary>
-        /// <param name="childFilter">A filter to be used in selecting child tests</param>
-        /// <returns>A new WorkItem</returns>
-        public abstract WorkItem CreateWorkItem(ITestFilter childFilter);
-
         ///// <summary>
         ///// Gets a count of test cases that would be run using
         ///// the specified filter.

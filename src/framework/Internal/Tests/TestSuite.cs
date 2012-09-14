@@ -265,18 +265,6 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
-        /// Creates a WorkItem for executing this test.
-        /// </summary>
-        /// <param name="childFilter">A filter to be used in selecting child tests</param>
-        /// <returns>A new WorkItem</returns>
-        public override WorkItem CreateWorkItem(ITestFilter childFilter)
-        {
-            return RunState == Api.RunState.Runnable || RunState == Api.RunState.Explicit
-                ? (WorkItem)new CompositeWorkItem(this, childFilter)
-                : (WorkItem)new SimpleWorkItem(this);
-        }
-
-        /// <summary>
         /// Gets a bool indicating whether the current test
         /// has any descendant tests.
         /// </summary>

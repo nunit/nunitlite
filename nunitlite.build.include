@@ -356,16 +356,22 @@
 
     <copy todir="${package.src.dir}">
       <fileset basedir="${project.src.dir}">
-		<include name="framework/*.csproj"/>
+        <include name="framework/*.csproj"/>
+        <include name="framework/*.snk"/>
+        <include name="framework/*.build"/>
         <include name="framework/**/*.cs"/>
-		<include name="tests/*.csproj"/>
+        <include name="tests/*.csproj"/>
         <include name="tests/**/*.cs"/>
-		<include name="testdata/*.csproj"/>
+        <include name="tests/*.build"/>
+        <include name="testdata/*.csproj"/>
         <include name="testdata/**/*.cs"/>
-		<include name="mock-assembly/*.csproj"/>
-		<include name="mock-assembly/**/*.cs"/>
-		<include name="TestResultConsole/*.csproj"/>
-		<include name="TestResultConsole/**/*.cs"/>
+        <include name="testdata/*.build"/>
+        <include name="mock-assembly/*.csproj"/>
+        <include name="mock-assembly/**/*.cs"/>
+        <include name="mock-assembly/*.build"/>
+        <include name="TestResultConsole/*.csproj"/>
+        <include name="TestResultConsole/**/*.cs"/>
+        <include name="TestResultConsole/*.build"/>
       </fileset>
     </copy>
 

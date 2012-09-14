@@ -36,7 +36,7 @@ namespace NUnit.Framework.Internal.WorkItems
     public class CompositeWorkItem : WorkItem
     {
         private TestSuite _suite;
-        private TestSuiteResult _suiteResult;
+        private ITestFilter _childFilter;
 #if CLR_2_0 || CLR_4_0
         private System.Collections.Generic.Queue<WorkItem> _children = new System.Collections.Generic.Queue<WorkItem>();
 #else
@@ -51,16 +51,14 @@ namespace NUnit.Framework.Internal.WorkItems
         /// using a filter to select child tests.
         /// </summary>
         /// <param name="suite">The TestSuite to be executed</param>
+        /// <param name="context">The execution context in which to run the suite</param>
         /// <param name="childFilter">A filter used to select child tests</param>
-        public CompositeWorkItem(TestSuite suite, ITestFilter childFilter)
-            : base(suite)
+        public CompositeWorkItem(TestSuite suite, TestExecutionContext context, ITestFilter childFilter)
+            : base(suite, context)
         {
             _suite = suite;
-            _suiteResult = Result as TestSuiteResult;
             _suiteCommand = Command as TestSuiteCommand;
-
-            foreach (Test test in _suite.Tests)
-                _children.Enqueue(test.CreateWorkItem(childFilter));
+            _childFilter = childFilter;
         }
 
         /// <summary>
@@ -77,11 +75,21 @@ namespace NUnit.Framework.Internal.WorkItems
 
             PerformOneTimeSetUp();
 
-            if (Result.ResultState.Status == TestStatus.Passed && _children.Count > 0)
+            if (Result.ResultState.Status == TestStatus.Passed && _suite.HasChildren)
             {
-                RunChildren();
+                foreach (Test test in _suite.Tests)
+                    if (_childFilter.Pass(test))
+                        _children.Enqueue(CreateWorkItem(test, this.Context, _childFilter));
+
+                if (_children.Count > 0)
+                {
+                    RunChildren();
+                    return;
+                }
             }
 
+            // Fall through in case there were no child tests to run.
+            // Otherwise, this is done in the completion event.
             PerformOneTimeTearDown();
             WorkItemComplete();
         }
@@ -95,7 +103,7 @@ namespace NUnit.Framework.Internal.WorkItems
                 _suiteCommand.DoOneTimeSetUp(Context);
 
                 // SetUp may have changed some things
-                Context.Update();
+                Context.UpdateContext();
             }
             catch (Exception ex)
             {
@@ -114,10 +122,8 @@ namespace NUnit.Framework.Internal.WorkItems
             {
                 WorkItem child = (WorkItem)_children.Dequeue();
                 child.Completed += new EventHandler(OnChildCompleted);
-                child.Execute(this.Context);
+                child.Execute();
             }
-
-            _childTestCountdown.Wait();
         }
 
         private void PerformOneTimeTearDown()
@@ -125,14 +131,25 @@ namespace NUnit.Framework.Internal.WorkItems
             _suiteCommand.DoOneTimeTearDown(Context);
         }
 
+        private object _completionLock = new object();
+
         private void OnChildCompleted(object sender, EventArgs e)
         {
-            WorkItem childTask = sender as WorkItem;
-            if (childTask != null)
+            lock (_completionLock)
             {
-                childTask.Completed -= new EventHandler(OnChildCompleted);
-                Result.AddResult(childTask.Result);
-                _childTestCountdown.Signal();
+                WorkItem childTask = sender as WorkItem;
+                if (childTask != null)
+                {
+                    childTask.Completed -= new EventHandler(OnChildCompleted);
+                    Result.AddResult(childTask.Result);
+                    _childTestCountdown.Signal();
+
+                    if (_childTestCountdown.CurrentCount == 0)
+                    {
+                        PerformOneTimeTearDown();
+                        WorkItemComplete();
+                    }
+                }
             }
         }
 

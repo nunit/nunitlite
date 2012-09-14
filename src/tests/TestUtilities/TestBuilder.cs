@@ -28,8 +28,8 @@ using NUnit.Framework.Api;
 using NUnit.Framework.Builders;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Commands;
-using NUnit.Framework.Internal.WorkItems;
 using NUnit.Framework.Extensibility;
+using NUnit.Framework.Internal.WorkItems;
 using System.Threading;
 
 namespace NUnit.TestUtilities
@@ -85,8 +85,8 @@ namespace NUnit.TestUtilities
             TestExecutionContext context = new TestExecutionContext();
             context.TestObject = null;
 
-            CompositeWorkItem work = new CompositeWorkItem(suite, TestFilter.Empty);
-            return ExecuteWorkItem(work, context);
+            CompositeWorkItem work = new CompositeWorkItem(suite, context, TestFilter.Empty);
+            return ExecuteAndWaitForResult(work);
         }
 
         public static TestResult RunTestFixture(object fixture)
@@ -96,8 +96,8 @@ namespace NUnit.TestUtilities
             TestExecutionContext context = new TestExecutionContext();
             context.TestObject = fixture;
 
-            WorkItem work = suite.CreateWorkItem(TestFilter.Empty);
-            return ExecuteWorkItem(work, context);
+            WorkItem work = WorkItem.CreateWorkItem(suite, context, TestFilter.Empty);
+            return ExecuteAndWaitForResult(work);
         }
 
         public static ITestResult RunTestCase(Type type, string methodName)
@@ -128,15 +128,6 @@ namespace NUnit.TestUtilities
             return RunTest(test, null);
         }
 
-        public static ITestResult RunTest(Test test, object testObject)
-        {
-            TestExecutionContext context = new TestExecutionContext();
-            context.TestObject = testObject;
-
-            WorkItem work = test.CreateWorkItem(TestFilter.Empty);
-            return ExecuteWorkItem(work, context);
-        }
-
         public static WorkItem RunTestAsync(Test test)
         {
             return RunTestAsync(test, (object)null);
@@ -147,15 +138,24 @@ namespace NUnit.TestUtilities
             TestExecutionContext context = new TestExecutionContext();
             context.TestObject = testObject;
 
-            WorkItem work = test.CreateWorkItem(TestFilter.Empty);
-            work.Execute(context);
+            WorkItem work = WorkItem.CreateWorkItem(test, context, TestFilter.Empty);
+            work.Execute();
 
             return work;
         }
 
-        private static TestResult ExecuteWorkItem(WorkItem work, TestExecutionContext context)
+        public static ITestResult RunTest(Test test, object testObject)
         {
-            work.Execute(context);
+            TestExecutionContext context = new TestExecutionContext();
+            context.TestObject = testObject;
+
+            WorkItem work = WorkItem.CreateWorkItem(test, context, TestFilter.Empty);
+            return ExecuteAndWaitForResult(work);
+        }
+
+        private static TestResult ExecuteAndWaitForResult(WorkItem work)
+        {
+            work.Execute();
 
             // TODO: Replace with an event
             while (work.State != WorkItemState.Complete)

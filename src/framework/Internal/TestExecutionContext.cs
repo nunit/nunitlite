@@ -567,7 +567,7 @@ namespace NUnit.Framework.Internal
         /// the test code in the execution context so it
         /// will be passed on to lower level tests.
         /// </summary>
-        public void Update()
+        public void UpdateContext()
         {
 #if !NETCF
             this.currentCulture = CultureInfo.CurrentCulture;

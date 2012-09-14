@@ -281,6 +281,7 @@
     <Compile Include="Internal\TextMessageWriter.cs" />
     <Compile Include="Internal\TypeHelper.cs" />
     <Compile Include="Internal\WorkItems\CompositeWorkItem.cs" />
+    <Compile Include="Internal\WorkItems\CountdownEvent.cs" />
     <Compile Include="Internal\WorkItems\SimpleWorkItem.cs" />
     <Compile Include="Internal\WorkItems\WorkItem.cs" />
     <Compile Include="Internal\WorkItems\WorkItemState.cs" />
@@ -302,9 +303,6 @@
     <Compile Include="TestCaseData.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="Throws.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

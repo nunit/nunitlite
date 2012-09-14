@@ -37,22 +37,35 @@ namespace NUnit.Framework.Internal.WorkItems
     /// </summary>
     public abstract class WorkItem
     {
-        // The current state of the WorkItem
-        private WorkItemState _state;
-
         // The test this WorkItem represents
-        private Test _test;
+        private readonly Test _test;
 
         // The TestCommand for that test
-        private TestCommand _command;
+        private readonly TestCommand _command;
+
+        // The execution context used by this work item
+        private TestExecutionContext _context;
+
+        // The current state of the WorkItem
+        private WorkItemState _state;
 
         /// <summary>
         /// The result of running the test
         /// </summary>
         protected TestResult testResult;
 
-        // The execution context used by this work item
-        private TestExecutionContext _context;
+        #region Static Factory Method
+
+        public static WorkItem CreateWorkItem(Test test, TestExecutionContext context, ITestFilter filter)
+        {
+            TestSuite suite = test as TestSuite;
+            if (suite != null && (suite.RunState == RunState.Runnable || suite.RunState == RunState.Explicit))
+                return new CompositeWorkItem(suite, context, filter);
+            else
+                return new SimpleWorkItem(test, context);
+        }
+
+        #endregion
 
         #region Constructor
 
@@ -60,9 +73,11 @@ namespace NUnit.Framework.Internal.WorkItems
         /// Construct a WorkItem for a particular test.
         /// </summary>
         /// <param name="test">The test that the WorkItem will run</param>
-        public WorkItem(Test test)
+        /// <param name="context">The context to be used for running this test</param>
+        public WorkItem(Test test, TestExecutionContext context)
         {
             _test = test;
+            _context = context.Save();
             testResult = test.MakeTestResult();
             _command = test.GetTestCommand();
             _state = WorkItemState.Ready;
@@ -94,11 +109,20 @@ namespace NUnit.Framework.Internal.WorkItems
         }
 
         /// <summary>
-        /// The execution context
+        /// The execution context in use
         /// </summary>
         protected TestExecutionContext Context
         {
             get { return _context; }
+        }
+
+        /// <summary>
+        /// The original context supplied from the fixture
+        /// or other higher-level test
+        /// </summary>
+        protected TestExecutionContext PriorContext
+        {
+            get { return _context.prior; }
         }
 
         /// <summary>
@@ -125,10 +149,8 @@ namespace NUnit.Framework.Internal.WorkItems
         /// Execute the current work item, including any
         /// child work items.
         /// </summary>
-        public virtual void Execute(TestExecutionContext context)
+        public virtual void Execute()
         {
-            _context = new TestExecutionContext(context);
-
 #if (CLR_2_0 || CLR_4_0) && !NETCF
             // Timeout set at a higher level
             int timeout = _context.TestCaseTimeout;
