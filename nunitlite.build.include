@@ -132,6 +132,13 @@
     <call target="set-${default.netcf.runtime}-runtime-config" />
   </target>
 
+  <target name="set-default-silverlight-runtime-config">
+    <fail unless="${property::exists( 'default.silverlight.runtime' )}"
+      message="No versions of Silverlight were found"/>
+
+    <call target="set-${default.sliverlight.runtime}-runtime-config" />
+  </target>
+
   <target name="set-default-mono-runtime-config">
     <fail unless="${property::exists( 'default.mono.runtime' )}"
       message="No versions of the Mono runtime were found"/>
@@ -307,21 +314,47 @@
 		<property name="test.platforms" value="mono-3.5,net-3.5"/>
 	</target>
 
-	<target name="set-mono-4.0-runtime-config">
-		<fail unless="${framework::exists( 'mono-4.0' )}"
-		  message="Mono 4.0 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'mono-4.0' )}"
-		  message="The Mono 4.0 SDK is not configured or not installed"/>
+  <target name="set-mono-4.0-runtime-config">
+    <fail unless="${framework::exists( 'mono-4.0' )}"
+      message="Mono 4.0 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'mono-4.0' )}"
+      message="The Mono 4.0 SDK is not configured or not installed"/>
 
-		<property name="runtime.platform" value="mono"/>
-		<property name="runtime.version" value="4.0"/>
-		<property name="runtime.config" value="mono-4.0"/>
-		<property name="runtime.defines" value="MONO,MONO_4_0,CLR_4_0"/>
-		<property name="build.framework" value="mono-4.0"/>
-		<property name="test.platforms" value="mono-4.0,net-4.0"/>
-	</target>
+    <property name="runtime.platform" value="mono"/>
+    <property name="runtime.version" value="4.0"/>
+    <property name="runtime.config" value="mono-4.0"/>
+    <property name="runtime.defines" value="MONO,MONO_4_0,CLR_4_0"/>
+    <property name="build.framework" value="mono-4.0"/>
+    <property name="test.platforms" value="mono-4.0,net-4.0"/>
+  </target>
 
-	<!-- ***************************************************************** -->
+  <target name="set-silverlight-3.0-runtime-config">
+    <fail unless="${framework::exists( 'silverlight-3.0' )}"
+      message="Silverlight 3.0 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'silverlight-3.0' )}"
+      message="The Silverlight 3.0 SDK is not configured or not installed"/>
+
+    <property name="runtime.platform" value="silverlight"/>
+    <property name="runtime.version" value="3.0"/>
+    <property name="runtime.config" value="silverlight-3.0"/>
+    <property name="runtime.defines" value="SILVERLIGHT,SL_3_0,CLR_2_0"/>
+    <property name="build.framework" value="silverlight-3.0"/>
+    <property name="test.platforms" value="silverlight-3.0"/>
+  </target>
+
+  <target name="set-silverlight-4.0-runtime-config">
+    <fail unless="${framework::exists( 'silverlight-4.0' )}"
+      message="Silverlight 4.0 is not installed"/>
+
+    <property name="runtime.platform" value="silverlight"/>
+    <property name="runtime.version" value="4.0"/>
+    <property name="runtime.config" value="silverlight-4.0"/>
+    <property name="runtime.defines" value="SILVERLIGHT,SL_4_0,CLR_4_0"/>
+    <property name="build.framework" value="silverlight-4.0"/>
+    <property name="test.platforms" value="silverlight-4.0"/>
+  </target>
+
+<!-- ***************************************************************** -->
 <!-- **************** Internally used targets ************************ -->
 <!-- ***************************************************************** -->
 

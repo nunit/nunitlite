@@ -253,15 +253,6 @@ namespace NUnit.Framework.Internal
             get { return displayName; }
         }
 
-        public bool IsSilverlight
-        {
-#if SILVERLIGHT
-            get { return true; }
-#else
-            get { return false; }
-#endif
-        }
-
 #if !NUNITLITE
 		private static RuntimeFramework[] availableFrameworks;
 

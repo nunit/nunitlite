@@ -69,7 +69,7 @@
          The first .NET and Mono frameworks found are the
          respective net and mono defaults. -->
   <property name="supported.frameworks" 
-    value="net-4.0,net-3.5,net-2.0,net-1.1,net-1.0,netcf-3.5,netcf-2.0,netcf-1.0,mono-4.0,mono-3.5,mono-2.0,mono-1.0"/>
+    value="net-4.0,net-3.5,net-2.0,net-1.1,net-1.0,netcf-3.5,netcf-2.0,netcf-1.0,mono-4.0,mono-3.5,mono-2.0,mono-1.0,silverlight-4.0,silverlight-3.0"/>
 
   <!-- Framework versions for which packages are normally created -->
   <property name="standard.packages"
@@ -97,7 +97,7 @@
 <!-- ***************************************************************** -->
 
   <target name="net" 
-    description="Set runtime to .NET 1.1 for targets that follow"
+    description="Set runtime to the default .NET config for targets that follow"
     depends="set-default-dot-net-runtime-config"/>
 
   <target name="net-1.0" 
@@ -116,15 +116,15 @@
     description="Set runtime to .NET 3.0 for targets that follow"
     depends="set-net-3.0-runtime-config"/>
 
-	<target name="net-3.5"
-	  description="Set runtime to .NET 3.5 for targets that follow"
-	  depends="set-net-3.5-runtime-config"/>
+  <target name="net-3.5"
+    description="Set runtime to .NET 3.5 for targets that follow"
+    depends="set-net-3.5-runtime-config"/>
 
-	<target name="net-4.0"
-	  description="Set runtime to .NET 4.0 for targets that follow"
-	  depends="set-net-4.0-runtime-config"/>
+  <target name="net-4.0"
+    description="Set runtime to .NET 4.0 for targets that follow"
+    depends="set-net-4.0-runtime-config"/>
 
-	<target name="netcf" 
+  <target name="netcf" 
     description="Set runtime to default .NET CF version for targets that follow"
     depends="set-default-netcf-runtime-config"/>
 
@@ -141,26 +141,38 @@
     depends="set-netcf-3.5-runtime-config"/>
       
   <target name="mono" 
-    description="Set runtime to Mono 1.0 for targets that follow"
+    description="Set runtime to the default Mono config for targets that follow"
     depends="set-default-mono-runtime-config"/>
 
   <target name="mono-1.0" 
     description="Set runtime to Mono 1.0 for targets that follow"
     depends="set-mono-1.0-runtime-config"/>
 
-	<target name="mono-2.0"
-	  description="Set runtime to Mono 2.0 for targets that follow"
-	  depends="set-mono-2.0-runtime-config"/>
+  <target name="mono-2.0"
+    description="Set runtime to Mono 2.0 for targets that follow"
+    depends="set-mono-2.0-runtime-config"/>
 
-	<target name="mono-3.5"
-  description="Set runtime to Mono 3.5 for targets that follow"
-  depends="set-mono-3.5-runtime-config"/>
+  <target name="mono-3.5"
+    description="Set runtime to Mono 3.5 for targets that follow"
+    depends="set-mono-3.5-runtime-config"/>
 
-	<target name="mono-4.0"
-  description="Set runtime to Mono 4.0 for targets that follow"
-  depends="set-mono-4.0-runtime-config"/>
+  <target name="mono-4.0"
+    description="Set runtime to Mono 4.0 for targets that follow"
+    depends="set-mono-4.0-runtime-config"/>
 
-	<!-- ***************************************************************** -->
+  <target name="silverlight"
+    description="Set runtime to the default Silverlight config for targets that follow"
+    depends="set-default-silverlight-runtime-config"/>
+
+  <target name="silverlight-3.0"
+    description="Set runtime to Silverlight 3.0 for targets that follow"
+    depends="set-silverlight-3.0-runtime-config"/>
+
+  <target name="silverlight-4.0"
+    description="Set runtime to Silverlight 4.0 for targets that follow"
+    depends="set-silverlight-4.0-runtime-config"/>
+
+<!-- ***************************************************************** -->
 <!-- ***             Targets that clean directories                *** -->
 <!-- ***************************************************************** -->
 
@@ -206,84 +218,12 @@
     <echo message="* Current Build Directory = ${current.build.dir}"/>
     <echo message="*"/>
 
-	<property name="nant.settings.currentframework" value="${build.framework}"/>
+    <property name="nant.settings.currentframework" value="${build.framework}"/>
 
-    <echo message="* Building nunitlite.dll"/>
-    <echo message="*"/>
-    <csc target="library"
-        output="${current.build.dir}/nunitlite.dll"
-        doc="${current.build.dir}/nunitlite.xml"
-        debug="${build.debug}" 
-        define="${build.defines}">
-      <sources basedir="${project.src.dir}/framework">
-        <include name="**/*.cs"/>
-        <exclude name="Api/ITestCaseSourceProvider.cs"/>
-        <exclude name="Attributes/SetCultureAttribute.cs" if="${runtime.platform == 'netcf'}"/>
-        <exclude name="Attributes/SetUICultureAttribute.cs" if="${runtime.platform == 'netcf'}"/>
-      </sources>
-      <references>
-        <include name="mscorlib.dll"/>
-		  <include name="System.dll"/>
-		  <include name="System.Xml.dll"/>
-	  </references>
-    </csc>
-
-
-	  <echo message="*"/>
-	  <echo message="* Building nunitlite.testdata.dll"/>
-	  <echo message="*"/>
-
-	  <csc target="library"
-		  output="${current.build.dir}/nunitlite.testdata.dll"
-		  debug="${build.debug}"
-		  define="${build.defines}">
-		  <sources basedir="${project.src.dir}/testdata">
-			  <include name="**/*.cs"/>
-		  </sources>
-		  <references basedir="${current.build.dir}">
-			  <include name="mscorlib.dll"/>
-			  <include name="nunitlite.dll"/>
-		  </references>
-	  </csc>
-
-	  <echo message="*"/>
-	  <echo message="* Building mock-assembly.dll"/>
-	  <echo message="*"/>
-
-	  <csc target="library"
-		  output="${current.build.dir}/mock-assembly.dll"
-		  debug="${build.debug}"
-		  define="${build.defines}">
-		  <sources basedir="${project.src.dir}/mock-assembly">
-			  <include name="**/*.cs"/>
-		  </sources>
-		  <references basedir="${current.build.dir}">
-			  <include name="mscorlib.dll"/>
-			  <include name="nunitlite.dll"/>
-		  </references>
-	  </csc>
-
-	  <echo message="*"/>
-    <echo message="* Building nunitlite.tests.exe"/>
-    <echo message="*"/>
-
-    <csc target="exe"
-        output="${current.build.dir}/nunitlite.tests.exe"
-        debug="${build.debug}" 
-        define="${build.defines}">
-      <sources basedir="${project.src.dir}/tests">
-        <include name="**/*.cs"/>
-		  <exclude name="Attributes/SetCultureAttributeTests.cs" if ="${runtime.platform == 'netcf'}"/>
-      </sources>
-      <references basedir="${current.build.dir}">
-        <include name="mscorlib.dll"/>
-        <include name="System.Drawing.dll"/>
-		<include name="System.Xml.dll"/>
-        <include name="nunitlite.dll"/>
-        <include name="nunitlite.testdata.dll"/>
-		<include name="mock-assembly.dll"/>
-      </references>
-    </csc>
+    <nant target="build" buildfile="src/framework/nunitlite.framework.build"/>
+    <nant target="build" buildfile="src/testdata/nunitlite.testdata.build"/>
+    <nant target="build" buildfile="src/mock-assembly/mock-assembly.build"/>
+    <nant target="build" buildfile="src/tests/nunitlite.tests.build"/>
 
   </target>
 

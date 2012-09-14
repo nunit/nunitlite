@@ -315,6 +315,12 @@ namespace NUnit.Framework.Internal
 #endif
         }
 
+        /// <summary>
+        /// Gets the names defined for an enumeration, using Enum.GetNames
+        /// where available, otherwise through reflection.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
         public static string[] GetEnumNames(Type enumType)
         {
 #if NETCF || SILVERLIGHT
