@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2010 Charlie Poole
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,20 +21,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
 using System;
+using NUnit.Framework.Internal;
 
-namespace NUnit.Framework.Api
+namespace NUnit.Framework
 {
     /// <summary>
-    /// The IApplyToTest interface is implemented by self-applying
-    /// attributes that modify the state of a test in some way.
+    /// Attribute used to mark a test method to be run asynchronously.
+    /// When the test is executed, control returns immediately, while
+    /// the test continues to run on a separate thread. When the test
+    /// terminates, NUnit is notified of  the result.
     /// </summary>
-    public interface IApplyToTest
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public class AsynchronousAttribute : NUnitAttribute, IApplyToTest
     {
-        /// <summary>
-        /// Modifies a test as defined for the specific attribute.
-        /// </summary>
-        /// <param name="test">The test to modify</param>
-        void ApplyToTest(ITest test);
+        void IApplyToTest.ApplyToTest(Test test)
+        {
+            test.RequiresThread = true;
+            test.IsAsynchronous = true;
+        }
     }
 }
+#endif

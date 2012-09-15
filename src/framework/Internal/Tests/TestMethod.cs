@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,13 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
 #endif
 using System.Reflection;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Internal.WorkItems;
 
 namespace NUnit.Framework.Internal
 {
@@ -57,16 +57,11 @@ namespace NUnit.Framework.Internal
 #endif
 
         /// <summary>
-        /// Indicated whether the method has an expected result.
+        /// The ParameterSet used to create this test method
         /// </summary>
-	    internal bool hasExpectedResult;
+        internal ParameterSet parms;
 
-        /// <summary>
-        /// The result that the test method is expected to return.
-        /// </summary>
-        internal object expectedResult;
-
-		#endregion
+        #endregion
 
 		#region Constructor
 
@@ -129,6 +124,21 @@ namespace NUnit.Framework.Internal
             get { return decorators; }
         }
 
+        internal bool HasExpectedResult
+        {
+            get { return parms != null && parms.HasExpectedResult; }
+        }
+
+        internal object ExpectedResult
+        {
+            get { return parms != null ? parms.ExpectedResult : null; }
+        }
+
+        internal object[] Arguments
+        {
+            get { return parms != null ? parms.Arguments : null; }
+        }
+
         #endregion
 
         #region Test Overrides
@@ -150,30 +160,6 @@ namespace NUnit.Framework.Internal
         {
             get { return false; }
         }
-
-#if !NUNITLITE
-        /// <summary>
-        /// Gets a boolean value indicating whether this 
-        /// test should run on it's own thread.
-        /// </summary>
-        internal override bool ShouldRunOnOwnThread
-        {
-            get
-            {
-                if (base.ShouldRunOnOwnThread)
-                    return true;
-
-                int timeout = TestExecutionContext.CurrentContext.TestCaseTimeout;
-                if (Properties.ContainsKey(PropertyNames.Timeout))
-                    timeout = (int)Properties.Get(PropertyNames.Timeout);
-                // TODO: Remove this kluge!
-                else if (Parent != null && Parent.Properties.ContainsKey(PropertyNames.Timeout))
-                    timeout = (int)Parent.Properties.Get(PropertyNames.Timeout);
-
-                return timeout > 0;
-            }
-        }
-#endif
 
         /// <summary>
         /// Returns an XmlNode representing the current result after
@@ -214,17 +200,18 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
-        /// Creates and returns a test command for use in running
-        /// this test. Child tests are included in the command only
-        /// if they pass the supplied filter.
+        /// Creates a test command for use in running this test. 
         /// </summary>
-        /// <param name="filter">A test filter to be applied to any child tests.</param>
         /// <returns></returns>
-        protected override TestCommand MakeTestCommand(ITestFilter filter)
+        protected override TestCommand MakeTestCommand()
         {
             TestCommand command = new TestMethodCommand(this);
 
             command = ApplyDecoratorsToCommand(command);
+
+            IApplyToContext[] changes = (IApplyToContext[])this.Method.GetCustomAttributes(typeof(IApplyToContext), true);
+            if (changes.Length > 0)
+                command = new ApplyChangesToContextCommand(command, changes);
 
             return command;
         }
@@ -239,11 +226,6 @@ namespace NUnit.Framework.Internal
 
             // Add Standard stuff
             decorators.Add(new SetUpTearDownDecorator());
-
-#if !NUNITLITE
-            if (ShouldRunOnOwnThread)
-                decorators.Add(new ThreadedTestDecorator());
-#endif
 
             // Add Decorators supplied by attributes and parameter sets
             foreach (ICommandDecorator decorator in CustomDecorators)

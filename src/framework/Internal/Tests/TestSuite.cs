@@ -30,6 +30,7 @@ using System.Collections;
 using System.Reflection;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal.Commands;
+using NUnit.Framework.Internal.WorkItems;
 
 namespace NUnit.Framework.Internal
 {
@@ -54,11 +55,6 @@ namespace NUnit.Framework.Internal
         /// </summary>
         protected bool maintainTestOrder;
 
-        ///// <summary>
-        ///// Arguments for use in creating a parameterized fixture
-        ///// </summary>
-        //internal object[] arguments;
-
         /// <summary>
         /// The fixture setup methods for this suite
         /// </summary>
@@ -68,6 +64,11 @@ namespace NUnit.Framework.Internal
         /// The fixture teardown methods for this suite
         /// </summary>
         protected MethodInfo[] oneTimeTearDownMethods;
+
+        /// <summary>
+        /// Argument list for use in creating the fixture.
+        /// </summary>
+        internal object[] arguments;
 
         #endregion
 
@@ -255,25 +256,12 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
-        /// Creates a test command for this suite, including any child
-        /// tests that jpass the provided filter.
+        /// Creates a test command for this suite.
         /// </summary>
-        /// <param name="filter">Filter to be used for child tests</param>
         /// <returns></returns>
-        protected override TestCommand MakeTestCommand(ITestFilter filter)
+        protected override TestCommand MakeTestCommand()
         {
-            TestCommand command = new TestSuiteCommand(this);
-
-            foreach (Test childTest in Tests)
-                if (filter.Pass(childTest))
-                    command.Children.Add(childTest.GetTestCommand(filter));
-
-#if !NUNITLITE
-            if (ShouldRunOnOwnThread)
-                command = new ThreadedTestCommand(command);
-#endif
-
-            return command;
+            return new TestSuiteCommand(this);
         }
 
         /// <summary>

@@ -17,6 +17,7 @@
     <include name="Constraints/**/*.cs"/>
     <exclude name="Constraints/BinarySerializableConstraint.cs" if="${runtime.platform == 'silverlight'}"/>
     <exclude name="Constraints/BinarySerializableConstraint.cs" if="${runtime.platform == 'netcf'}"/>
+    <exclude name="Constraints/DelayedConstraint.cs" if="${runtime.config == 'net-1.1'}"/>
     <exclude name="Constraints/XmlSerializableConstraint.cs" if="${runtime.platform == 'silverlight'}"/>
     <exclude name="Constraints/XmlSerializableConstraint.cs" if="${runtime.config == 'netcf-1.0'}"/>
 
@@ -26,14 +27,7 @@
     <include name="Internal/**/*.cs"/>
     <exclude name="Internal/XmlHelper.cs"/>
 
-    <include name="Runner/*.cs"/>
-    <exclude name="Runner/TcpWriter.cs" if="${runtime.platform == 'silverlight'}"/>
-    <exclude name="Runner/TextUi.cs" if="${runtime.platform == 'silverlight'}"/>
-    <include name="obj/Debug/TestPage.g.cs"/>
-
-    <include name="Runner/Silverlight/*.cs" if="${runtime.platform == 'silverlight'}"/>
-    <exclude name="Runner/Silverlight/TestRunListener.cs"/>
-    <exclude name="Runner/Silverlight/TestRunStatus.cs"/>
+    <include name="Runner/**/*.cs"/>
   </patternset>
 
   <target name="build">

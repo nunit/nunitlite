@@ -21,37 +21,63 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
+using NUnit.Framework.Api;
+using NUnit.TestData.AssertFailFixture;
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Assertions
 {
     [TestFixture]
     public class AssertFailTests
     {
-        [Test]
+        [Test, ExpectedException(typeof(AssertionException))]
+        public void ThrowsAssertionException()
+        {
+            Assert.Fail();
+        }
+
+        [Test, ExpectedException(typeof(AssertionException), ExpectedMessage = "MESSAGE")]
         public void ThrowsAssertionExceptionWithMessage()
         {
-            try
-            {
-                Assert.Fail("MESSAGE");
-            }
-            catch( AssertionException ex )
-            {
-                Assert.That(ex.Message, Is.EqualTo("MESSAGE"));
-            }
+            Assert.Fail("MESSAGE");
+        }
+
+        [Test, ExpectedException(typeof(AssertionException), ExpectedMessage = "MESSAGE: 2+2=4")]
+        public void ThrowsAssertionExceptionWithMessageAndArgs()
+        {
+            Assert.Fail("MESSAGE: {0}+{1}={2}", 2, 2, 4);
         }
 
         [Test]
-        public void ThrowsAssertionExceptionWithMessageAndArgs()
+        public void AssertFailWorks()
         {
-            try
-            {
-                Assert.Fail("MESSAGE: {0}+{1}={2}", 2, 2, 4);
-            }
-            catch (AssertionException ex)
-            {
-                Assert.That(ex.Message, Is.EqualTo("MESSAGE: 2+2=4"));
-            }
+            ITestResult result = TestBuilder.RunTestCase(
+                typeof(AssertFailFixture),
+                "CallAssertFail");
+
+            Assert.AreEqual(ResultState.Failure, result.ResultState);
+        }
+
+        [Test]
+        public void AssertFailWorksWithMessage()
+        {
+            ITestResult result = TestBuilder.RunTestCase(
+                typeof(AssertFailFixture),
+                "CallAssertFailWithMessage");
+
+            Assert.AreEqual(ResultState.Failure, result.ResultState);
+            Assert.AreEqual("MESSAGE", result.Message);
+        }
+
+        [Test]
+        public void AssertFailWorksWithMessageAndArgs()
+        {
+            ITestResult result = TestBuilder.RunTestCase(
+                typeof(AssertFailFixture),
+                "CallAssertFailWithMessageAndArgs");
+
+            Assert.AreEqual(ResultState.Failure, result.ResultState);
+            Assert.AreEqual("MESSAGE: 2+2=4", result.Message);
         }
     }
 }

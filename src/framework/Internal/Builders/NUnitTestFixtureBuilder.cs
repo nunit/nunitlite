@@ -160,7 +160,7 @@ namespace NUnit.Framework.Builders
             this.fixture = new TestFixture(type, arguments);
             CheckTestFixtureIsValid(fixture);
 
-            fixture.ApplyCommonAttributes(type);
+            fixture.ApplyAttributesToTest(type);
 
             if (fixture.RunState == RunState.Runnable && attr != null)
             {

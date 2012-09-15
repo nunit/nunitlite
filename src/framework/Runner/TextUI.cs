@@ -42,8 +42,12 @@ namespace NUnitLite.Runner
     /// The provided TextWriter is used by default, unless the
     /// arguments to Execute override it using -out. The second
     /// form uses the Console, provided it exists on the platform.
+    /// 
+    /// NOTE: When running on a platform without a Console, such
+    /// as Windows Phone, the results will simply not appear if
+    /// you fail to specify a file in the call itself or as an option.
     /// </summary>
-    public class TextUI
+    public class TextUI : ITestListener
     {
         private CommandLineOptions commandLineOptions;
         private int reportCount = 0;
@@ -85,6 +89,7 @@ namespace NUnitLite.Runner
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// Execute a test run based on the aruments passed
         /// from Main.
@@ -96,10 +101,26 @@ namespace NUnitLite.Runner
             // test assembly in order for the mechanism to work.
             Assembly callingAssembly = Assembly.GetCallingAssembly();
 
-            this.commandLineOptions = ProcessArguments( args );
+            this.commandLineOptions = new CommandLineOptions();
+            commandLineOptions.Parse(args);
 
-            if (!commandLineOptions.ShowHelp && !commandLineOptions.Error)
+            if (commandLineOptions.OutFile != null)
+                this.writer = new StreamWriter(commandLineOptions.OutFile);
+
+            if (!commandLineOptions.NoHeader)
+                WriteHeader();
+
+            if (commandLineOptions.ShowHelp)
+                writer.Write(commandLineOptions.HelpText);
+            else if (commandLineOptions.Error)
             {
+                writer.WriteLine(commandLineOptions.ErrorMessage);
+                writer.WriteLine(commandLineOptions.HelpText);
+            }
+            else
+            {
+                WriteRuntimeEnvironment();
+
                 if (commandLineOptions.Wait && commandLineOptions.OutFile != null)
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
 
@@ -140,7 +161,7 @@ namespace NUnitLite.Runner
                     if (commandLineOptions.Explore)
                         ExploreTests();
                     else
-                        RunTests(this.listener, filter);
+                        RunTests(filter);
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -168,10 +189,14 @@ namespace NUnitLite.Runner
             }
         }
 
-        private void RunTests(ITestListener listener, ITestFilter filter)
+        #endregion
+
+        #region Helper Methods
+
+        private void RunTests(ITestFilter filter)
         {
-            ITestResult result = runner.Run(listener, filter);
-            new ResultReporter(result, writer).ReportResults();
+            ITestResult result = runner.Run(this, filter);
+            ReportResults(result);
             string resultFile = commandLineOptions.ResultFile;
             string resultFormat = commandLineOptions.ResultFormat;
                     
@@ -216,31 +241,33 @@ namespace NUnitLite.Runner
 #endif
             testNode.WriteTo(testWriter);
             testWriter.Close();
+
+            Console.WriteLine();
+            Console.WriteLine("Test info saved as {0}.", listFile);
         }
 
-        #endregion
-
-        #region Helper Methods
-        private CommandLineOptions ProcessArguments(string[] args)
+        /// <summary>
+        /// Reports the results.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        private void ReportResults( ITestResult result )
         {
-            this.commandLineOptions = new CommandLineOptions();
-            commandLineOptions.Parse(args);
+            ResultSummary summary = new ResultSummary(result);
 
-            if (commandLineOptions.OutFile != null)
-                this.writer = new StreamWriter(commandLineOptions.OutFile);
+            writer.WriteLine("{0} Tests : {1} Failures, {2} Errors, {3} Not Run",
+                summary.TestCount, summary.FailureCount, summary.ErrorCount, summary.NotRunCount);
 
-            if (!commandLineOptions.NoHeader)
-                WriteCopyright();
+            if (summary.FailureCount > 0 || summary.ErrorCount > 0)
+                PrintErrorReport(result);
 
-            if (commandLineOptions.ShowHelp)
-                writer.Write(commandLineOptions.HelpText);
-            else if (commandLineOptions.Error)
-                writer.WriteLine(commandLineOptions.ErrorMessage);
+            if (summary.NotRunCount > 0)
+                PrintNotRunReport(result);
 
-            return commandLineOptions;
+            if (commandLineOptions.Full)
+                PrintFullReport(result);
         }
 
-        private void WriteCopyright()
+        private void WriteHeader()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
 #if NUNITLITE
@@ -280,12 +307,121 @@ namespace NUnitLite.Runner
             writer.WriteLine(String.Format("{0} {1} {2}", title, version.ToString(3), build));
             writer.WriteLine(copyright);
             writer.WriteLine();
+        }
 
+        private void WriteRuntimeEnvironment()
+        {
             string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
             writer.WriteLine("Runtime Environment -");
             writer.WriteLine("    OS Version: {0}", Environment.OSVersion);
             writer.WriteLine("  {0} Version: {1}", clrPlatform, Environment.Version);
             writer.WriteLine();
+        }
+
+        private void PrintErrorReport(ITestResult result)
+        {
+            reportCount = 0;
+            writer.WriteLine();
+            writer.WriteLine("Errors and Failures:");
+            PrintErrorResults(result);
+        }
+
+        private void PrintErrorResults(ITestResult result)
+        {
+            if (result.HasChildren)
+                foreach (ITestResult r in result.Children)
+                    PrintErrorResults(r);
+            else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
+            {
+                writer.WriteLine();
+                writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Name, result.FullName);
+                //if (options.ListProperties)
+                //    PrintTestProperties(result.Test);
+                writer.WriteLine(result.Message);
+#if !NETCF_1_0
+                writer.WriteLine(result.StackTrace);
+#endif
+            }
+        }
+
+        private void PrintNotRunReport(ITestResult result)
+        {
+            reportCount = 0;
+            writer.WriteLine();
+            writer.WriteLine("Tests Not Run:");
+            PrintNotRunResults(result);
+        }
+
+        private void PrintNotRunResults(ITestResult result)
+        {
+            if (result.HasChildren)
+                foreach (ITestResult r in result.Children)
+                    PrintNotRunResults(r);
+            else if (result.ResultState == ResultState.Ignored || result.ResultState == ResultState.NotRunnable || result.ResultState == ResultState.Skipped)
+            {
+                writer.WriteLine();
+                writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Name, result.FullName, result.Message);
+                //if (options.ListProperties)
+                //    PrintTestProperties(result.Test);
+            }
+        }
+
+        private void PrintTestProperties(ITest test)
+        {
+            foreach (PropertyEntry entry in test.Properties)
+                writer.WriteLine("  {0}: {1}", entry.Name, entry.Value);
+        }
+
+        private void PrintFullReport(ITestResult result)
+        {
+            writer.WriteLine();
+            writer.WriteLine("All Test Results:");
+            PrintAllResults(result, " ");
+        }
+
+        private void PrintAllResults(ITestResult result, string indent)
+        {
+            string status = null;
+            switch (result.ResultState.Status)
+            {
+                case TestStatus.Failed:
+                    status = "FAIL";
+                    break;
+                case TestStatus.Skipped:
+                    status = "SKIP";
+                    break;
+                case TestStatus.Inconclusive:
+                    status = "INC ";
+                    break;
+                case TestStatus.Passed:
+                    status = "OK  ";
+                    break;
+            }
+
+            writer.Write(status);
+            writer.Write(indent);
+            writer.WriteLine(result.Name);
+
+            if (result.HasChildren)
+                foreach (ITestResult r in result.Children)
+                    PrintAllResults(r, indent + "  ");
+        }
+        #endregion
+
+        #region ITestListener Members
+
+        public void TestStarted(ITest test)
+        {
+            if (commandLineOptions.LabelTestsInOutput)
+                writer.WriteLine("***** {0}", test.Name);
+        }
+
+        public void TestFinished(ITestResult result)
+        {
+        }
+
+        public void TestOutput(TestOutput testOutput)
+        {
         }
 
         #endregion

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="MockAssembly" default="build" basedir=".">
+
+  <target name="build">
+
+    <csc target="library"
+        output="${current.build.dir}/mock-assembly.dll"
+        debug="${build.debug}"
+        define="${build.defines};NUNITLITE">
+      <sources basedir=".">
+        <include name="**/*.cs"/>
+      </sources>
+      <references basedir="${current.build.dir}">
+        <include name="mscorlib.dll"/>
+        <include name="nunitlite.dll"/>   
+      </references>
+    </csc>
+
+  </target>
+
+</project>

@@ -68,6 +68,7 @@ namespace NUnit.Framework
         #region Assume.That
 
         #region Object
+
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an InconclusiveException on failure.
@@ -113,6 +114,7 @@ namespace NUnit.Framework
         #endregion
 
         #region ActualValueDelegate
+
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an InconclusiveException on failure.
@@ -155,6 +157,7 @@ namespace NUnit.Framework
                 throw new InconclusiveException(writer.ToString());
             }
         }
+
         #endregion
 
         #region ref Boolean
@@ -207,6 +210,7 @@ namespace NUnit.Framework
         #endregion
 
         #region Boolean
+
         /// <summary>
         /// Asserts that a condition is true. If the condition is false the method throws
         /// an <see cref="InconclusiveException"/>.
@@ -239,7 +243,10 @@ namespace NUnit.Framework
         {
             Assume.That(condition, Is.True, null, null);
         }
+
         #endregion
+
+        #region TestDelegate
 
         /// <summary>
         /// Asserts that the code represented by a delegate throws an exception
@@ -251,6 +258,9 @@ namespace NUnit.Framework
         {
             Assume.That((object)code, constraint);
         }
+
+        #endregion
+
         #endregion
 
         #region Assume.That<T>

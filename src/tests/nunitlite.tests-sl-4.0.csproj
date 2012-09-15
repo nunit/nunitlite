@@ -101,17 +101,13 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Assertions\ArrayEqualityTests.cs" />
     <Compile Include="Assertions\ArrayEqualsFailureMessageFixture.cs" />
     <Compile Include="Assertions\ArrayEqualsFixture.cs" />
-    <Compile Include="Assertions\ArrayFailureMessageTests.cs" />
     <Compile Include="Assertions\ArrayNotEqualFixture.cs" />
     <Compile Include="Assertions\AssertFailTests.cs" />
     <Compile Include="Assertions\AssertIgnoreTests.cs" />
     <Compile Include="Assertions\AssertInconclusiveTests.cs" />
-    <Compile Include="Assertions\AssertionExceptionTests.cs" />
     <Compile Include="Assertions\AssertPassTests.cs" />
-    <Compile Include="Assertions\AssertTests.cs" />
     <Compile Include="Assertions\AssertThrowsTests.cs" />
     <Compile Include="Assertions\AssumeThatTests.cs" />
     <Compile Include="Assertions\CollectionTests.cs" />

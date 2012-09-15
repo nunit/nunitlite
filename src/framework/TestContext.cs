@@ -62,10 +62,7 @@ namespace NUnit.Framework
         /// </summary>
         public static TestContext CurrentContext
         {
-            get
-            {
-                return new TestContext(TestExecutionContext.CurrentContext);
-            }
+            get { return new TestContext(TestExecutionContext.CurrentContext); }
         }
 
         /// <summary>
@@ -104,7 +101,7 @@ namespace NUnit.Framework
         {
             get
             {
-                return AssemblyHelper.GetAssemblyPath(ec.CurrentTest.FixtureType.Assembly);
+                return AssemblyHelper.GetDirectoryName(ec.CurrentTest.FixtureType.Assembly);
             }
         }
 #endif

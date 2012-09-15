@@ -87,7 +87,7 @@ namespace NUnitLite.Runner.Tests
             Assert.That(RequiredAttribute(topNode, "name"), Is.EqualTo("NUnit.Tests.Assemblies.MockTestFixture"));
         }
 
-        [TestCase("total", MockTestFixture.ResultCount)]
+        [TestCase("total", MockTestFixture.Tests-MockTestFixture.Explicit)]
         [TestCase("errors", MockTestFixture.Errors)]
         [TestCase("failures", MockTestFixture.Failures)]
         [TestCase("inconclusive", MockTestFixture.Inconclusive)]

@@ -48,7 +48,9 @@ namespace NUnit.Framework.Internal
 		/// <summary>Mono</summary>
 		Mono,
         /// <summary>Silverlight</summary>
-        Silverlight
+        Silverlight,
+        /// <summary>MonoTouch</summary>
+        MonoTouch
 	}
 
 	/// <summary>
@@ -146,13 +148,17 @@ namespace NUnit.Framework.Internal
                     int minor = 0;
 #else
                     Type monoRuntimeType = Type.GetType("Mono.Runtime", false);
+                    Type monoTouchType = Type.GetType("MonoTouch.UIKit.UIApplicationDelegate, monotouch");
+                    bool isMonoTouch = monoTouchType != null;
 					bool isMono = monoRuntimeType != null;
 					
-                    RuntimeType runtime = isMono
-                        ? RuntimeType.Mono 
-                        : Environment.OSVersion.Platform == PlatformID.WinCE
-                            ? RuntimeType.NetCF
-                            : RuntimeType.Net;
+                    RuntimeType runtime = isMonoTouch
+                        ? RuntimeType.MonoTouch
+                        : isMono
+                            ? RuntimeType.Mono 
+                            : Environment.OSVersion.Platform == PlatformID.WinCE
+                                ? RuntimeType.NetCF
+                                : RuntimeType.Net;
 
                     int major = Environment.Version.Major;
                     int minor = Environment.Version.Minor;

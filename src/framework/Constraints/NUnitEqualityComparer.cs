@@ -196,24 +196,11 @@ namespace NUnit.Framework.Constraints
 
         private static Type[] GetEquatableGenericArguments(Type type)
         {
-#if SILVERLIGHT
             foreach (Type @interface in type.GetInterfaces())
                 if (@interface.IsGenericType && @interface.GetGenericTypeDefinition().Equals(typeof(IEquatable<>)))
                     return @interface.GetGenericArguments();
 
             return new Type[0];
-#else
-            return Array.ConvertAll(Array.FindAll(type.GetInterfaces(),
-                                    delegate(Type @interface)
-                                    {
-                                        return @interface.IsGenericType &&
-                                               @interface.GetGenericTypeDefinition().Equals(typeof(IEquatable<>));
-                                    }),
-                                    delegate(Type iEquatableInterface)
-                                    {
-                                        return iEquatableInterface.GetGenericArguments()[0];
-                                    });
-#endif
         }
 
         private static bool InvokeFirstIEquatableEqualsSecond(object first, object second)

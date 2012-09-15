@@ -106,27 +106,31 @@ namespace NUnit.Framework.Assertions
 				"  But was:  null" + Env.NewLine));
 		}
 
-        //[Test, ExpectedException(typeof(AssertionException)), Platform("Mono")]
-        //public void UnrelatedExceptionThrown()
-        //{
-        //    ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsCustomException);
-        //    Assert.That(ex.Message, Is.StringStarting(
-        //        "  Expected: <System.ArgumentException>" + Env.NewLine +
-        //        "  But was:  <System.ApplicationException> (my message)" + Env.NewLine));
-        //    Assert.That(ex.Message, Contains.Substring("  at "));
-        //}
+        [Test, ExpectedException(typeof(AssertionException))]
+        public void UnrelatedExceptionThrown()
+        {
+#if CLR_2_0 || CLR_4_0
+            ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsCustomException);
+#else
+            ArgumentException ex = (ArgumentException)Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsCustomException));
+#endif
+            Assert.That(ex.Message, Is.StringStarting(
+                "  Expected: <System.ArgumentException>" + Env.NewLine +
+                "  But was:  <System.ApplicationException> (my message)" + Env.NewLine));
+            Assert.That(ex.Message, Contains.Substring("  at "));
+        }
 
         [Test, ExpectedException(typeof(AssertionException))]
         public void BaseExceptionThrown()
         {
-#if CLR_2_0x || CLR_4_0
+#if CLR_2_0 || CLR_4_0
             ArgumentException ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsSystemException);
 #else
             Exception ex = Assert.Throws(typeof(ArgumentException), new TestDelegate(TestDelegates.ThrowsSystemException));
 #endif
             Assert.That(ex.Message, Is.StringStarting(
                 "  Expected: <System.ArgumentException>" + Env.NewLine +
-                "  But was:  <System.Exception> (my message)" + Env.NewLine));
+                "  But was:  <NUnit.TestUtilities.TestDelegates+CustomException> (my message)" + Env.NewLine));
             Assert.That(ex.Message, Contains.Substring("  at "));
         }
 

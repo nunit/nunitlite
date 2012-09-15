@@ -55,7 +55,7 @@ namespace NUnit.Framework.Internal
 			CheckPlatforms(
 				new PlatformHelper( OSPlatform.CurrentPlatform, runtimeFramework ),
 				expectedPlatforms,
-				PlatformHelper.RuntimePlatforms + ",NET-1.0,NET-1.1,NET-2.0,MONO-1.0,MONO-2.0" );
+				PlatformHelper.RuntimePlatforms + ",NET-1.0,NET-1.1,NET-2.0,NET-3.0,NET-3.5,NET-4.0,MONO-1.0,MONO-2.0,MONO-3.0,MONO-3.5,MONO-4.0,MONOTOUCH" );
 		}
 
 		private void CheckPlatforms( PlatformHelper helper, 
@@ -63,6 +63,18 @@ namespace NUnit.Framework.Internal
 		{
 			string[] expected = expectedPlatforms.Split( new char[] { ',' } );
 			string[] check = checkPlatforms.Split( new char[] { ',' } );
+
+            //foreach (string platform in expected)
+            //{
+            //    bool isValid = false;
+
+            //    foreach (string testPlatform in check)
+            //        if (isValid = platform.ToLower() == testPlatform.ToLower())
+            //            break;
+
+            //    if (!isValid)
+            //        Assert.Fail("Invalid platform: {0}", platform);
+            //}
 
 			foreach( string testPlatform in check )
 			{
@@ -214,6 +226,24 @@ namespace NUnit.Framework.Internal
                 "UNIX,Linux");
         }
 
+#if (CLR_2_0 || CLR_4_0) && !NETCF
+        [Test]
+        public void DetectXbox()
+        {
+            CheckOSPlatforms(
+                new OSPlatform(PlatformID.Xbox, new Version(0,0)),
+                "Xbox");
+        }
+
+        [Test]
+        public void DetectMacOSX()
+        {
+            CheckOSPlatforms(
+                new OSPlatform(PlatformID.MacOSX, new Version(0, 0)),
+                "MacOSX");
+        }
+#endif
+
         [Test]
 		public void DetectNet10()
 		{
@@ -316,6 +346,14 @@ namespace NUnit.Framework.Internal
             CheckRuntimePlatforms(
                 new RuntimeFramework(RuntimeType.Mono, new Version(4, 0, 30319)),
                 "Mono,Mono-4.0");
+        }
+
+        [Test]
+        public void DetectMonoTouch()
+        {
+            CheckRuntimePlatforms(
+                new RuntimeFramework(RuntimeType.MonoTouch, new Version(4, 0, 30319)),
+                "MonoTouch");
         }
 
 		[Test]

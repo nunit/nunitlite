@@ -38,7 +38,7 @@ namespace NUnit.Framework.Api
 		/// on the semantics of the particular filter
 		/// </summary>
 		/// <param name="test">The test to which the filter is applied</param>
-		/// <returns>True if the test passes the filter, otherwise false</returns>
+		/// <returns>True if the test passes the fFilter, otherwise false</returns>
 		bool Pass( ITest test );
 	}
 }

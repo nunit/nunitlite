@@ -45,6 +45,7 @@ namespace NUnitLite.Runner
         private bool help = false;
         private bool full = false;
         private bool explore = false;
+        private bool labelTestsInOutput = false;
 
         private string exploreFile;
         private string resultFile;
@@ -113,7 +114,7 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ExploreFile
         {
-            get { return ExpandToFullPath(exploreFile); }
+            get { return ExpandToFullPath(exploreFile.Length < 1 ? "tests.xml" : exploreFile); }
         }
 
         /// <summary>
@@ -141,6 +142,15 @@ namespace NUnitLite.Runner
             {
                 return ExpandToFullPath(outFile);
             }
+        }
+
+        /// <summary>
+        /// Gets a flag indicating whether each test should
+        /// be labeled in the output.
+        /// </summary>
+        public bool LabelTestsInOutput
+        {
+            get { return labelTestsInOutput; }
         }
 
         private string ExpandToFullPath(string path)
@@ -249,6 +259,9 @@ namespace NUnitLite.Runner
                 case "out":
                     outFile = val;
                     break;
+                case "labels":
+                    labelTestsInOutput = true;
+                    break;
                 default:
                     error = true;
                     invalidOptions.Add(opt);
@@ -303,7 +316,7 @@ namespace NUnitLite.Runner
                 string name = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
 #endif
 
-                sb.Append(NL + name + " [assemblies] [options]" + NL + NL);
+                sb.Append("Usage: " + name + " [assemblies] [options]" + NL + NL);
                 sb.Append("Runs a set of NUnitLite tests from the console." + NL + NL);
                 sb.Append("You may specify one or more test assemblies by name, without a path or" + NL);
                 sb.Append("extension. They must be in the same in the same directory as the exe" + NL);
@@ -324,6 +337,7 @@ namespace NUnitLite.Runner
                 sb.Append("                  to the specified file in XML format." + NL);
                 sb.Append("  -help,-h        Displays this help" + NL + NL);
                 sb.Append("  -noheader,-noh  Suppresses display of the initial message" + NL + NL);
+                sb.Append("  -labels         Displays the name of each test when it starts" + NL + NL);
                 sb.Append("  -wait           Waits for a key press before exiting" + NL + NL);
 
                 sb.Append("Notes:" + NL);

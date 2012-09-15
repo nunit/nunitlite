@@ -75,17 +75,14 @@
   <ItemGroup>
     <Compile Include="Api\ResultStateTests.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Assertions\ArrayEqualityTests.cs" />
     <Compile Include="Assertions\ArrayEqualsFailureMessageFixture.cs" />
     <Compile Include="Assertions\ArrayEqualsFixture.cs" />
-    <Compile Include="Assertions\ArrayFailureMessageTests.cs" />
     <Compile Include="Assertions\ArrayNotEqualFixture.cs" />
     <Compile Include="Assertions\AssertFailTests.cs" />
     <Compile Include="Assertions\AssertIgnoreTests.cs" />
     <Compile Include="Assertions\AssertInconclusiveTests.cs" />
-    <Compile Include="Assertions\AssertionExceptionTests.cs" />
     <Compile Include="Assertions\AssertPassTests.cs" />
-    <Compile Include="Assertions\AssertTests.cs" />
+    <Compile Include="Assertions\AssertThatTests.cs" />
     <Compile Include="Assertions\AssertThrowsTests.cs" />
     <Compile Include="Assertions\AssumeThatTests.cs" />
     <Compile Include="Assertions\CollectionTests.cs" />
@@ -96,6 +93,9 @@
     <Compile Include="Assertions\NotSameFixture.cs" />
     <Compile Include="Assertions\SameFixture.cs" />
     <Compile Include="Attributes\ApplyToTestTests.cs" />
+    <Compile Include="Attributes\AsychronousTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Attributes\AttributeInheritanceTests.cs" />
     <Compile Include="Attributes\CategoryAttributeTests.cs" />
     <Compile Include="Attributes\CombinatorialTests.cs" />
@@ -114,8 +114,10 @@
     <Compile Include="Attributes\TestDummy.cs" />
     <Compile Include="Attributes\TestFixtureAttributeTests.cs" />
     <Compile Include="Attributes\TheoryTests.cs" />
+    <Compile Include="Attributes\TimeoutTests.cs" />
     <Compile Include="Attributes\ValuesAttributeTests.cs" />
     <Compile Include="Attributes\ValueSourceTests.cs" />
+    <Compile Include="Constraints\AfterConstraintTests.cs" />
     <Compile Include="Constraints\AllItemsConstraintTests.cs" />
     <Compile Include="Constraints\AndConstraintTests.cs" />
     <Compile Include="Constraints\AssignableFromConstraintTests.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="Constraints\XmlSerializableTest.cs" />
     <Compile Include="Framework\StackFilterTest.cs" />
     <Compile Include="Framework\SyntaxTests.cs" />
+    <Compile Include="Framework\TestContextTests.cs" />
     <Compile Include="Framework\TestResultTests.cs" />
     <Compile Include="Internal\CultureSettingAndDetectionTests.cs" />
     <Compile Include="Internal\DeduceTypeArgsFromArgs.cs" />

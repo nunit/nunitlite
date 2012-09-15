@@ -39,7 +39,7 @@ namespace NUnitLite.Tests
         }
 
         [TestFixture]
-        class ExpectedValueTests : ValueTests
+        public class ExpectedValueTests : ValueTests
         {
             protected override void WriteValue(object obj)
             {
@@ -48,7 +48,7 @@ namespace NUnitLite.Tests
         }
 
         [TestFixture]
-        class ActualValueTests : ValueTests
+        public class ActualValueTests : ValueTests
         {
             protected override void WriteValue(object obj)
             {
@@ -56,7 +56,7 @@ namespace NUnitLite.Tests
             }
         }
 
-        abstract class ValueTests : MessageWriterTests
+        public abstract class ValueTests : MessageWriterTests
         {
             protected abstract void WriteValue( object obj);
 

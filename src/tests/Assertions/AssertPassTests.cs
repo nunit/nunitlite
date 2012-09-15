@@ -34,30 +34,16 @@ namespace NUnit.Framework.Assertions
             Assert.Pass();
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(SuccessException), ExpectedMessage = "MESSAGE")]
         public void ThrowsSuccessExceptionWithMessage()
         {
-            try
-            {
-                Assert.Pass("MESSAGE");
-            }
-            catch (SuccessException ex)
-            {
-                Assert.That(ex.Message, Is.EqualTo("MESSAGE"));
-            }
+            Assert.Pass("MESSAGE");
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(SuccessException), ExpectedMessage = "MESSAGE: 2+2=4")]
         public void ThrowsSuccessExceptionWithMessageAndArgs()
         {
-            try
-            {
-                Assert.Pass("MESSAGE: {0}+{1}={2}", 2, 2, 4);
-            }
-            catch (SuccessException ex)
-            {
-                Assert.That(ex.Message, Is.EqualTo("MESSAGE: 2+2=4"));
-            }
+            Assert.Pass("MESSAGE: {0}+{1}={2}", 2, 2, 4);
         }
 
         [Test]

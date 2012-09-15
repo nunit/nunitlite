@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using NUnit.Framework.Constraints;
 using NUnit.Framework.Internal;
@@ -280,7 +279,7 @@ namespace NUnit.Framework
         {
             Constraint constraint = expression.Resolve();
 
-            TestExecutionContext.CurrentContext.IncrementAssertCount();
+            IncrementAssertCount();
             if (!constraint.Matches(actual))
             {
                 MessageWriter writer = new TextMessageWriter(message, args);
@@ -366,7 +365,7 @@ namespace NUnit.Framework
             {
                 Constraint constraint = expression.Resolve();
 
-                TestExecutionContext.CurrentContext.IncrementAssertCount();
+                IncrementAssertCount();
                 if (!constraint.Matches(ref actual))
                 {
                     MessageWriter writer = new TextMessageWriter(message, args);
@@ -379,7 +378,7 @@ namespace NUnit.Framework
         #endregion
 
         #region ActualValueDelegate
-#if !NUNITLITE
+
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
@@ -415,15 +414,15 @@ namespace NUnit.Framework
         {
             Constraint constraint = expr.Resolve();
 
-            TestExecutionContext.CurrentContext.IncrementAssertCount();
-            if (!constraint.Matches(del).HasSucceeded)
+            IncrementAssertCount();
+            if (!constraint.Matches(del))
             {
                 MessageWriter writer = new TextMessageWriter(message, args);
                 constraint.WriteMessageTo(writer);
                 throw new AssertionException(writer.ToString());
             }
         }
-#endif
+
         #endregion
 
         #region TestDelegate
@@ -481,7 +480,7 @@ namespace NUnit.Framework
         {
             Constraint constraint = expression.Resolve();
 
-            TestExecutionContext.CurrentContext.IncrementAssertCount();
+            IncrementAssertCount();
             if (!constraint.Matches(ref actual))
             {
                 MessageWriter writer = new TextMessageWriter(message, args);
@@ -3777,6 +3776,7 @@ namespace NUnit.Framework
 #endif
 
         #region Helper Methods
+
         /// <summary>
         /// Helper for Assert.AreEqual(double expected, double actual, ...)
         /// allowing code generation to work consistently.
@@ -3794,6 +3794,12 @@ namespace NUnit.Framework
             else
                 Assert.That(actual, Is.EqualTo(expected).Within(delta), message, args);
         }
+
+        private static void IncrementAssertCount()
+        {
+            TestExecutionContext.CurrentContext.IncrementAssertCount();
+        }
+
         #endregion
     }
 }

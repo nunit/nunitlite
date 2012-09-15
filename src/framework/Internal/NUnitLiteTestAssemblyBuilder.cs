@@ -174,8 +174,8 @@ namespace NUnit.Framework.Internal
                 testAssembly.Properties.Set(PropertyNames.SkipReason, "Has no TestFixtures");
             }
 
-            testAssembly.ApplyCommonAttributes(assembly);
-            
+            testAssembly.ApplyAttributesToTest(assembly);
+
 #if !SILVERLIGHT
             testAssembly.Properties.Set(PropertyNames.ProcessID, System.Diagnostics.Process.GetCurrentProcess().Id);
 #endif

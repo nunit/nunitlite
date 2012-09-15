@@ -11,8 +11,8 @@
 
   <target name="build">
 
-    <csc target="library"
-        output="${current.build.dir}/nunitlite.tests.dll"
+    <csc target="exe"
+        output="${current.build.dir}/nunitlite.tests.exe"
         debug="${build.debug}"
         define="${build.defines};NUNITLITE">
       <sources basedir=".">

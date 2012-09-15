@@ -53,6 +53,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\bin\Release\net-2.0\nunitlite.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>nunit.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -60,7 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ExpectedExceptionData.cs" />
-    <Compile Include="Api\IApplyToTest.cs" />
+    <Compile Include="Attributes\AsynchronousAttribute.cs" />
+    <Compile Include="Attributes\TimeoutAttribute.cs" />
+    <Compile Include="Constraints\DelayedConstraint.cs" />
+    <Compile Include="Internal\Commands\ApplyChangesToContextCommand.cs" />
+    <Compile Include="Internal\IApplyToContext.cs" />
+    <Compile Include="Internal\IApplyToTest.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />
     <Compile Include="Api\IPropertyBag.cs" />
     <Compile Include="Api\ITest.cs" />
@@ -250,7 +261,6 @@
     <Compile Include="Internal\Builders\ProviderCache.cs" />
     <Compile Include="Internal\Builders\SequentialStrategy.cs" />
     <Compile Include="Internal\Commands\CommandDecoratorList.cs" />
-    <Compile Include="Internal\Commands\CommandRunner.cs" />
     <Compile Include="Internal\Commands\CommandStage.cs" />
     <Compile Include="Internal\Commands\DelegatingTestCommand.cs" />
     <Compile Include="Internal\Commands\ExpectedExceptionCommand.cs" />
@@ -304,7 +314,13 @@
     <Compile Include="Internal\Tests\TestMethod.cs" />
     <Compile Include="Internal\Tests\TestSuite.cs" />
     <Compile Include="Internal\TextMessageWriter.cs" />
+    <Compile Include="Internal\ThreadUtility.cs" />
     <Compile Include="Internal\TypeHelper.cs" />
+    <Compile Include="Internal\WorkItems\CompositeWorkItem.cs" />
+    <Compile Include="Internal\WorkItems\CountdownEvent.cs" />
+    <Compile Include="Internal\WorkItems\SimpleWorkItem.cs" />
+    <Compile Include="Internal\WorkItems\WorkItem.cs" />
+    <Compile Include="Internal\WorkItems\WorkItemState.cs" />
     <Compile Include="Is.cs" />
     <Compile Include="Iz.cs" />
     <Compile Include="ListMapper.cs" />
@@ -344,6 +360,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="nunit.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -118,7 +118,7 @@ namespace NUnit.Framework.Constraints.Tests
         }
 #endif
 
-#if NET_3_5 || NET_4_0 || SILVERLIGHT
+#if NET_3_5 || NET_4_0
         [Test, Platform("Net-3.5,Mono-3.5,Net-4.0,Mono-4.0,Silverlight")]
         public void WorksWithHashSets()
         {

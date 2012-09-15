@@ -50,7 +50,7 @@ namespace NUnit.Framework.Api
         /// <summary>
         /// Constructs a new instance of XmlNode
         /// </summary>
-        /// <param name="name">The name of the element</param>
+        /// <param name="name">The name of the node</param>
         public XmlNode(string name)
         {
             this.name = name;
@@ -325,14 +325,21 @@ namespace NUnit.Framework.Api
     {
         private System.Collections.ArrayList orderedKeys = new System.Collections.ArrayList();
 
-        // Save the order in which keys are added
+        /// <summary>
+        /// Adds a key and value to the dictionary. Overridden to
+        /// save the order in which keys are added.
+        /// </summary>
+        /// <param name="key">The attribute key</param>
+        /// <param name="value">The attribute value</param>
         public override void Add(string key, string value)
         {
             base.Add(key, value);
             orderedKeys.Add(key);
         }
 
-        // Return keys in the same order added
+        /// <summary>
+        /// Gets the keys in the same order they were added.
+        /// </summary>
         public override System.Collections.ICollection Keys
         {
             get

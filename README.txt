@@ -1,4 +1,4 @@
-NUnitLite Version 0.7 - May 11, 2012
+NUnitLite Version 0.8 - September 13, 2012
 
 NUnitLite is a small-footprint implementation of much of the current NUnit framework. It is distributed in source form and is intended for use in situations where NUnit is too large or complex. In particular, it targets mobile and embedded environments as well as testing of applications that require "embedding" the framework in another piece of software, as when testing plugin architectures.
 
@@ -14,15 +14,41 @@ NUNitLite is based on ideas in NUnit, but not on the NUnit implementation. In ad
 
 ATTRIBUTES
 
-Classes marked with the TestFixtureAttribute represent fixtures and methods with the TestAttribute are test cases.
+NUnitLite supports most of the same attributes as NUnit 2.6.
+	AsynchronousAttribute (unique to NUnitLite)
+	CategoryAttribute
+	CombinatorialAttribute
+	CultureAttribute
+	DatapointAttribute
+	DatapointsAttribute
+	DescriptionAttribute
+	ExpectedExceptionAttribute
+	ExplicitAttribute
+	IgnoreAttribute
+	MaxTimeAttribute
+	PairwiseAttribute
+	PlatformAttribute
+	PropertyAttribute
+	RandomAttribute
+	RangeAttribute
+	SequentialAttribute
+	SetCultureAttribute
+	SetUICultureAttribute
+	SetUpAttribute
+	TearDownAttribute
+	TestAttribute
+	TestCaseAttribute
+	TestCaseSourceAttribute
+	TestFixtureAttribute
+	TestFixtureSetUpAttribute
+	TestFixtureTearDownAttribute
+	TheoryAttribute
+	TimeoutAttribute
+	ValuesAttribute
+	ValueSourceAttribute
 
-The SetUp and TearDown attributes are recognized as in NUnit. In methods inheriting from TestCase, the SetUp and TearDown methods may be overridden and will be called before and after each test.
+The AsynchronousAttribute marks a test that returns immediately when invoked, continuing to execute on a separate thread. The containing fixture waits for such tests to complete before exiting itself.
 
-A simplified form of the ExpectedExceptionAttribute allows specification of the type of the expected exception and of an ExceptionHander method, which is called to evaluate the exception in more detail.
-
-By use of the static Suite property, arbitrary suites of tests may be manually created. A suite may consist of individual test cases, entire test fixtures or other suites.
-
-The PropertyAttribute may be used to assign name/value pairs to any test. The DescriptionAttribute assigns descriptive text to a test. The IgnoreAttribute may be used to temporarily suppress execution of a test.
 
 ASSERTS
 
@@ -64,6 +90,7 @@ NUnitLite supports most of the same built-in constraints as NUnit. Users may als
 	CollectionOrderedConstraint
 	CollectionSubsetConstraint
 	ContainsConstraint
+	DelayedConstraint
 	EmptyCollectionConstraint
 	EmptyConstraint
 	EmptyDirectoryConstraint
@@ -85,10 +112,12 @@ NUnitLite supports most of the same built-in constraints as NUnit. Users may als
 	NullConstraint
 	NullOrEmptyStringConstraint
 	OrConstraint
+	PredicateConstraint
 	PropertyConstraint
 	PropertyExistsConstraint
 	RangeConstraint
 	RegexConstraint (not available on compact framework)
+	ReusableConstraint
 	SameAsConstraint
 	SamePathConstraint
 	SamePathOrUnderConstraint
@@ -122,5 +151,7 @@ NUnitLite is not "installed" in your system. Instead, you should include nunitli
     new TextUI().Execute(args);
 then NUnitLite will run all the tests in the test project, using the args provided. Use -help to see the available options.
 
-NUnitLite uses the NUnit.Framework namespace, which allows relatively easy portability between NUnit and NUnitLite. Test assemblies built using NUnitLite may be opened using NUnit version 2.4 or later, provided that all tests are identified using attributes rather than inheritance.
+DOCUMENTATION
+
+NUnitLite uses the NUnit.Framework namespace, which allows relatively easy portability between NUnit and NUnitLite. Currently, there is no separate set of documentation for NUnitLite so you should use the docs for NUnit 2.6 or later in conjunction with the information in this file.
 
