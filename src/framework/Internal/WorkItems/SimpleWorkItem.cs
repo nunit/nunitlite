@@ -36,6 +36,7 @@ namespace NUnit.Framework.Internal.WorkItems
         /// Construct a simple work item for a test.
         /// </summary>
         /// <param name="test">The test to be executed</param>
+        /// <param name="context">The execution context in which the test is to be run</param>
         public SimpleWorkItem(Test test, TestExecutionContext context) : base(test, context) { }
 
         /// <summary>

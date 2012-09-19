@@ -47,11 +47,17 @@ namespace NUnit.Framework.Internal.WorkItems
             _initialCount = _remainingCount = initialCount;
         }
 
+        /// <summary>
+        /// Gets the initial count established for the CountdownEvent
+        /// </summary>
         public int InitialCount
         {
             get { return _initialCount; }
         }
 
+        /// <summary>
+        /// Gets the current count remaining for the CountdownEvent
+        /// </summary>
         public int CurrentCount
         {
             get { return _remainingCount; }

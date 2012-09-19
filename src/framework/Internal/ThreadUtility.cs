@@ -27,6 +27,10 @@ using System.Threading;
 
 namespace NUnit.Framework.Internal
 {
+    /// <summary>
+    /// The ThreadUtility class encapsulates several static methods
+    /// useful when working with threads.
+    /// </summary>
     public class ThreadUtility
     {
         /// <summary>
