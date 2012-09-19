@@ -308,6 +308,9 @@
       <DependentUpon>TestPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runner\Silverlight\TextBlockWriter.cs" />
+    <Compile Include="Runner\TextUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SpecialValue.cs" />
     <Compile Include="TestCaseData.cs" />
     <Compile Include="TestContext.cs" />

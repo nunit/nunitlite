@@ -50,7 +50,6 @@ namespace NUnitLite.Runner
     public class TextUI : ITestListener
     {
         private CommandLineOptions commandLineOptions;
-        private int reportCount = 0;
 
         private NUnit.ObjectList assemblies = new NUnit.ObjectList();
 
@@ -108,7 +107,7 @@ namespace NUnitLite.Runner
                 this.writer = new StreamWriter(commandLineOptions.OutFile);
 
             if (!commandLineOptions.NoHeader)
-                WriteHeader();
+                WriteHeader(this.writer);
 
             if (commandLineOptions.ShowHelp)
                 writer.Write(commandLineOptions.HelpText);
@@ -119,7 +118,7 @@ namespace NUnitLite.Runner
             }
             else
             {
-                WriteRuntimeEnvironment();
+                WriteRuntimeEnvironment(this.writer);
 
                 if (commandLineOptions.Wait && commandLineOptions.OutFile != null)
                     writer.WriteLine("Ignoring /wait option - only valid for Console");
@@ -189,6 +188,57 @@ namespace NUnitLite.Runner
             }
         }
 
+        public static void WriteHeader(TextWriter writer)
+        {
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+#if NUNITLITE
+            string title = "NUnitLite";
+#else
+            string title = "NUNit Framework";
+#endif
+            AssemblyName assemblyName = new AssemblyName(executingAssembly.FullName);
+            System.Version version = assemblyName.Version;
+            string copyright = "Copyright (C) 2012, Charlie Poole";
+            string build = "";
+
+#if !NETCF_1_0
+            object[] attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+            if (attrs.Length > 0)
+            {
+                AssemblyTitleAttribute titleAttr = (AssemblyTitleAttribute)attrs[0];
+                title = titleAttr.Title;
+            }
+
+            attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            if (attrs.Length > 0)
+            {
+                AssemblyCopyrightAttribute copyrightAttr = (AssemblyCopyrightAttribute)attrs[0];
+                copyright = copyrightAttr.Copyright;
+            }
+
+            attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
+            if (attrs.Length > 0)
+            {
+                AssemblyConfigurationAttribute configAttr = (AssemblyConfigurationAttribute)attrs[0];
+                if (configAttr.Configuration.Length > 0)
+                    build = string.Format("({0})", configAttr.Configuration);
+            }
+#endif
+
+            writer.WriteLine(String.Format("{0} {1} {2}", title, version.ToString(3), build));
+            writer.WriteLine(copyright);
+            writer.WriteLine();
+        }
+
+        public static void WriteRuntimeEnvironment(TextWriter writer)
+        {
+            string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
+            writer.WriteLine("Runtime Environment -");
+            writer.WriteLine("    OS Version: {0}", Environment.OSVersion);
+            writer.WriteLine("  {0} Version: {1}", clrPlatform, Environment.Version);
+            writer.WriteLine();
+        }
+
         #endregion
 
         #region Helper Methods
@@ -196,7 +246,7 @@ namespace NUnitLite.Runner
         private void RunTests(ITestFilter filter)
         {
             ITestResult result = runner.Run(this, filter);
-            ReportResults(result);
+            new ResultReporter(result, writer).ReportResults();
             string resultFile = commandLineOptions.ResultFile;
             string resultFormat = commandLineOptions.ResultFormat;
                     
@@ -246,180 +296,32 @@ namespace NUnitLite.Runner
             Console.WriteLine("Test info saved as {0}.", listFile);
         }
 
-        /// <summary>
-        /// Reports the results.
-        /// </summary>
-        /// <param name="result">The result.</param>
-        private void ReportResults( ITestResult result )
-        {
-            ResultSummary summary = new ResultSummary(result);
-
-            writer.WriteLine("{0} Tests : {1} Failures, {2} Errors, {3} Not Run",
-                summary.TestCount, summary.FailureCount, summary.ErrorCount, summary.NotRunCount);
-
-            if (summary.FailureCount > 0 || summary.ErrorCount > 0)
-                PrintErrorReport(result);
-
-            if (summary.NotRunCount > 0)
-                PrintNotRunReport(result);
-
-            if (commandLineOptions.Full)
-                PrintFullReport(result);
-        }
-
-        private void WriteHeader()
-        {
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
-#if NUNITLITE
-            string title = "NUnitLite";
-#else
-            string title = "NUNit Framework";
-#endif
-            AssemblyName assemblyName = new AssemblyName(executingAssembly.FullName);
-            System.Version version = assemblyName.Version;
-            string copyright = "Copyright (C) 2012, Charlie Poole";
-            string build = "";
-
-#if !NETCF_1_0
-            object[] attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-            if (attrs.Length > 0)
-            {
-                AssemblyTitleAttribute titleAttr = (AssemblyTitleAttribute)attrs[0];
-                title = titleAttr.Title;
-            }
-
-            attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            if (attrs.Length > 0)
-            {
-                AssemblyCopyrightAttribute copyrightAttr = (AssemblyCopyrightAttribute)attrs[0];
-                copyright = copyrightAttr.Copyright;      
-            }
-
-            attrs = executingAssembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
-            if (attrs.Length > 0)
-            {
-                AssemblyConfigurationAttribute configAttr = (AssemblyConfigurationAttribute)attrs[0];
-                if (configAttr.Configuration.Length > 0)
-                    build = string.Format("({0})", configAttr.Configuration); 
-            }
-#endif
-
-            writer.WriteLine(String.Format("{0} {1} {2}", title, version.ToString(3), build));
-            writer.WriteLine(copyright);
-            writer.WriteLine();
-        }
-
-        private void WriteRuntimeEnvironment()
-        {
-            string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
-            writer.WriteLine("Runtime Environment -");
-            writer.WriteLine("    OS Version: {0}", Environment.OSVersion);
-            writer.WriteLine("  {0} Version: {1}", clrPlatform, Environment.Version);
-            writer.WriteLine();
-        }
-
-        private void PrintErrorReport(ITestResult result)
-        {
-            reportCount = 0;
-            writer.WriteLine();
-            writer.WriteLine("Errors and Failures:");
-            PrintErrorResults(result);
-        }
-
-        private void PrintErrorResults(ITestResult result)
-        {
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintErrorResults(r);
-            else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Name, result.FullName);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-                writer.WriteLine(result.Message);
-#if !NETCF_1_0
-                writer.WriteLine(result.StackTrace);
-#endif
-            }
-        }
-
-        private void PrintNotRunReport(ITestResult result)
-        {
-            reportCount = 0;
-            writer.WriteLine();
-            writer.WriteLine("Tests Not Run:");
-            PrintNotRunResults(result);
-        }
-
-        private void PrintNotRunResults(ITestResult result)
-        {
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintNotRunResults(r);
-            else if (result.ResultState == ResultState.Ignored || result.ResultState == ResultState.NotRunnable || result.ResultState == ResultState.Skipped)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Name, result.FullName, result.Message);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-            }
-        }
-
-        private void PrintTestProperties(ITest test)
-        {
-            foreach (PropertyEntry entry in test.Properties)
-                writer.WriteLine("  {0}: {1}", entry.Name, entry.Value);
-        }
-
-        private void PrintFullReport(ITestResult result)
-        {
-            writer.WriteLine();
-            writer.WriteLine("All Test Results:");
-            PrintAllResults(result, " ");
-        }
-
-        private void PrintAllResults(ITestResult result, string indent)
-        {
-            string status = null;
-            switch (result.ResultState.Status)
-            {
-                case TestStatus.Failed:
-                    status = "FAIL";
-                    break;
-                case TestStatus.Skipped:
-                    status = "SKIP";
-                    break;
-                case TestStatus.Inconclusive:
-                    status = "INC ";
-                    break;
-                case TestStatus.Passed:
-                    status = "OK  ";
-                    break;
-            }
-
-            writer.Write(status);
-            writer.Write(indent);
-            writer.WriteLine(result.Name);
-
-            if (result.HasChildren)
-                foreach (ITestResult r in result.Children)
-                    PrintAllResults(r, indent + "  ");
-        }
         #endregion
 
         #region ITestListener Members
 
+        /// <summary>
+        /// A test has just started
+        /// </summary>
+        /// <param name="test">The test</param>
         public void TestStarted(ITest test)
         {
             if (commandLineOptions.LabelTestsInOutput)
                 writer.WriteLine("***** {0}", test.Name);
         }
 
+        /// <summary>
+        /// A test has just finished
+        /// </summary>
+        /// <param name="result">The result of the test</param>
         public void TestFinished(ITestResult result)
         {
         }
 
+        /// <summary>
+        /// A test has produced some text output
+        /// </summary>
+        /// <param name="testOutput">A TestOutput object holding the text that was written</param>
         public void TestOutput(TestOutput testOutput)
         {
         }
