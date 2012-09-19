@@ -60,6 +60,9 @@ namespace NUnit.Framework.Internal
         {
             get
             {
+                if (method.IsDefined(typeof(TheoryAttribute), true))
+                    return "Theory";
+
 #if CLR_2_0 || CLR_4_0
                 if (this.Method.ContainsGenericParameters)
                     return "GenericMethod";

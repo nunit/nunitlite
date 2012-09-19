@@ -94,10 +94,31 @@ namespace NUnit.Framework.Internal.Commands
         /// <param name="context">The execution context to use in running the test.</param>
         public virtual void DoOneTimeTearDown(TestExecutionContext context)
         {
+            TestResult suiteResult = context.CurrentResult;
+
+            // TODO: This should really be in a separate command
+            ParameterizedMethodSuite methodSuite = suite as ParameterizedMethodSuite;
+            if (methodSuite != null && methodSuite.Method.IsDefined(typeof(TheoryAttribute), true) && suiteResult.ResultState == ResultState.Success)
+            {
+                if (!suiteResult.HasChildren)
+                    suiteResult.SetResult(ResultState.Failure, "No test cases were provided", null);
+                else
+                {
+                    bool wasInconclusive = true;
+                    foreach (TestResult childResult in suiteResult.Children)
+                        if (childResult.ResultState == ResultState.Success)
+                        {
+                            wasInconclusive = false;
+                            break;
+                        }
+
+                    if (wasInconclusive)
+                        suiteResult.SetResult(ResultState.Failure, "All test cases were inconclusive", null);
+                }
+            }
+
             if (fixtureType != null)
             {
-                TestSuiteResult suiteResult = context.CurrentResult as TestSuiteResult;
-
                 try
                 {
                     if (suite.OneTimeTearDownMethods != null)
