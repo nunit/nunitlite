@@ -249,6 +249,9 @@
   <target name="run-test"
       description="Run tests for selected config and runtime (no rebuild)">
 
+    <fail message="Testing under Silverlight is not yet implemented."
+      if="${runtime.platform=='silverlight'}"/>
+
     <echo message="*"/>
     <echo message="* Testing ${runtime.config} ${build.config} build"/>
     <echo message="*    Running under ${nant.settings.currentframework}"/>

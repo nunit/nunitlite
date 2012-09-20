@@ -3,15 +3,18 @@
 
   <patternset id="source-files">
     <include name="**/*.cs"/>
-    <exclude name="**/*.g.i.cs"/>
+    <exclude name="App.g.cs" unless="${runtime.platform=='silverlight'}"/>
     <exclude name="Attributes/SetCultureAttributeTests.cs" if="${runtime.platform == 'netcf'}"/>
 <!--    <exclude name="Runner/CommandLineOptionTests.cs" if="${runtime.platform == 'silverlight'}"/>-->
     <exclude name="Program.cs" if="${runtime.platform == 'silverlight'}"/>
   </patternset>
 
   <target name="build">
+ 
+    <property name="csc.target" value="exe" unless="${runtime.platform=='silverlight'}"/>
+    <property name="csc.target" value="library" if="${runtime.platform=='silverlight'}"/>
 
-    <csc target="exe"
+    <csc target="${csc.target}"
         output="${current.build.dir}/nunitlite.tests.exe"
         debug="${build.debug}"
         define="${build.defines};NUNITLITE">
