@@ -101,7 +101,7 @@ namespace NUnit.Framework.Internal.Commands
             if (methodSuite != null && methodSuite.Method.IsDefined(typeof(TheoryAttribute), true) && suiteResult.ResultState == ResultState.Success)
             {
                 if (!suiteResult.HasChildren)
-                    suiteResult.SetResult(ResultState.Failure, "No test cases were provided", null);
+                    suiteResult.SetResult(ResultState.Failure, "No test cases were provided", null, FailureSite.TearDown);
                 else
                 {
                     bool wasInconclusive = true;
@@ -113,7 +113,7 @@ namespace NUnit.Framework.Internal.Commands
                         }
 
                     if (wasInconclusive)
-                        suiteResult.SetResult(ResultState.Failure, "All test cases were inconclusive", null);
+                        suiteResult.SetResult(ResultState.Failure, "All test cases were inconclusive", null, FailureSite.TearDown);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace NUnit.Framework.Internal.Commands
                         stackTrace = suiteResult.StackTrace + NUnit.Env.NewLine + stackTrace;
 
                     // TODO: What about ignore exceptions in teardown?
-                    suiteResult.SetResult(ResultState.Error, message, stackTrace);
+                    suiteResult.SetResult(ResultState.Error, message, stackTrace, FailureSite.TearDown);
 #else
                     Result.SetResult(ResultState.Error, message);
 #endif

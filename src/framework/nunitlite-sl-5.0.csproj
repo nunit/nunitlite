@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ExpectedExceptionData.cs" />
+    <Compile Include="Api\FailureSite.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />
     <Compile Include="Api\IPropertyBag.cs" />
     <Compile Include="Api\ITest.cs" />

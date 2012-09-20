@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ExpectedExceptionData.cs" />
+    <Compile Include="Api\FailureSite.cs" />
     <Compile Include="Attributes\AsynchronousAttribute.cs" />
     <Compile Include="Attributes\TimeoutAttribute.cs" />
     <Compile Include="Constraints\DelayedConstraint.cs" />

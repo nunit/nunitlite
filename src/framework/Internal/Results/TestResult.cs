@@ -70,6 +70,11 @@ namespace NUnit.Framework.Internal
         protected int assertCount = 0;
 
         /// <summary>
+        /// The point in processing at which a failure occured
+        /// </summary>
+        private FailureSite failureSite;
+
+        /// <summary>
         /// List of child results
         /// </summary>
 #if CLR_2_0 || CLR_4_0
@@ -158,6 +163,15 @@ namespace NUnit.Framework.Internal
             get { return stackTrace; }
         }
 #endif
+
+        /// <summary>
+        /// Gets the failure site, which indicates the point
+        /// in the processing of the test where it failed.
+        /// </summary>
+        public FailureSite FailureSite
+        {
+            get { return failureSite; }
+        }
 
         /// <summary>
         /// Gets or sets the count of asserts executed
@@ -372,7 +386,7 @@ namespace NUnit.Framework.Internal
         /// <param name="resultState">The ResultState to use in the result</param>
         public void SetResult(ResultState resultState)
         {
-            SetResult(resultState, null, null);
+            SetResult(resultState, null, null, FailureSite.Test);
         }
 
         /// <summary>
@@ -382,7 +396,7 @@ namespace NUnit.Framework.Internal
         /// <param name="message">A message associated with the result state</param>
         public void SetResult(ResultState resultState, string message)
         {
-            SetResult(resultState, message, null);
+            SetResult(resultState, message, null, FailureSite.Test);
         }
 
         /// <summary>
@@ -393,9 +407,21 @@ namespace NUnit.Framework.Internal
         /// <param name="stackTrace">Stack trace giving the location of the command</param>
         public void SetResult(ResultState resultState, string message, string stackTrace)
         {
+            SetResult(resultState, message, stackTrace, FailureSite.Test);
+        }
+
+        /// <summary>
+        /// Set the result of the test
+        /// </summary>
+        /// <param name="resultState">The ResultState to use in the result</param>
+        /// <param name="message">A message associated with the result state</param>
+        /// <param name="stackTrace">Stack trace giving the location of the command</param>
+        public void SetResult(ResultState resultState, string message, string stackTrace, FailureSite site)
+        {
             this.resultState = resultState;
             this.message = message;
             this.stackTrace = stackTrace;
+            this.failureSite = site;
         }
 
         /// <summary>

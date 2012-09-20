@@ -21,10 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework;
 using NUnit.Framework.Api;
-using NUnit.Framework.Internal;
 
 namespace NUnitLite.Runner
 {
@@ -132,6 +129,13 @@ namespace NUnitLite.Runner
         {
             if (result.HasChildren)
             {
+                if (result.ResultState.Status == TestStatus.Failed)
+                    if (result.FailureSite == FailureSite.SetUp || result.FailureSite == FailureSite.TearDown)
+                        if (result.ResultState == ResultState.Failure)
+                            failureCount++;
+                        else
+                            errorCount++;
+                
                 foreach (ITestResult r in result.Children)
                     Visit(r);
             }

@@ -23,6 +23,7 @@
 
 using System.IO;
 using NUnit.Framework.Api;
+using NUnit.Framework.Internal;
 
 namespace NUnitLite.Runner
 {
@@ -119,20 +120,13 @@ namespace NUnitLite.Runner
 
         private void PrintErrorResults(ITestResult result)
         {
+            if (result.ResultState.Status == TestStatus.Failed)
+                if (!result.HasChildren || result.FailureSite == FailureSite.SetUp || result.FailureSite == FailureSite.TearDown)
+                    WriteSingleResult(result);
+
             if (result.HasChildren)
                 foreach (ITestResult childResult in result.Children)
                     PrintErrorResults(childResult);
-            else if (result.ResultState == ResultState.Error || result.ResultState == ResultState.Failure)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Name, result.FullName);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-                writer.WriteLine(result.Message);
-#if !NETCF_1_0
-                writer.WriteLine(result.StackTrace);
-#endif
-            }
         }
 
         private void PrintNotRunResults(ITestResult result)
@@ -140,13 +134,8 @@ namespace NUnitLite.Runner
             if (result.HasChildren)
                 foreach (ITestResult childResult in result.Children)
                     PrintNotRunResults(childResult);
-            else if (result.ResultState == ResultState.Ignored || result.ResultState == ResultState.NotRunnable || result.ResultState == ResultState.Skipped)
-            {
-                writer.WriteLine();
-                writer.WriteLine("{0}) {1} ({2}) : {3}", ++reportCount, result.Name, result.FullName, result.Message);
-                //if (options.ListProperties)
-                //    PrintTestProperties(result.Test);
-            }
+            else if (result.ResultState.Status == TestStatus.Skipped)
+                WriteSingleResult(result);
         }
 
         private void PrintTestProperties(ITest test)
@@ -181,6 +170,22 @@ namespace NUnitLite.Runner
             if (result.HasChildren)
                 foreach (ITestResult childResult in result.Children)
                     PrintAllResults(childResult, indent + "  ");
+        }
+
+        private void WriteSingleResult(ITestResult result)
+        {
+            writer.WriteLine();
+            writer.WriteLine("{0}) {1} ({2})", ++reportCount, result.Name, result.FullName);
+
+            if (result.Message != null && result.Message != string.Empty)
+                writer.WriteLine("   {0}", result.Message);
+
+#if !NETCF_1_0
+            if (result.StackTrace != null && result.StackTrace != string.Empty)
+                writer.WriteLine(result.ResultState == ResultState.Failure
+                    ? StackFilter.Filter(result.StackTrace)
+                    : result.StackTrace + NUnit.Env.NewLine);
+#endif
         }
 
         #endregion
