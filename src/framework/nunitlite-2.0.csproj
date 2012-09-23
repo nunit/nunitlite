@@ -137,7 +137,6 @@
     <Compile Include="Attributes\TestFixtureAttribute.cs" />
     <Compile Include="Attributes\TestFixtureSetUpAttribute.cs" />
     <Compile Include="Attributes\TestFixtureTearDownAttribute.cs" />
-    <Compile Include="Attributes\TestModificationAttribute.cs" />
     <Compile Include="Attributes\TheoryAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
