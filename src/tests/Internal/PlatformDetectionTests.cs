@@ -218,7 +218,7 @@ namespace NUnit.Framework.Internal
         }
 
         // This throws under Microsoft .Net due to the invlaid enumeration value of 128
-        [Test, Platform(Exclude="Net")]
+        [Test]
         public void DetectUnixUnderMono()
         {
             CheckOSPlatforms(

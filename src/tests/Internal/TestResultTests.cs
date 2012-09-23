@@ -44,17 +44,17 @@ namespace NUnit.Framework.Internal
 		[SetUp]
 		public void SetUp()
 		{
-            test = new TestMethod(typeof(DummySuite).GetMethod("DummyMethod"));
-            test.Properties.Set(PropertyNames.Description, "Test description");
-            test.Properties.Add(PropertyNames.Category, "Dubious");
-            test.Properties.Set("Priority", "low");
-			testResult = test.MakeTestResult();
-
             TestSuite suite = new TestSuite(typeof(DummySuite));
             suite.Properties.Set(PropertyNames.Description, "Suite description");
             suite.Properties.Add(PropertyNames.Category, "Fast");
             suite.Properties.Add("Value", 3);
             suiteResult = suite.MakeTestResult();
+
+            test = new TestMethod(typeof(DummySuite).GetMethod("DummyMethod"), suite);
+            test.Properties.Set(PropertyNames.Description, "Test description");
+            test.Properties.Add(PropertyNames.Category, "Dubious");
+            test.Properties.Set("Priority", "low");
+			testResult = test.MakeTestResult();
 
             SimulateTestRun();
         }

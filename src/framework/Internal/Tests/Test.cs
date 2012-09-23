@@ -73,18 +73,12 @@ namespace NUnit.Framework.Internal
         private object fixture;
 
         /// <summary>
-        /// NUnitAttributes applied to the method, class or assembly
-        /// used to implement this test.
-        /// </summary>
-        private NUnitAttribute[] attributes = new NUnitAttribute[0];
-
-        /// <summary>
         /// The SetUp methods.
         /// </summary>
         protected MethodInfo[] setUpMethods;
 
         /// <summary>
-        /// The teardown method
+        /// The teardown methods
         /// </summary>
         protected MethodInfo[] tearDownMethods;
 
@@ -93,6 +87,9 @@ namespace NUnit.Framework.Internal
         /// </summary>
         private bool requiresThread;
 
+        /// <summary>
+        /// True if the test should run asynchronously
+        /// </summary>
         private bool isAsynchronous;
 
         #endregion
@@ -313,17 +310,6 @@ namespace NUnit.Framework.Internal
         /// <returns>A TestResult suitable for this type of test.</returns>
         public abstract TestResult MakeTestResult();
 
-        /// <summary>
-        /// Gets a test command to be used in executing this test
-        /// </summary>
-        /// <returns></returns>
-        public TestCommand GetTestCommand()
-        {
-            return runState == RunState.Runnable || runState == RunState.Explicit
-                ? MakeTestCommand()
-                : new SkipCommand(this);
-        }
-
         ///// <summary>
         ///// Gets a count of test cases that would be run using
         ///// the specified filter.
@@ -348,27 +334,13 @@ namespace NUnit.Framework.Internal
         /// <param name="provider">An object implementing ICustomAttributeProvider</param>
         public void ApplyAttributesToTest(ICustomAttributeProvider provider)
         {
-            this.attributes = (NUnitAttribute[])provider.GetCustomAttributes(typeof(NUnitAttribute), true);
-
-            foreach (Attribute attribute in this.attributes)
-            {
-                IApplyToTest iApply = attribute as IApplyToTest;
-                if (iApply != null)
-                {
-                    iApply.ApplyToTest(this);
-                }
-            }
+            foreach (IApplyToTest iApply in provider.GetCustomAttributes(typeof(IApplyToTest), true))
+                iApply.ApplyToTest(this);
         }
 
         #endregion
 
         #region Protected Methods
-
-        /// <summary>
-        /// Make a test command for running this test
-        /// </summary>
-        /// <returns>A TestCommand, which runs the test when executed.</returns>
-        protected abstract TestCommand MakeTestCommand();
 
         /// <summary>
         /// Add standard attributes and members to a test node.
@@ -435,11 +407,6 @@ namespace NUnit.Framework.Internal
 
                 return tearDownMethods;
             }
-        }
-
-        internal NUnitAttribute[] Attributes
-        {
-            get { return attributes; }
         }
 
         internal bool RequiresThread

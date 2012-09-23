@@ -41,7 +41,7 @@ namespace NUnit.Framework.Internal.WorkItems
         private readonly Test _test;
 
         // The TestCommand for that test
-        private readonly TestCommand _command;
+        //private readonly TestCommand _command;
 
         // The execution context used by this work item
         private TestExecutionContext _context;
@@ -65,11 +65,14 @@ namespace NUnit.Framework.Internal.WorkItems
         /// <returns></returns>
         public static WorkItem CreateWorkItem(Test test, TestExecutionContext context, ITestFilter filter)
         {
+            if (test.RunState != RunState.Runnable && test.RunState != RunState.Explicit)
+                return new SimpleWorkItem(new SkipCommand(test), context);
+
             TestSuite suite = test as TestSuite;
-            if (suite != null && (suite.RunState == RunState.Runnable || suite.RunState == RunState.Explicit))
+            if (suite != null)
                 return new CompositeWorkItem(suite, context, filter);
-            else
-                return new SimpleWorkItem(test, context);
+
+            return new SimpleWorkItem((TestMethod)test, context);
         }
 
         #endregion
@@ -86,7 +89,7 @@ namespace NUnit.Framework.Internal.WorkItems
             _test = test;
             _context = context.Save();
             testResult = test.MakeTestResult();
-            _command = test.GetTestCommand();
+            //_command = test.GetTestCommand();
             _state = WorkItemState.Ready;
         }
 
@@ -132,13 +135,13 @@ namespace NUnit.Framework.Internal.WorkItems
             get { return _context.prior; }
         }
 
-        /// <summary>
-        /// The command used to run the test
-        /// </summary>
-        protected TestCommand Command
-        {
-            get { return _command; }
-        }
+        ///// <summary>
+        ///// The command used to run the test
+        ///// </summary>
+        //protected TestCommand Command
+        //{
+        //    get { return _command; }
+        //}
 
         /// <summary>
         /// The test result

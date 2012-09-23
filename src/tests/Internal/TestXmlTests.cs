@@ -12,15 +12,15 @@ namespace NUnit.Framework.Internal
         [SetUp]
         public void SetUp()
         {
-            testMethod = new TestMethod(typeof(DummyFixture).GetMethod("DummyMethod"));
-            testMethod.Properties.Set(PropertyNames.Description, "Test description");
-            testMethod.Properties.Add(PropertyNames.Category, "Dubious");
-            testMethod.Properties.Set("Priority", "low");
-
             testFixture = new TestFixture(typeof(DummyFixture));
             testFixture.Properties.Set(PropertyNames.Description, "Fixture description");
             testFixture.Properties.Add(PropertyNames.Category, "Fast");
             testFixture.Properties.Add("Value", 3);
+
+            testMethod = new TestMethod(typeof(DummyFixture).GetMethod("DummyMethod"), testFixture);
+            testMethod.Properties.Set(PropertyNames.Description, "Test description");
+            testMethod.Properties.Add(PropertyNames.Category, "Dubious");
+            testMethod.Properties.Set("Priority", "low");
 
             testFixture.Tests.Add(testMethod);
 

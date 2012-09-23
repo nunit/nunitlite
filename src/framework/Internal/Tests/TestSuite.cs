@@ -56,16 +56,6 @@ namespace NUnit.Framework.Internal
         protected bool maintainTestOrder;
 
         /// <summary>
-        /// The fixture setup methods for this suite
-        /// </summary>
-        protected MethodInfo[] oneTimeSetUpMethods;
-
-        /// <summary>
-        /// The fixture teardown methods for this suite
-        /// </summary>
-        protected MethodInfo[] oneTimeTearDownMethods;
-
-        /// <summary>
         /// Argument list for use in creating the fixture.
         /// </summary>
         internal object[] arguments;
@@ -182,6 +172,37 @@ namespace NUnit.Framework.Internal
 		}
 #endif
 
+        /// <summary>
+        /// Gets the command to be executed before any of
+        /// the child tests are run.
+        /// </summary>
+        /// <returns>A TestCommand</returns>
+        public virtual TestCommand GetOneTimeSetUpCommand()
+        {
+            TestCommand command = new OneTimeSetUpCommand(this);
+
+            if (this.FixtureType != null)
+            {
+                IApplyToContext[] changes = (IApplyToContext[])this.FixtureType.GetCustomAttributes(typeof(IApplyToContext), true);
+                if (changes.Length > 0)
+                    command = new ApplyChangesToContextCommand(command, changes);
+            }
+
+            return command;
+        }
+
+        /// <summary>
+        /// Gets the command to be executed after all of the
+        /// child tests are run.
+        /// </summary>
+        /// <returns>A TestCommand</returns>
+        public virtual TestCommand GetOneTimeTearDownCommand()
+        {
+            TestCommand command = new OneTimeTearDownCommand(this);
+
+            return command;
+        }
+
 		#endregion
 
 		#region Properties
@@ -218,30 +239,6 @@ namespace NUnit.Framework.Internal
 			}
 		}
 
-        /// <summary>
-        /// Gets the set up methods.
-        /// </summary>
-        /// <returns></returns>
-        internal MethodInfo[] OneTimeSetUpMethods
-        {
-            get
-            {
-                return oneTimeSetUpMethods;
-            }
-        }
-
-        /// <summary>
-        /// Gets the tear down methods.
-        /// </summary>
-        /// <returns></returns>
-        internal MethodInfo[] OneTimeTearDownMethods
-        {
-            get
-            {
-                return oneTimeTearDownMethods;
-            }
-        }
-
         #endregion
 
 		#region Test Overrides
@@ -253,15 +250,6 @@ namespace NUnit.Framework.Internal
         public override TestResult MakeTestResult()
         {
             return new TestSuiteResult(this);
-        }
-
-        /// <summary>
-        /// Creates a test command for this suite.
-        /// </summary>
-        /// <returns></returns>
-        protected override TestCommand MakeTestCommand()
-        {
-            return new TestSuiteCommand(this);
         }
 
         /// <summary>

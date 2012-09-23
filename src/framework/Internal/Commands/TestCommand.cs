@@ -39,11 +39,6 @@ namespace NUnit.Framework.Internal.Commands
     public abstract class TestCommand
     {
         private Test test;
-#if CLR_2_0 || CLR_4_0
-        private System.Collections.Generic.IList<TestCommand> children;
-#else
-        private System.Collections.IList children;
-#endif
 
         /// <summary>
         /// Construct a TestCommand for a test.
@@ -62,29 +57,6 @@ namespace NUnit.Framework.Internal.Commands
         public Test Test
         {
             get { return test; }
-        }
-
-        /// <summary>
-        /// Gets any child TestCommands of this command
-        /// </summary>
-        /// <value>A list of child TestCommands</value>
-#if CLR_2_0 || CLR_4_0
-        public System.Collections.Generic.IList<TestCommand> Children
-#else
-        public System.Collections.IList Children
-#endif
-        {
-            get 
-            {
-                if (children == null)
-#if CLR_2_0 || CLR_4_0
-                    children = new System.Collections.Generic.List<TestCommand>();
-#else
-                    children = new System.Collections.ArrayList();
-#endif
-
-                return children;
-            }
         }
 
         /// <summary>

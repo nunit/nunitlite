@@ -231,44 +231,54 @@ namespace NUnit.Framework.Builders
         private void CheckTestFixtureIsValid(TestFixture fixture)
         {
             Type fixtureType = fixture.FixtureType;
-            string reason = null;
 
-            if (fixture.RunState == RunState.NotRunnable)
+#if CLR_2_0 || CLR_4_0
+            if (fixtureType.ContainsGenericParameters)
+            {
+                SetNotRunnable(fixture, NO_TYPE_ARGS_MSG);
                 return;
-
-            if (!IsValidFixtureType(fixtureType, ref reason))
-            {
-                fixture.RunState = RunState.NotRunnable;
-                fixture.Properties.Set(PropertyNames.SkipReason, reason);
             }
-            else if( !IsStaticClass( fixtureType ) )
+#endif
+            if( !IsStaticClass(fixtureType)  && !HasValidConstructor(fixtureType, fixture.arguments) )
             {
-                object[] args = fixture.arguments;
-
-                Type[] argTypes;
-
-                // Note: This could be done more simply using
-                // Type.EmptyTypes and Type.GetTypeArray() but
-                // they don't exist in all runtimes we support.
-                if (args == null)
-                    argTypes = new Type[0];
-                else
-                {
-                    argTypes = new Type[args.Length];
-
-                    int index = 0;
-                    foreach (object arg in args)
-                        argTypes[index++] = arg.GetType();
-                }
-                
-                ConstructorInfo ctor = fixtureType.GetConstructor(argTypes);
-
-                if (ctor == null)
-                {
-                    fixture.RunState = RunState.NotRunnable;
-                    fixture.Properties.Set(PropertyNames.SkipReason, "No suitable constructor was found");
-                }
+                SetNotRunnable(fixture, "No suitable constructor was found");
+                return;
             }
+
+            if (!CheckSetUpTearDownMethods(fixture, fixture.SetUpMethods))
+                return;
+            if (!CheckSetUpTearDownMethods(fixture, fixture.TearDownMethods))
+                return;
+            if (!CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(TestFixtureSetUpAttribute), true)))
+                return;
+            CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(TestFixtureTearDownAttribute), true));
+        }
+
+        private static bool HasValidConstructor(Type fixtureType, object[] args)
+        {
+            Type[] argTypes;
+
+            // Note: This could be done more simply using
+            // Type.EmptyTypes and Type.GetTypeArray() but
+            // they don't exist in all runtimes we support.
+            if (args == null)
+                argTypes = new Type[0];
+            else
+            {
+                argTypes = new Type[args.Length];
+
+                int index = 0;
+                foreach (object arg in args)
+                    argTypes[index++] = arg.GetType();
+            }
+
+            return fixtureType.GetConstructor(argTypes) != null;
+        }
+
+        private void SetNotRunnable(TestFixture fixture, string reason)
+        {
+            fixture.RunState = RunState.NotRunnable;
+            fixture.Properties.Set(PropertyNames.SkipReason, reason);
         }
 
         private static bool IsStaticClass(Type type)
@@ -276,23 +286,17 @@ namespace NUnit.Framework.Builders
             return type.IsAbstract && type.IsSealed;
         }
 
-		/// <summary>
-        /// Check that the fixture type is valid. This method ensures that 
-        /// the type is not abstract and that there is no more than one of 
-        /// each setup or teardown method and that their signatures are correct.
-        /// </summary>
-        /// <param name="fixtureType">The type of the fixture to check</param>
-        /// <param name="reason">A message indicating why the fixture is invalid</param>
-        /// <returns>True if the fixture is valid, false if not</returns>
-        private bool IsValidFixtureType(Type fixtureType, ref string reason)
+        private bool CheckSetUpTearDownMethods(TestFixture fixture, MethodInfo[] methods)
         {
-#if CLR_2_0 || CLR_4_0
-            if ( fixtureType.ContainsGenericParameters )
-            {
-                reason = NO_TYPE_ARGS_MSG;
-                return false;
-            }
-#endif
+            foreach (MethodInfo method in methods)
+                if (method.IsAbstract ||
+                     !method.IsPublic && !method.IsFamily ||
+                     method.GetParameters().Length > 0 ||
+                     !method.ReturnType.Equals(typeof(void)))
+                {
+                    SetNotRunnable(fixture, string.Format("Invalid signature for Setup or TearDown method: {0}", method.Name));
+                    return false;
+                }
 
             return true;
         }

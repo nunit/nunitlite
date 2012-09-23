@@ -34,6 +34,7 @@ namespace NUnit.Framework.Internal
 	public class TestFixture : TestSuite
 	{
 		#region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TestFixture"/> class.
         /// </summary>
@@ -49,31 +50,11 @@ namespace NUnit.Framework.Internal
         public TestFixture(Type fixtureType, object[] arguments)
             : base(fixtureType, arguments) 
         {
-            this.oneTimeSetUpMethods =      GetSetUpTearDownMethods( typeof(TestFixtureSetUpAttribute) );
-            this.oneTimeTearDownMethods =   GetSetUpTearDownMethods( typeof( TestFixtureTearDownAttribute) );
-            this.setUpMethods =             GetSetUpTearDownMethods( typeof(SetUpAttribute) );
-            this.tearDownMethods =          GetSetUpTearDownMethods( typeof(TearDownAttribute) );
+            this.setUpMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(SetUpAttribute), true);
+            this.tearDownMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(TearDownAttribute), true);
         }
 
-        private MethodInfo[] GetSetUpTearDownMethods(Type attrType)
-        {
-            MethodInfo[] methods = Reflect.GetMethodsWithAttribute(FixtureType, attrType, true);
-
-            foreach ( MethodInfo method in methods )
-                if ( method.IsAbstract ||
-                     !method.IsPublic && !method.IsFamily ||
-                     method.GetParameters().Length > 0 ||
-                     !method.ReturnType.Equals(typeof(void)))
-                {
-                    this.Properties.Set(
-                        PropertyNames.SkipReason, 
-                        string.Format("Invalid signature for SetUp or TearDown method: {0}", method.Name));
-                    this.RunState = RunState.NotRunnable;
-                    break;
-                }
-
-            return methods;
-        }
         #endregion
-	}
+
+    }
 }

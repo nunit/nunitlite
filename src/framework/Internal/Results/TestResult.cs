@@ -416,6 +416,7 @@ namespace NUnit.Framework.Internal
         /// <param name="resultState">The ResultState to use in the result</param>
         /// <param name="message">A message associated with the result state</param>
         /// <param name="stackTrace">Stack trace giving the location of the command</param>
+        /// <param name="site">The FailureSite for any failure or error</param>
         public void SetResult(ResultState resultState, string message, string stackTrace, FailureSite site)
         {
             this.resultState = resultState;

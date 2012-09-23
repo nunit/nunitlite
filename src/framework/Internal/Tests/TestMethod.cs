@@ -69,12 +69,6 @@ namespace NUnit.Framework.Internal
         /// Initializes a new instance of the <see cref="TestMethod"/> class.
         /// </summary>
         /// <param name="method">The method to be used as a test.</param>
-        public TestMethod(MethodInfo method) : this(method, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestMethod"/> class.
-        /// </summary>
-        /// <param name="method">The method to be used as a test.</param>
         /// <param name="parentSuite">The suite or fixture to which the new test will be added</param>
         public TestMethod(MethodInfo method, Test parentSuite) 
 			: base( method.ReflectedType ) 
@@ -203,7 +197,7 @@ namespace NUnit.Framework.Internal
         /// Creates a test command for use in running this test. 
         /// </summary>
         /// <returns></returns>
-        protected override TestCommand MakeTestCommand()
+        public virtual TestCommand GetTestCommand()
         {
             TestCommand command = new TestMethodCommand(this);
 

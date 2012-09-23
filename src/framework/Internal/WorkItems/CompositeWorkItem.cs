@@ -42,7 +42,8 @@ namespace NUnit.Framework.Internal.WorkItems
 #else
         private System.Collections.Queue _children = new System.Collections.Queue();
 #endif
-        private TestSuiteCommand _suiteCommand;
+        private TestCommand _setupCommand;
+        private TestCommand _teardownCommand;
 
         private CountdownEvent _childTestCountdown;
 
@@ -57,7 +58,8 @@ namespace NUnit.Framework.Internal.WorkItems
             : base(suite, context)
         {
             _suite = suite;
-            _suiteCommand = Command as TestSuiteCommand;
+            _setupCommand = suite.GetOneTimeSetUpCommand();
+            _teardownCommand = suite.GetOneTimeTearDownCommand();
             _childFilter = childFilter;
         }
 
@@ -100,7 +102,7 @@ namespace NUnit.Framework.Internal.WorkItems
         {
             try
             {
-                _suiteCommand.DoOneTimeSetUp(Context);
+                _setupCommand.Execute(Context);
 
                 // SetUp may have changed some things
                 Context.UpdateContext();
@@ -128,7 +130,8 @@ namespace NUnit.Framework.Internal.WorkItems
 
         private void PerformOneTimeTearDown()
         {
-            _suiteCommand.DoOneTimeTearDown(Context);
+            TestExecutionContext.SetCurrentContext(Context);
+            _teardownCommand.Execute(Context);
         }
 
         private object _completionLock = new object();

@@ -32,7 +32,6 @@ using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Attributes
 {
-    //[Platform(Exclude = "Mono", Reason = "Runner hangs at end when these are run")]
     public class TimeoutTests
     {
         Thread parentThread;

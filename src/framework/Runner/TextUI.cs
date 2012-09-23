@@ -188,6 +188,10 @@ namespace NUnitLite.Runner
             }
         }
 
+        /// <summary>
+        /// Write the standard header information to a TextWriter.
+        /// </summary>
+        /// <param name="writer">The TextWriter to use</param>
         public static void WriteHeader(TextWriter writer)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -230,6 +234,10 @@ namespace NUnitLite.Runner
             writer.WriteLine();
         }
 
+        /// <summary>
+        /// Write information about the current runtime environment
+        /// </summary>
+        /// <param name="writer">The TextWriter to be used</param>
         public static void WriteRuntimeEnvironment(TextWriter writer)
         {
             string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
