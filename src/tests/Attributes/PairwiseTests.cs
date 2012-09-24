@@ -139,7 +139,7 @@ namespace NUnit.Framework.Attributes
 #if CLR_2_0 || CLR_4_0
         class PairCounter : System.Collections.Generic.Dictionary<string, object> {}
 #else
-        class PairCounter : Hashtable() { }
+        class PairCounter : Hashtable { }
 #endif
     }
 }

@@ -202,7 +202,7 @@ namespace NUnit.Framework.Internal
         /// <param name="test">A test.</param>
         public void ApplyToTest(Test test)
         {
-            if (this.RunState == RunState.Ignored || this.RunState == RunState.Explicit)
+            if (this.RunState != RunState.Runnable)
 				test.RunState = this.RunState;
 
             foreach (string key in Properties.Keys)

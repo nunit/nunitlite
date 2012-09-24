@@ -3,7 +3,8 @@
 
   <patternset id="source-files">
     <include name="**/*.cs"/>
-    <exclude name="App.g.cs" unless="${runtime.platform=='silverlight'}"/>
+    <exclude name="obj/**"/>
+    <exclude name="**/App.*.cs" unless="${runtime.platform=='silverlight'}"/>
     <exclude name="Attributes/SetCultureAttributeTests.cs" if="${runtime.platform == 'netcf'}"/>
 <!--    <exclude name="Runner/CommandLineOptionTests.cs" if="${runtime.platform == 'silverlight'}"/>-->
     <exclude name="Program.cs" if="${runtime.platform == 'silverlight'}"/>

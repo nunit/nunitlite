@@ -25,8 +25,8 @@ using System;
 using System.Collections;
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
-using NUnit.TestUtilities;
 #endif
+using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {

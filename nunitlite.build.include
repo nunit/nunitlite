@@ -155,7 +155,7 @@
     <property name="runtime.platform" value="net"/>
     <property name="runtime.version" value="1.0"/>
     <property name="runtime.config" value="net-1.0"/>
-    <property name="runtime.defines" value="NET,NET_1_0"/>
+    <property name="runtime.defines" value="NET,NET_1_0,CLR_1_0"/>
 	<property name="build.framework" value="net-1.1"/>
 	<property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
   </target>
@@ -169,7 +169,7 @@
     <property name="runtime.platform" value="net"/>
     <property name="runtime.version" value="1.1"/>
     <property name="runtime.config" value="net-1.1"/>
-    <property name="runtime.defines" value="NET,NET_1_1"/>
+    <property name="runtime.defines" value="NET,NET_1_1,CLR_1_1"/>
     <property name="build.framework" value="net-1.1"/>
     <property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
   </target>

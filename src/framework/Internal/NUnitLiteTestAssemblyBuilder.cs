@@ -53,7 +53,7 @@ namespace NUnit.Framework.Internal
 
             if (fixtures.Count > 0)
             {
-                AssemblyName assemblyName = new AssemblyName(assembly.FullName);
+                AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(assembly);
                 return BuildTestAssembly(assemblyName.Name, fixtures);
             }
 

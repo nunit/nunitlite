@@ -100,10 +100,14 @@ namespace NUnit.Framework.Internal
 
             StringBuilder actual = new StringBuilder();
             StringWriter sw = new StringWriter(actual);
+#if CLR_2_0 || CLR_4_0
             System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.CloseOutput = true;
             settings.ConformanceLevel = System.Xml.ConformanceLevel.Fragment;
             System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(sw, settings);
+#else
+            System.Xml.XmlTextWriter writer = new System.Xml.XmlTextWriter(sw);
+#endif
             testNode.WriteTo(writer);
             writer.Close();
 
@@ -135,10 +139,14 @@ namespace NUnit.Framework.Internal
 
             StringBuilder actual = new StringBuilder();
             StringWriter sw = new StringWriter(actual);
+#if CLR_2_0 || CLR_4_0
             System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.CloseOutput = true;
             settings.ConformanceLevel = System.Xml.ConformanceLevel.Fragment;
             System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(sw, settings);
+#else
+            System.Xml.XmlWriter writer = new System.Xml.XmlTextWriter(sw);
+#endif
             suiteNode.WriteTo(writer);
             writer.Close();
 

@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 
@@ -32,6 +33,15 @@ namespace NUnit.TestUtilities
     /// </summary>
     public class TestFinder
     {
+        public static Test MustFind(string name, TestSuite suite, bool recursive)
+        {
+            Test test = Find(name, suite, recursive);
+
+            Assert.NotNull(test, "Unable to find test {0}", name);
+
+            return test;
+        }
+
         public static Test Find(string name, TestSuite suite, bool recursive)
         {
             foreach (Test child in suite.Tests)
@@ -51,6 +61,15 @@ namespace NUnit.TestUtilities
             }
 
             return null;
+        }
+
+        public static ITestResult MustFind(string name, TestResult result, bool recursive)
+        {
+            ITestResult foundResult = Find(name, result, recursive);
+
+            Assert.NotNull(foundResult, "Unable to find result for {0}", name);
+
+            return foundResult;
         }
 
         public static ITestResult Find(string name, TestResult result, bool recursive)

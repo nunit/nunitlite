@@ -212,13 +212,13 @@ namespace NUnit.Framework.Tests
             TestSuite test = (TestSuite)TestBuilder.MakeTestCase(
                 typeof(TestCaseSourceAttributeFixture), "MethodWithIgnoredTestCases");
 
-            Test testCase = TestFinder.Find("MethodWithIgnoredTestCases(1)", test, false);
+            Test testCase = TestFinder.MustFind("MethodWithIgnoredTestCases(1)", test, false);
             Assert.That(testCase.RunState, Is.EqualTo(RunState.Runnable));
  
-            testCase = TestFinder.Find("MethodWithIgnoredTestCases(2)", test, false);
+            testCase = TestFinder.MustFind("MethodWithIgnoredTestCases(2)", test, false);
             Assert.That(testCase.RunState, Is.EqualTo(RunState.Ignored));
  
-			testCase = TestFinder.Find("MethodWithIgnoredTestCases(3)", test, false);
+			testCase = TestFinder.MustFind("MethodWithIgnoredTestCases(3)", test, false);
             Assert.That(testCase.RunState, Is.EqualTo(RunState.Ignored));
             Assert.That(testCase.Properties.GetSetting(PropertyNames.SkipReason, ""), Is.EqualTo("Don't Run Me!"));
         }

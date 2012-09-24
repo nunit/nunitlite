@@ -5,7 +5,7 @@ namespace NUnit.Framework.Internal
     /// <summary>
     /// Provides methods to support legacy string comparison methods.
     /// </summary>
-    public static class StringUtil
+    public class StringUtil
     {
         /// <summary>
         /// Compares two strings for equality, ignoring case if requested.

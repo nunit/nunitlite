@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if CLR_2_0 || CLR_4_0
+using System.Collections;
 using System.Collections.Generic;
 
 namespace NUnit.TestUtilities
@@ -39,3 +40,4 @@ namespace NUnit.TestUtilities
         }
     }
 }
+#endif

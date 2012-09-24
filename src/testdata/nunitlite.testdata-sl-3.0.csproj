@@ -52,6 +52,7 @@
     <Reference Include="system" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AssertFailFixture.cs" />
     <Compile Include="AssertIgnoreData.cs" />
     <Compile Include="AttributeInheritanceData.cs" />

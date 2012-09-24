@@ -29,7 +29,6 @@
 
     <include name="Runner/**/*.cs"/>
     <exclude name="Runner/TcpWriter.cs"/>
-    <exclude name="Runner/TextUI.cs" if="${runtime.platform == 'silverlight'}"/>
     <exclude name="Runner/Silverlight/*.cs" unless="${runtime.platform == 'silverlight'}"/>
   </patternset>
 

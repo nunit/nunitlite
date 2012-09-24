@@ -152,7 +152,7 @@ namespace NUnitLite.Runner
 
                     if (!runner.Load(assembly, loadOptions))
                     {
-                        AssemblyName assemblyName = new AssemblyName(assembly.FullName);
+                        AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(assembly);
                         Console.WriteLine("No tests found in assembly {0}", assemblyName.Name);
                         return;
                     }
@@ -200,7 +200,7 @@ namespace NUnitLite.Runner
 #else
             string title = "NUNit Framework";
 #endif
-            AssemblyName assemblyName = new AssemblyName(executingAssembly.FullName);
+            AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(executingAssembly);
             System.Version version = assemblyName.Version;
             string copyright = "Copyright (C) 2012, Charlie Poole";
             string build = "";
@@ -278,25 +278,20 @@ namespace NUnitLite.Runner
             XmlNode testNode = runner.LoadedTest.ToXml(true);
 
             string listFile = commandLineOptions.ExploreFile;
+            TextWriter textWriter = listFile != null && listFile.Length > 0
+                ? new StreamWriter(listFile)
+                : Console.Out;
+
+#if CLR_2_0 || CLR_4_0
             System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.Indent = true;
-            System.Xml.XmlWriter testWriter = null;
-            if (listFile != null && listFile.Length > 0)
-            {
-                TextWriter textWriter = new StreamWriter(listFile);
-                settings.Encoding = System.Text.Encoding.UTF8;
-                testWriter = System.Xml.XmlWriter.Create(textWriter, settings);
-            }
-            else
-            {
-                testWriter = System.Xml.XmlWriter.Create(Console.Out, settings);
-            }
-#if false
-            System.Xml.XmlWriter testWriter = listFile != null && listFile.Length > 0
-                ? System.Xml.XmlWriter.Create(listFile, System.Text.Encoding.UTF8)
-                : System.Xml.XmlWriter.Create(Console.Out);
+            settings.Encoding = System.Text.Encoding.UTF8;
+            System.Xml.XmlWriter testWriter = System.Xml.XmlWriter.Create(textWriter, settings);
+#else
+            System.Xml.XmlTextWriter testWriter = new System.Xml.XmlTextWriter(textWriter);
             testWriter.Formatting = System.Xml.Formatting.Indented;
 #endif
+
             testNode.WriteTo(testWriter);
             testWriter.Close();
 

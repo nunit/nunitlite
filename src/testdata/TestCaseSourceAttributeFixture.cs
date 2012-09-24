@@ -25,8 +25,6 @@ using System;
 using System.Collections;
 using NUnit.Framework;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("nunitlite")]
-
 namespace NUnit.TestData.TestCaseSourceAttributeFixture
 {
     [TestFixture]

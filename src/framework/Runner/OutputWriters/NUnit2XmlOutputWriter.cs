@@ -137,7 +137,7 @@ namespace NUnitLite.Runner
         private void WriteEnvironment()
         {
             xmlWriter.WriteStartElement("environment");
-            AssemblyName assemblyName = new AssemblyName(Assembly.GetExecutingAssembly().FullName);
+            AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(Assembly.GetExecutingAssembly());
             xmlWriter.WriteAttributeString("nunit-version",
                                            assemblyName.Version.ToString());
             xmlWriter.WriteAttributeString("clr-version",

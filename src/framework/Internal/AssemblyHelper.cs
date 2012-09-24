@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if !NETCF
 using System;
 using System.Reflection;
 
@@ -35,6 +34,7 @@ namespace NUnit.Framework.Internal
     {
         #region GetAssemblyPath
 
+#if !NETCF
         /// <summary>
         /// Gets the path from which an assembly was loaded.
         /// </summary>
@@ -64,11 +64,13 @@ namespace NUnit.Framework.Internal
 
             return path.Substring(start);
         }
+#endif
 
         #endregion
 
         #region GetDirectoryName
 
+#if !NETCF
         /// <summary>
         /// Gets the path to the directory from which an assembly was loaded.
         /// </summary>
@@ -78,8 +80,26 @@ namespace NUnit.Framework.Internal
         {
             return System.IO.Path.GetDirectoryName(GetAssemblyPath(assembly));
         }
+#endif
+
+        #endregion
+
+        #region GetAssemblyName
+
+        /// <summary>
+        /// Gets the AssemblyName of an assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>An AssemblyName</returns>
+        public static AssemblyName GetAssemblyName(Assembly assembly)
+        {
+#if SILVERLIGHT
+            return new AssemblyName(assembly.FullName);
+#else
+            return assembly.GetName();
+#endif
+        }
 
         #endregion
     }
 }
-#endif
