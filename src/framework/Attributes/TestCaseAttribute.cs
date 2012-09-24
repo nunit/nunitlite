@@ -125,6 +125,15 @@ namespace NUnit.Framework
         }
 
         /// <summary>
+        /// Gets the expected result (alias for use
+        /// by NUnit 2.6.x runners
+        /// </summary>
+        public object Result
+        {
+            get { return expectedResult; }
+        }
+
+        /// <summary>
         /// Returns true if the expected result has been set
         /// </summary>
         public bool HasExpectedResult

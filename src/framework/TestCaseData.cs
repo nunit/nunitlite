@@ -195,6 +195,50 @@ namespace NUnit.Framework
 
         #endregion
 
+        #region Public Properties - NUnit 2.6 Compatibility
+
+        /// <summary>
+        /// Gets the expected result.
+        /// </summary>
+        public object Result
+        {
+            get { return expectedResult; }
+        }
+
+        /// <summary>
+        /// The type of exception expected
+        /// </summary>
+        public Type ExpectedException
+        {
+            get { return exceptionData.ExpectedExceptionType; }
+        }
+
+        /// <summary>
+        /// The full name of the expected exception type
+        /// </summary>
+        public string ExpectedExceptionName
+        {
+            get { return exceptionData.ExpectedExceptionName; }
+        }
+
+        /// <summary>
+        /// The message to expect on any exception
+        /// </summary>
+        public string ExpectedExceptionMessage
+        {
+            get { return exceptionData.ExpectedMessage; }
+        }
+
+        /// <summary>
+        /// The type of match to be made on the message
+        /// </summary>
+        public MessageMatch MatchType
+        {
+            get { return exceptionData.MatchType; }
+        }
+
+        #endregion
+
         #region Fluent Instance Modifiers
 
         /// <summary>
