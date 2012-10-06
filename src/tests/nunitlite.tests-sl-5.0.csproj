@@ -30,6 +30,7 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject />
     <TargetFrameworkProfile />
+    <IntermediateOutputPath>obj\$(Configuration)\sl-5.0\</IntermediateOutputPath>
   </PropertyGroup>
   <!--
   //
