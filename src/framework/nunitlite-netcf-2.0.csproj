@@ -18,12 +18,13 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <IntermediateOutputPath>obj\$(Configuration)\netcf-2.0\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\netcf-2.0</OutputPath>
     <DefineConstants>TRACE;DEBUG;WindowsCE;NETCF;NETCF_2_0;CLR_2_0;NUNITLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -31,11 +32,12 @@
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DocumentationFile>..\..\bin\Debug\netcf-2.0\nunitlite.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\netcf-2.0</OutputPath>
     <DefineConstants>TRACE;WindowsCE;NETCF;NETCF_2_0;CLR_2_0;NUNITLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -43,6 +45,7 @@
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DocumentationFile>..\..\bin\Release\netcf-2.0\nunitlite.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -51,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ExpectedExceptionData.cs" />
+    <Compile Include="Api\FailureSite.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />
     <Compile Include="Api\IPropertyBag.cs" />
     <Compile Include="Api\ITest.cs" />
@@ -101,7 +105,6 @@
     <Compile Include="Attributes\TestFixtureAttribute.cs" />
     <Compile Include="Attributes\TestFixtureSetUpAttribute.cs" />
     <Compile Include="Attributes\TestFixtureTearDownAttribute.cs" />
-    <Compile Include="Attributes\TestModificationAttribute.cs" />
     <Compile Include="Attributes\TheoryAttribute.cs" />
     <Compile Include="Attributes\ValuesAttribute.cs" />
     <Compile Include="Attributes\ValueSourceAttribute.cs" />
@@ -228,12 +231,14 @@
     <Compile Include="Internal\Commands\ExpectedExceptionCommand.cs" />
     <Compile Include="Internal\Commands\ICommandDecorator.cs" />
     <Compile Include="Internal\Commands\MaxTimeCommand.cs" />
+    <Compile Include="Internal\Commands\OneTimeSetUpCommand.cs" />
+    <Compile Include="Internal\Commands\OneTimeTearDownCommand.cs" />
     <Compile Include="Internal\Commands\RepeatedTestCommand.cs" />
     <Compile Include="Internal\Commands\SetUpTearDownCommand.cs" />
     <Compile Include="Internal\Commands\SkipCommand.cs" />
     <Compile Include="Internal\Commands\TestCommand.cs" />
     <Compile Include="Internal\Commands\TestMethodCommand.cs" />
-    <Compile Include="Internal\Commands\TestSuiteCommand.cs" />
+    <Compile Include="Internal\Commands\TheoryResultCommand.cs" />
     <Compile Include="Internal\CultureDetector.cs" />
     <Compile Include="Internal\ExceptionHelper.cs" />
     <Compile Include="Internal\Extensibility\ParameterDataProviders.cs" />
@@ -263,6 +268,7 @@
     <Compile Include="Internal\Results\TestSuiteResult.cs" />
     <Compile Include="Internal\RuntimeFramework.cs" />
     <Compile Include="Internal\StackFilter.cs" />
+    <Compile Include="Internal\StringUtil.cs" />
     <Compile Include="Internal\TestExecutionContext.cs" />
     <Compile Include="Internal\TestFilter.cs" />
     <Compile Include="Internal\TestFixtureBuilder.cs" />
@@ -292,6 +298,7 @@
     <Compile Include="Runner\OutputWriters\NUnit2XmlOutputWriter.cs" />
     <Compile Include="Runner\OutputWriters\NUnit3XmlOutputWriter.cs" />
     <Compile Include="Runner\OutputWriters\OutputWriter.cs" />
+    <Compile Include="Runner\ResultReporter.cs" />
     <Compile Include="Runner\ResultSummary.cs" />
     <Compile Include="Runner\TcpWriter.cs" />
     <Compile Include="Runner\TextUI.cs" />

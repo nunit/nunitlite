@@ -18,12 +18,13 @@
     <NativePlatformName>Pocket PC 2003</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <IntermediateOutputPath>obj\$(Configuration)\netcf-2.0\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\netcf-2.0</OutputPath>
     <DefineConstants>TRACE;DEBUG;WindowsCE;NETCF;NETCF_2_0;CLR_2_0;NUNITLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -35,7 +36,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\netcf-2.0</OutputPath>
     <DefineConstants>TRACE;WindowsCE;NETCF;NETCF_2_0;CLR_2_0;NUNITLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>

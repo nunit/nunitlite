@@ -18,6 +18,7 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <IntermediateOutputPath>obj\$(Configuration)\netcf-3.5\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
