@@ -69,11 +69,11 @@
          The first .NET and Mono frameworks found are the
          respective net and mono defaults. -->
   <property name="supported.frameworks" 
-    value="net-4.0,net-3.5,net-2.0,net-1.1,net-1.0,netcf-3.5,netcf-2.0,netcf-1.0,mono-4.0,mono-3.5,mono-2.0,mono-1.0,silverlight-4.0,silverlight-3.0"/>
+    value="net-4.5,net-4.0,net-3.5,net-2.0,net-1.1,net-1.0,netcf-3.5,netcf-2.0,netcf-1.0,mono-4.0,mono-3.5,mono-2.0,mono-1.0,silverlight-4.0,silverlight-3.0"/>
 
   <!-- Framework versions for which packages are normally created -->
   <property name="standard.packages"
-    value="net-1.1,net-2.0,net-3.5,net-4.0,netcf-2.0,netcf-3.5" />
+    value="net-1.1,net-2.0,net-3.5,net-4.0,net-4.5,netcf-2.0,netcf-3.5" />
 
   <!-- Additional internal properties are set in the include file -->
   <include buildfile="nunitlite.build.include"/>
@@ -123,6 +123,10 @@
   <target name="net-4.0"
     description="Set runtime to .NET 4.0 for targets that follow"
     depends="set-net-4.0-runtime-config"/>
+
+  <target name="net-4.5"
+    description="Set runtime to .NET 4.5 for targets that follow"
+    depends="set-net-4.5-runtime-config"/>
 
   <target name="netcf" 
     description="Set runtime to default .NET CF version for targets that follow"

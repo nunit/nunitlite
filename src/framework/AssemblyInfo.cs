@@ -40,7 +40,9 @@ using System;
 // Set AssemblyConfiguration attribute depending on
 // how we are building the assembly.
 #if DEBUG
-#if NET_4_0
+#if NET_4_5
+[assembly: AssemblyConfiguration(".NET 4.5 Debug")]
+#elif NET_4_0
 [assembly: AssemblyConfiguration(".NET 4.0 Debug")]
 #elif NET_3_5
 [assembly: AssemblyConfiguration(".NET 3.5 Debug")]
@@ -60,7 +62,9 @@ using System;
 [assembly: AssemblyConfiguration("Silverlight 3.0 Debug")]
 #endif
 #else
-#if NET_4_0
+#if NET_4_5
+[assembly: AssemblyConfiguration(".NET 4.5")]
+#elif NET_4_0
 [assembly: AssemblyConfiguration(".NET 4.0")]
 #elif NET_3_5
 [assembly: AssemblyConfiguration(".NET 3.5")]

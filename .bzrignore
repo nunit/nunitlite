@@ -8,3 +8,4 @@ obj
 *.pidb
 *.userprefs
 package
+TestResults
