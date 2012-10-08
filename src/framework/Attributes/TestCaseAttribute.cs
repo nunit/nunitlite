@@ -126,11 +126,15 @@ namespace NUnit.Framework
 
         /// <summary>
         /// Gets the expected result (alias for use
-        /// by NUnit 2.6.x runners
+        /// by NUnit 2.6.x runners and for use
+        /// in legacy code. Remove the setter
+        /// after a time.)
         /// </summary>
+        [Obsolete("Use ExpectedResult")]
         public object Result
         {
             get { return expectedResult; }
+            set { expectedResult = value; }
         }
 
         /// <summary>
