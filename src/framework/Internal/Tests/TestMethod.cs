@@ -133,6 +133,18 @@ namespace NUnit.Framework.Internal
             get { return parms != null ? parms.Arguments : null; }
         }
 
+        internal bool IsAsync
+        {
+            get
+            {
+#if NET_4_5
+                return method.IsDefined(typeof(System.Runtime.CompilerServices.AsyncStateMachineAttribute), false);
+#else
+                return false;
+#endif
+            }
+        }
+
         #endregion
 
         #region Test Overrides

@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2007-2012 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -230,9 +230,9 @@ namespace NUnit.Framework.Internal
 
 		#endregion
 
-		#region Private Constructor for static-only class
+        #region Private Constructor for static-only class
 
-		private Reflect() { }
+        private Reflect() { }
 
 		#endregion
 

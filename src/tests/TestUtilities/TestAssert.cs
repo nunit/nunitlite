@@ -31,28 +31,70 @@ namespace NUnit.TestUtilities
     public class TestAssert
     {
         #region IsRunnable
+
+        /// <summary>
+        /// Verify that a test is runnable
+        /// </summary>
         public static void IsRunnable(Test test)
         {
             Assert.AreEqual(RunState.Runnable, test.RunState);
         }
+
+        /// <summary>
+        /// Verify that the first child test is runnable
+        /// </summary>
+        public static void FirstChildIsRunnable(Test test)
+        {
+            IsRunnable((Test)test.Tests[0]);
+        }
+
+        /// <summary>
+        /// Verify that a Type can be used to create a
+        /// runnable fixture
+        /// </summary>
         public static void IsRunnable(Type type)
         {
-            IsRunnable(type, ResultState.Success);
+            TestSuite suite = TestBuilder.MakeFixture(type);
+            Assert.NotNull(suite, "Unable to construct fixture");
+            Assert.AreEqual(RunState.Runnable, suite.RunState);
         }
+
+        /// <summary>
+        /// Verify that a Type is runnable, then run it and
+        /// verify the result.
+        /// </summary>
         public static void IsRunnable(Type type, ResultState resultState)
         {
             TestSuite suite = TestBuilder.MakeFixture(type);
-			Assert.NotNull(suite, "Unable to construct fixture");
+            Assert.NotNull(suite, "Unable to construct fixture");
             Assert.AreEqual(RunState.Runnable, suite.RunState);
             ITestResult result = TestBuilder.RunTest(suite);
             Assert.AreEqual(resultState, result.ResultState);
         }
 
+        /// <summary>
+        /// Verify that a named test method is runnable
+        /// </summary>
         public static void IsRunnable(Type type, string name)
         {
-            IsRunnable(type, name, ResultState.Success);
+            Test test = TestBuilder.MakeTestCase(type, name);
+            Assert.That(test.RunState, Is.EqualTo(RunState.Runnable));
         }
 
+        /// <summary>
+        /// Verify that the first child (usually a test case)
+        /// of a named test method is runnable
+        /// </summary>
+        public static void FirstChildIsRunnable(Type type, string name)
+        {
+            var suite = TestBuilder.MakeTestCase(type, name);
+            TestAssert.FirstChildIsRunnable(suite);
+        }
+
+        /// <summary>
+        /// Verify that a named test method is runnable, then
+        /// run it and verify the result.
+        /// </summary>
         public static void IsRunnable(Type type, string name, ResultState resultState)
         {
             Test test = TestBuilder.MakeTestCase(type, name);
@@ -63,6 +105,7 @@ namespace NUnit.TestUtilities
                 result = (ITestResult)result.Children[0];
             Assert.That(result.ResultState, Is.EqualTo(resultState));
         }
+
         #endregion
 
         #region IsNotRunnable
@@ -85,9 +128,14 @@ namespace NUnit.TestUtilities
             IsNotRunnable(TestBuilder.MakeTestCase(type, name));
         }
 
-        public static void ChildNotRunnable(Type type, string name)
+        public static void FirstChildIsNotRunnable(Test suite)
         {
-            IsNotRunnable((Test)TestBuilder.MakeParameterizedMethodSuite(type, name).Tests[0]);
+            IsNotRunnable((Test)suite.Tests[0]);
+        }
+
+        public static void FirstChildIsNotRunnable(Type type, string name)
+        {
+            FirstChildIsNotRunnable(TestBuilder.MakeParameterizedMethodSuite(type, name));
         }
         #endregion
 

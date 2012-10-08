@@ -37,19 +37,19 @@ namespace NUnit.Framework.Internal
         [Test]
 		public void InstanceTestMethodIsRunnable()
 		{
-			TestAssert.IsRunnable( fixtureType, "InstanceTestMethod" );
+            TestAssert.IsRunnable(fixtureType, "InstanceTestMethod", ResultState.Success);
 		}
 
 		[Test]
 		public void StaticTestMethodIsRunnable()
 		{
-			TestAssert.IsRunnable( fixtureType, "StaticTestMethod" );
+            TestAssert.IsRunnable(fixtureType, "StaticTestMethod", ResultState.Success);
 		}
 
 		[Test]
 		public void TestMethodWithoutParametersWithArgumentsProvidedIsNotRunnable()
 		{
-			TestAssert.ChildNotRunnable(fixtureType, "TestMethodWithoutParametersWithArgumentsProvided");
+			TestAssert.FirstChildIsNotRunnable(fixtureType, "TestMethodWithoutParametersWithArgumentsProvided");
 		}
 
         [Test]
@@ -61,13 +61,13 @@ namespace NUnit.Framework.Internal
         [Test]
         public void TestMethodWithArgumentsProvidedIsRunnable()
         {
-            TestAssert.IsRunnable(fixtureType, "TestMethodWithArgumentsProvided");
+            TestAssert.IsRunnable(fixtureType, "TestMethodWithArgumentsProvided", ResultState.Success);
         }
 
         [Test]
         public void TestMethodWithWrongNumberOfArgumentsProvidedIsNotRunnable()
         {
-            TestAssert.ChildNotRunnable(fixtureType, "TestMethodWithWrongNumberOfArgumentsProvided");
+            TestAssert.FirstChildIsNotRunnable(fixtureType, "TestMethodWithWrongNumberOfArgumentsProvided");
         }
 
         [Test]
@@ -85,13 +85,13 @@ namespace NUnit.Framework.Internal
         [Test]
         public void StaticTestMethodWithArgumentsProvidedIsRunnable()
         {
-            TestAssert.IsRunnable(fixtureType, "StaticTestMethodWithArgumentsProvided");
+            TestAssert.IsRunnable(fixtureType, "StaticTestMethodWithArgumentsProvided", ResultState.Success);
         }
 
         [Test]
         public void StaticTestMethodWithWrongNumberOfArgumentsProvidedIsNotRunnable()
         {
-            TestAssert.ChildNotRunnable(fixtureType, "StaticTestMethodWithWrongNumberOfArgumentsProvided");
+            TestAssert.FirstChildIsNotRunnable(fixtureType, "StaticTestMethodWithWrongNumberOfArgumentsProvided");
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace NUnit.Framework.Internal
         [Test]
         public void TestMethodWithConvertibleArgumentsIsRunnable()
         {
-            TestAssert.IsRunnable(fixtureType, "TestMethodWithConvertibleArguments");
+            TestAssert.IsRunnable(fixtureType, "TestMethodWithConvertibleArguments", ResultState.Success);
         }
 
         [Test]

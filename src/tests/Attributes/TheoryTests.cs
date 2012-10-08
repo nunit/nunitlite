@@ -36,7 +36,7 @@ namespace NUnit.Framework.Tests
         [Test]
         public void TheoryWithNoArgumentsIsTreatedAsTest()
         {
-            TestAssert.IsRunnable(fixtureType, "TheoryWithNoArguments");
+            TestAssert.IsRunnable(fixtureType, "TheoryWithNoArguments", ResultState.Success);
         }
 
         [Test]

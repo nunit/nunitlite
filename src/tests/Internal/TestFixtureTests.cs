@@ -101,7 +101,7 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunConstructorWithArgsSupplied()
         {
-            TestAssert.IsRunnable(typeof(FixtureWithArgsSupplied));
+            TestAssert.IsRunnable(typeof(FixtureWithArgsSupplied), ResultState.Success);
         }
 
         [Test]
@@ -113,13 +113,13 @@ namespace NUnit.Framework.Internal
 		[Test] 
 		public void CanRunMultipleSetUp()
 		{
-            TestAssert.IsRunnable(typeof(MultipleSetUpAttributes));
+            TestAssert.IsRunnable(typeof(MultipleSetUpAttributes), ResultState.Success);
 		}
 
 		[Test] 
 		public void CanRunMultipleTearDown()
 		{
-            TestAssert.IsRunnable(typeof(MultipleTearDownAttributes));
+            TestAssert.IsRunnable(typeof(MultipleTearDownAttributes), ResultState.Success);
 		}
 
 		[Test]
@@ -139,13 +139,13 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunFixtureDerivedFromAbstractTestFixture()
         {
-            TestAssert.IsRunnable(typeof(DerivedFromAbstractTestFixture));
+            TestAssert.IsRunnable(typeof(DerivedFromAbstractTestFixture), ResultState.Success);
         }
 
         [Test]
         public void CanRunFixtureDerivedFromAbstractDerivedTestFixture()
         {
-            TestAssert.IsRunnable(typeof(DerivedFromAbstractDerivedTestFixture));
+            TestAssert.IsRunnable(typeof(DerivedFromAbstractDerivedTestFixture), ResultState.Success);
         }
 
 //		[Test]
@@ -165,19 +165,19 @@ namespace NUnit.Framework.Internal
         [Test] 
 		public void CanRunMultipleTestFixtureSetUp()
 		{
-            TestAssert.IsRunnable(typeof(MultipleFixtureSetUpAttributes));
+            TestAssert.IsRunnable(typeof(MultipleFixtureSetUpAttributes), ResultState.Success);
 		}
 
 		[Test] 
 		public void CanRunMultipleTestFixtureTearDown()
 		{
-            TestAssert.IsRunnable(typeof(MultipleFixtureTearDownAttributes));
+            TestAssert.IsRunnable(typeof(MultipleFixtureTearDownAttributes), ResultState.Success);
 		}
 
         [Test]
         public void CanRunTestFixtureWithNoTests()
         {
-            TestAssert.IsRunnable(typeof(FixtureWithNoTests));
+            TestAssert.IsRunnable(typeof(FixtureWithNoTests), ResultState.Success);
         }
 
 #if CLR_2_0 || CLR_4_0
@@ -190,7 +190,7 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunStaticFixture()
         {
-            TestAssert.IsRunnable(typeof(StaticFixtureWithoutTestFixtureAttribute));
+            TestAssert.IsRunnable(typeof(StaticFixtureWithoutTestFixtureAttribute), ResultState.Success);
         }
 
 #if !NETCF
@@ -263,7 +263,7 @@ namespace NUnit.Framework.Internal
 		[Test] 
 		public void CanRunProtectedSetUp()
 		{
-            TestAssert.IsRunnable(typeof(ProtectedSetUp));
+            TestAssert.IsRunnable(typeof(ProtectedSetUp), ResultState.Success);
 		}
 #endif
 
@@ -273,7 +273,7 @@ namespace NUnit.Framework.Internal
 		[Test] 
 		public void CanRunStaticSetUp()
 		{
-            TestAssert.IsRunnable(typeof(StaticSetUp));
+            TestAssert.IsRunnable(typeof(StaticSetUp), ResultState.Success);
 		}
 
 		[Test]
@@ -306,14 +306,14 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunProtectedTearDown()
         {
-            TestAssert.IsRunnable(typeof(ProtectedTearDown));
+            TestAssert.IsRunnable(typeof(ProtectedTearDown), ResultState.Success);
         }
 #endif
 
 		[Test] 
 		public void CanRunStaticTearDown()
 		{
-            TestAssert.IsRunnable(typeof(StaticTearDown));
+            TestAssert.IsRunnable(typeof(StaticTearDown), ResultState.Success);
 		}
 
 		[Test]
@@ -346,14 +346,14 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunProtectedFixtureSetUp()
         {
-            TestAssert.IsRunnable(typeof(ProtectedFixtureSetUp));
+            TestAssert.IsRunnable(typeof(ProtectedFixtureSetUp), ResultState.Success);
         }
 #endif
 
 		[Test] 
 		public void CanRunStaticFixtureSetUp()
 		{
-            TestAssert.IsRunnable(typeof(StaticFixtureSetUp));
+            TestAssert.IsRunnable(typeof(StaticFixtureSetUp), ResultState.Success);
 		}
 
 		[Test]
@@ -386,14 +386,14 @@ namespace NUnit.Framework.Internal
         [Test]
         public void CanRunProtectedFixtureTearDown()
         {
-            TestAssert.IsRunnable(typeof(ProtectedFixtureTearDown));
+            TestAssert.IsRunnable(typeof(ProtectedFixtureTearDown), ResultState.Success);
         }
 #endif
 
 		[Test] 
 		public void CanRunStaticFixtureTearDown()
 		{
-            TestAssert.IsRunnable(typeof(StaticFixtureTearDown));
+            TestAssert.IsRunnable(typeof(StaticFixtureTearDown), ResultState.Success);
 		}
 
 //		[TestFixture]
