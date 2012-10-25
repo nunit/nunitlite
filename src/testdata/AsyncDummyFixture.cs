@@ -61,13 +61,13 @@ namespace NUnit.TestData
         }
 
         [TestCase(4)]
-        public async Task<int> AsyncGenericTask_TestCase()
+        public async Task<int> AsyncGenericTaskTestCase()
         {
             return await Task.Run(() => 1);
         }
 
         [TestCase(ExpectedResult = 1)]
-        public async Task<int> AsyncGenericTask_TestCaseWithExpectedResult()
+        public async Task<int> AsyncGenericTaskTestCaseWithExpectedResult()
         {
             return await Task.Run(() => 1);
         }
