@@ -133,8 +133,8 @@ namespace NUnit.Framework
         [Obsolete("Use ExpectedResult")]
         public object Result
         {
-            get { return expectedResult; }
-            set { expectedResult = value; }
+            get { return ExpectedResult; }
+            set { ExpectedResult = value; }
         }
 
         /// <summary>
