@@ -171,6 +171,7 @@
     <Compile Include="Framework\SyntaxTests.cs" />
     <Compile Include="Framework\TestContextTests.cs" />
     <Compile Include="Framework\TestResultTests.cs" />
+    <Compile Include="Internal\AssemblyHelperTests.cs" />
     <Compile Include="Internal\CultureSettingAndDetectionTests.cs" />
     <Compile Include="Internal\DeduceTypeArgsFromArgs.cs" />
     <Compile Include="Internal\GenericTestFixtureTests.cs" />

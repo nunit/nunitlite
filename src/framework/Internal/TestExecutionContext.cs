@@ -34,7 +34,9 @@ using System.Security.Principal;
 #endif
 
 using NUnit.Framework.Api;
+#if !NETCF
 using System.Runtime.Remoting.Messaging;
+#endif
 
 namespace NUnit.Framework.Internal
 {
@@ -232,7 +234,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// The current context, head of the list of saved contexts.
         /// </summary>
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCF
 #if (CLR_2_0 || CLR_4_0) && !NETCF
         [ThreadStatic]
 #endif
@@ -247,7 +249,7 @@ namespace NUnit.Framework.Internal
         {
             get 
             {
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCF
                 if (current == null)
                     current = new TestExecutionContext();
 
@@ -264,7 +266,7 @@ namespace NUnit.Framework.Internal
 
         internal static void SetCurrentContext(TestExecutionContext ec)
         {
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCF
             current = ec;
 #else
             CallContext.LogicalSetData("NUnit.Framework.TestContext", ec);
