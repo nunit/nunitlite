@@ -42,7 +42,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// The elapsed time for executing this test
         /// </summary>
-        private double time = 0.0;
+        private TimeSpan time = TimeSpan.Zero;
 
         /// <summary>
         /// The test that this result pertains to
@@ -137,7 +137,7 @@ namespace NUnit.Framework.Internal
         /// <summary>
         /// Gets or sets the elapsed time for running the test
         /// </summary>
-        public double Time
+        public TimeSpan Duration
         {
             get { return time; }
             set { time = value; }
@@ -278,7 +278,7 @@ namespace NUnit.Framework.Internal
             if (ResultState.Label != string.Empty) // && ResultState.Label != ResultState.Status.ToString())
                 thisNode.AddAttribute("label", ResultState.Label);
 
-            thisNode.AddAttribute("time", this.Time.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture));
+            thisNode.AddAttribute("time", this.Duration.ToString());
 
             if (this.test is TestSuite)
             {

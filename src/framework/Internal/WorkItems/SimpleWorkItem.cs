@@ -24,6 +24,7 @@
 using System;
 using System.Threading;
 using NUnit.Framework.Internal.Commands;
+
 namespace NUnit.Framework.Internal.WorkItems
 {
     /// <summary>

@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework.Internal.Commands;
 using NUnit.Framework.Api;
@@ -223,14 +224,25 @@ namespace NUnit.Framework.Internal.WorkItems
 
             TestExecutionContext.SetCurrentContext(_context);
 
+#if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+#endif
+
             try
             {
                 PerformWork();
             }
             finally
             {
+#if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
+                stopwatch.Stop();
+                Result.Duration = stopwatch.Elapsed;
+#else
+                Result.Duration = DateTime.Now - Context.StartTime;
+#endif
+
                 Result.AssertCount = _context.AssertCount;
-                Result.Time = (DateTime.Now - _context.StartTime).TotalSeconds;
 
                 _context.Listener.TestFinished(Result);
 

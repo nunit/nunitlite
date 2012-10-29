@@ -93,6 +93,7 @@ namespace NUnit.Framework.Internal.WorkItems
             // Fall through in case there were no child tests to run.
             // Otherwise, this is done in the completion event.
             PerformOneTimeTearDown();
+
             WorkItemComplete();
         }
 

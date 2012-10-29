@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics;
 using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal.Commands
@@ -51,15 +52,29 @@ namespace NUnit.Framework.Internal.Commands
         /// <returns>A TestResult</returns>
         public override TestResult Execute(TestExecutionContext context)
         {
+            // TODO: This command duplicates the calculation of the
+            // duration of the test because that calculation is 
+            // normally performed at a higher level. Most likely,
+            // we should move the maxtime calculation to the
+            // higher level eventually.
+#if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+#endif
+
             TestResult testResult = innerCommand.Execute(context);
 
-            TimeSpan span = DateTime.Now.Subtract(context.StartTime);
-            testResult.Time = span.TotalSeconds;// (double)span.Ticks / (double)TimeSpan.TicksPerSecond;
-
+#if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
+            stopwatch.Stop();
+            testResult.Duration = stopwatch.Elapsed;
+#else
+            testResult.Duration = DateTime.Now - context.StartTime;
+#endif
 
             if (testResult.ResultState == ResultState.Success)
             {
-                int elapsedTime = (int)Math.Round(testResult.Time * 1000.0);
+                //int elapsedTime = (int)Math.Round(testResult.Time * 1000.0);
+                double elapsedTime = testResult.Duration.TotalMilliseconds;
 
                 if (elapsedTime > maxTime)
                     testResult.SetResult(ResultState.Failure,
