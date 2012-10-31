@@ -170,8 +170,8 @@ namespace NUnit.Framework.Internal.WorkItems
             if (Test.Properties.ContainsKey(PropertyNames.Timeout))
                 timeout = (int)Test.Properties.Get(PropertyNames.Timeout);
 
-            if (Test.RequiresThread || Test is TestMethod && timeout > 0)
-                RunTestOnOwnThread(timeout);
+            if (Test is TestMethod && timeout > 0)
+                RunTestWithTimeout(timeout);
             else
                 RunTest();
 #else
@@ -180,37 +180,34 @@ namespace NUnit.Framework.Internal.WorkItems
         }
 
 #if (CLR_2_0 || CLR_4_0) && !NETCF && !SILVERLIGHT
-        private void RunTestOnOwnThread(int timeout)
+        private void RunTestWithTimeout(int timeout)
         {
             Thread thread = new Thread(new ThreadStart(RunTest));
 
             thread.Start();
 
-            if (!Test.IsAsynchronous || timeout > 0)
+            if (timeout <= 0)
+                timeout = Timeout.Infinite;
+
+            thread.Join(timeout);
+
+            if (thread.IsAlive)
             {
-                if (timeout <= 0)
-                    timeout = Timeout.Infinite;
+                ThreadUtility.Kill(thread);
 
-                thread.Join(timeout);
+                // NOTE: Without the use of Join, there is a race condition here.
+                // The thread sets the result to Cancelled and our code below sets
+                // it to Failure. In order for the result to be shown as a failure,
+                // we need to ensure that the following code executes after the
+                // thread has terminated. There is a risk here: the test code might
+                // refuse to terminate. However, it's more important to deal with
+                // the normal rather than a pathological case.
+                thread.Join();
 
-                if (thread.IsAlive)
-                {
-                    ThreadUtility.Kill(thread);
+                Result.SetResult(ResultState.Failure,
+                    string.Format("Test exceeded Timeout value of {0}ms", timeout));
 
-                    // NOTE: Without the use of Join, there is a race condition here.
-                    // The thread sets the result to Cancelled and our code below sets
-                    // it to Failure. In order for the result to be shown as a failure,
-                    // we need to ensure that the following code executes after the
-                    // thread has terminated. There is a risk here: the test code might
-                    // refuse to terminate. However, it's more important to deal with
-                    // the normal rather than a pathological case.
-                    thread.Join();
-
-                    Result.SetResult(ResultState.Failure,
-                        string.Format("Test exceeded Timeout value of {0}ms", timeout));
-
-                    WorkItemComplete();
-                }
+                WorkItemComplete();
             }
         }
 #endif

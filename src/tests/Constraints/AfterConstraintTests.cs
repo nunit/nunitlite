@@ -69,7 +69,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.IsFalse(theConstraint.Matches(del));
         }
 
-        [Test, Asynchronous]
+        [Test]
         public void SimpleTest()
         {
             var worker = new BackgroundWorker();
@@ -79,7 +79,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(DelegateReturningValue, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
         }
 
-        [Test, Asynchronous]
+        [Test]
         public void SimpleTestUsingReference()
         {
             var worker = new BackgroundWorker();
@@ -101,7 +101,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(DelegateReturningZero, new DelayedConstraint(new EqualConstraint(0), -1));
         }
 
-        [Test, Asynchronous]
+        [Test]
         public void CanTestContentsOfList()
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -112,7 +112,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(list, Has.Count.EqualTo(1).After(5000, 100));
         }
 
-        [Test, Asynchronous]
+        [Test]
         public void CanTestContentsOfRefList()
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -123,7 +123,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(ref list, Has.Count.EqualTo(1).After(5000, 100));
         }
 
-        [Test, Asynchronous]
+        [Test]
         public void CanTestContentsOfDelegateReturningList()
         {
             var worker = new BackgroundWorker();
@@ -134,7 +134,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(() => list, Has.Count.EqualTo(1).After(5000, 100));
         }
 
-        [Test, Asynchronous]
+        [Test]
 		public void CanTestInitiallyNullReference()
 		{
 			string statusString = null; // object starts off as null
@@ -147,7 +147,7 @@ namespace NUnit.Framework.Constraints.Tests
 			Assert.That(ref statusString, Has.Length.GreaterThan(0).After(3000, 100));
 		}
 
-        [Test, Asynchronous]
+        [Test]
 		public void CanTestInitiallyNullDelegate()
 		{
 			string statusString = null; // object starts off as null

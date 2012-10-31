@@ -82,16 +82,6 @@ namespace NUnit.Framework.Internal
         /// </summary>
         protected MethodInfo[] tearDownMethods;
 
-        /// <summary>
-        /// True if the test should run on its own thread
-        /// </summary>
-        private bool requiresThread;
-
-        /// <summary>
-        /// True if the test should run asynchronously
-        /// </summary>
-        private bool isAsynchronous;
-
         #endregion
 
         #region Construction
@@ -407,18 +397,6 @@ namespace NUnit.Framework.Internal
 
                 return tearDownMethods;
             }
-        }
-
-        internal bool RequiresThread
-        {
-            get { return requiresThread; }
-            set { requiresThread = value; }
-        }
-
-        internal bool IsAsynchronous
-        {
-            get { return isAsynchronous; }
-            set { isAsynchronous = value; }
         }
 
         #endregion

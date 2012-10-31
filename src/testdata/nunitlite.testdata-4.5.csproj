@@ -63,7 +63,6 @@
     <Compile Include="AssertFailFixture.cs" />
     <Compile Include="AssertIgnoreData.cs" />
     <Compile Include="AsyncDummyFixture.cs" />
-    <Compile Include="AsynchronousFixture.cs" />
     <Compile Include="AsyncRealFixture.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -61,7 +61,6 @@
     <Compile Include="AssertCountFixture.cs" />
     <Compile Include="AssertFailFixture.cs" />
     <Compile Include="AssertIgnoreData.cs" />
-    <Compile Include="AsynchronousFixture.cs" />
     <Compile Include="AttributeInheritanceData.cs" />
     <Compile Include="CategoryAttributeData.cs" />
     <Compile Include="CultureAttributeData.cs" />
