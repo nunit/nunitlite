@@ -256,6 +256,8 @@
     <fail message="Testing under Silverlight is not yet implemented."
       if="${runtime.platform=='silverlight'}"/>
 
+    <property name="nant.settings.currentframework" value="${runtime.config}"/>
+
     <echo message="*"/>
     <echo message="* Testing ${runtime.config} ${build.config} build"/>
     <echo message="*    Running under ${nant.settings.currentframework}"/>

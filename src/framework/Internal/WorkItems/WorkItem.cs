@@ -222,8 +222,7 @@ namespace NUnit.Framework.Internal.WorkItems
             TestExecutionContext.SetCurrentContext(_context);
 
 #if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            long startTicks = Stopwatch.GetTimestamp();
 #endif
 
             try
@@ -233,8 +232,9 @@ namespace NUnit.Framework.Internal.WorkItems
             finally
             {
 #if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
-                stopwatch.Stop();
-                Result.Duration = stopwatch.Elapsed;
+                long tickCount = Stopwatch.GetTimestamp() - startTicks;
+                double seconds = (double)tickCount / Stopwatch.Frequency;
+                Result.Duration = TimeSpan.FromSeconds(seconds);
 #else
                 Result.Duration = DateTime.Now - Context.StartTime;
 #endif

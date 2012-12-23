@@ -184,7 +184,7 @@
     <property name="runtime.version" value="2.0"/>
     <property name="runtime.config" value="net-2.0"/>
     <property name="runtime.defines" value="NET,NET_2_0,CLR_2_0"/>
-    <property name="build.framework" value="net-3.5"/>
+    <property name="build.framework" value="net-4.0"/>
 	<property name="test.platforms" value="net-2.0,mono-2.0"/>
   </target>
 	
@@ -198,7 +198,7 @@
     <property name="runtime.version" value="3.0"/>
     <property name="runtime.config" value="net-3.0"/>
     <property name="runtime.defines" value="NET,NET_3_0,CLR_2_0"/>
-	<property name="build.framework" value="net-3.5"/>
+	<property name="build.framework" value="net-4.0"/>
 	<property name="test.platforms" value="net-3.0,mono-3.0"/>
   </target>
 
@@ -212,7 +212,7 @@
 		<property name="runtime.version" value="3.5"/>
 		<property name="runtime.config" value="net-3.5"/>
 		<property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
-		<property name="build.framework" value="net-3.5"/>
+		<property name="build.framework" value="net-4.0"/>
 		<property name="test.platforms" value="net-3.5,mono-3.5"/>
 	</target>
 

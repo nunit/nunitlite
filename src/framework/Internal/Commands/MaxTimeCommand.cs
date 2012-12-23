@@ -58,15 +58,15 @@ namespace NUnit.Framework.Internal.Commands
             // we should move the maxtime calculation to the
             // higher level eventually.
 #if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            long startTicks = Stopwatch.GetTimestamp();
 #endif
 
             TestResult testResult = innerCommand.Execute(context);
 
 #if (CLR_2_0 || CLR_4_0) && !SILVERLIGHT && !NETCF_2_0
-            stopwatch.Stop();
-            testResult.Duration = stopwatch.Elapsed;
+            long tickCount = Stopwatch.GetTimestamp() - startTicks;
+            double seconds = (double)tickCount / Stopwatch.Frequency;
+            testResult.Duration = TimeSpan.FromSeconds(seconds);
 #else
             testResult.Duration = DateTime.Now - context.StartTime;
 #endif
