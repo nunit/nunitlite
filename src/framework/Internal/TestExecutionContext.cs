@@ -53,6 +53,9 @@ namespace NUnit.Framework.Internal
 	/// object on the top of the stack.
 	/// </summary>
 	public class TestExecutionContext
+#if !SILVERLIGHT && !NETCF
+        : ILogicalThreadAffinative
+#endif
 	{
         #region Instance Fields
 
@@ -255,7 +258,7 @@ namespace NUnit.Framework.Internal
 
                 return current; 
 #else
-                return CallContext.LogicalGetData("NUnit.Framework.TestContext") as TestExecutionContext;
+                return CallContext.GetData("NUnit.Framework.TestContext") as TestExecutionContext;
 #endif
             }
         }
@@ -269,7 +272,7 @@ namespace NUnit.Framework.Internal
 #if SILVERLIGHT || NETCF
             current = ec;
 #else
-            CallContext.LogicalSetData("NUnit.Framework.TestContext", ec);
+            CallContext.SetData("NUnit.Framework.TestContext", ec);
 #endif
         }
 

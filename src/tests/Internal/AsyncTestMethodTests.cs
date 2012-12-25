@@ -42,7 +42,7 @@ namespace NUnit.Framework.Internal
                 yield return new object[] { Method("AsyncTaskResultError"), ResultState.NotRunnable, 0 };
 
                 yield return new object[] { Method("AsyncTaskResultCheckSuccess"), ResultState.Success, 1 };
-                //yield return new object[] { Method("AsyncVoidTestCaseWithParametersSuccess(0, 0)), ResultState.Success, 1 };
+                yield return new object[] { Method("AsyncVoidTestCaseWithParametersSuccess"), ResultState.Success, 1 };
                 yield return new object[] { Method("AsyncTaskResultCheckSuccessReturningNull"), ResultState.Success, 1 };
                 yield return new object[] { Method("AsyncTaskResultCheckFailure"), ResultState.Failure, 1 };
                 yield return new object[] { Method("AsyncTaskResultCheckError"), ResultState.Failure, 0 };
@@ -66,7 +66,15 @@ namespace NUnit.Framework.Internal
                 yield return new object[] { Method("AsyncTaskMultipleSuccess"), ResultState.Success, 1 };
                 yield return new object[] { Method("AsyncTaskMultipleFailure"), ResultState.Failure, 1 };
                 yield return new object[] { Method("AsyncTaskMultipleError"), ResultState.Error, 0 };
-			}
+
+                yield return new object[] { Method("VoidCheckTestContextAcrossTasks"), ResultState.Success, 2 };
+                yield return new object[] { Method("VoidCheckTestContextWithinTestBody"), ResultState.Success, 2 };
+                yield return new object[] { Method("TaskCheckTestContextAcrossTasks"), ResultState.Success, 2 };
+                yield return new object[] { Method("TaskCheckTestContextWithinTestBody"), ResultState.Success, 2 };
+
+                //yield return new object[] { Method("VoidAsyncVoidChildCompletingEarlierThanTest"), ResultState.Success, 0 };
+                yield return new object[] { Method("VoidAsyncVoidChildThrowingImmediately"), ResultState.Success, 0 };
+            }
 		}
 
 		[Test]
