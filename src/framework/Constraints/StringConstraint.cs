@@ -33,7 +33,7 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// The expected value
         /// </summary>
-        protected string expected;
+        protected readonly string expected;
 
         /// <summary>
         /// Indicates whether tests should be case-insensitive

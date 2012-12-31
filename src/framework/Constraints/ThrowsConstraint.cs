@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Constraints
 {
@@ -34,7 +35,7 @@ namespace NUnit.Framework.Constraints
         private Exception caughtException;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:ThrowsConstraint"/> class,
+        /// Initializes a new instance of the <see cref="ThrowsConstraint"/> class,
         /// using a constraint to be applied to the exception.
         /// </summary>
         /// <param name="baseConstraint">A constraint to apply to the caught exception.</param>
@@ -60,39 +61,27 @@ namespace NUnit.Framework.Constraints
         /// <returns>True if an exception is thrown and the constraint succeeds, otherwise false</returns>
         public override bool Matches(object actual)
         {
-            TestDelegate code = actual as TestDelegate;
-            if (code == null)
-                throw new ArgumentException(
-                    string.Format("The actual value must be a TestDelegate but was {0}", actual.GetType().Name), "actual");
+            caughtException = ExceptionInterceptor.Intercept(actual);
 
-            caughtException = null;
+            if (caughtException == null)
+                return false;
 
-            try
-            {
-                code();
-            }
-            catch (Exception ex)
-            {
-                caughtException = ex;
-            }
-
-            bool hasSucceeded = caughtException != null &&
-                (baseConstraint == null || baseConstraint.Matches(caughtException));
-
-            return hasSucceeded;
+            return baseConstraint == null || baseConstraint.Matches(caughtException);
         }
 
-#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Converts an ActualValueDelegate to a TestDelegate
         /// before calling the primary overload.
         /// </summary>
-        /// <param name="del"></param>
-        /// <returns></returns>
+#if CLR_2_0 || CLR_4_0
+        public override bool Matches<T>(ActualValueDelegate<T> del)
+        {
+            return Matches(new GenericInvocationDescriptor<T>(del));
+        }
+#else
         public override bool Matches(ActualValueDelegate del)
         {
-            TestDelegate testDelegate = new TestDelegate(delegate { del(); });
-            return Matches((object)testDelegate);
+            return Matches(new ObjectInvocationDescriptor(del));
         }
 #endif
 
@@ -137,4 +126,142 @@ namespace NUnit.Framework.Constraints
             return base.GetStringRepresentation();
         }
     }
+
+    #region ExceptionInterceptor
+
+    internal class ExceptionInterceptor
+    {
+        private ExceptionInterceptor() { }
+
+        internal static Exception Intercept(object invocation)
+        {
+            IInvocationDescriptor invocationDescriptor = GetInvocationDescriptor(invocation);
+
+#if NET_4_5
+            if (AsyncInvocationRegion.IsAsyncOperation(invocationDescriptor.Delegate))
+            {
+                using (AsyncInvocationRegion region = AsyncInvocationRegion.Create(invocationDescriptor.Delegate))
+                {
+                    object result = invocationDescriptor.Invoke();
+
+                    try
+                    {
+                        region.WaitForPendingOperationsToComplete(result);
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        return ex;
+                    }
+                }
+            }
+            else
+#endif
+            {
+                try
+                {
+                    invocationDescriptor.Invoke();
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    return ex;
+                }
+            }
+        }
+
+        private static IInvocationDescriptor GetInvocationDescriptor(object actual)
+        {
+            IInvocationDescriptor invocationDescriptor = actual as IInvocationDescriptor;
+
+            if (invocationDescriptor == null)
+            {
+                TestDelegate testDelegate = actual as TestDelegate;
+
+                if (testDelegate == null)
+                    throw new ArgumentException(
+                        String.Format("The actual value must be a TestDelegate or ActualValueDelegate but was {0}", actual.GetType().Name),
+                        "actual");
+
+                invocationDescriptor = new VoidInvocationDescriptor(testDelegate);
+            }
+
+            return invocationDescriptor;
+        }
+    }
+
+    #endregion
+
+    #region InvocationDescriptor
+
+    internal class VoidInvocationDescriptor : IInvocationDescriptor
+    {
+        private readonly TestDelegate _del;
+
+        public VoidInvocationDescriptor(TestDelegate del)
+        {
+            _del = del;
+        }
+
+        public object Invoke()
+        {
+            _del();
+            return null;
+        }
+
+        public Delegate Delegate
+        {
+            get { return _del; }
+        }
+    }
+
+#if CLR_2_0 || CLR_4_0
+    internal class GenericInvocationDescriptor<T> : IInvocationDescriptor
+    {
+        private readonly ActualValueDelegate<T> _del;
+
+        public GenericInvocationDescriptor(ActualValueDelegate<T> del)
+        {
+            _del = del;
+        }
+
+        public object Invoke()
+        {
+            return _del();
+        }
+
+        public Delegate Delegate
+        {
+            get { return _del; }
+        }
+    }
+#else
+	internal class ObjectInvocationDescriptor : IInvocationDescriptor
+	{
+		private readonly ActualValueDelegate _del;
+
+		public ObjectInvocationDescriptor(ActualValueDelegate del)
+		{
+			_del = del;
+		}
+
+		public object Invoke()
+		{
+			return _del();
+		}
+
+		public Delegate Delegate
+		{
+			get { return _del; }
+		}
+	}
+#endif
+
+    internal interface IInvocationDescriptor
+    {
+        object Invoke();
+        Delegate Delegate { get; }
+    }
+
+    #endregion
 }

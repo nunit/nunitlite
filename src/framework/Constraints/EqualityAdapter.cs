@@ -228,4 +228,14 @@ namespace NUnit.Framework.Constraints
         #endregion
 #endif
     }
+
+    /// <summary>
+    /// EqualityAdapterList represents a list of EqualityAdapters
+    /// in a common class across platforms.
+    /// </summary>
+#if CLR_2_0 || CLR_4_0
+    class EqualityAdapterList : System.Collections.Generic.List<EqualityAdapter> { }
+#else
+    class EqualityAdapterList : ArrayList { }
+#endif
 }

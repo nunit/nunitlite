@@ -21,16 +21,21 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if (CLR_2_0 || CLR_4_0) && !NETCF
+#if !NETCF
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+#if CLR_2_0 || CLR_4_0
+using System.Collections.Generic;
+using ActualValueDelegate = NUnit.Framework.Constraints.ActualValueDelegate<object>;
+#else
+using ActualValueDelegate = NUnit.Framework.Constraints.ActualValueDelegate;
+#endif
 
 namespace NUnit.Framework.Constraints.Tests
 {
     [TestFixture]
-    public class AfterConstraintTest : ConstraintTestBase
+    public class DelayedConstraintTest : ConstraintTestBase
     {
         private static bool value;
 
@@ -72,20 +77,14 @@ namespace NUnit.Framework.Constraints.Tests
         [Test]
         public void SimpleTest()
         {
-            var worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += delegate { value = true; };
-            worker.DoWork += delegate { Thread.Sleep(500); };
-            worker.RunWorkerAsync();
+            SetValueTrueAfterDelay(500);
             Assert.That(DelegateReturningValue, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
         }
 
         [Test]
         public void SimpleTestUsingReference()
         {
-            var worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += delegate { value = true; };
-            worker.DoWork += delegate { Thread.Sleep(500); };
-            worker.RunWorkerAsync();
+            SetValueTrueAfterDelay(500);
             Assert.That(ref value, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
         }
 
@@ -101,6 +100,7 @@ namespace NUnit.Framework.Constraints.Tests
             Assert.That(DelegateReturningZero, new DelayedConstraint(new EqualConstraint(0), -1));
         }
 
+#if CLR_2_0 || CLR_4_0
         [Test]
         public void CanTestContentsOfList()
         {
@@ -159,6 +159,7 @@ namespace NUnit.Framework.Constraints.Tests
 			
 			Assert.That(() => statusString, Has.Length.GreaterThan(0).After(3000, 100));
 		}
+#endif
 
         private static int setValueTrueDelay;
 

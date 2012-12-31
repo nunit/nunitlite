@@ -21,11 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Framework.Api;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Threading;
+using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal.Commands
 {
@@ -80,23 +78,43 @@ namespace NUnit.Framework.Internal.Commands
         {
 #if NET_4_5
             if (MethodHelper.IsAsyncMethod(testMethod.Method))
-            {
-                if (testMethod.Method.ReturnType == typeof(void))
-                    return RunAsyncVoidTestMethod(context);
-                else
-                    return RunAsyncTaskTestMethod(context);
-            }
+                return RunAsyncTestMethod(context);
+            //{
+            //    if (testMethod.Method.ReturnType == typeof(void))
+            //        return RunAsyncVoidTestMethod(context);
+            //    else
+            //        return RunAsyncTaskTestMethod(context);
+            //}
             else
 #endif
                 return RunNonAsyncTestMethod(context);
         }
+
+#if NET_4_5
+        private object RunAsyncTestMethod(TestExecutionContext context)
+        {
+            using (AsyncInvocationRegion region = AsyncInvocationRegion.Create(testMethod.Method))
+            {
+                object result = Reflect.InvokeMethod(testMethod.Method, context.TestObject, arguments);
+
+                try
+                {
+                    return region.WaitForPendingOperationsToComplete(result);
+                }
+                catch (Exception e)
+                {
+                    throw new NUnitException("Rethrown", e);
+                }
+            }
+        }
+#endif
 
         private object RunNonAsyncTestMethod(TestExecutionContext context)
         {
             return Reflect.InvokeMethod(testMethod.Method, context.TestObject, arguments);
         }
 
-#if NET_4_5
+#if NET_4_5x
         private object RunAsyncVoidTestMethod(TestExecutionContext context)
         {
             var previousContext = SynchronizationContext.Current;

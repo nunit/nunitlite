@@ -44,7 +44,7 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-            return Left.Matches(actual) || Right.Matches(actual);
+            return left.Matches(actual) || right.Matches(actual);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The MessageWriter to receive the description</param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            Left.WriteDescriptionTo(writer);
+            left.WriteDescriptionTo(writer);
             writer.WriteConnector("or");
-            Right.WriteDescriptionTo(writer);
+            right.WriteDescriptionTo(writer);
         }
     }
 }

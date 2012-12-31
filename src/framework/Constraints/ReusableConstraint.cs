@@ -51,11 +51,9 @@ namespace NUnit.Framework.Constraints
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// Returns the string representation of the constraint.
         /// </summary>
-        /// <returns>
-        /// A <see cref="System.String"/> that represents this instance.
-        /// </returns>
+        /// <returns>A string representing the constraint</returns>
         public override string ToString()
         {
             return constraint.ToString();
@@ -64,9 +62,10 @@ namespace NUnit.Framework.Constraints
         #region IResolveConstraint Members
 
         /// <summary>
-        /// Return the top-level constraint for this expression
+        /// Resolves the ReusableConstraint by returning the constraint
+        /// that it originally wrapped.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A resolved constraint</returns>
         public Constraint Resolve()
         {
             return constraint;

@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2007 Charlie Poole
+// Copyright (c) 2011 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -32,83 +32,24 @@ namespace NUnit.Framework.Constraints
     /// <summary>
     /// Abstract base class for constraints that compare values to
     /// determine if one is greater than, equal to or less than
-    /// the other.
+    /// the other. This class supplies the Using modifiers.
     /// </summary>
     public abstract class ComparisonConstraint : Constraint
     {
         /// <summary>
-        /// The value against which a comparison is to be made
-        /// </summary>
-        protected object expected;
-        /// <summary>
-        /// If true, less than returns success
-        /// </summary>
-        protected bool lessComparisonResult = false;
-        /// <summary>
-        /// if true, equal returns success
-        /// </summary>
-        protected bool equalComparisonResult = false;
-        /// <summary>
-        /// if true, greater than returns success
-        /// </summary>
-        protected bool greaterComparisonResult = false;
-        /// <summary>
-        /// The predicate used as a part of the description
-        /// </summary>
-        private readonly string predicate;
-
-        /// <summary>
         /// ComparisonAdapter to be used in making the comparison
         /// </summary>
-        private ComparisonAdapter comparer = ComparisonAdapter.Default;
+        protected ComparisonAdapter comparer = ComparisonAdapter.Default;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:ComparisonConstraint"/> class.
         /// </summary>
-        /// <param name="value">The value against which to make a comparison.</param>
-        /// <param name="lessComparisonResult">if set to <c>true</c> less succeeds.</param>
-        /// <param name="equalComparisonResult">if set to <c>true</c> equal succeeds.</param>
-        /// <param name="greaterComparisonResult">if set to <c>true</c> greater succeeds.</param>
-        /// <param name="predicate">String used in describing the constraint.</param>
-        protected ComparisonConstraint(object value, bool lessComparisonResult, bool equalComparisonResult, bool greaterComparisonResult, string predicate)
-            : base(value)
-        {
-            this.expected = value;
-            this.lessComparisonResult = lessComparisonResult;
-            this.equalComparisonResult = equalComparisonResult;
-            this.greaterComparisonResult = greaterComparisonResult;
-            this.predicate = predicate;
-        }
+        public ComparisonConstraint(object arg) : base(arg) { }
 
         /// <summary>
-        /// Test whether the constraint is satisfied by a given value
+        /// Initializes a new instance of the <see cref="T:ComparisonConstraint"/> class.
         /// </summary>
-        /// <param name="actual">The value to be tested</param>
-        /// <returns>True for success, false for failure</returns>
-        public override bool Matches(object actual)
-        {
-            this.actual = actual;
-
-            if (expected == null)
-                throw new ArgumentException("Cannot compare using a null reference", "expected");
-
-            if (actual == null)
-                throw new ArgumentException("Cannot compare to null reference", "actual");
-
-            int icomp = comparer.Compare(expected, actual);
-
-            return icomp < 0 && greaterComparisonResult || icomp == 0 && equalComparisonResult || icomp > 0 && lessComparisonResult;
-        }
-
-        /// <summary>
-        /// Write the constraint description to a MessageWriter
-        /// </summary>
-        /// <param name="writer">The writer on which the description is displayed</param>
-        public override void WriteDescriptionTo(MessageWriter writer)
-        {
-            writer.WritePredicate(predicate);
-            writer.WriteExpectedValue(expected);
-        }
+        public ComparisonConstraint(object arg1, object arg2) : base(arg1, arg2) { }
 
         /// <summary>
         /// Modifies the constraint to use an IComparer and returns self

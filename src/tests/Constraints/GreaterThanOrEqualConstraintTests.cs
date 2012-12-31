@@ -30,7 +30,7 @@ using System.Collections.Generic;
 namespace NUnit.Framework.Constraints.Tests
 {
     [TestFixture]
-    public class GreaterThanOrEqualConstraintTests : ComparisonConstraintTestBase
+    public class GreaterThanOrEqualConstraintTests : ComparisonConstraintTest
     {
         [SetUp]
         public void SetUp()

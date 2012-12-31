@@ -1,10 +1,7 @@
 ﻿#if NET_4_5
-using System;
 using System.Collections;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
-using NUnit.Framework;
 using NUnit.Framework.Api;
 using NUnit.Framework.Builders;
 using NUnit.TestData;
@@ -72,7 +69,7 @@ namespace NUnit.Framework.Internal
                 yield return new object[] { Method("TaskCheckTestContextAcrossTasks"), ResultState.Success, 2 };
                 yield return new object[] { Method("TaskCheckTestContextWithinTestBody"), ResultState.Success, 2 };
 
-                //yield return new object[] { Method("VoidAsyncVoidChildCompletingEarlierThanTest"), ResultState.Success, 0 };
+                yield return new object[] { Method("VoidAsyncVoidChildCompletingEarlierThanTest"), ResultState.Success, 0 };
                 yield return new object[] { Method("VoidAsyncVoidChildThrowingImmediately"), ResultState.Success, 0 };
             }
 		}
@@ -89,19 +86,19 @@ namespace NUnit.Framework.Internal
 		}
 
         [Test]
-		public void SynchronizationContextSwitching()
-		{
-			var context = new CustomSynchronizationContext();
+        public void SynchronizationContextSwitching()
+        {
+            var context = new CustomSynchronizationContext();
 
-			SynchronizationContext.SetSynchronizationContext(context);
+            SynchronizationContext.SetSynchronizationContext(context);
 
-			var test = _builder.BuildFrom(Method("AsyncVoidAssertSynchronizationContext"));
-			var result = TestBuilder.RunTest(test, _testObject);
+            var test = _builder.BuildFrom(Method("AsyncVoidAssertSynchronizationContext"));
+            var result = TestBuilder.RunTest(test, _testObject);
 
-			Assert.AreSame(context, SynchronizationContext.Current);
-			Assert.That(result.ResultState, Is.EqualTo(ResultState.Success), "Wrong result state");
-			Assert.That(result.AssertCount, Is.EqualTo(1), "Wrong assertion count");
-		}
+            Assert.AreSame(context, SynchronizationContext.Current);
+            Assert.That(result.ResultState, Is.EqualTo(ResultState.Success), "Wrong result state");
+            Assert.That(result.AssertCount, Is.EqualTo(0), "Wrong assertion count");
+        }
 
 		private static MethodInfo Method(string name)
 		{

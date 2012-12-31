@@ -142,6 +142,7 @@
     <Compile Include="Constraints\ExactCountConstraint.cs" />
     <Compile Include="Constraints\ExactTypeConstraint.cs" />
     <Compile Include="Constraints\ExceptionTypeConstraint.cs" />
+    <Compile Include="Constraints\FailurePoint.cs" />
     <Compile Include="Constraints\FalseConstraint.cs" />
     <Compile Include="Constraints\FloatingPointNumerics.cs" />
     <Compile Include="Constraints\GreaterThanConstraint.cs" />
@@ -160,17 +161,20 @@
     <Compile Include="Constraints\Numerics.cs" />
     <Compile Include="Constraints\NUnitComparer.cs" />
     <Compile Include="Constraints\NUnitEqualityComparer.cs" />
+    <Compile Include="Constraints\Operators\AllOperator.cs" />
     <Compile Include="Constraints\Operators\AndOperator.cs" />
     <Compile Include="Constraints\Operators\AttributeOperator.cs" />
     <Compile Include="Constraints\Operators\BinaryOperator.cs" />
     <Compile Include="Constraints\Operators\CollectionOperator.cs" />
     <Compile Include="Constraints\Operators\ConstraintOperator.cs" />
     <Compile Include="Constraints\Operators\ExactCountOperator.cs" />
+    <Compile Include="Constraints\Operators\NoneOperator.cs" />
     <Compile Include="Constraints\Operators\NotOperator.cs" />
     <Compile Include="Constraints\Operators\OrOperator.cs" />
     <Compile Include="Constraints\Operators\PrefixOperator.cs" />
     <Compile Include="Constraints\Operators\PropOperator.cs" />
     <Compile Include="Constraints\Operators\SelfResolvingOperator.cs" />
+    <Compile Include="Constraints\Operators\SomeOperator.cs" />
     <Compile Include="Constraints\Operators\ThrowsOperator.cs" />
     <Compile Include="Constraints\Operators\WithOperator.cs" />
     <Compile Include="Constraints\OrConstraint.cs" />
@@ -189,6 +193,7 @@
     <Compile Include="Constraints\SomeItemsConstraint.cs" />
     <Compile Include="Constraints\StartsWithConstraint.cs" />
     <Compile Include="Constraints\StringConstraint.cs" />
+    <Compile Include="Constraints\SubPathConstraint.cs" />
     <Compile Include="Constraints\SubstringConstraint.cs" />
     <Compile Include="Constraints\ThrowsConstraint.cs" />
     <Compile Include="Constraints\ThrowsNothingConstraint.cs" />

@@ -21,9 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using NUnit.Framework.Constraints;
 using NUnit.Framework.Internal;
 using NUnit.TestData;
 using NUnit.TestUtilities;
+#if NET_4_5
+using System.Threading.Tasks;
+#endif
+
+#if CLR_2_0 || CLR_4_0
+using ActualValueDelegate = NUnit.Framework.Constraints.ActualValueDelegate<object>;
+#else
+using ActualValueDelegate = NUnit.Framework.Constraints.ActualValueDelegate;
+#endif
 
 namespace NUnit.Framework.Assertions
 {
@@ -90,19 +101,19 @@ namespace NUnit.Framework.Assertions
         [Test]
         public void AssertionPasses_DelegateAndConstraint()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFour), Is.EqualTo(4));
+            Assert.That(new ActualValueDelegate(ReturnsFour), Is.EqualTo(4));
         }
 
         [Test]
         public void AssertionPasses_DelegateAndConstraintWithMessage()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFour), Is.EqualTo(4), "Message");
+            Assert.That(new ActualValueDelegate(ReturnsFour), Is.EqualTo(4), "Message");
         }
 
         [Test]
         public void AssertionPasses_DelegateAndConstraintWithMessageAndArgs()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFour), Is.EqualTo(4), "Should be {0}", 4);
+            Assert.That(new ActualValueDelegate(ReturnsFour), Is.EqualTo(4), "Should be {0}", 4);
         }
 
         private object ReturnsFour()
@@ -170,19 +181,19 @@ namespace NUnit.Framework.Assertions
         [Test, ExpectedException(typeof(AssertionException))]
         public void FailureThrowsAssertionException_DelegateAndConstraint()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFive), Is.EqualTo(4));
+            Assert.That(new ActualValueDelegate(ReturnsFive), Is.EqualTo(4));
         }
 
         [Test, ExpectedException(typeof(AssertionException), ExpectedMessage = "Error", MatchType = MessageMatch.Contains)]
         public void FailureThrowsAssertionException_DelegateAndConstraintWithMessage()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFive), Is.EqualTo(4), "Error");
+            Assert.That(new ActualValueDelegate(ReturnsFive), Is.EqualTo(4), "Error");
         }
 
         [Test, ExpectedException(typeof(AssertionException), ExpectedMessage = "Should be 4", MatchType = MessageMatch.Contains)]
         public void FailureThrowsAssertionException_DelegateAndConstraintWithMessageAndArgs()
         {
-            Assert.That(new Constraints.ActualValueDelegate(ReturnsFive), Is.EqualTo(4), "Should be {0}", 4);
+            Assert.That(new ActualValueDelegate(ReturnsFive), Is.EqualTo(4), "Should be {0}", 4);
         }
 
         [Test]
@@ -205,5 +216,64 @@ namespace NUnit.Framework.Assertions
         {
             return 5;
         }
+
+#if NET_4_5
+        [Test]
+        public void AssertThatSuccess()
+        {
+            Assert.That(async () => await One(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void AssertThatFailure()
+        {
+            var exception = Assert.Throws<AssertionException>(() =>
+                Assert.That(async () => await One(), Is.EqualTo(2)));
+        }
+
+        [Test]
+        public void AssertThatErrorTask()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                Assert.That(async () => await ThrowExceptionTask(), Is.EqualTo(1)));
+
+            Assert.That(exception.StackTrace, Contains.Substring("ThrowExceptionTask"));
+        }
+
+        [Test]
+        public void AssertThatErrorGenericTask()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                Assert.That(async () => await ThrowExceptionGenericTask(), Is.EqualTo(1)));
+
+            Assert.That(exception.StackTrace, Contains.Substring("ThrowExceptionGenericTask"));
+        }
+
+        [Test]
+        public void AssertThatErrorVoid()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(() =>
+                Assert.That(async () => { await ThrowExceptionGenericTask(); }, Is.EqualTo(1)));
+
+            Assert.That(exception.StackTrace, Contains.Substring("ThrowExceptionGenericTask"));
+        }
+
+        private static Task<int> One()
+        {
+            return Task.Run(() => 1);
+        }
+
+        private static async Task<int> ThrowExceptionGenericTask()
+        {
+            await One();
+            throw new InvalidOperationException();
+        }
+
+        private static async Task ThrowExceptionTask()
+        {
+            await One();
+            throw new InvalidOperationException();
+        }
+#endif
     }
 }

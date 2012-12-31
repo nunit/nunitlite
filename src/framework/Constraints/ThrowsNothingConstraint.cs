@@ -40,23 +40,22 @@ namespace NUnit.Framework.Constraints
         /// <returns>True if no exception is thrown, otherwise false</returns>
         public override bool Matches(object actual)
         {
-            TestDelegate code = actual as TestDelegate;
-            if (code == null)
-                throw new ArgumentException("The actual value must be a TestDelegate", "actual");
-
-            caughtException = null;
-
-            try
-            {
-                code();
-            }
-            catch (Exception ex)
-            {
-                caughtException = ex;
-            }
+            caughtException = ExceptionInterceptor.Intercept(actual);
 
             return caughtException == null;
         }
+
+#if CLR_2_0 || CLR_4_0
+        public override bool Matches<T>(ActualValueDelegate<T> del)
+        {
+            return Matches(new GenericInvocationDescriptor<T>(del));
+        }
+#else
+        public override bool Matches(ActualValueDelegate del)
+        {
+            return Matches(new ObjectInvocationDescriptor(del));
+        }
+#endif
 
         /// <summary>
         /// Write the constraint description to a MessageWriter
@@ -69,14 +68,14 @@ namespace NUnit.Framework.Constraints
 
         /// <summary>
         /// Write the actual value for a failing constraint test to a
-        /// MessageWriter. The default implementation simply writes
-        /// the raw value of actual, leaving it to the writer to
-        /// perform any formatting.
+        /// MessageWriter. Overridden in ThrowsNothingConstraint to write 
+        /// information about the exception that was actually caught.
         /// </summary>
         /// <param name="writer">The writer on which the actual value is displayed</param>
         public override void WriteActualValueTo(MessageWriter writer)
         {
-            writer.WriteActualValue(caughtException.GetType());
+            writer.WriteLine(" ({0})", caughtException.Message);
+            writer.Write(caughtException.StackTrace);
         }
     }
 }

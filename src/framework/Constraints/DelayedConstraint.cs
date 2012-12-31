@@ -21,9 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if CLR_2_0 || CLR_4_0
+#if !NETCF
 using System;
 using System.Threading;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Constraints
 {
@@ -90,7 +91,11 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="del">The delegate whose value is to be tested</param>
         /// <returns>True for if the base constraint fails, false if it succeeds</returns>
+#if CLR_2_0 || CLR_4_0
+        public override bool Matches<T>(ActualValueDelegate<T> del)
+#else
         public override bool Matches(ActualValueDelegate del)
+#endif
         {
             int remainingDelay = delayInMilliseconds;
 
@@ -98,14 +103,14 @@ namespace NUnit.Framework.Constraints
             {
                 remainingDelay -= pollingInterval;
                 Thread.Sleep(pollingInterval);
-                actual = del();
+                this.actual = InvokeDelegate(del);
 				
 				try
 				{
 	                if (baseConstraint.Matches(actual))
 	                    return true;
 				}
-				catch(Exception)
+				catch
 				{
 					// Ignore any exceptions when polling
 				}
@@ -113,10 +118,29 @@ namespace NUnit.Framework.Constraints
 
             if (remainingDelay > 0)
                 Thread.Sleep(remainingDelay);
-            actual = del();
+            this.actual = InvokeDelegate(del);
             return baseConstraint.Matches(actual);
         }
 
+#if CLR_2_0 || CLR_4_0
+        private static object InvokeDelegate<T>(ActualValueDelegate<T> del)
+        {
+#if NET_4_5
+            if (AsyncInvocationRegion.IsAsyncOperation(del))
+                using (AsyncInvocationRegion region = AsyncInvocationRegion.Create(del))
+                    return region.WaitForPendingOperationsToComplete(del());
+#endif
+
+            return del();
+        }
+#else
+        private static object InvokeDelegate(ActualValueDelegate del)
+        {
+            return del();
+        }
+#endif
+
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Test whether the constraint is satisfied by a given reference.
         /// Overridden to wait for the specified delay period before
@@ -124,11 +148,41 @@ namespace NUnit.Framework.Constraints
         /// </summary>
         /// <param name="actual">A reference to the value to be tested</param>
         /// <returns>True for success, false for failure</returns>
-#if CLR_2_0 || CLR_4_0
         public override bool Matches<T>(ref T actual)
+        {
+            int remainingDelay = delayInMilliseconds;
+
+            while (pollingInterval > 0 && pollingInterval < remainingDelay)
+            {
+                remainingDelay -= pollingInterval;
+                Thread.Sleep(pollingInterval);
+                this.actual = actual;
+
+                try
+                {
+                    if (baseConstraint.Matches(actual))
+                        return true;
+                }
+                catch (Exception)
+                {
+                    // Ignore any exceptions when polling
+                }
+            }
+
+            if (remainingDelay > 0)
+                Thread.Sleep(remainingDelay);
+            this.actual = actual;
+            return baseConstraint.Matches(actual);
+        }
 #else
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given boolean reference.
+        /// Overridden to wait for the specified delay period before
+        /// calling the base constraint with the dereferenced value.
+        /// </summary>
+        /// <param name="actual">A reference to the value to be tested</param>
+        /// <returns>True for success, false for failure</returns>
         public override bool Matches(ref bool actual)
-#endif
         {
             int remainingDelay = delayInMilliseconds;
 
@@ -138,15 +192,8 @@ namespace NUnit.Framework.Constraints
                 Thread.Sleep(pollingInterval);
                 this.actual = actual;
 				
-				try
-				{
-	                if (baseConstraint.Matches(actual))
-	                    return true;
-				}
-				catch(Exception)
-				{
-					// Ignore any exceptions when polling
-				}
+                if (baseConstraint.Matches(actual))
+                    return true;
             }
 
             if (remainingDelay > 0)
@@ -154,6 +201,7 @@ namespace NUnit.Framework.Constraints
             this.actual = actual;
             return baseConstraint.Matches(actual);
         }
+#endif
 
         /// <summary>
         /// Write the constraint description to a MessageWriter

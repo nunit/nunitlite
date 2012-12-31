@@ -42,8 +42,6 @@ namespace NUnit.Framework.Constraints
         /// <returns>True for success, false for failure</returns>
         protected override bool Matches(string actual)
         {
-            //this.actual = actual;
-
             if (this.caseInsensitive)
                 return actual.ToLower().IndexOf(expected.ToLower()) >= 0;
             else

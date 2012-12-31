@@ -1,5 +1,5 @@
-// ***********************************************************************
-// Copyright (c) 2008 Charlie Poole
+﻿// ***********************************************************************
+// Copyright (c) 2009 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -24,20 +24,45 @@
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// Abstract base for operators that indicate how to
-    /// apply a constraint to items in a collection.
+    /// FailurePoint class represents one point of failure
+    /// in an equality test.
     /// </summary>
-    public abstract class CollectionOperator : PrefixOperator
+    public class FailurePoint
     {
         /// <summary>
-        /// Constructs a CollectionOperator
+        /// The location of the failure
         /// </summary>
-        protected CollectionOperator()
-        {
-            // Collection Operators stack on everything
-            // and allow all other ops to stack on them
-            this.left_precedence = 1;
-            this.right_precedence = 10;
-        }
+        public int Position;
+
+        /// <summary>
+        /// The expected value
+        /// </summary>
+        public object ExpectedValue;
+
+        /// <summary>
+        /// The actual value
+        /// </summary>
+        public object ActualValue;
+
+        /// <summary>
+        /// Indicates whether the expected value is valid
+        /// </summary>
+        public bool ExpectedHasData;
+
+        /// <summary>
+        /// Indicates whether the actual value is valid
+        /// </summary>
+        public bool ActualHasData;
     }
- }
+
+    /// <summary>
+    /// FailurePointList represents a set of FailurePoints
+    /// in a cross-platform way.
+    /// </summary>
+#if CLR_2_0 || CLR_4_0
+    class FailurePointList : System.Collections.Generic.List<FailurePoint> { }
+#else
+    class FailurePointList : System.Collections.ArrayList { }
+#endif
+
+}

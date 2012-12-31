@@ -44,8 +44,6 @@ namespace NUnit.Framework.Constraints
         /// <returns></returns>
         protected override bool Matches(string actual)
         {
-            //this.actual = actual;
-
             if (this.caseInsensitive)
                 return actual.ToLower().EndsWith(expected.ToLower());
             else

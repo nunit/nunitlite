@@ -80,8 +80,7 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="EqualConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected value.</param>
-        public EqualConstraint(object expected)
-            : base(expected)
+        public EqualConstraint(object expected) : base(expected)
         {
             this.expected = expected;
         }
@@ -396,7 +395,8 @@ namespace NUnit.Framework.Constraints
         {
             if (expected.Length == actual.Length)
             {
-                long offset = (long)comparer.FailurePoints[depth];
+                FailurePoint fp = (FailurePoint)comparer.FailurePoints[depth];
+                long offset = fp.Position;
                 writer.WriteMessageLine(StreamsDiffer_1, expected.Length, offset);
             }
             else
@@ -418,7 +418,7 @@ namespace NUnit.Framework.Constraints
 
             if (comparer.FailurePoints.Count > depth)
             {
-                NUnitEqualityComparer.FailurePoint failurePoint = (NUnitEqualityComparer.FailurePoint)comparer.FailurePoints[depth];
+                FailurePoint failurePoint = (FailurePoint)comparer.FailurePoints[depth];
 
                 DisplayFailurePoint(writer, expected, actual, failurePoint, depth);
 
@@ -443,8 +443,8 @@ namespace NUnit.Framework.Constraints
 
         /// <summary>
         /// Displays a single line showing the types and sizes of the expected
-        /// and actual collections or arrays. If both are identical, the value is 
-        /// only shown once.
+        /// and actual enumerations, collections or arrays. If both are identical,
+        /// the value is only shown once.
         /// </summary>
         /// <param name="writer">The MessageWriter on which to display</param>
         /// <param name="expected">The expected collection or array</param>
@@ -476,7 +476,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="actual">The actual array</param>
         /// <param name="failurePoint">Index of the failure point in the underlying collections</param>
         /// <param name="indent">The indentation level for the message line</param>
-        private void DisplayFailurePoint(MessageWriter writer, IEnumerable expected, IEnumerable actual, NUnitEqualityComparer.FailurePoint failurePoint, int indent)
+        private void DisplayFailurePoint(MessageWriter writer, IEnumerable expected, IEnumerable actual, FailurePoint failurePoint, int indent)
         {
             Array expectedArray = expected as Array;
             Array actualArray = actual as Array;
@@ -537,7 +537,7 @@ namespace NUnit.Framework.Constraints
  
             if (comparer.FailurePoints.Count > depth)
             {
-                NUnitEqualityComparer.FailurePoint failurePoint = (NUnitEqualityComparer.FailurePoint)comparer.FailurePoints[depth];
+                FailurePoint failurePoint = (FailurePoint)comparer.FailurePoints[depth];
  
                 DisplayFailurePoint(writer, expected, actual, failurePoint, depth);
  

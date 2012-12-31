@@ -50,16 +50,14 @@ namespace NUnit.Framework.Constraints
 
             this.actual = actual;
 
-            if (actual == null)
-                return true;
-            else
-            {
-                string actualAsString = actual as string;
-                if (actualAsString == null)
-                    throw new ArgumentException("Actual value must be a string", "actual");
+            if (actual == null) return true;
 
-                return actualAsString == string.Empty;
-            }
+            string actualAsString = actual as string;
+
+            if (actualAsString == null)
+                throw new ArgumentException("Actual value must be a string", "actual");
+
+            return actualAsString == string.Empty;
         }
 
         /// <summary>

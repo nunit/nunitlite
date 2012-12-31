@@ -61,8 +61,7 @@ namespace NUnit.Framework.Constraints
             if (attrProvider == null)
                 throw new ArgumentException(string.Format("Actual value {0} does not implement ICustomAttributeProvider", actual), "actual");
 
-            bool hasSucceeded = attrProvider.GetCustomAttributes(expectedType, true).Length > 0;
-            return hasSucceeded;
+            return attrProvider.GetCustomAttributes(expectedType, true).Length > 0;
         }
 
         /// <summary>

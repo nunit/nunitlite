@@ -87,7 +87,7 @@ namespace NUnit.TestUtilities
         /// </summary>
         public static void FirstChildIsRunnable(Type type, string name)
         {
-            var suite = TestBuilder.MakeTestCase(type, name);
+            Test suite = TestBuilder.MakeTestCase(type, name);
             TestAssert.FirstChildIsRunnable(suite);
         }
 

@@ -42,12 +42,23 @@ namespace NUnit.Framework.Constraints
         private const string NumericToleranceRequired = "A numeric tolerance is required";
 
         /// <summary>
-        /// Returns an empty Tolerance object, equivalent to 
-        /// specifying an exact match.
+        /// Returns an empty Tolerance object, equivalent to
+        /// specifying no tolerance. In most cases, it results
+        /// in an exact match but for floats and doubles a
+        /// default tolerance may be used.
         /// </summary>
         public static Tolerance Empty
         {
             get { return new Tolerance(0, ToleranceMode.None); }
+        }
+
+        /// <summary>
+        /// Returns a zero Tolerance object, equivalent to 
+        /// specifying an exact match.
+        /// </summary>
+        public static Tolerance Zero
+        {
+            get { return new Tolerance(0, ToleranceMode.Linear); }
         }
 
         /// <summary>

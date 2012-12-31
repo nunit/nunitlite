@@ -36,10 +36,8 @@ namespace NUnit.Framework.Constraints
         public override bool Matches(object actual)
         {
             this.actual = actual;
-            bool hasSucceeded = actual is double && double.IsNaN((double)actual)
+            return actual is double && double.IsNaN((double)actual)
                 || actual is float && float.IsNaN((float)actual);
-
-            return hasSucceeded;
         }
 
         /// <summary>

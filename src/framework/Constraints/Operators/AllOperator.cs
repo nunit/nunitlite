@@ -1,4 +1,4 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) 2008 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,20 +24,19 @@
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// Abstract base for operators that indicate how to
-    /// apply a constraint to items in a collection.
+    /// Represents a constraint that succeeds if all the 
+    /// members of a collection match a base constraint.
     /// </summary>
-    public abstract class CollectionOperator : PrefixOperator
+    public class AllOperator : CollectionOperator
     {
         /// <summary>
-        /// Constructs a CollectionOperator
+        /// Returns a constraint that will apply the argument
+        /// to the members of a collection, succeeding if
+        /// they all succeed.
         /// </summary>
-        protected CollectionOperator()
+        public override Constraint ApplyPrefix(Constraint constraint)
         {
-            // Collection Operators stack on everything
-            // and allow all other ops to stack on them
-            this.left_precedence = 1;
-            this.right_precedence = 10;
+            return new AllItemsConstraint(constraint);
         }
     }
- }
+}

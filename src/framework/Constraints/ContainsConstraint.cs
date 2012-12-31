@@ -21,6 +21,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using System.Collections;
+#if CLR_2_0 || CLR_4_0
+using System.Collections.Generic;
+#endif
+
 namespace NUnit.Framework.Constraints
 {
 	// TODO Needs tests
@@ -37,7 +43,13 @@ namespace NUnit.Framework.Constraints
 		Constraint realConstraint;
         bool ignoreCase;
 
-		private Constraint RealConstraint
+#if CLR_2_0 || CLR_4_0
+        private List<EqualityAdapter> equalityAdapters = new List<EqualityAdapter>();
+#else
+        private ArrayList equalityAdapters = new ArrayList();
+#endif
+
+        private Constraint RealConstraint
 		{
 			get 
 			{
@@ -51,7 +63,14 @@ namespace NUnit.Framework.Constraints
                         this.realConstraint = constraint;
                     }
                     else
-                        this.realConstraint = new CollectionContainsConstraint(expected);
+                    {
+                        CollectionItemsEqualConstraint constraint = new CollectionContainsConstraint(expected);
+
+                        foreach (EqualityAdapter adapter in equalityAdapters)
+                            constraint = constraint.Using(adapter);
+
+                        this.realConstraint = constraint;
+                    }
 				}
 
 				return realConstraint;
@@ -66,7 +85,7 @@ namespace NUnit.Framework.Constraints
         /// Initializes a new instance of the <see cref="ContainsConstraint"/> class.
         /// </summary>
         /// <param name="expected">The expected.</param>
-		public ContainsConstraint( object expected )
+		public ContainsConstraint( object expected ) : base(expected)
 		{
 			this.expected = expected;
 		}
@@ -98,5 +117,67 @@ namespace NUnit.Framework.Constraints
 		{
 			this.RealConstraint.WriteDescriptionTo(writer);
 		}
-	}
+
+        /// <summary>
+        /// Flag the constraint to use the supplied IComparer object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public ContainsConstraint Using(IComparer comparer)
+        {
+            return AddAdapter(EqualityAdapter.For(comparer));
+        }
+
+#if CLR_2_0 || CLR_4_0
+        /// <summary>
+        /// Flag the constraint to use the supplied IComparer object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public ContainsConstraint Using<T>(IComparer<T> comparer)
+        {
+            return AddAdapter(EqualityAdapter.For(comparer));
+        }
+
+        /// <summary>
+        /// Flag the constraint to use the supplied Comparison object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public ContainsConstraint Using<T>(Comparison<T> comparer)
+        {
+            return AddAdapter(EqualityAdapter.For(comparer));
+        }
+
+        /// <summary>
+        /// Flag the constraint to use the supplied IEqualityComparer object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public ContainsConstraint Using(IEqualityComparer comparer)
+        {
+            return AddAdapter(EqualityAdapter.For(comparer));
+        }
+
+        /// <summary>
+        /// Flag the constraint to use the supplied IEqualityComparer object.
+        /// </summary>
+        /// <param name="comparer">The IComparer object to use.</param>
+        /// <returns>Self.</returns>
+        public ContainsConstraint Using<T>(IEqualityComparer<T> comparer)
+        {
+            return AddAdapter(EqualityAdapter.For(comparer));
+        }
+#endif
+
+        #region Helper Methods
+
+        private ContainsConstraint AddAdapter(EqualityAdapter adapter)
+        {
+            this.equalityAdapters.Add(adapter);
+            return this;
+        }
+
+        #endregion
+    }
 }

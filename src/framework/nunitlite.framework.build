@@ -17,7 +17,7 @@
     <include name="Constraints/**/*.cs"/>
     <exclude name="Constraints/BinarySerializableConstraint.cs" if="${runtime.platform == 'silverlight'}"/>
     <exclude name="Constraints/BinarySerializableConstraint.cs" if="${runtime.platform == 'netcf'}"/>
-    <exclude name="Constraints/DelayedConstraint.cs" if="${runtime.config == 'net-1.1'}"/>
+    <exclude name="Constraints/DelayedConstraint.cs" if="${runtime.platform == 'netcf'}"/>
     <exclude name="Constraints/XmlSerializableConstraint.cs" if="${runtime.platform == 'silverlight'}"/>
     <exclude name="Constraints/XmlSerializableConstraint.cs" if="${runtime.config == 'netcf-1.0'}"/>
 
@@ -25,6 +25,8 @@
     <include name="Extensibility/*.cs"/>
 
     <include name="Internal/**/*.cs"/>
+    <exclude name="Internal/AsyncSynchronizationContext.cs" unless="${runtime.config == 'net-4.5'}"/>
+    <exclude name="Internal/AsyncInvocationRegion.cs" unless="${runtime.config == 'net-4.5'}"/>
     <exclude name="Internal/XmlHelper.cs"/>
 
     <include name="Runner/**/*.cs"/>

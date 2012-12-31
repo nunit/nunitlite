@@ -249,7 +249,7 @@ namespace NUnit.Framework
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A constraint to be applied</param>
+        /// <param name="expression">A Constraint to be applied</param>
         static public void That(object actual, IResolveConstraint expression)
         {
             Assert.That(actual, expression, null, null);
@@ -260,7 +260,7 @@ namespace NUnit.Framework
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A constraint to be applied</param>
+        /// <param name="expression">A Constraint to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         static public void That(object actual, IResolveConstraint expression, string message)
         {
@@ -272,7 +272,7 @@ namespace NUnit.Framework
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A constraint to be applied</param>
+        /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         static public void That(object actual, IResolveConstraint expression, string message, params object[] args)
@@ -334,8 +334,8 @@ namespace NUnit.Framework
             /// Apply a constraint to a referenced boolean, succeeding if the constraint
             /// is satisfied and throwing an assertion exception on failure.
             /// </summary>
-            /// <param name="constraint">A Constraint to be applied</param>
             /// <param name="actual">The actual value to test</param>
+            /// <param name="constraint">A Constraint to be applied</param>
             static public void That(ref bool actual, IResolveConstraint constraint)
             {
                 Assert.That(ref actual, constraint.Resolve(), null, null);
@@ -345,8 +345,8 @@ namespace NUnit.Framework
             /// Apply a constraint to a referenced value, succeeding if the constraint
             /// is satisfied and throwing an assertion exception on failure.
             /// </summary>
-            /// <param name="constraint">A Constraint to be applied</param>
             /// <param name="actual">The actual value to test</param>
+            /// <param name="constraint">A Constraint to be applied</param>
             /// <param name="message">The message that will be displayed on failure</param>
             static public void That(ref bool actual, IResolveConstraint constraint, string message)
             {
@@ -379,12 +379,57 @@ namespace NUnit.Framework
 
         #region ActualValueDelegate
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
-        /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr)
+        {
+            Assert.That(del, expr.Resolve(), null, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr, string message)
+        {
+            Assert.That(del, expr.Resolve(), message, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr, string message, params object[] args)
+        {
+            Constraint constraint = expr.Resolve();
+
+            IncrementAssertCount();
+            if (!constraint.Matches(del))
+            {
+                MessageWriter writer = new TextMessageWriter(message, args);
+                constraint.WriteMessageTo(writer);
+                throw new AssertionException(writer.ToString());
+            }
+        }
+#else
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
         static public void That(ActualValueDelegate del, IResolveConstraint expr)
         {
             Assert.That(del, expr.Resolve(), null, null);
@@ -394,8 +439,8 @@ namespace NUnit.Framework
         /// Apply a constraint to an actual value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
-        /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         static public void That(ActualValueDelegate del, IResolveConstraint expr, string message)
         {
@@ -422,27 +467,11 @@ namespace NUnit.Framework
                 throw new AssertionException(writer.ToString());
             }
         }
+#endif
 
         #endregion
 
-        #region TestDelegate
-
-        /// <summary>
-        /// Asserts that the code represented by a delegate throws an exception
-        /// that satisfies the constraint provided.
-        /// </summary>
-        /// <param name="code">A TestDelegate to be executed</param>
-        /// <param name="constraint">A ThrowsConstraint used in the test</param>
-        static public void That(TestDelegate code, IResolveConstraint constraint)
-        {
-            Assert.That((object)code, constraint);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Assert.That<T>
+        #region ref Object
 
 #if CLR_2_0 || CLR_4_0
         /// <summary>
@@ -492,6 +521,23 @@ namespace NUnit.Framework
 
         #endregion
 
+        #region TestDelegate
+
+        /// <summary>
+        /// Asserts that the code represented by a delegate throws an exception
+        /// that satisfies the constraint provided.
+        /// </summary>
+        /// <param name="code">A TestDelegate to be executed</param>
+        /// <param name="constraint">A ThrowsConstraint used in the test</param>
+        static public void That(TestDelegate code, IResolveConstraint constraint)
+        {
+            Assert.That((object)code, constraint);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Assert.ByVal
 
         /// <summary>
@@ -500,8 +546,8 @@ namespace NUnit.Framework
         /// Used as a synonym for That in rare cases where a private setter 
         /// causes a Visual Basic compilation error.
         /// </summary>
-        /// <param name="expression">A Constraint to be applied</param>
         /// <param name="actual">The actual value to test</param>
+        /// <param name="expression">A Constraint to be applied</param>
         static public void ByVal(object actual, IResolveConstraint expression)
         {
             Assert.That(actual, expression, null, null);
@@ -513,8 +559,8 @@ namespace NUnit.Framework
         /// Used as a synonym for That in rare cases where a private setter 
         /// causes a Visual Basic compilation error.
         /// </summary>
-        /// <param name="expression">A Constraint to be applied</param>
         /// <param name="actual">The actual value to test</param>
+        /// <param name="expression">A Constraint to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         static public void ByVal(object actual, IResolveConstraint expression, string message)
         {
@@ -531,8 +577,8 @@ namespace NUnit.Framework
         /// This method is provided for use by VB developers needing to test
         /// the value of properties with private setters.
         /// </remarks>
-        /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="actual">The actual value to test</param>
+        /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         static public void ByVal(object actual, IResolveConstraint expression, string message, params object[] args)
@@ -549,14 +595,33 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expression">A constraint to be satisfied by the exception</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         public static Exception Throws(IResolveConstraint expression, TestDelegate code, string message, params object[] args)
         {
             Exception caughtException = null;
 
-            try
+#if NET_4_5
+            if (AsyncInvocationRegion.IsAsyncOperation(code))
+            {
+                using (AsyncInvocationRegion region = AsyncInvocationRegion.Create(code))
+                {
+                    code();
+
+                    try
+                    {
+                        region.WaitForPendingOperationsToComplete(null);
+                    }
+                    catch (Exception e)
+                    {
+                        caughtException = e;
+                    }
+                }
+            }
+            else
+#endif
+                try
             {
                 code();
             }
@@ -574,7 +639,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expression">A constraint to be satisfied by the exception</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         public static Exception Throws(IResolveConstraint expression, TestDelegate code, string message)
         {
@@ -585,7 +650,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expression">A constraint to be satisfied by the exception</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         public static Exception Throws(IResolveConstraint expression, TestDelegate code)
         {
             return Throws(expression, code, string.Empty, null);
@@ -595,7 +660,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expectedExceptionType">The exception Type expected</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         public static Exception Throws(Type expectedExceptionType, TestDelegate code, string message, params object[] args)
@@ -607,7 +672,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expectedExceptionType">The exception Type expected</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         public static Exception Throws(Type expectedExceptionType, TestDelegate code, string message)
         {
@@ -618,7 +683,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <param name="expectedExceptionType">The exception Type expected</param>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         public static Exception Throws(Type expectedExceptionType, TestDelegate code)
         {
             return Throws(new ExceptionTypeConstraint(expectedExceptionType), code, string.Empty, null);
@@ -633,7 +698,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <typeparam name="T">Type of the expected exception</typeparam>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         public static T Throws<T>(TestDelegate code, string message, params object[] args) where T : Exception
@@ -645,7 +710,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <typeparam name="T">Type of the expected exception</typeparam>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         public static T Throws<T>(TestDelegate code, string message) where T : Exception
         {
@@ -656,7 +721,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
         /// <typeparam name="T">Type of the expected exception</typeparam>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         public static T Throws<T>(TestDelegate code) where T : Exception
         {
             return Throws<T>(code, string.Empty, null);
@@ -743,6 +808,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws an exception of a certain Type
         /// or one derived from it when called and returns it.
         /// </summary>
+        /// <typeparam name="T">The expected Exception Type</typeparam>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
@@ -755,6 +821,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws an exception of a certain Type
         /// or one derived from it when called and returns it.
         /// </summary>
+        /// <typeparam name="T">The expected Exception Type</typeparam>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         public static T Catch<T>(TestDelegate code, string message) where T : System.Exception
@@ -766,6 +833,7 @@ namespace NUnit.Framework
         /// Verifies that a delegate throws an exception of a certain Type
         /// or one derived from it when called and returns it.
         /// </summary>
+        /// <typeparam name="T">The expected Exception Type</typeparam>
         /// <param name="code">A TestDelegate</param>
         public static T Catch<T>(TestDelegate code) where T : System.Exception
         {
@@ -780,27 +848,18 @@ namespace NUnit.Framework
         /// <summary>
         /// Verifies that a delegate does not throw an exception
         /// </summary>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
         public static void DoesNotThrow(TestDelegate code, string message, params object[] args)
         {
-            try
-            {
-                code();
-            }
-            catch (Exception ex)
-            {
-                TextMessageWriter writer = new TextMessageWriter(message, args);
-                writer.WriteLine("Unexpected exception: {0}", ex.GetType());
-                Assert.Fail(writer.ToString());
-            }
+            Assert.That(code, new ThrowsNothingConstraint(), message, args);
         }
 
         /// <summary>
         /// Verifies that a delegate does not throw an exception.
         /// </summary>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         public static void DoesNotThrow(TestDelegate code, string message)
         {
@@ -810,7 +869,7 @@ namespace NUnit.Framework
         /// <summary>
         /// Verifies that a delegate does not throw an exception.
         /// </summary>
-        /// <param name="code">A TestSnippet delegate</param>
+        /// <param name="code">A TestDelegate</param>
         public static void DoesNotThrow(TestDelegate code)
         {
             DoesNotThrow(code, string.Empty, null);
@@ -1833,1947 +1892,6 @@ namespace NUnit.Framework
         }
 
         #endregion
-
-#if !NUNITLITE
-        #region IsNaN
-
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNaN(double aDouble, string message, params object[] args)
-        {
-            Assert.That(aDouble, Is.NaN ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNaN(double aDouble, string message)
-        {
-            Assert.That(aDouble, Is.NaN ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        public static void IsNaN(double aDouble)
-        {
-            Assert.That(aDouble, Is.NaN ,null, null);
-        }
-
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNaN(double? aDouble, string message, params object[] args)
-        {
-            Assert.That(aDouble, Is.NaN ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNaN(double? aDouble, string message)
-        {
-            Assert.That(aDouble, Is.NaN ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the double that is passed in is an <code>NaN</code> value.
-        /// If the object is not <code>NaN</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="aDouble">The value that is to be tested</param>
-        public static void IsNaN(double? aDouble)
-        {
-            Assert.That(aDouble, Is.NaN ,null, null);
-        }
-
-        #endregion
-
-        #region IsEmpty
-
-        #region String
-
-        /// <summary>
-        /// Assert that a string is empty - that is equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsEmpty(string aString, string message, params object[] args)
-        {
-            Assert.That(aString, new EmptyStringConstraint() ,message, args);
-        }
-        /// <summary>
-        /// Assert that a string is empty - that is equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsEmpty(string aString, string message)
-        {
-            Assert.That(aString, new EmptyStringConstraint() ,message, null);
-        }
-        /// <summary>
-        /// Assert that a string is empty - that is equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        public static void IsEmpty(string aString)
-        {
-            Assert.That(aString, new EmptyStringConstraint() ,null, null);
-        }
-
-        #endregion
-
-        #region Collection
-
-        /// <summary>
-        /// Assert that an array, list or other collection is empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsEmpty(IEnumerable collection, string message, params object[] args)
-        {
-            Assert.That(collection, new EmptyCollectionConstraint() ,message, args);
-        }
-        /// <summary>
-        /// Assert that an array, list or other collection is empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsEmpty(IEnumerable collection, string message)
-        {
-            Assert.That(collection, new EmptyCollectionConstraint() ,message, null);
-        }
-        /// <summary>
-        /// Assert that an array, list or other collection is empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        public static void IsEmpty(IEnumerable collection)
-        {
-            Assert.That(collection, new EmptyCollectionConstraint() ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region IsNotEmpty
-
-        #region String
-
-        /// <summary>
-        /// Assert that a string is not empty - that is not equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotEmpty(string aString, string message, params object[] args)
-        {
-            Assert.That(aString, Is.Not.Empty ,message, args);
-        }
-        /// <summary>
-        /// Assert that a string is not empty - that is not equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotEmpty(string aString, string message)
-        {
-            Assert.That(aString, Is.Not.Empty ,message, null);
-        }
-        /// <summary>
-        /// Assert that a string is not empty - that is not equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        public static void IsNotEmpty(string aString)
-        {
-            Assert.That(aString, Is.Not.Empty ,null, null);
-        }
-
-        #endregion
-
-        #region Collection
-
-        /// <summary>
-        /// Assert that an array, list or other collection is not empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotEmpty(IEnumerable collection, string message, params object[] args)
-        {
-            Assert.That(collection, Is.Not.Empty ,message, args);
-        }
-        /// <summary>
-        /// Assert that an array, list or other collection is not empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotEmpty(IEnumerable collection, string message)
-        {
-            Assert.That(collection, Is.Not.Empty ,message, null);
-        }
-        /// <summary>
-        /// Assert that an array, list or other collection is not empty
-        /// </summary>
-        /// <param name="collection">An array, list or other collection implementing ICollection</param>
-        public static void IsNotEmpty(IEnumerable collection)
-        {
-            Assert.That(collection, Is.Not.Empty ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region IsNullOrEmpty
-
-        /// <summary>
-        /// Assert that a string is either null or equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNullOrEmpty(string aString, string message, params object[] args)
-        {
-            Assert.That(aString, new NullOrEmptyStringConstraint() ,message, args);
-        }
-        /// <summary>
-        /// Assert that a string is either null or equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNullOrEmpty(string aString, string message)
-        {
-            Assert.That(aString, new NullOrEmptyStringConstraint() ,message, null);
-        }
-        /// <summary>
-        /// Assert that a string is either null or equal to string.Empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        public static void IsNullOrEmpty(string aString)
-        {
-            Assert.That(aString, new NullOrEmptyStringConstraint() ,null, null);
-        }
-
-        #endregion
-
-        #region IsNotNullOrEmpty
-
-        /// <summary>
-        /// Assert that a string is not null or empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotNullOrEmpty(string aString, string message, params object[] args)
-        {
-            Assert.That(aString, new NotConstraint( new NullOrEmptyStringConstraint()) ,message, args);
-        }
-        /// <summary>
-        /// Assert that a string is not null or empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotNullOrEmpty(string aString, string message)
-        {
-            Assert.That(aString, new NotConstraint( new NullOrEmptyStringConstraint()) ,message, null);
-        }
-        /// <summary>
-        /// Assert that a string is not null or empty
-        /// </summary>
-        /// <param name="aString">The string to be tested</param>
-        public static void IsNotNullOrEmpty(string aString)
-        {
-            Assert.That(aString, new NotConstraint( new NullOrEmptyStringConstraint()) ,null, null);
-        }
-
-        #endregion
-
-        #region IsAssignableFrom
-
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsAssignableFrom(Type expected, object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.AssignableFrom(expected) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsAssignableFrom(Type expected, object actual, string message)
-        {
-            Assert.That(actual, Is.AssignableFrom(expected) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        public static void IsAssignableFrom(Type expected, object actual)
-        {
-            Assert.That(actual, Is.AssignableFrom(expected) ,null, null);
-        }
-
-        #endregion
-
-        #region IsAssignableFrom<T>
-
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsAssignableFrom<T>(object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.AssignableFrom(typeof(T)) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsAssignableFrom<T>(object actual, string message)
-        {
-            Assert.That(actual, Is.AssignableFrom(typeof(T)) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object may be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        public static void IsAssignableFrom<T>(object actual)
-        {
-            Assert.That(actual, Is.AssignableFrom(typeof(T)) ,null, null);
-        }
-
-        #endregion
-
-        #region IsNotAssignableFrom
-
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotAssignableFrom(Type expected, object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(expected) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotAssignableFrom(Type expected, object actual, string message)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(expected) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <param name="expected">The expected Type.</param>
-        /// <param name="actual">The object under examination</param>
-        public static void IsNotAssignableFrom(Type expected, object actual)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(expected) ,null, null);
-        }
-
-        #endregion
-
-        #region IsNotAssignableFrom<T>
-
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotAssignableFrom<T>(object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(typeof(T)) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotAssignableFrom<T>(object actual, string message)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(typeof(T)) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object may not be assigned a  value of a given Type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type.</typeparam>
-        /// <param name="actual">The object under examination</param>
-        public static void IsNotAssignableFrom<T>(object actual)
-        {
-            Assert.That(actual, Is.Not.AssignableFrom(typeof(T)) ,null, null);
-        }
-
-        #endregion
-
-        #region IsInstanceOf
-
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsInstanceOf(Type expected, object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.InstanceOf(expected) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsInstanceOf(Type expected, object actual, string message)
-        {
-            Assert.That(actual, Is.InstanceOf(expected) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        public static void IsInstanceOf(Type expected, object actual)
-        {
-            Assert.That(actual, Is.InstanceOf(expected) ,null, null);
-        }
-
-        #endregion
-
-        #region IsInstanceOf<T>
-
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsInstanceOf<T>(object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.InstanceOf(typeof(T)) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsInstanceOf<T>(object actual, string message)
-        {
-            Assert.That(actual, Is.InstanceOf(typeof(T)) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object is an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        public static void IsInstanceOf<T>(object actual)
-        {
-            Assert.That(actual, Is.InstanceOf(typeof(T)) ,null, null);
-        }
-
-        #endregion
-
-        #region IsNotInstanceOf
-
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotInstanceOf(Type expected, object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(expected) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotInstanceOf(Type expected, object actual, string message)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(expected) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <param name="expected">The expected Type</param>
-        /// <param name="actual">The object being examined</param>
-        public static void IsNotInstanceOf(Type expected, object actual)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(expected) ,null, null);
-        }
-
-        #endregion
-
-        #region IsNotInstanceOf<T>
-
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotInstanceOf<T>(object actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(typeof(T)) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void IsNotInstanceOf<T>(object actual, string message)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(typeof(T)) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object is not an instance of a given type.
-        /// </summary>
-        /// <typeparam name="T">The expected Type</typeparam>
-        /// <param name="actual">The object being examined</param>
-        public static void IsNotInstanceOf<T>(object actual)
-        {
-            Assert.That(actual, Is.Not.InstanceOf(typeof(T)) ,null, null);
-        }
-
-        #endregion
-
-        #region Greater
-
-        #region Ints
-
-        /// <summary>
-        /// Verifies that the first int is greater than the second
-        /// int. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(int arg1, int arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first int is greater than the second
-        /// int. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(int arg1, int arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first int is greater than the second
-        /// int. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(int arg1, int arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Ints
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void Greater(uint arg1, uint arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void Greater(uint arg1, uint arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        [CLSCompliant(false)]
-        public static void Greater(uint arg1, uint arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(long arg1, long arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(long arg1, long arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(long arg1, long arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void Greater(ulong arg1, ulong arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void Greater(ulong arg1, ulong arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        [CLSCompliant(false)]
-        public static void Greater(ulong arg1, ulong arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Decimals
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(decimal arg1, decimal arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(decimal arg1, decimal arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(decimal arg1, decimal arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Doubles
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(double arg1, double arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(double arg1, double arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(double arg1, double arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Floats
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(float arg1, float arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(float arg1, float arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(float arg1, float arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region IComparables
-
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Greater(IComparable arg1, IComparable arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Greater(IComparable arg1, IComparable arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void Greater(IComparable arg1, IComparable arg2)
-        {
-            Assert.That(arg1, Is.GreaterThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Less
-
-        #region Ints
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(int arg1, int arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(int arg1, int arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(int arg1, int arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Ints
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void Less(uint arg1, uint arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void Less(uint arg1, uint arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        [CLSCompliant(false)]
-        public static void Less(uint arg1, uint arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(long arg1, long arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(long arg1, long arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(long arg1, long arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void Less(ulong arg1, ulong arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void Less(ulong arg1, ulong arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        [CLSCompliant(false)]
-        public static void Less(ulong arg1, ulong arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-#endregion
-
-        #region Decimals
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(decimal arg1, decimal arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(decimal arg1, decimal arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(decimal arg1, decimal arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Doubles
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(double arg1, double arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(double arg1, double arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(double arg1, double arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Floats
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(float arg1, float arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(float arg1, float arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(float arg1, float arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region IComparables
-
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Less(IComparable arg1, IComparable arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Less(IComparable arg1, IComparable arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void Less(IComparable arg1, IComparable arg2)
-        {
-            Assert.That(arg1, Is.LessThan(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region GreaterOrEqual
-
-        #region Ints
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(int arg1, int arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(int arg1, int arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(int arg1, int arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Ints
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(uint arg1, uint arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(uint arg1, uint arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(uint arg1, uint arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(long arg1, long arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(long arg1, long arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(long arg1, long arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(ulong arg1, ulong arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(ulong arg1, ulong arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        [CLSCompliant(false)]
-        public static void GreaterOrEqual(ulong arg1, ulong arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Decimals
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(decimal arg1, decimal arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(decimal arg1, decimal arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(decimal arg1, decimal arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Doubles
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(double arg1, double arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(double arg1, double arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(double arg1, double arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Floats
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(float arg1, float arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(float arg1, float arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(float arg1, float arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region IComparables
-
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void GreaterOrEqual(IComparable arg1, IComparable arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void GreaterOrEqual(IComparable arg1, IComparable arg2, string message)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is greater than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be greater</param>
-        /// <param name="arg2">The second value, expected to be less</param>
-        public static void GreaterOrEqual(IComparable arg1, IComparable arg2)
-        {
-            Assert.That(arg1, Is.GreaterThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region LessOrEqual
-
-        #region Ints
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(int arg1, int arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(int arg1, int arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(int arg1, int arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Ints
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(uint arg1, uint arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(uint arg1, uint arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(uint arg1, uint arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(long arg1, long arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(long arg1, long arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(long arg1, long arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(ulong arg1, ulong arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(ulong arg1, ulong arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        [CLSCompliant(false)]
-        public static void LessOrEqual(ulong arg1, ulong arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion 
-
-        #region Decimals
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(decimal arg1, decimal arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(decimal arg1, decimal arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(decimal arg1, decimal arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Doubles
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(double arg1, double arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(double arg1, double arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(double arg1, double arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region Floats
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(float arg1, float arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(float arg1, float arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(float arg1, float arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #region IComparables
-
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void LessOrEqual(IComparable arg1, IComparable arg2, string message, params object[] args)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, args);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void LessOrEqual(IComparable arg1, IComparable arg2, string message)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,message, null);
-        }
-        /// <summary>
-        /// Verifies that the first value is less than or equal to the second
-        /// value. If it is not, then an
-        /// <see cref="AssertionException"/> is thrown. 
-        /// </summary>
-        /// <param name="arg1">The first value, expected to be less</param>
-        /// <param name="arg2">The second value, expected to be greater</param>
-        public static void LessOrEqual(IComparable arg1, IComparable arg2)
-        {
-            Assert.That(arg1, Is.LessThanOrEqualTo(arg2) ,null, null);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Contains
-
-        /// <summary>
-        /// Asserts that an object is contained in a list.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        /// <param name="actual">The list to be examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Contains(object expected, ICollection actual, string message, params object[] args)
-        {
-            Assert.That(actual, new CollectionContainsConstraint(expected) ,message, args);
-        }
-        /// <summary>
-        /// Asserts that an object is contained in a list.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        /// <param name="actual">The list to be examined</param>
-        /// <param name="message">The message to display in case of failure</param>
-        public static void Contains(object expected, ICollection actual, string message)
-        {
-            Assert.That(actual, new CollectionContainsConstraint(expected) ,message, null);
-        }
-        /// <summary>
-        /// Asserts that an object is contained in a list.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        /// <param name="actual">The list to be examined</param>
-        public static void Contains(object expected, ICollection actual)
-        {
-            Assert.That(actual, new CollectionContainsConstraint(expected) ,null, null);
-        }
-
-        #endregion
-#endif
 
         #region Helper Methods
 

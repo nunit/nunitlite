@@ -37,10 +37,7 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-            string actualAsString = actual as string;
-            bool hasSucceeded = actual != null && actualAsString == string.Empty;
-
-            return hasSucceeded;
+            return actual as string == string.Empty;
         }
 
         /// <summary>

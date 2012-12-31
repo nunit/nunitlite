@@ -23,11 +23,9 @@
 
 #if !NETCF
 using System.Text.RegularExpressions;
-#endif
 
 namespace NUnit.Framework.Constraints
 {
-#if !NETCF
     /// <summary>
     /// RegexConstraint can test whether a string matches
     /// the pattern provided.
@@ -47,8 +45,6 @@ namespace NUnit.Framework.Constraints
         /// <returns>True for success, false for failure</returns>
         protected override bool Matches(string actual)
         {
-            //this.actual = actual;
-
             return Regex.IsMatch(
                     actual,
                     this.expected,
@@ -67,5 +63,5 @@ namespace NUnit.Framework.Constraints
                 writer.WriteModifier("ignoring case");
         }
     }
-#endif
 }
+#endif

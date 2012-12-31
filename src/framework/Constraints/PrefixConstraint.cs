@@ -37,8 +37,7 @@ namespace NUnit.Framework.Constraints
         /// Construct given a base constraint
         /// </summary>
         /// <param name="resolvable"></param>
-        protected PrefixConstraint(IResolveConstraint resolvable)
-            : base(resolvable)
+        protected PrefixConstraint(IResolveConstraint resolvable) : base(resolvable)
         {
             if (resolvable != null)
                 this.baseConstraint = resolvable.Resolve();

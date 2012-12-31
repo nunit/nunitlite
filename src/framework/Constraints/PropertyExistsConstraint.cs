@@ -61,7 +61,7 @@ namespace NUnit.Framework.Constraints
 
             Guard.ArgumentNotNull(actual, "actual");
 
-            actualType = actual as Type;
+            this.actualType = actual as Type;
             if (actualType == null)
                 actualType = actual.GetType();
 

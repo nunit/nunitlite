@@ -750,6 +750,19 @@ namespace NUnit.Framework.Constraints
 
         #endregion
 
+        #region SubPath
+
+        /// <summary>
+        /// Returns a constraint that tests whether the path provided 
+        /// is the same path or under an expected path after canonicalization.
+        /// </summary>
+        public SubPathConstraint SubPath(string expected)
+        {
+            return new SubPathConstraint(expected);
+        }
+
+        #endregion
+
         #region SamePathOrUnder
 
         /// <summary>
@@ -765,6 +778,16 @@ namespace NUnit.Framework.Constraints
 
         #region InRange
 
+#if CLR_2_0 || CLR_4_0
+        /// <summary>
+        /// Returns a constraint that tests whether the actual value falls 
+        /// within a specified range.
+        /// </summary>
+        public RangeConstraint<T> InRange<T>(T from, T to) where T : IComparable<T>
+        {
+            return new RangeConstraint<T>(from, to);
+        }
+#else
         /// <summary>
         /// Returns a constraint that tests whether the actual value falls 
         /// within a specified range.
@@ -773,6 +796,7 @@ namespace NUnit.Framework.Constraints
         {
             return new RangeConstraint(from, to);
         }
+#endif
 
         #endregion
 

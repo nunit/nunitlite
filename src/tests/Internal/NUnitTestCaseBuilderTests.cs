@@ -29,6 +29,7 @@ namespace NUnit.Framework.Internal
         [TestCase("AsyncTaskTestCaseWithExpectedResult", RunState.NotRunnable)]
         [TestCase("AsyncGenericTaskTestCase", RunState.NotRunnable)]
         [TestCase("AsyncGenericTaskTestCaseWithExpectedResult", RunState.Runnable)]
+        [TestCase("AsyncGenericTaskTestCaseWithExpectedException", RunState.Runnable)]
         public void AsyncTestCases(string methodName, RunState expectedState)
         {
             var suite = TestBuilder.MakeTestCase(fixtureType, methodName);

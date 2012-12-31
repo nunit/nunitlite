@@ -135,11 +135,10 @@ namespace NUnit.TestData
         [Test]
         public async void AsyncVoidAssertSynchronizationContext()
         {
-            Assert.That(SynchronizationContext.Current, Is.InstanceOf<AsyncSynchronizationContext>());
             await Task.Yield();
         }
 
-		[Test]//bad
+		[Test]
 		public async void NestedAsyncVoidSuccess()
 		{
 			var result = await Task.Run(async () => await ReturnOne());
@@ -147,7 +146,7 @@ namespace NUnit.TestData
 			Assert.AreEqual(1, result);
 		}
 
-		[Test]//bad
+		[Test]
 		public async void NestedAsyncVoidFailure()
 		{
 			var result = await Task.Run(async () => await ReturnOne());
@@ -163,7 +162,7 @@ namespace NUnit.TestData
 			Assert.Fail("Should not get here");
 		}
 
-		[Test]//bad
+		[Test]
 		public async Task NestedAsyncTaskSuccess()
 		{
 			var result = await Task.Run(async () => await ReturnOne());
@@ -171,7 +170,7 @@ namespace NUnit.TestData
 			Assert.AreEqual(1, result);
 		}
 
-		[Test]//bad
+		[Test]
 		public async Task NestedAsyncTaskFailure()
 		{
 			var result = await Task.Run(async () => await ReturnOne());
@@ -217,7 +216,7 @@ namespace NUnit.TestData
 			return result;
 		}
 
-		[Test]//bad
+		[Test]
 		public async void AsyncVoidMultipleSuccess()
 		{
 			var result = await ReturnOne();
@@ -242,7 +241,7 @@ namespace NUnit.TestData
 			Assert.Fail("Should never get here");
 		}
 
-		[Test]//bad
+		[Test]
 		public async void AsyncTaskMultipleSuccess()
 		{
 			var result = await ReturnOne();
@@ -250,7 +249,7 @@ namespace NUnit.TestData
 			Assert.AreEqual(await ReturnOne(), result);
 		}
 
-		[Test]//bad
+		[Test]
 		public async void AsyncTaskMultipleFailure()
 		{
 			var result = await ReturnOne();

@@ -32,11 +32,11 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// The first constraint being combined
         /// </summary>
-        protected Constraint Left;
+        protected Constraint left;
         /// <summary>
         /// The second constraint being combined
         /// </summary>
-        protected Constraint Right;
+        protected Constraint right;
 
         /// <summary>
         /// Construct a BinaryConstraint from two other constraints
@@ -46,8 +46,8 @@ namespace NUnit.Framework.Constraints
         protected BinaryConstraint(Constraint left, Constraint right)
             : base(left, right)
         {
-            this.Left = left;
-            this.Right = right;
+            this.left = left;
+            this.right = right;
         }
     }
 }

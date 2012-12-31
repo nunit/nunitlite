@@ -158,8 +158,9 @@ namespace NUnit.Framework.Constraints
         }
 
         /// <summary>
-        /// Get an array of indices representing the point in a collection or
-        /// array corresponding to a single int index into the collection.
+        /// Get an array of indices representing the point in a enumerable,
+        /// collection or array corresponding to a single int index into the 
+        /// collection.
         /// </summary>
         /// <param name="collection">The collection to which the indices apply</param>
         /// <param name="index">Index in the collection</param>

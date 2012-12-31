@@ -54,8 +54,8 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-            failurePoint = Left.Matches(actual)
-                ? Right.Matches(actual)
+            failurePoint = left.Matches(actual)
+                ? right.Matches(actual)
                     ? FailurePoint.None
                     : FailurePoint.Right
                 : FailurePoint.Left;
@@ -69,9 +69,9 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The MessageWriter to receive the description</param>
         public override void WriteDescriptionTo(MessageWriter writer)
         {
-            Left.WriteDescriptionTo(writer);
+            left.WriteDescriptionTo(writer);
             writer.WriteConnector("and");
-            Right.WriteDescriptionTo(writer);
+            right.WriteDescriptionTo(writer);
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace NUnit.Framework.Constraints
             switch (failurePoint)
             {
                 case FailurePoint.Left:
-                    Left.WriteActualValueTo(writer);
+                    left.WriteActualValueTo(writer);
                     break;
                 case FailurePoint.Right:
-                    Right.WriteActualValueTo(writer);
+                    right.WriteActualValueTo(writer);
                     break;
                 default:
                     base.WriteActualValueTo(writer);

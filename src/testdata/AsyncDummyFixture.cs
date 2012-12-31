@@ -1,6 +1,7 @@
 #if NET_4_5
 using System.Threading.Tasks;
 using NUnit.Framework;
+using System;
 
 namespace NUnit.TestData
 {
@@ -70,6 +71,21 @@ namespace NUnit.TestData
         public async Task<int> AsyncGenericTaskTestCaseWithExpectedResult()
         {
             return await Task.Run(() => 1);
+        }
+
+        [TestCase(ExpectedException = typeof(Exception))]
+        public async Task<int> AsyncGenericTaskTestCaseWithExpectedException()
+        {
+            return await Throw();
+        }
+
+        private async Task<int> Throw()
+        {
+            return await Task.Run(() =>
+            {
+                throw new InvalidOperationException();
+                return 1;
+            });
         }
     }
 }

@@ -25,6 +25,9 @@ using System;
 using System.Collections;
 using NUnit.Framework.Internal;
 using NUnit.TestUtilities;
+#if CLR_2_0 || CLR_4_0
+using RangeConstraint = NUnit.Framework.Constraints.RangeConstraint<int>;
+#endif
 
 namespace NUnit.Framework.Constraints.Tests
 {

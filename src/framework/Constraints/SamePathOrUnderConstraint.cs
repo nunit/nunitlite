@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using NUnit.Framework.Internal;
+
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
@@ -37,16 +39,14 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Test whether the constraint is satisfied by a given value
         /// </summary>
-        /// <param name="actual">The value to be tested</param>
+        /// <param name="expectedPath">The expected path</param>
+        /// <param name="actualPath">The actual path</param>
         /// <returns>True for success, false for failure</returns>
-        public override bool Matches(object actual)
+        protected override bool IsMatch(string expectedPath, string actualPath)
         {
-            this.actual = actual;
-
-            string actualAsString = actual as string;
-            bool hasSucceeded = actualAsString != null && IsSamePathOrUnder(expected, actualAsString);
-
-            return hasSucceeded;
+            string path1 = Canonicalize(expectedPath);
+            string path2 = Canonicalize(actualPath);
+            return StringUtil.StringsEqual(path1, path2, caseInsensitive) || IsSubPath(path1, path2, caseInsensitive);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace NUnit.Framework.Constraints
         public override void WriteDescriptionTo(MessageWriter writer)
         {
             writer.WritePredicate("Path under or matching");
-            writer.WriteExpectedValue(expected);
+            writer.WriteExpectedValue(expectedPath);
         }
     }
 }

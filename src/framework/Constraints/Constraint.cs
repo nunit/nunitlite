@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System.Collections;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Constraints
 {
@@ -29,7 +30,11 @@ namespace NUnit.Framework.Constraints
     /// Delegate used to delay evaluation of the actual value
     /// to be used in evaluating a constraint
     /// </summary>
+#if CLR_2_0 || CLR_4_0
+    public delegate T ActualValueDelegate<T>();
+#else
     public delegate object ActualValueDelegate();
+#endif
 
     /// <summary>
     /// The Constraint class is the base of all built-in constraints
@@ -172,6 +177,7 @@ namespace NUnit.Framework.Constraints
         /// <returns>True for success, false for failure</returns>
         public abstract bool Matches(object actual);
 
+#if CLR_2_0 || CLR_4_0
         /// <summary>
         /// Test whether the constraint is satisfied by an
         /// ActualValueDelegate that returns the value to be tested.
@@ -179,12 +185,32 @@ namespace NUnit.Framework.Constraints
         /// but derived classes may override it to provide for delayed 
         /// processing.
         /// </summary>
-        /// <param name="del">An ActualValueDelegate</param>
+        /// <param name="del">An <see cref="ActualValueDelegate{T}" /></param>
+        /// <returns>True for success, false for failure</returns>
+        public virtual bool Matches<T>(ActualValueDelegate<T> del)
+        {
+#if NET_4_5
+            if (AsyncInvocationRegion.IsAsyncOperation(del))
+                using (var region = AsyncInvocationRegion.Create(del))
+                    return Matches(region.WaitForPendingOperationsToComplete(del()));
+#endif
+            return Matches(del());
+        }
+#else
+        /// <summary>
+        /// Test whether the constraint is satisfied by an
+        /// ActualValueDelegate that returns the value to be tested.
+        /// The default implementation simply evaluates the delegate
+        /// but derived classes may override it to provide for delayed 
+        /// processing.
+        /// </summary>
+        /// <param name="del">An <see cref="ActualValueDelegate" /></param>
         /// <returns>True for success, false for failure</returns>
         public virtual bool Matches(ActualValueDelegate del)
         {
             return Matches(del());
         }
+#endif
 
         /// <summary>
         /// Test whether the constraint is satisfied by a given reference.
@@ -237,7 +263,6 @@ namespace NUnit.Framework.Constraints
         /// <summary>
         /// Returns the string representation of this constraint
         /// </summary>
-        /// <returns></returns>
         protected virtual string GetStringRepresentation()
         {
             switch (argcnt)
@@ -350,7 +375,7 @@ namespace NUnit.Framework.Constraints
 
         #region After Modifier
 
-#if (CLR_2_0 || CLR_4_0) && !NETCF
+#if !NETCF && !SILVERLIGHT
         /// <summary>
         /// Returns a DelayedConstraint with the specified delay time.
         /// </summary>

@@ -30,9 +30,9 @@ using NUnit.TestUtilities;
 
 namespace NUnit.Framework.Constraints.Tests
 {
-    #region ComparisonConstraintTestBase
+    #region ComparisonConstraintTest
 
-    public abstract class ComparisonConstraintTestBase : ConstraintTestBaseWithArgumentException
+    public abstract class ComparisonConstraintTest : ConstraintTestBaseWithArgumentException
     {
         protected ComparisonConstraint comparisonConstraint;
 

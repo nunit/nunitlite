@@ -1,4 +1,4 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) 2008 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,23 +21,40 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+
 namespace NUnit.Framework.Constraints
 {
     /// <summary>
-    /// Abstract base for operators that indicate how to
-    /// apply a constraint to items in a collection.
+    /// SubPathConstraint tests that the actual path is under the expected path
     /// </summary>
-    public abstract class CollectionOperator : PrefixOperator
+    public class SubPathConstraint : PathConstraint
     {
         /// <summary>
-        /// Constructs a CollectionOperator
+        /// Initializes a new instance of the <see cref="T:SubPathConstraint"/> class.
         /// </summary>
-        protected CollectionOperator()
+        /// <param name="expected">The expected path</param>
+        public SubPathConstraint(string expected) : base(expected) { }
+
+        /// <summary>
+        /// Test whether the constraint is satisfied by a given value
+        /// </summary>
+        /// <param name="expectedPath">The expected path</param>
+        /// <param name="actualPath">The actual path</param>
+        /// <returns>True for success, false for failure</returns>
+        protected override bool IsMatch(string expectedPath, string actualPath)
         {
-            // Collection Operators stack on everything
-            // and allow all other ops to stack on them
-            this.left_precedence = 1;
-            this.right_precedence = 10;
+            return IsSubPath(Canonicalize(expectedPath), Canonicalize(actualPath), caseInsensitive);
+        }
+
+        /// <summary>
+        /// Write the constraint description to a MessageWriter
+        /// </summary>
+        /// <param name="writer">The writer on which the description is displayed</param>
+        public override void WriteDescriptionTo(MessageWriter writer)
+        {
+            writer.WritePredicate("Path under");
+            writer.WriteExpectedValue(expectedPath);
         }
     }
- }
+}

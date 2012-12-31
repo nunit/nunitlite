@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+
 namespace NUnit.Framework.Constraints
 {
 	/// <summary>
@@ -53,9 +55,9 @@ namespace NUnit.Framework.Constraints
 			this.actual = actual;
 
             if (actual == null)
-                throw new System.ArgumentException("The actual value must be a non-null string, IEnumerable or DirectoryInfo", "actual");
+                throw new ArgumentException("The actual value must be a non-null string, IEnumerable or DirectoryInfo", "actual");
 
-			return RealConstraint.Matches( actual );
+			return this.RealConstraint.Matches( actual );
 		}
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace NUnit.Framework.Constraints
         /// <param name="writer">The writer on which the description is displayed</param>
 		public override void WriteDescriptionTo(MessageWriter writer)
 		{
-			RealConstraint.WriteDescriptionTo( writer );
+			this.RealConstraint.WriteDescriptionTo( writer );
 		}
 	}
 }
