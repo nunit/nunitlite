@@ -78,7 +78,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual(1, StaticSetUpAndTearDownFixture.tearDownCount);
         }
 
-#if !NUNITLITE
+#if CLR_2_0 || CLR_4_0
         [Test]
         public static void StaticClassSetUpAndTearDownAreCalled()
         {
@@ -299,7 +299,7 @@ namespace NUnit.Framework.Attributes
         }
 	}
 
-#if !NUNITLITE
+#if !SILVERLIGHT && !NETCF
     [TestFixture]
     class ChangesMadeInFixtureSetUp
     {
@@ -322,6 +322,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("en-GB", Thread.CurrentThread.CurrentUICulture.Name);
         }
 
+#if !NUNITLITE
         [Test, RequiresThread]
         public void TestThatChangesPersistUsingSeparateThread()
         {
@@ -329,6 +330,7 @@ namespace NUnit.Framework.Attributes
             Assert.AreEqual("en-GB", Thread.CurrentThread.CurrentCulture.Name);
             Assert.AreEqual("en-GB", Thread.CurrentThread.CurrentUICulture.Name);
         }
+#endif
     }
 #endif
 }

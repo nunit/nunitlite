@@ -93,6 +93,15 @@ namespace NUnit.Framework.Syntax
         }
 
         [Test]
+        public void ThrowsTypeofWithMessage()
+        {
+            IResolveConstraint expr = Throws.TypeOf(typeof(ArgumentException)).With.Message.EqualTo("my message");
+            Assert.AreEqual(
+                @"<throws <and <typeof System.ArgumentException> <property Message <equal ""my message"">>>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
         public void ThrowsInstanceOf()
         {
             IResolveConstraint expr = Throws.InstanceOf(typeof(ArgumentException));
@@ -110,8 +119,64 @@ namespace NUnit.Framework.Syntax
                 expr.Resolve().ToString());
         }
 
+        [Test]
+        public void ThrowsInnerException()
+        {
+            IResolveConstraint expr = Throws.InnerException.TypeOf(typeof(ArgumentException));
+            Assert.AreEqual(
+                "<throws <property InnerException <typeof System.ArgumentException>>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
+        public void ThrowsExceptionWithInnerException()
+        {
+            IResolveConstraint expr = Throws.Exception.With.InnerException.TypeOf(typeof(ArgumentException));
+            Assert.AreEqual(
+                "<throws <property InnerException <typeof System.ArgumentException>>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
+        public void ThrowsTypeOfWithInnerException()
+        {
+            IResolveConstraint expr = Throws.TypeOf(typeof(System.Reflection.TargetInvocationException))
+                .With.InnerException.TypeOf(typeof(ArgumentException));
+            Assert.AreEqual(
+                "<throws <and <typeof System.Reflection.TargetInvocationException> <property InnerException <typeof System.ArgumentException>>>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
+        public void ThrowsTargetInvocationExceptionWithInnerException()
+        {
+            IResolveConstraint expr = Throws.TargetInvocationException
+                .With.InnerException.TypeOf(typeof(ArgumentException));
+            Assert.AreEqual(
+                "<throws <and <typeof System.Reflection.TargetInvocationException> <property InnerException <typeof System.ArgumentException>>>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
+        public void ThrowsArgumentException()
+        {
+            IResolveConstraint expr = Throws.ArgumentException;
+            Assert.AreEqual(
+                "<throws <typeof System.ArgumentException>>",
+                expr.Resolve().ToString());
+        }
+
+        [Test]
+        public void ThrowsInvalidOperationException()
+        {
+            IResolveConstraint expr = Throws.InvalidOperationException;
+            Assert.AreEqual(
+                "<throws <typeof System.InvalidOperationException>>",
+                expr.Resolve().ToString());
+        }
+
 #if CLR_2_0 || CLR_4_0
-#if !NETCF_2_0 // Won't compile
+#if !NETCF
         [Test]
         public void DelegateThrowsException()
         {
@@ -119,9 +184,7 @@ namespace NUnit.Framework.Syntax
                 delegate { throw new ArgumentException(); },
                 Throws.Exception);
         }
-#endif
 
-#if !NETCF
         [Test]
         public void LambdaThrowsExcepton()
         {
@@ -148,6 +211,29 @@ namespace NUnit.Framework.Syntax
                     throw new ArgumentNullException();
                 }
             }
+        }
+
+        [Test]
+        public void LambdaThrowsNothing()
+        {
+            Assert.That(() => (object)null, Throws.Nothing);
+        }
+#else
+        [Test]
+        public void DelegateThrowsException()
+        {
+            Assert.That(
+                delegate { Throw(); return; },
+                Throws.Exception);
+        }
+
+        // Encapsulate throw to trick compiler and
+        // avoid unreachable code warning. Can't
+        // use pragma because this is also compiled
+        // under the .NET 1.0 and 1.1 compilers.
+        private void Throw()
+        {
+            throw new ApplicationException();
         }
 #endif
 #endif

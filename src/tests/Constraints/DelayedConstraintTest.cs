@@ -102,6 +102,25 @@ namespace NUnit.Framework.Constraints.Tests
 
 #if CLR_2_0 || CLR_4_0
         [Test]
+        public void SimpleTestBoolDelegate()
+        {
+            SetValueTrueAfterDelay(500);
+            Assert.That(DelegateReturningValue, new DelayedConstraint(new EqualConstraint(true), 5000, 200));
+        }
+
+        [Test]
+        public void ThatOverload_ZeroDelayIsAllowed_IntDelegate()
+        {
+            Assert.That(DelegateReturningZero, new DelayedConstraint(new EqualConstraint(0), 0));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ThatOverload_DoesNotAcceptNegativeDelayValues_IntDelegate()
+        {
+            Assert.That(DelegateReturningZero, new DelayedConstraint(new EqualConstraint(0), -1));
+        }
+
+        [Test]
         public void CanTestContentsOfList()
         {
             BackgroundWorker worker = new BackgroundWorker();

@@ -61,6 +61,18 @@ namespace NUnit.Framework.Syntax
         }
     }
 
+    public class NaNTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<nan>";
+            staticSyntax = Is.NaN;
+            inheritedSyntax = Helper().NaN;
+            builderSyntax = Builder().NaN;
+        }
+    }
+
     public class PositiveTest : SyntaxTest
     {
         [SetUp]
@@ -85,15 +97,15 @@ namespace NUnit.Framework.Syntax
         }
     }
 
-    public class NaNTest : SyntaxTest
+    public class EmptyTest : SyntaxTest
     {
         [SetUp]
         public void SetUp()
         {
-            parseTree = "<nan>";
-            staticSyntax = Is.NaN;
-            inheritedSyntax = Helper().NaN;
-            builderSyntax = Builder().NaN;
+            parseTree = "<empty>";
+            staticSyntax = Is.Empty;
+            inheritedSyntax = Helper().Empty;
+            builderSyntax = Builder().Empty;
         }
     }
 }

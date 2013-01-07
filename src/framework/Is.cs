@@ -173,7 +173,7 @@ namespace NUnit.Framework
 
         #region XmlSerializable
 
-#if !NETCF_1_0 && !SILVERLIGHT
+#if !SILVERLIGHT
         /// <summary>
         /// Returns a constraint that tests whether an object graph is serializable in xml format.
         /// </summary>

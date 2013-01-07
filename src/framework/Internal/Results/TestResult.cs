@@ -50,12 +50,10 @@ namespace NUnit.Framework.Internal
         [CLSCompliant(false)]
         protected readonly ITest test;
 
-#if !NETCF_1_0
         /// <summary>
         /// The stacktrace at the point of failure
         /// </summary>
         private string stackTrace;
-#endif
 
         /// <summary>
         /// Message giving the reason for failure, error or skipping the test
@@ -152,7 +150,6 @@ namespace NUnit.Framework.Internal
             get { return message; }
         }
 
-#if !NETCF_1_0
         /// <summary>
         /// Gets any stacktrace associated with an
         /// error or failure. Not available in
@@ -162,7 +159,6 @@ namespace NUnit.Framework.Internal
         {
             get { return stackTrace; }
         }
-#endif
 
         /// <summary>
         /// Gets the failure site, which indicates the point
@@ -445,7 +441,6 @@ namespace NUnit.Framework.Internal
             if (ex is NUnitException)
                 ex = ex.InnerException;
 
-#if !NETCF_1_0
             if (ex is System.Threading.ThreadAbortException)
                 SetResult(ResultState.Cancelled, "Test cancelled by user", ex.StackTrace);
             else if (ex is AssertionException)
@@ -460,18 +455,6 @@ namespace NUnit.Framework.Internal
                 SetResult(ResultState.Error,
                     ExceptionHelper.BuildMessage(ex),
                     ExceptionHelper.BuildStackTrace(ex));
-#else
-            if (ex is AssertionException)
-		        SetResult(ResultState.Failure, ex.Message);
-            else if (ex is IgnoreException)
-                SetResult(ResultState.Ignored, ex.Message);
-            else if (ex is InconclusiveException)
-                SetResult(ResultState.Inconclusive, ex.Message);
-            else if (ex is SuccessException)
-                SetResult(ResultState.Success, ex.Message);
-            else
-                SetResult(ResultState.Error, ExceptionHelper.BuildMessage(ex));
-#endif
         }
 
         #endregion
@@ -504,12 +487,10 @@ namespace NUnit.Framework.Internal
                 failureNode.AddElement("message").TextContent = this.Message;
             }
 
-#if !NETCF_1_0
             if (this.StackTrace != null)
             {
                 failureNode.AddElement("stack-trace").TextContent = this.StackTrace;
             }
-#endif
 
             return failureNode;
         }

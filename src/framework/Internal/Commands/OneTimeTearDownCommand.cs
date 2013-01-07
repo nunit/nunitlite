@@ -91,16 +91,12 @@ namespace NUnit.Framework.Internal.Commands
                     if (suiteResult.Message != null)
                         message = suiteResult.Message + NUnit.Env.NewLine + message;
 
-#if !NETCF_1_0
                     string stackTrace = "--TearDown" + NUnit.Env.NewLine + ExceptionHelper.BuildStackTrace(ex);
                     if (suiteResult.StackTrace != null)
                         stackTrace = suiteResult.StackTrace + NUnit.Env.NewLine + stackTrace;
 
                     // TODO: What about ignore exceptions in teardown?
                     suiteResult.SetResult(ResultState.Error, message, stackTrace);
-#else
-                    Result.SetResult(ResultState.Error, message);
-#endif
                 }
             }
 

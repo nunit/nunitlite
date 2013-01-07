@@ -36,30 +36,20 @@
   <property name="build.defines" value=""/>
 
   <!-- Default runtime configuration -->
+  <property name="runtime.config" value="${framework::get-target-framework()}"/>
+
+  <!-- Collect list of installed frameworks -->
   <foreach item="String" delim="," 
       property="framework" in="${supported.frameworks}">
     <if test="${framework::exists( framework )}">
-    <if test="${framework::sdk-exists( framework )}">
+    <if test="${string::starts-with(framework, 'silverlight') or framework::sdk-exists( framework )}">
       <property name="installed.frameworks" value="${installed.frameworks},${framework}"
         if="${property::exists('installed.frameworks')}"/>
       <property name="installed.frameworks" value="${framework}"
         unless="${property::exists('installed.frameworks')}"/>
-      <property name="default.runtime" value="${framework}"
-        unless="${property::exists('default.runtime')}"/>
-      <property name="default.net.runtime" value="${framework}"
-        if="${string::starts-with(framework,'net-')}"
-        unless="${property::exists('default.net.runtime')}"/>
-      <property name="default.netcf.runtime" value="${framework}"
-        if="${string::starts-with(framework,'netcf-')}"
-        unless="${property::exists('default.netcf.runtime')}"/>
-      <property name="default.mono.runtime" value="${framework}"
-        if="${string::starts-with(framework,'mono')}"
-        unless="${property::exists('default.mono.runtime')}"/>
     </if>
     </if>
   </foreach>
-
-  <call target="set-${default.runtime}-runtime-config" />
 
 <!-- ***************************************************************** -->
 <!-- *********      FileSets Used by Various Targets       *********** -->
@@ -118,48 +108,6 @@
     <call target="set-${runtime.config}-runtime-config"/>
   </target>
   
-  <target name="set-default-dot-net-runtime-config">
-    <fail unless="${property::exists( 'default.net.runtime' )}"
-      message="No versions of the .NET SDK were found"/>
-
-    <call target="set-${default.net.runtime}-runtime-config" />
-  </target>
-
-  <target name="set-default-netcf-runtime-config">
-    <fail unless="${property::exists( 'default.netcf.runtime' )}"
-      message="No versions of the .NET Compact Framework SDK were found"/>
-
-    <call target="set-${default.netcf.runtime}-runtime-config" />
-  </target>
-
-  <target name="set-default-silverlight-runtime-config">
-    <fail unless="${property::exists( 'default.silverlight.runtime' )}"
-      message="No versions of Silverlight were found"/>
-
-    <call target="set-${default.sliverlight.runtime}-runtime-config" />
-  </target>
-
-  <target name="set-default-mono-runtime-config">
-    <fail unless="${property::exists( 'default.mono.runtime' )}"
-      message="No versions of the Mono runtime were found"/>
-
-    <call target="set-${default.mono.runtime}-runtime-config" />
-  </target>
-
-  <target name="set-net-1.0-runtime-config">
-    <fail unless="${framework::exists( 'net-1.0' )}"
-      message=".NET 1.0 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'net-1.0' )}"
-      message="The .NET 1.0 SDK is not configured or not installed"/>
-
-    <property name="runtime.platform" value="net"/>
-    <property name="runtime.version" value="1.0"/>
-    <property name="runtime.config" value="net-1.0"/>
-    <property name="runtime.defines" value="NET,NET_1_0,CLR_1_0"/>
-	<property name="build.framework" value="net-1.1"/>
-	<property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
-  </target>
-	
   <target name="set-net-1.1-runtime-config">
     <fail unless="${framework::exists( 'net-1.1' )}"
       message=".NET 1.1 is not installed"/>
@@ -171,7 +119,8 @@
     <property name="runtime.config" value="net-1.1"/>
     <property name="runtime.defines" value="NET,NET_1_1,CLR_1_1"/>
     <property name="build.framework" value="net-1.1"/>
-    <property name="test.platforms" value="net-1.0,net-1.1,net-2.0,mono-1.0,mono-2.0"/>
+    <property name="build.method" value="nant"/>
+    <property name="msbuild.proj.suffix" value=""/>c
   </target>
 	
   <target name="set-net-2.0-runtime-config">
@@ -184,80 +133,56 @@
     <property name="runtime.version" value="2.0"/>
     <property name="runtime.config" value="net-2.0"/>
     <property name="runtime.defines" value="NET,NET_2_0,CLR_2_0"/>
-    <property name="build.framework" value="net-4.0"/>
-	<property name="test.platforms" value="net-2.0,mono-2.0"/>
+    <property name="build.framework" value="net-3.5"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="2.0"/>
   </target>
 	
-  <target name="set-net-3.0-runtime-config">
-    <fail unless="${framework::exists( 'net-3.0' )}"
-      message=".NET 3.0 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'net-3.0' )}"
-      message="The .NET 3.0 SDK is not configured or not installed"/>
+  <target name="set-net-3.5-runtime-config">
+    <fail unless="${framework::exists( 'net-3.5' )}"
+      message=".NET 3.5 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'net-3.5' )}"
+      message="The .NET 3.5 SDK is not configured or not installed"/>
 
     <property name="runtime.platform" value="net"/>
-    <property name="runtime.version" value="3.0"/>
-    <property name="runtime.config" value="net-3.0"/>
-    <property name="runtime.defines" value="NET,NET_3_0,CLR_2_0"/>
-	<property name="build.framework" value="net-4.0"/>
-	<property name="test.platforms" value="net-3.0,mono-3.0"/>
+    <property name="runtime.version" value="3.5"/>
+    <property name="runtime.config" value="net-3.5"/>
+    <property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
+    <property name="build.framework" value="net-3.5"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="3.5"/>
   </target>
 
-	<target name="set-net-3.5-runtime-config">
-		<fail unless="${framework::exists( 'net-3.5' )}"
-		  message=".NET 3.5 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'net-3.5' )}"
-		  message="The .NET 3.5 SDK is not configured or not installed"/>
+  <target name="set-net-4.0-runtime-config">
+    <fail unless="${framework::exists( 'net-4.0' )}"
+      message=".NET 4.0 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'net-4.0' )}"
+      message="The .NET 4.0 SDK is not configured or not installed"/>
 
-		<property name="runtime.platform" value="net"/>
-		<property name="runtime.version" value="3.5"/>
-		<property name="runtime.config" value="net-3.5"/>
-		<property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
-		<property name="build.framework" value="net-4.0"/>
-		<property name="test.platforms" value="net-3.5,mono-3.5"/>
-	</target>
-
-	<target name="set-net-4.0-runtime-config">
-		<fail unless="${framework::exists( 'net-4.0' )}"
-		  message=".NET 4.0 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'net-4.0' )}"
-		  message="The .NET 4.0 SDK is not configured or not installed"/>
-
-		<property name="runtime.platform" value="net"/>
-		<property name="runtime.version" value="4.0"/>
-		<property name="runtime.config" value="net-4.0"/>
-		<property name="runtime.defines" value="NET,NET_4_0,CLR_4_0"/>
-		<property name="build.framework" value="net-4.0"/>
-		<property name="test.platforms" value="net-4.0,mono-4.0"/>
-	</target>
-
-	<target name="set-net-4.5-runtime-config">
-		<fail unless="${framework::exists( 'net-4.5' )}"
-		  message=".NET 4.5 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'net-4.5' )}"
-		  message="The .NET 4.5 SDK is not configured or not installed"/>
-
-		<property name="runtime.platform" value="net"/>
-		<property name="runtime.version" value="4.5"/>
-		<property name="runtime.config" value="net-4.5"/>
-		<property name="runtime.defines" value="NET,NET_4_5,CLR_4_0"/>
-		<property name="build.framework" value="net-4.5"/>
-		<property name="test.platforms" value="net-4.5"/>
-	</target>
-
-	<target name="set-netcf-1.0-runtime-config">
-    <fail unless="${framework::exists( 'netcf-1.0' )}"
-      message=".NET CF 1.0 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'netcf-1.0' )}"
-      message="The .NET CF 1.0 SDK is not configured or not installed"/>
-
-    <property name="runtime.platform" value="netcf"/>
-    <property name="runtime.version" value="1.0"/>
-    <property name="runtime.config" value="netcf-1.0"/>
-    <property name="runtime.defines" value="NETCF,NETCF_1_0"/>
-    <property name="build.framework" value="netcf-1.0"/>
-    <property name="test.platforms" value="netcf-1.0"/>
+    <property name="runtime.platform" value="net"/>
+    <property name="runtime.version" value="4.0"/>
+    <property name="runtime.config" value="net-4.0"/>
+    <property name="runtime.defines" value="NET,NET_4_0,CLR_4_0"/>
+    <property name="build.framework" value="net-4.0"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="4.0"/>
   </target>
-	
+
+  <target name="set-net-4.5-runtime-config">
+    <fail unless="${framework::exists( 'net-4.5' )}"
+      message=".NET 4.5 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'net-4.5' )}"
+      message="The .NET 4.5 SDK is not configured or not installed"/>
+
+    <property name="runtime.platform" value="net"/>
+    <property name="runtime.version" value="4.5"/>
+    <property name="runtime.config" value="net-4.5"/>
+    <property name="runtime.defines" value="NET,NET_4_5,CLR_4_0"/>
+    <property name="build.framework" value="net-4.5"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="4.5"/>
+  </target>
+
   <target name="set-netcf-2.0-runtime-config">
     <fail unless="${framework::exists( 'netcf-2.0' )}"
       message=".NET CF 2.0 is not installed"/>
@@ -269,64 +194,54 @@
     <property name="runtime.config" value="netcf-2.0"/>
     <property name="runtime.defines" value="NETCF,NETCF_2_0,CLR_2_0"/>
     <property name="build.framework" value="netcf-2.0"/>
-    <property name="test.platforms" value="netcf-2.0"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="netcf-2.0"/>
   </target>
 	
   <target name="set-netcf-3.5-runtime-config">
-    <fail unless="${framework::exists( 'netcf-3.5' )}"
+    <!--<fail unless="${framework::exists( 'netcf-3.5' )}"
       message=".NET CF 3.5 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'netcf-3.5' )}"
-      message="The .NET CF 3.5 SDK is not configured or not installed"/>
+    <fail unless="${framework::sdk-exists( 'net-3.5' )}"
+      message="The .NET 3.5 SDK is not configured or not installed"/>-->
 
     <property name="runtime.platform" value="netcf"/>
     <property name="runtime.version" value="3.5"/>
     <property name="runtime.config" value="netcf-3.5"/>
     <property name="runtime.defines" value="NETCF,NETCF_3_5,CLR_2_0"/>
-    <property name="build.framework" value="netcf-3.5"/>
-    <property name="test.platforms" value="netcf-3.5"/>
+    <property name="build.framework" value="net-3.5"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="netcf-3.5"/>
   </target>
 	
-  <target name="set-mono-1.0-runtime-config">
-    <fail unless="${framework::exists( 'mono-1.0' )}"
-      message="Mono is not installed"/>
-    <fail unless="${framework::sdk-exists( 'mono-1.0' )}"
-      message="The Mono 1.0 SDK is not configured or not installed"/>
+  <target name="set-mono-2.0-runtime-config">
+    <fail unless="${framework::exists( 'mono-2.0' )}"
+      message="Mono 2.0 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'mono-2.0' )}"
+      message="The Mono 2.0 SDK is not configured or not installed"/>
 
     <property name="runtime.platform" value="mono"/>
-    <property name="runtime.version" value="1.0"/>
-    <property name="runtime.config" value="mono-1.0"/>
-    <property name="runtime.defines" value="MONO,MONO_1_0"/>
-    <property name="nant.settings.currentframework" value="mono-1.0"/>
-    <property name="test.platforms" value="mono-1.0,mono-2.0,net-1.0,net-1.1,net-2.0"/>
+    <property name="runtime.version" value="2.0"/>
+    <property name="runtime.config" value="mono-2.0"/>
+    <property name="runtime.defines" value="MONO,MONO_2_0,CLR_2_0"/>
+    <property name="build.framework" value="mono-3.5"/>
+    <property name="build.method" value="nant"/>
+    <property name="msbuild.proj.suffix" value="2.0"/>
   </target>
 
-	<target name="set-mono-2.0-runtime-config">
-		<fail unless="${framework::exists( 'mono-2.0' )}"
-		  message="Mono 2.0 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'mono-2.0' )}"
-		  message="The Mono 2.0 SDK is not configured or not installed"/>
+  <target name="set-mono-3.5-runtime-config">
+    <fail unless="${framework::exists( 'mono-3.5' )}"
+      message="Mono 3.5 is not installed"/>
+    <fail unless="${framework::sdk-exists( 'mono-3.5' )}"
+      message="The Mono 3.5 SDK is not configured or not installed"/>
 
-		<property name="runtime.platform" value="mono"/>
-		<property name="runtime.version" value="2.0"/>
-		<property name="runtime.config" value="mono-2.0"/>
-		<property name="runtime.defines" value="MONO,MONO_2_0,CLR_2_0"/>
-		<property name="build.framework" value="mono-3.5"/>
-		<property name="test.platforms" value="mono-2.0,net-2.0"/>
-	</target>
-
-	<target name="set-mono-3.5-runtime-config">
-		<fail unless="${framework::exists( 'mono-3.5' )}"
-		  message="Mono 3.5 is not installed"/>
-		<fail unless="${framework::sdk-exists( 'mono-3.5' )}"
-		  message="The Mono 3.5 SDK is not configured or not installed"/>
-
-		<property name="runtime.platform" value="mono"/>
-		<property name="runtime.version" value="3.5"/>
-		<property name="runtime.config" value="mono-3.5"/>
-		<property name="runtime.defines" value="MONO,MONO_3_5,CLR_2_0"/>
-		<property name="build.framework" value="mono-3.5"/>
-		<property name="test.platforms" value="mono-3.5,net-3.5"/>
-	</target>
+    <property name="runtime.platform" value="mono"/>
+    <property name="runtime.version" value="3.5"/>
+    <property name="runtime.config" value="mono-3.5"/>
+    <property name="runtime.defines" value="MONO,MONO_3_5,CLR_2_0"/>
+    <property name="build.framework" value="mono-3.5"/>
+    <property name="build.method" value="nant"/>
+    <property name="msbuild.proj.suffix" value="3.5"/>
+  </target>
 
   <target name="set-mono-4.0-runtime-config">
     <fail unless="${framework::exists( 'mono-4.0' )}"
@@ -339,21 +254,21 @@
     <property name="runtime.config" value="mono-4.0"/>
     <property name="runtime.defines" value="MONO,MONO_4_0,CLR_4_0"/>
     <property name="build.framework" value="mono-4.0"/>
-    <property name="test.platforms" value="mono-4.0,net-4.0"/>
+    <property name="build.method" value="nant"/>
+    <property name="msbuild.proj.suffix" value="4.0"/>
   </target>
 
   <target name="set-silverlight-3.0-runtime-config">
     <fail unless="${framework::exists( 'silverlight-3.0' )}"
       message="Silverlight 3.0 is not installed"/>
-    <fail unless="${framework::sdk-exists( 'silverlight-3.0' )}"
-      message="The Silverlight 3.0 SDK is not configured or not installed"/>
 
     <property name="runtime.platform" value="silverlight"/>
     <property name="runtime.version" value="3.0"/>
     <property name="runtime.config" value="silverlight-3.0"/>
     <property name="runtime.defines" value="SILVERLIGHT,SL_3_0,CLR_2_0"/>
     <property name="build.framework" value="silverlight-3.0"/>
-    <property name="test.platforms" value="silverlight-3.0"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="sl-3.0"/>
   </target>
 
   <target name="set-silverlight-4.0-runtime-config">
@@ -365,7 +280,21 @@
     <property name="runtime.config" value="silverlight-4.0"/>
     <property name="runtime.defines" value="SILVERLIGHT,SL_4_0,CLR_4_0"/>
     <property name="build.framework" value="silverlight-4.0"/>
-    <property name="test.platforms" value="silverlight-4.0"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="sl-4.0"/>
+  </target>
+
+  <target name="set-silverlight-5.0-runtime-config">
+    <fail unless="${framework::exists( 'silverlight-5.0' )}"
+      message="Silverlight 5.0 is not installed"/>
+
+    <property name="runtime.platform" value="silverlight"/>
+    <property name="runtime.version" value="5.0"/>
+    <property name="runtime.config" value="silverlight-5.0"/>
+    <property name="runtime.defines" value="SILVERLIGHT,SL_5_0,CLR_4_0"/>
+    <property name="build.framework" value="silverlight-5.0"/>
+    <property name="build.method" value="msbuild"/>
+    <property name="msbuild.proj.suffix" value="sl-5.0"/>
   </target>
 
 <!-- ***************************************************************** -->
@@ -381,6 +310,11 @@
       value="${path::combine(runtime.platform.dir,runtime.version)}"/>
     <property name="current.build.dir" 
       value="${path::combine(runtime.version.dir,build.config)}"/>
+
+    <property name="msbuild.dir" value="${framework::get-framework-directory(build.framework)}"/>
+    <property name="msbuild.exe" value="MSBuild.exe" unless="${runtime.platform == 'mono'}"/>
+    <property name="msbuild.exe" value="xbuild.exe" if="${runtime.platform == 'mono'}"/>
+    <property name="msbuild.path" value="${msbuild.dir}/${msbuild.exe}"/>
   </target>
   
   <target name="make-build-dir" depends="set-build-dir">
@@ -447,17 +381,18 @@
     <echo>   Build:    ${project.build.dir}</echo>
     <echo>   Package:  ${project.package.dir}</echo>
     <echo></echo>
-    <echo>Runtime Versions</echo>
-    <echo>  Supported: ${supported.frameworks}</echo>
-    <echo>  Installed: ${installed.frameworks}</echo>
-    <echo>  Default:   ${default.runtime}</echo>
-    <echo>    .Net:    ${default.net.runtime}</echo>
-    <echo>    Mono:    ${default.mono.runtime}</echo>
+    <echo>Supported Framework Versions</echo>
+    <echo>  ${supported.frameworks}</echo>
+    <echo></echo>
+    <echo>Installed Framework Versions</echo>
+    <echo>  ${installed.frameworks}</echo>
     <echo></echo>
     <echo>Current Configuration</echo>
     <echo>  Config:    ${build.config}</echo>
     <echo>  Runtime:   ${runtime.config}</echo>
+    <echo>  VS Proj:   nunitlite-${msbuild.proj.suffix}.csproj</echo>
     <echo>  Defines:   ${build.defines}</echo>
+    <echo>  Builder:   ${msbuild.exe}</echo>
     <echo>  Version:   ${package.version}</echo>
     <echo>  Package:   ${package.name}</echo>
     <echo></echo>
@@ -467,8 +402,8 @@
     <echo>   Source:   ${package.src.dir}</echo>
     <echo></echo>
     <echo>Current Framework and SDK Directories</echo>
-    <echo>  ${framework::get-framework-directory(framework::get-target-framework())}</echo>
-    <echo>  ${framework::get-sdk-directory(framework::get-target-framework())}</echo>
+    <echo>  ${framework::get-framework-directory(runtime.config)}</echo>
+    <echo>  ${framework::get-sdk-directory(runtime.config)}</echo>
   </target>
 
 </project>

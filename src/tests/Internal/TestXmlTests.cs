@@ -1,4 +1,5 @@
-﻿using NUnit.Framework.Api;
+﻿using System;
+using NUnit.Framework.Api;
 
 namespace NUnit.Framework.Internal
 {
@@ -41,13 +42,11 @@ namespace NUnit.Framework.Internal
                 Is.EqualTo("Assembly"));
             Assert.That(new ParameterizedMethodSuite(typeof(DummyFixture).GetMethod("ParameterizedMethod")).TestType,
                 Is.EqualTo("ParameterizedMethod"));
+            Assert.That(new ParameterizedFixtureSuite(typeof(DummyFixture)).TestType,
+                Is.EqualTo("ParameterizedFixture"));
 #if CLR_2_0 || CLR_4_0
             Assert.That(new ParameterizedMethodSuite(typeof(DummyFixture).GetMethod("GenericMethod")).TestType,
                 Is.EqualTo("GenericMethod"));
-#endif
-#if !NUNITLITE
-            Assert.That(new ParameterizedFixtureSuite(typeof(DummyFixture)).TestType,
-                Is.EqualTo("ParameterizedFixture"));
             Type genericType = typeof(DummyGenericFixture<int>).GetGenericTypeDefinition();
             Assert.That(new ParameterizedFixtureSuite(genericType).TestType,
                 Is.EqualTo("GenericFixture"));
@@ -111,8 +110,6 @@ namespace NUnit.Framework.Internal
             Assert.That(topNode.Attributes["name"], Is.EqualTo(test.Name));
             Assert.That(topNode.Attributes["fullname"], Is.EqualTo(test.FullName));
 
-            // TODO: Replace SelectSingleNode to allow testing under CF 1.0
-#if !NETCF_1_0
             int expectedCount = test.Properties.Count;
             if (expectedCount > 0)
             {
@@ -152,7 +149,6 @@ namespace NUnit.Framework.Internal
                     }
                 }
             }
-#endif
         }
 
         #endregion
@@ -166,8 +162,8 @@ namespace NUnit.Framework.Internal
 #endif
         }
 
-#if !NUNITLITE
-        public class DummyGenericFixture<T>
+#if CLR_2_0 || CLR_4_0
+       public class DummyGenericFixture<T>
         {
         }
 #endif

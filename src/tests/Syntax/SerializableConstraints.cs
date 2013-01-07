@@ -38,7 +38,7 @@ namespace NUnit.Framework.Syntax
     }
 #endif
 
-#if !NETCF_1_0 && ! SILVERLIGHT
+#if !SILVERLIGHT
     [TestFixture]
     public class XmlSerializableTest : SyntaxTest
     {

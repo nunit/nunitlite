@@ -80,7 +80,9 @@
     <Compile Include="Assertions\AssertIgnoreTests.cs" />
     <Compile Include="Assertions\AssertInconclusiveTests.cs" />
     <Compile Include="Assertions\AssertPassTests.cs" />
-    <Compile Include="Assertions\AssertThatTests.cs" />
+    <Compile Include="Assertions\AssertThatTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Assertions\AssertThrowsTests.cs" />
     <Compile Include="Assertions\AssumeThatTests.cs" />
     <Compile Include="Assertions\CollectionTests.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Assertions\MessageChecker.cs" />
     <Compile Include="Assertions\NotEqualFixture.cs" />
     <Compile Include="Assertions\NotSameFixture.cs" />
+    <Compile Include="Assertions\NullableTypesTests.cs" />
     <Compile Include="Assertions\SameFixture.cs" />
     <Compile Include="Attributes\ApplyToTestTests.cs" />
     <Compile Include="Attributes\AttributeInheritanceTests.cs" />
@@ -124,7 +127,7 @@
     </Compile>
     <Compile Include="Constraints\BinarySerializableTest.cs" />
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
-    <Compile Include="Constraints\ComparisonConstraintTestBase.cs" />
+    <Compile Include="Constraints\ComparisonConstraintTest.cs" />
     <Compile Include="Constraints\DelayedConstraintTest.cs" />
     <Compile Include="Constraints\ExactCountConstraintTests.cs" />
     <Compile Include="Constraints\PredicateConstraintTests.cs" />
@@ -190,9 +193,12 @@
     <Compile Include="RecordingTestListener.cs" />
     <Compile Include="Runner\CommandLineOptionTests.cs" />
     <Compile Include="Runner\NUnit2XmlOutputWriterTests.cs" />
+    <Compile Include="Syntax\AfterTests.cs" />
+    <Compile Include="Syntax\ArbitraryConstraintMatching.cs" />
     <Compile Include="Syntax\CollectionTests.cs" />
     <Compile Include="Syntax\ComparisonTests.cs" />
     <Compile Include="Syntax\EqualityTests.cs" />
+    <Compile Include="Syntax\InvalidCodeTests.cs" />
     <Compile Include="Syntax\OperatorOverrides.cs" />
     <Compile Include="Syntax\OperatorTests.cs" />
     <Compile Include="Syntax\PathConstraintTests.cs" />
@@ -201,6 +207,7 @@
     <Compile Include="Syntax\SimpleConstraints.cs" />
     <Compile Include="Syntax\StringConstraints.cs" />
     <Compile Include="Syntax\SyntaxTest.cs" />
+    <Compile Include="Syntax\TestCompiler.cs" />
     <Compile Include="Syntax\ThrowsTests.cs" />
     <Compile Include="Syntax\TypeConstraints.cs" />
     <Compile Include="TestUtilities\Collections\SimpleObjectCollection.cs" />

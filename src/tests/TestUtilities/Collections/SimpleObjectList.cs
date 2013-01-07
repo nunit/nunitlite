@@ -19,7 +19,7 @@ namespace NUnit.TestUtilities
 
         private void Initialize(IList contents)
         {
-#if CLR_1_0 || CLR_1_1 || NETCF_1_0
+#if CLR_1_1
             this.inner = new System.Collections.ArrayList();
 #else
             this.inner = new System.Collections.Generic.List<object>();

@@ -205,10 +205,10 @@ namespace NUnit.Framework.Internal
                 expected.Append("<failure>");
                 if (result.Message != null)
                     expected.Append("<message>" + Escape(result.Message) + "</message>");
-#if !NETCF_1_0
+
                 if (result.StackTrace != null)
                     expected.Append("<stack-trace>" + Escape(result.StackTrace) + "</stack-trace>");
-#endif
+
                 expected.Append("</failure>");
             }
             else if (result.Message != null)

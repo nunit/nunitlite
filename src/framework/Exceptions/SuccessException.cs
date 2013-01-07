@@ -50,8 +50,7 @@ namespace NUnit.Framework
         /// Serialization Constructor
         /// </summary>
         protected SuccessException(System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context)
-            : base(info, context)
+            System.Runtime.Serialization.StreamingContext context) : base(info, context)
         { }
 #endif
     }

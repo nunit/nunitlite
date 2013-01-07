@@ -65,7 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite.tests-sl-5.0", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SL-3.0", "SL-3.0", "{035EFB6B-82E9-4510-AC99-B586E6381B25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite-sl-3.0 ", "src\framework\nunitlite-sl-3.0 .csproj", "{02B02379-2596-4E45-8B10-835D62EA2D9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunitlite-sl-3.0", "src\framework\nunitlite-sl-3.0.csproj", "{02B02379-2596-4E45-8B10-835D62EA2D9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-sl-3.0", "src\mock-assembly\mock-assembly-sl-3.0.csproj", "{BB355D2C-FB4F-4526-9B40-7944C40FDFDA}"
 EndProject

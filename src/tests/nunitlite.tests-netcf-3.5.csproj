@@ -100,7 +100,7 @@
     <Compile Include="Constraints\CollectionEquivalentConstraintTests.cs" />
     <Compile Include="Constraints\CollectionOrderedConstraintTests.cs" />
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
-    <Compile Include="Constraints\ComparisonConstraintTestBase.cs" />
+    <Compile Include="Constraints\ComparisonConstraintTest.cs" />
     <Compile Include="Constraints\ConstraintTestBase.cs" />
     <Compile Include="Constraints\EmptyConstraintTest.cs" />
     <Compile Include="Constraints\EndsWithConstraintTests.cs" />

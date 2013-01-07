@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\framework\nunitlite-sl-3.0 .csproj">
+    <ProjectReference Include="..\framework\nunitlite-sl-3.0.csproj">
       <Project>{02B02379-2596-4E45-8B10-835D62EA2D9E}</Project>
-      <Name>nunitlite-sl-3.0 </Name>
+      <Name>nunitlite-sl-3.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

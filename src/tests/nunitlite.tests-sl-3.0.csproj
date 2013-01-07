@@ -18,7 +18,7 @@
     <SupportedCultures />
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>nunitlite.tests_sl_3._0.xap</XapFilename>
+    <XapFilename>nunitlite.tests-sl-3.0.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>NUnitLite.Tests.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
@@ -78,8 +78,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
@@ -96,6 +94,7 @@
     <Compile Include="Assertions\AssertIgnoreTests.cs" />
     <Compile Include="Assertions\AssertInconclusiveTests.cs" />
     <Compile Include="Assertions\AssertPassTests.cs" />
+    <Compile Include="Assertions\AssertThatTests.cs" />
     <Compile Include="Assertions\AssertThrowsTests.cs" />
     <Compile Include="Assertions\AssumeThatTests.cs" />
     <Compile Include="Assertions\CollectionTests.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="Assertions\MessageChecker.cs" />
     <Compile Include="Assertions\NotEqualFixture.cs" />
     <Compile Include="Assertions\NotSameFixture.cs" />
+    <Compile Include="Assertions\NullableTypesTests.cs" />
     <Compile Include="Assertions\SameFixture.cs" />
     <Compile Include="Attributes\ApplyToTestTests.cs" />
     <Compile Include="Attributes\AttributeInheritanceTests.cs" />
@@ -137,7 +137,7 @@
     <Compile Include="Constraints\CollectionEquivalentConstraintTests.cs" />
     <Compile Include="Constraints\CollectionOrderedConstraintTests.cs" />
     <Compile Include="Constraints\CollectionSubsetConstraintTests.cs" />
-    <Compile Include="Constraints\ComparisonConstraintTestBase.cs" />
+    <Compile Include="Constraints\ComparisonConstraintTest.cs" />
     <Compile Include="Constraints\ConstraintTestBase.cs" />
     <Compile Include="Constraints\EmptyConstraintTest.cs" />
     <Compile Include="Constraints\EndsWithConstraintTests.cs" />
@@ -194,6 +194,7 @@
     <Compile Include="RecordingTestListener.cs" />
     <Compile Include="Runner\CommandLineOptionTests.cs" />
     <Compile Include="Runner\NUnit2XmlOutputWriterTests.cs" />
+    <Compile Include="Syntax\ArbitraryConstraintMatching.cs" />
     <Compile Include="Syntax\CollectionTests.cs" />
     <Compile Include="Syntax\ComparisonTests.cs" />
     <Compile Include="Syntax\EqualityTests.cs" />
@@ -232,9 +233,9 @@
     <None Include="Properties\OutOfBrowserSettings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\framework\nunitlite-sl-3.0 .csproj">
+    <ProjectReference Include="..\framework\nunitlite-sl-3.0.csproj">
       <Project>{02B02379-2596-4E45-8B10-835D62EA2D9E}</Project>
-      <Name>nunitlite-sl-3.0 </Name>
+      <Name>nunitlite-sl-3.0</Name>
     </ProjectReference>
     <ProjectReference Include="..\mock-assembly\mock-assembly-sl-3.0.csproj">
       <Project>{BB355D2C-FB4F-4526-9B40-7944C40FDFDA}</Project>

@@ -29,12 +29,6 @@
   </foreach>
 
   <echo>
-    The default build target is the ${default.runtime} debug config.
-    Generic runtime targets use the following defaults:
-        net           ${default.net.runtime}
-        netcf         ${default.netcf.runtime}
-        mono          ${default.mono.runtime}
-
     Note that targets that set the build configuration or runtime
     to be used must come before action targets. For example:
 
@@ -64,16 +58,13 @@
        but may differ when we are in alpha or beta. -->
   <property name="nominal.version" value="0.9.0" />
 
-  <!-- Frameworks supported by this build script. The first
-         installed framework found is the default for builds. 
-         The first .NET and Mono frameworks found are the
-         respective net and mono defaults. -->
-  <property name="supported.frameworks" 
-    value="net-4.5,net-4.0,net-3.5,net-2.0,net-1.1,net-1.0,netcf-3.5,netcf-2.0,netcf-1.0,mono-4.0,mono-3.5,mono-2.0,mono-1.0,silverlight-4.0,silverlight-3.0"/>
+  <!-- Frameworks supported by this build script -->
+  <property name="supported.frameworks"
+    value="net-1.1,net-2.0,net-3.5,net-4.0,net-4.5,netcf-2.0,netcf-3.5,mono-2.0,mono-3.5,mono-4.0,silverlight-3.0,silverlight-4.0,silverlight-5.0"/>
 
   <!-- Framework versions for which packages are normally created -->
   <property name="standard.packages"
-    value="net-1.1,net-2.0,net-3.5,net-4.0,net-4.5,netcf-2.0,netcf-3.5" />
+    value="net-1.1,net-2.0,net-3.5,net-4.0,net-4.5,netcf-2.0,netcf-3.5,silverlight-3.0,silverlight-4.0,silverlight-5.0" />
 
   <!-- Additional internal properties are set in the include file -->
   <include buildfile="nunitlite.build.include"/>
@@ -96,14 +87,6 @@
 <!-- ***     These must come before actions like build or test     *** -->
 <!-- ***************************************************************** -->
 
-  <target name="net" 
-    description="Set runtime to the default .NET config for targets that follow"
-    depends="set-default-dot-net-runtime-config"/>
-
-  <target name="net-1.0" 
-    description="Set runtime to .NET 1.0 for targets that follow"
-    depends="set-net-1.0-runtime-config"/>
-
   <target name="net-1.1" 
     description="Set runtime to .NET 1.1 for targets that follow"
     depends="set-net-1.1-runtime-config"/>
@@ -112,10 +95,6 @@
     description="Set runtime to .NET 2.0 for targets that follow"
     depends="set-net-2.0-runtime-config"/>
       
-  <target name="net-3.0" 
-    description="Set runtime to .NET 3.0 for targets that follow"
-    depends="set-net-3.0-runtime-config"/>
-
   <target name="net-3.5"
     description="Set runtime to .NET 3.5 for targets that follow"
     depends="set-net-3.5-runtime-config"/>
@@ -128,14 +107,6 @@
     description="Set runtime to .NET 4.5 for targets that follow"
     depends="set-net-4.5-runtime-config"/>
 
-  <target name="netcf" 
-    description="Set runtime to default .NET CF version for targets that follow"
-    depends="set-default-netcf-runtime-config"/>
-
-  <target name="netcf-1.0" 
-    description="Set runtime to .NET CF 1.0 for targets that follow"
-    depends="set-netcf-1.0-runtime-config"/>
-      
   <target name="netcf-2.0" 
     description="Set runtime to .NET CF 2.0 for targets that follow"
     depends="set-netcf-2.0-runtime-config"/>
@@ -144,14 +115,6 @@
     description="Set runtime to .NET CF 3.5 for targets that follow"
     depends="set-netcf-3.5-runtime-config"/>
       
-  <target name="mono" 
-    description="Set runtime to the default Mono config for targets that follow"
-    depends="set-default-mono-runtime-config"/>
-
-  <target name="mono-1.0" 
-    description="Set runtime to Mono 1.0 for targets that follow"
-    depends="set-mono-1.0-runtime-config"/>
-
   <target name="mono-2.0"
     description="Set runtime to Mono 2.0 for targets that follow"
     depends="set-mono-2.0-runtime-config"/>
@@ -164,17 +127,17 @@
     description="Set runtime to Mono 4.0 for targets that follow"
     depends="set-mono-4.0-runtime-config"/>
 
-  <target name="silverlight"
-    description="Set runtime to the default Silverlight config for targets that follow"
-    depends="set-default-silverlight-runtime-config"/>
-
-  <target name="silverlight-3.0"
+  <target name="sl-3.0"
     description="Set runtime to Silverlight 3.0 for targets that follow"
     depends="set-silverlight-3.0-runtime-config"/>
 
-  <target name="silverlight-4.0"
+  <target name="sl-4.0"
     description="Set runtime to Silverlight 4.0 for targets that follow"
     depends="set-silverlight-4.0-runtime-config"/>
+
+  <target name="sl-5.0"
+    description="Set runtime to Silverlight 5.0 for targets that follow"
+    depends="set-silverlight-5.0-runtime-config"/>
 
 <!-- ***************************************************************** -->
 <!-- ***             Targets that clean directories                *** -->
@@ -182,8 +145,11 @@
 
   <target name="clean" depends="set-build-dir"
       description="Removes the current build directory">
-    <delete dir="${current.build.dir}" 
-      if="${directory::exists( current.build.dir )}"/>
+
+    <nant target="clean">
+      <buildfiles refid="project.buildfiles"/>
+    </nant>
+
   </target>
 
   <target name="clean-all" description="Removes all build directories">
@@ -210,10 +176,6 @@
 <!-- ***              Targets that perform builds                  *** -->
 <!-- ***************************************************************** -->
 
-
-  <target name="rebuild" depends="clean,build"
-    description="Rebuild NUnit for default runtime version and config"/>
-
   <target name="build" depends="make-build-dir"
     description="Build NUnit for default runtime version and config">
 
@@ -224,15 +186,11 @@
 
     <property name="nant.settings.currentframework" value="${build.framework}"/>
 
-    <nant target="build" buildfile="src/framework/nunitlite.framework.build"/>
-    <nant target="build" buildfile="src/testdata/nunitlite.testdata.build"/>
-    <nant target="build" buildfile="src/mock-assembly/mock-assembly.build"/>
-    <nant target="build" buildfile="src/tests/nunitlite.tests.build"/>
+    <nant target="build">
+      <buildfiles refid="project.buildfiles"/>
+    </nant>
 
   </target>
-
-  <target name="rebuild-all" depends="clean-all,build-all"
-      description="Rebuild current config for all available runtimes"/>
 
   <target name="build-all"
       description="Build current config for all available runtime">
@@ -243,30 +201,71 @@
     </foreach>
   </target>
 
+  <target name="rebuild" depends="make-build-dir"
+    description="Rebuild NUnit for default runtime version and config">
+
+    <echo message="*"/>
+    <echo message="* Starting ${runtime.config} ${build.config} rebuild"/>
+    <echo message="* Current Build Directory = ${current.build.dir}"/>
+    <echo message="*"/>
+
+    <property name="nant.settings.currentframework" value="${build.framework}"/>
+
+    <nant target="rebuild">
+      <buildfiles refid="project.buildfiles"/>
+    </nant>
+
+  </target>
+
+  <target name="rebuild-all" depends="clean-all,build-all"
+      description="Rebuild current config for all available runtimes">
+    <foreach item="String" delim="," 
+        property="framework" in="${installed.frameworks}">
+      <call target="set-${framework}-runtime-config"/>
+      <call target="rebuild"/>
+    </foreach>
+  </target>
+
 <!-- ***************************************************************** -->
 <!-- ***                 Targets for running tests                 *** -->
 <!-- ***************************************************************** -->
 
-  <target name="test" depends="build,run-test"
-    description="Build and run tests for selected config and runtime"/>
+  <target name="test" depends="build"
+    description="Build and run tests for selected config and runtime">
+
+    <call target="run-test" unless="${runtime.platform == 'silverlight'}"/>
+    <call target="run-silverlight-test" if="${runtime.platform == 'silverlight'}"/>
+
+  </target>
 
   <target name="run-test"
       description="Run tests for selected config and runtime (no rebuild)">
-
-    <fail message="Testing under Silverlight is not yet implemented."
-      if="${runtime.platform=='silverlight'}"/>
 
     <property name="nant.settings.currentframework" value="${runtime.config}"/>
 
     <echo message="*"/>
     <echo message="* Testing ${runtime.config} ${build.config} build"/>
-    <echo message="*    Running under ${nant.settings.currentframework}"/>
     <echo message="*"/>
 
     <exec basedir="${current.build.dir}"
       workingdir="${current.build.dir}" 
       program="nunitlite.tests.exe" 
       managed="Strict"/>
+
+  </target>
+
+  <target name="run-silverlight-test">
+
+    <property name="xap.file.name" value="nunitlite.tests-${msbuild.proj.suffix}.xap"/>
+
+    <exec program="sllauncher.exe"
+          basedir="C:\Program Files\Microsoft Silverlight"
+          workingdir="${current.build.dir}">
+      
+      <arg value="/emulate:${xap.file.name}"/>
+      <arg value="/origin:file://TestPage.html"/>
+
+    </exec>
 
   </target>
 
@@ -279,51 +278,6 @@
       <call target="test" />
     </foreach>
 	  
-  </target>
-
-  <target name="test-each-runtime" depends="build"
-      description="Run tests for the current build under each runtime">
-
-    <foreach item="String" delim=","
-        property="framework" in="${test.platforms}">
-      <if test="${framework::exists( framework )}">
-        <property name="nant.settings.currentframework" value="${framework}" />
-        <call target="run-test" failonerror="false" />
-      </if>
-    </foreach>
-    <property name="nant.settings.currentframework" value="${runtime.config}" />
-
-    <echo message="*" />
-    <echo message="* Restored runtime to ${nant.settings.currentframework}" />
-    <echo message="*" />
-
-  </target>
-
-  <target name="test-all-under-each"
-      description="Build all runtimes and test the builds under each runtime.">
-
-    <call target="set-release-build-config"/>
-
-    <foreach item="String" delim="," 
-        property="framework" in="${installed.frameworks}">
-
-      <call target="set-${framework}-runtime-config"/>
-      <call target="test-each-runtime" failonerror="false"/>
-
-    </foreach>
-  </target>
-
-  <target name="nunit2-test" depends="build"
-    description="Run tests for a build using the nunit2 task">
-
-    <echo message="*"/>
-    <echo message="* Starting ${runtime.config} ${build.config} test run"/>
-    <echo message="*"/>
-
-    <nunit2>
-      <formatter type="Plain"/>
-      <test assemblyname="${current.build.dir}/nunit.framework.tests.dll"/>
-    </nunit2>
   </target>
 
 <!-- ***************************************************************** -->
@@ -406,4 +360,15 @@
 
   </target>
   
+<!-- ***************************************************************** -->
+<!-- ***          Fileset listing subproject build files         *** -->
+<!-- ***************************************************************** -->
+
+  <fileset id="project.buildfiles" >
+    <include name="src/framework/nunitlite.framework.build" asis="true"/>
+    <include name="src/mock-assembly/mock-assembly.build" asis="true"/>
+    <include name="src/testdata/nunitlite.testdata.build" asis="true"/>
+    <include name="src/tests/nunitlite.tests.build" asis="true"/>
+  </fileset>
+
 </project>

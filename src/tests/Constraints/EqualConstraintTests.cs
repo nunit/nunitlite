@@ -195,7 +195,6 @@ namespace NUnit.Framework.Constraints.Tests
 
         #endregion
 
-#if !NETCF_1_0
         [TestCase(20000000000000004.0)]
         [TestCase(19999999999999996.0)]
         public void CanMatchDoublesWithUlpTolerance(object value)
@@ -225,7 +224,6 @@ namespace NUnit.Framework.Constraints.Tests
         {
             Assert.That(value, new EqualConstraint(20000000.0f).Within(1).Ulps);
         }
-#endif
 
         [TestCase(9500.0)]
         [TestCase(10000.0)]

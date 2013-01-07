@@ -49,12 +49,7 @@ namespace NUnit.Framework.Constraints
         {
             this.actual = actual;
 
-#if NETCF_1_0
-            // TODO: THis makes it compile, now make it work.
-            return expected.Equals(actual);
-#else
             return ReferenceEquals(expected, actual);
-#endif
         }
 
         /// <summary>

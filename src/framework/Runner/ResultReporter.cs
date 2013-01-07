@@ -185,12 +185,10 @@ namespace NUnitLite.Runner
             if (result.Message != null && result.Message != string.Empty)
                 writer.WriteLine("   {0}", result.Message);
 
-#if !NETCF_1_0
             if (result.StackTrace != null && result.StackTrace != string.Empty)
                 writer.WriteLine(result.ResultState == ResultState.Failure
                     ? StackFilter.Filter(result.StackTrace)
                     : result.StackTrace + NUnit.Env.NewLine);
-#endif
         }
 
         #endregion

@@ -15,9 +15,7 @@ namespace NUnitLite.Tests
     public class TestResultTests
     {
         private static readonly string MESSAGE = "my message";
-#if !NETCF_1_0
         private static readonly string STACKTRACE = "stack trace";
-#endif
 
         private TestResult result;
 
@@ -52,14 +50,9 @@ namespace NUnitLite.Tests
         [Test]
         public void CanMarkAsFailure()
         {
-#if NETCF_1_0
-            result.SetResult(ResultState.Failure, MESSAGE);
-            VerifyResultState(ResultState.Failure, true, false, true, false, MESSAGE);
-#else
             result.SetResult(ResultState.Failure, MESSAGE, STACKTRACE);
             VerifyResultState(ResultState.Failure, MESSAGE);
             Assert.That( result.StackTrace, Is.EqualTo( STACKTRACE ) );
-#endif
         }
 
         [Test]
@@ -75,15 +68,9 @@ namespace NUnitLite.Tests
                 caught = ex;          
             }
 
-#if !NETCF_1_0
             result.SetResult(ResultState.Error, caught.Message, caught.StackTrace);
-#else
-            result.SetResult(ResultState.Error, caught.Message);
-#endif
             VerifyResultState(ResultState.Error, MESSAGE);
-#if !NETCF_1_0
             Assert.That( result.StackTrace, Is.EqualTo( caught.StackTrace ) );
-#endif
         }
 
         [Test]
