@@ -2,12 +2,13 @@
 <project name="NUnit" default="help" basedir=".">
 
 <!-- ***************************************************************** -->
-<!-- This script has been tested using NAnt 0.85. At least             -->
+<!-- This script has been tested using NAnt 0.92. At least             -->
 <!-- one of the supported runtimes and sdk must be installed. In       -->
 <!-- order to build the msi, WiX 2.0 and the WiX tasks for NAnt        -->
 <!-- are required. To run the test coverage target, NCover is          -->
 <!-- required.                                                         -->
 <!-- ***************************************************************** -->
+<!-- TODO: Edit above to reflect actual targets -->
 
 <!-- ***************************************************************** -->
 <!-- ***                 Default Help Target                       *** -->
@@ -15,28 +16,28 @@
 
 <target name="help">
   <echo>
-    This build file will build NUnitLite for any of the supported
-    runtime frameworks which are actually installed. To add or
-    support for a framework, edit this script
+This build file will build NUnitLite for any of the supported
+runtime frameworks which are actually installed. To add support
+for a framework, edit this script
 
-    Running on the current system, the following runtime frameworks
-    are available for building and testing NUnit:
+Running on the current system, the following runtime frameworks
+are available for building and testing NUnit:
   </echo>
 
   <foreach item="String" delim="," 
       property="framework" in="${installed.frameworks}">
-    <echo message="        ${string::pad-right(framework,15,' ')}${framework::get-description(framework)}"/>
+    <echo message="    ${string::pad-right(framework,18,' ')}${framework::get-description(framework)}"/>
   </foreach>
 
   <echo>
-    Note that targets that set the build configuration or runtime
-    to be used must come before action targets. For example:
+Note that targets that set the build configuration or runtime
+to be used must come before action targets. For example:
 
-        nant net-2.0 release build
-        nant build-all
-        nant debug clean build
+    nant net-2.0 release build
+    nant build-all
+    nant debug clean build
 
-    Use   nant -projecthelp to see a full list of targets.
+Use   nant -projecthelp to see a full list of targets.
   </echo>
 </target>
 
@@ -68,6 +69,7 @@
 
   <!-- Additional internal properties are set in the include file -->
   <include buildfile="nunitlite.build.include"/>
+
 
 <!-- ***************************************************************** -->
 <!-- ***          Targets that set the build configuration         *** -->
@@ -146,9 +148,8 @@
   <target name="clean" depends="set-build-dir"
       description="Removes the current build directory">
 
-    <nant target="clean">
-      <buildfiles refid="project.buildfiles"/>
-    </nant>
+    <property name="current.target" value="clean"/>
+    <call target="run-subprojects"/>
 
   </target>
 
@@ -186,14 +187,13 @@
 
     <property name="nant.settings.currentframework" value="${build.framework}"/>
 
-    <nant target="build">
-      <buildfiles refid="project.buildfiles"/>
-    </nant>
+    <property name="current.target" value="build"/>
+    <call target="run-subprojects"/>
 
   </target>
 
   <target name="build-all"
-      description="Build current config for all available runtime">
+      description="Build current config for all available runtimes">
     <foreach item="String" delim="," 
         property="framework" in="${installed.frameworks}">
       <call target="set-${framework}-runtime-config"/>
@@ -211,9 +211,8 @@
 
     <property name="nant.settings.currentframework" value="${build.framework}"/>
 
-    <nant target="rebuild">
-      <buildfiles refid="project.buildfiles"/>
-    </nant>
+    <property name="current.target" value="rebuild"/>
+    <call target="run-subprojects"/>
 
   </target>
 
@@ -235,6 +234,14 @@
 
     <call target="run-test" unless="${runtime.platform == 'silverlight'}"/>
     <call target="run-silverlight-test" if="${runtime.platform == 'silverlight'}"/>
+
+  </target>
+
+  <target name="ci-test" depends="build"
+    description="Build and run CI test (no gui) for selected config and runtime">
+
+    <call target="run-test" unless="${runtime.platform == 'silverlight'}"/>
+    <call target="run-silverlight-ci-test" if="${runtime.platform == 'silverlight'}"/>
 
   </target>
 
@@ -266,6 +273,20 @@
       <arg value="/origin:file://TestPage.html"/>
 
     </exec>
+
+  </target>
+
+  <target name="run-silverlight-ci-test">
+
+    <echo message="*"/>
+    <echo message="* Testing ${runtime.config} ${build.config} build"/>
+    <echo message="*"/>
+
+    <exec basedir="${current.build.dir}"
+      workingdir="${current.build.dir}" 
+      program="ci-test-runner.exe" 
+      commandline="nunitlite.tests"
+      managed="Strict"/>
 
   </target>
 
@@ -360,15 +381,4 @@
 
   </target>
   
-<!-- ***************************************************************** -->
-<!-- ***          Fileset listing subproject build files         *** -->
-<!-- ***************************************************************** -->
-
-  <fileset id="project.buildfiles" >
-    <include name="src/framework/nunitlite.framework.build" asis="true"/>
-    <include name="src/mock-assembly/mock-assembly.build" asis="true"/>
-    <include name="src/testdata/nunitlite.testdata.build" asis="true"/>
-    <include name="src/tests/nunitlite.tests.build" asis="true"/>
-  </fileset>
-
 </project>

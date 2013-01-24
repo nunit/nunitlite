@@ -55,7 +55,7 @@ namespace NUnit.Framework.Internal
 			CheckPlatforms(
 				new PlatformHelper( OSPlatform.CurrentPlatform, runtimeFramework ),
 				expectedPlatforms,
-				PlatformHelper.RuntimePlatforms + ",NET-1.0,NET-1.1,NET-2.0,NET-3.0,NET-3.5,NET-4.0,MONO-1.0,MONO-2.0,MONO-3.0,MONO-3.5,MONO-4.0,MONOTOUCH" );
+				PlatformHelper.RuntimePlatforms + ",NET-1.0,NET-1.1,NET-2.0,NET-3.0,NET-3.5,NET-4.0,MONO-1.0,MONO-2.0,MONO-3.0,MONO-3.5,MONO-4.0,MONOTOUCH,SL-3.0,SL-4.0,SL-5.0" );
 		}
 
 		private void CheckPlatforms( PlatformHelper helper, 
@@ -283,8 +283,8 @@ namespace NUnit.Framework.Internal
                 new RuntimeFramework(RuntimeType.Net, new Version(3, 5)),
                 "Net,Net-2.0,Net-3.0,Net-3.5");
         }
-		
-		[Test]
+
+        [Test]
         public void DetectNet40()
         {
             CheckRuntimePlatforms(
@@ -292,7 +292,7 @@ namespace NUnit.Framework.Internal
                 "Net,Net-4.0");
         }
 
-		[Test]
+        [Test]
 		public void DetectNetCF()
 		{
 			CheckRuntimePlatforms(
@@ -356,7 +356,31 @@ namespace NUnit.Framework.Internal
                 "MonoTouch");
         }
 
-		[Test]
+        [Test]
+        public void DetectSilverlight30()
+        {
+            CheckRuntimePlatforms(
+                new RuntimeFramework(RuntimeType.Silverlight, new Version(3, 0)),
+                "Silverlight,SL-3.0");
+        }
+
+        [Test]
+        public void DetectSilverlight40()
+        {
+            CheckRuntimePlatforms(
+                new RuntimeFramework(RuntimeType.Silverlight, new Version(4, 0)),
+                "Silverlight,SL-4.0");
+        }
+
+        [Test]
+        public void DetectSilverlight50()
+        {
+            CheckRuntimePlatforms(
+                new RuntimeFramework(RuntimeType.Silverlight, new Version(5, 0)),
+                "Silverlight,SL-5.0");
+        }
+
+        [Test]
 		public void DetectExactVersion()
 		{
 			Assert.IsTrue( winXPHelper.IsPlatformSupported( "net-1.1.4322" ) );

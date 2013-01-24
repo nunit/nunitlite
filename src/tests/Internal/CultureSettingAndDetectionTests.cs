@@ -154,11 +154,7 @@ namespace NUnit.Framework.Internal
         {
             ITestResult result = TestBuilder.RunTestFixture(typeof(FixtureWithInvalidSetCultureAttribute));
             Assert.AreEqual(ResultState.Error, result.ResultState);
-            RuntimeFramework current = RuntimeFramework.CurrentFramework;
-            string expectedException = "System.ArgumentException";
-            if (current.Runtime == RuntimeType.Silverlight || current.Runtime == RuntimeType.Net && current.ClrVersion.Major == 4)
-                expectedException = "System.Globalization.CultureNotFoundException";
-            Assert.That(result.Message, Is.StringStarting(expectedException));
+            Assert.That(result.Message, Is.StringStarting("System.ArgumentException").Or.StringStarting("System.Globalization.CultureNotFoundException"));
             Assert.That(result.Message, Is.StringContaining("xx-XX").IgnoreCase);
         }
 
@@ -167,11 +163,7 @@ namespace NUnit.Framework.Internal
         {
             ITestResult result = TestBuilder.RunTestCase(typeof(FixtureWithInvalidSetCultureAttributeOnTest), "InvalidCultureSet");
             Assert.AreEqual(ResultState.Error, result.ResultState);
-            RuntimeFramework current = RuntimeFramework.CurrentFramework;
-            string expectedException = "System.ArgumentException";
-            if (current.Runtime == RuntimeType.Silverlight || current.Runtime == RuntimeType.Net && current.ClrVersion.Major == 4)
-                expectedException = "System.Globalization.CultureNotFoundException";
-            Assert.That(result.Message, Is.StringStarting(expectedException));
+            Assert.That(result.Message, Is.StringStarting("System.ArgumentException").Or.StringStarting("System.Globalization.CultureNotFoundException"));
             Assert.That(result.Message, Is.StringContaining("xx-XX").IgnoreCase);
         }
 

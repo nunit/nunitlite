@@ -272,6 +272,7 @@ namespace NUnit.Framework.Internal
                 case "MONO":
                     return IsRuntimeSupported(RuntimeType.Mono, versionSpecification);
 
+                case "SL":
                 case "SILVERLIGHT":
                     return IsRuntimeSupported(RuntimeType.Silverlight, versionSpecification);
 

@@ -70,13 +70,6 @@ namespace NUnit.Framework.Internal
 
 		private static RuntimeFramework currentFramework;
 
-        private static Version[] knownVersions = new Version[] {
-            new Version(1, 0, 3705),
-            new Version(1, 1, 4322),
-            new Version(2, 0, 50727),
-            new Version(4, 0, 30319)
-        };
-
         private RuntimeType runtime;
 		private Version frameworkVersion;
 		private Version clrVersion;
@@ -86,7 +79,10 @@ namespace NUnit.Framework.Internal
 		#region Constructor
 		
         /// <summary>
-		/// Construct from a runtime type and version
+		/// Construct from a runtime type and version. If the version has
+        /// two parts, it is taken as a framework version. If it has three
+        /// or more, it is taken as a CLR version. In either case, the other
+        /// version is deduced based on the runtime type and provided version.
 		/// </summary>
 		/// <param name="runtime">The runtime type of the framework</param>
 		/// <param name="version">The version of the framework</param>
@@ -94,41 +90,47 @@ namespace NUnit.Framework.Internal
 		{
             this.runtime = runtime;
 
-            if (version.Build < 0)
-                InitFromFrameworkVersion(version);
-            else
-                InitFromClrVersion(version);
+            this.frameworkVersion = runtime == RuntimeType.Mono && version.Major == 1
+                ? new Version(1, 0)
+                : new Version(version.Major, version.Minor);
+            this.clrVersion = version;
 
-            if (version.Major == 3)
-                this.clrVersion = new Version(2, 0, 50727);
+            if (version.Build < 0)
+                this.clrVersion = GetClrVersion(runtime, version);
+
             this.displayName = GetDefaultDisplayName(runtime, version);
         }
 
-        private void InitFromFrameworkVersion(Version version)
+        private static Version GetClrVersion(RuntimeType runtime, Version version)
         {
-            this.frameworkVersion = this.clrVersion = version;
-            foreach (Version v in knownVersions)
-                if (v.Major == version.Major && v.Minor == version.Minor)
-                {
-                    this.clrVersion = v;
-                    break;
-                }
-
-            if (this.runtime == RuntimeType.Mono && version.Major == 1)
+            switch (runtime)
             {
-                this.frameworkVersion = new Version(1, 0);
-                this.clrVersion = new Version(1, 1, 4322);
+                case RuntimeType.Silverlight:
+                    return version.Major >= 4
+                        ? new Version(4, 0, 60310)
+                        : new Version(2, 0, 50727);
+
+                default:
+                    switch (version.Major)
+                    {
+                        case 4:
+                            return new Version(4, 0, 30319);
+
+                        case 2:
+                        case 3:
+                            return new Version(2, 0, 50727);
+
+                        case 1:
+                            return version.Minor == 0 && runtime != RuntimeType.Mono
+                                ? new Version(1, 0, 3705)
+                                : new Version(1, 1, 4322);
+
+                        default:
+                            return version;
+                    }
             }
         }
 
-        private void InitFromClrVersion(Version version)
-        {
-            this.frameworkVersion = new Version(version.Major, version.Minor);
-            this.clrVersion = version;
-            if (runtime == RuntimeType.Mono && version.Major == 1)
-                this.frameworkVersion = new Version(1, 0);
-        }
-		
 		#endregion
 
         #region Properties
@@ -143,9 +145,9 @@ namespace NUnit.Framework.Internal
                 if (currentFramework == null)
                 {
 #if SILVERLIGHT
-                    RuntimeType runtime = RuntimeType.Silverlight;
-                    int major = 4;
-                    int minor = 0;
+                    currentFramework = new RuntimeFramework(
+                        RuntimeType.Silverlight, 
+                        new Version(Environment.Version.Major, Environment.Version.Minor));
 #else
                     Type monoRuntimeType = Type.GetType("Mono.Runtime", false);
                     Type monoTouchType = Type.GetType("MonoTouch.UIKit.UIApplicationDelegate, monotouch");
@@ -198,12 +200,10 @@ namespace NUnit.Framework.Internal
                             }
                         }
                     }
-#endif
 
                     currentFramework = new RuntimeFramework(runtime, new Version(major, minor));
                     currentFramework.clrVersion = Environment.Version;
 
-#if !SILVERLIGHT
                     if (isMono)
                     {
                         MethodInfo getDisplayNameMethod = monoRuntimeType.GetMethod(
@@ -414,9 +414,12 @@ namespace NUnit.Framework.Internal
             if (this.AllowAnyVersion || target.AllowAnyVersion)
                 return true;
 
-            return VersionsMatch(this.ClrVersion, target.ClrVersion)
-                && this.FrameworkVersion.Major >= target.FrameworkVersion.Major
-                && this.FrameworkVersion.Minor >= target.FrameworkVersion.Minor;
+            if (!VersionsMatch(this.ClrVersion, target.ClrVersion))
+                return false;
+
+            return Runtime == RuntimeType.Silverlight
+                ? this.frameworkVersion.Major == target.FrameworkVersion.Major && this.frameworkVersion.Minor == target.FrameworkVersion.Minor
+                : this.FrameworkVersion.Major >= target.FrameworkVersion.Major && this.FrameworkVersion.Minor >= target.FrameworkVersion.Minor;
         }
 
         #endregion

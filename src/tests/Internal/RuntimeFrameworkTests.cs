@@ -22,30 +22,66 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
+using Microsoft.Win32;
 
 namespace NUnit.Framework.Internal
 {
     [TestFixture]
     public class RuntimeFrameworkTests
     {
-        static RuntimeType currentRuntime = 
+        [Test]
+        public void CanGetCurrentFramework()
+        {
+            Version expectedClrVersion = Environment.Version;
+            Version expectedFrameworkVersion = new Version(expectedClrVersion.Major, expectedClrVersion.Minor);
+
 #if SILVERLIGHT
-            RuntimeType.Silverlight;
+            RuntimeType expectedRuntime = RuntimeType.Silverlight;
+            expectedClrVersion = new RuntimeFramework(expectedRuntime, expectedFrameworkVersion).ClrVersion;
 #else
-            Type.GetType("Mono.Runtime", false) != null 
+             RuntimeType expectedRuntime = Type.GetType("Mono.Runtime", false) != null 
                 ? RuntimeType.Mono 
                 : Environment.OSVersion.Platform == PlatformID.WinCE
                     ? RuntimeType.NetCF
                     : RuntimeType.Net;
+
+            // TODO: Remove duplication of RuntimeFramework code
+            switch (expectedRuntime)
+            {
+                case RuntimeType.Mono:
+                    if (expectedFrameworkVersion.Major == 1)
+                        expectedFrameworkVersion = new Version(1,0);
+                    else if (expectedFrameworkVersion.Major == 2)
+                        expectedFrameworkVersion = new Version(3,5);
+                    break;
+
+                case RuntimeType.Net:
+                case RuntimeType.NetCF:
+                    if (expectedFrameworkVersion.Major == 2)
+                    {
+                        RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework");
+                        if (key != null)
+                        {
+                            string installRoot = key.GetValue("InstallRoot") as string;
+                            if (installRoot != null)
+                            {
+                                if (Directory.Exists(Path.Combine(installRoot, "v3.5")))
+                                    expectedFrameworkVersion = new Version(3,5);
+                                else if (Directory.Exists(Path.Combine(installRoot, "v3.0")))
+                                    expectedFrameworkVersion = new Version(3,0);
+                            }
+                        }
+                    }
+                    break;
+            }
 #endif
 
-        [Test]
-        public void CanGetCurrentFramework()
-        {
             RuntimeFramework framework = RuntimeFramework.CurrentFramework;
 
-            Assert.That(framework.Runtime, Is.EqualTo(currentRuntime));
-            Assert.That(framework.ClrVersion, Is.EqualTo(Environment.Version));
+            Assert.That(framework.Runtime, Is.EqualTo(expectedRuntime));
+            Assert.That(framework.ClrVersion, Is.EqualTo(expectedClrVersion));
+            Assert.That(framework.FrameworkVersion, Is.EqualTo(expectedFrameworkVersion));
         }
 
         [Test]

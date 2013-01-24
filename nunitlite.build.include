@@ -148,7 +148,7 @@
     <property name="runtime.version" value="3.5"/>
     <property name="runtime.config" value="net-3.5"/>
     <property name="runtime.defines" value="NET,NET_3_5,CLR_2_0"/>
-    <property name="build.framework" value="net-3.5"/>
+    <property name="build.framework" value="net-4.0"/>
     <property name="build.method" value="msbuild"/>
     <property name="msbuild.proj.suffix" value="3.5"/>
   </target>
@@ -359,6 +359,7 @@
   </target>
 
   <target name="copy-tools">
+	  
     <delete dir="${package.tools.dir}" />
     <mkdir dir="${package.tools.dir}"/>
 
@@ -370,7 +371,18 @@
 
   </target>
 
-<!-- ***************************************************************** -->
+  <target name="run-subprojects">
+
+    <nant target="${current.target}" buildfile="src/framework/nunitlite.framework.build"/>
+    <nant target="${current.target}" buildfile="src/mock-assembly/mock-assembly.build"/>
+    <nant target="${current.target}" buildfile="src/testdata/nunitlite.testdata.build"/>
+    <nant target="${current.target}" buildfile="src/tests/nunitlite.tests.build"/>
+    <nant target="${current.target}" buildfile="src/runner/ci-test-runner.build"
+      if="${runtime.platform=='silverlight'}"/>
+
+	</target>
+
+	<!-- ***************************************************************** -->
 <!-- ***           Dump configuration settings for debugging       *** -->
 <!-- ***************************************************************** -->
 

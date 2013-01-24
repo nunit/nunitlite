@@ -253,14 +253,8 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateSetUp));
 		}
 
-#if SL_3_0 || SL_4_0
-		[Test] 
-		public void ProtectedSetUpFailsUnderSilverlight_3_And_4()
-		{
-            TestAssert.IsRunnable(typeof(ProtectedSetUp), ResultState.Failure);
-		}
-#else
-		[Test] 
+#if !SL_3_0 && !SL_4_0
+        [Test] 
 		public void CanRunProtectedSetUp()
 		{
             TestAssert.IsRunnable(typeof(ProtectedSetUp), ResultState.Success);
@@ -296,13 +290,7 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateTearDown));
 		}
 
-#if SL_3_0 || SL_4_0
-        [Test]
-        public void ProtectedTearDownFailsUnderSilverlight_3_And_4()
-        {
-            TestAssert.IsRunnable(typeof(ProtectedTearDown), ResultState.Failure);
-        }
-#else
+#if !SL_3_0 && !SL_4_0
         [Test]
         public void CanRunProtectedTearDown()
         {
@@ -336,13 +324,7 @@ namespace NUnit.Framework.Internal
             TestAssert.IsNotRunnable(typeof(PrivateFixtureSetUp));
 		}
 
-#if SL_3_0 || SL_4_0
-        [Test]
-        public void ProtectedFixtureSetUpFailsUnderSilverlight_3_And_4()
-        {
-            TestAssert.IsRunnable(typeof(ProtectedFixtureSetUp), ResultState.Error);
-        }
-#else
+#if !SL_3_0 && !SL_4_0
         [Test]
         public void CanRunProtectedFixtureSetUp()
         {
@@ -370,19 +352,14 @@ namespace NUnit.Framework.Internal
 		#endregion
 
 		#region TestFixtureTearDown Signature
+
 		[Test] 
 		public void CannotRunPrivateFixtureTearDown()
 		{
             TestAssert.IsNotRunnable(typeof(PrivateFixtureTearDown));
 		}
 
-#if SL_3_0 || SL_4_0
-        [Test]
-        public void ProtectedFixtureTearDownFailsUnderSilverlight_3_And_4()
-        {
-            TestAssert.IsRunnable(typeof(ProtectedFixtureTearDown), ResultState.Error);
-        }
-#else
+#if !SL_3_0 && !SL_4_0
         [Test]
         public void CanRunProtectedFixtureTearDown()
         {

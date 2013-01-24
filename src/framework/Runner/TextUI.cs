@@ -28,6 +28,7 @@ using System.Reflection;
 using NUnit.Framework.Api;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Filters;
+using System.Diagnostics;
 
 namespace NUnitLite.Runner
 {
@@ -239,6 +240,7 @@ namespace NUnitLite.Runner
         public static void WriteRuntimeEnvironment(TextWriter writer)
         {
             string clrPlatform = Type.GetType("Mono.Runtime", false) == null ? ".NET" : "Mono";
+
             writer.WriteLine("Runtime Environment -");
             writer.WriteLine("    OS Version: {0}", Environment.OSVersion);
             writer.WriteLine("  {0} Version: {1}", clrPlatform, Environment.Version);

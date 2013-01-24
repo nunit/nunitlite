@@ -28,7 +28,7 @@ using NUnit.Framework.Internal;
 
 namespace NUnitLite.Tests
 {
-    class Program
+    public class Program
     {
         // The main program executes the tests. Output may be routed to
         // various locations, depending on the arguments passed.
@@ -60,7 +60,7 @@ namespace NUnitLite.Tests
         //
         //    -wait             Wait for a keypress before exiting.
         //
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             new TextUI().Execute(args);
         }

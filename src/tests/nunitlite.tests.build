@@ -19,8 +19,8 @@
     <property name="csc.output" value="nunitlite.tests.exe" unless="${runtime.platform=='silverlight'}"/>
     <property name="csc.output" value="nunitlite.tests.dll" if="${runtime.platform=='silverlight'}"/>
 
-    <csc target="${csc.target}"
-        output="${current.build.dir}/${csc.output}"
+    <csc target="exe"
+        output="${current.build.dir}/nunitlite.tests.exe"
         debug="${build.debug}"
         define="${build.defines};NUNITLITE">
       <sources basedir=".">
@@ -29,7 +29,7 @@
       <references basedir="${current.build.dir}">
         <include name="mscorlib.dll"/>
         <include name="System.dll"/>
-        <include name="System.Core.dll" if="${runtime.platform == 'silverlight'}"/>
+        <include name="System.Core.dll" if="${runtime.version >= '3.5'}"/>
         <include name="System.Windows.dll" if="${runtime.platform == 'silverlight'}"/>
         <include name="System.Windows.Browser.dll" if="${runtime.platform == 'silverlight'}"/>
         <include name="System.Xml.dll"/>
