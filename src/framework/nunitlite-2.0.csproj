@@ -82,6 +82,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\Commands\TheoryResultCommand.cs" />
+    <Compile Include="Internal\Filters\SimpleCategoryExpression.cs" />
     <Compile Include="Internal\IApplyToContext.cs" />
     <Compile Include="Internal\IApplyToTest.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />

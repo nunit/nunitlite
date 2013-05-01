@@ -161,7 +161,32 @@ namespace NUnitLite.Runner
                     if (commandLineOptions.Explore)
                         ExploreTests();
                     else
+                    {
+                        if (commandLineOptions.Include != null && commandLineOptions.Include != string.Empty)
+                        {
+                            TestFilter includeFilter = new SimpleCategoryExpression(commandLineOptions.Include).Filter;
+                            Console.WriteLine("Included categories: " + includeFilter.ToString());
+
+                            if (filter.IsEmpty)
+                                filter = includeFilter;
+                            else
+                                filter = new AndFilter(filter, includeFilter);
+                        }
+
+                        if (commandLineOptions.Exclude != null && commandLineOptions.Exclude != string.Empty)
+                        {
+                            TestFilter excludeFilter = new NotFilter(new SimpleCategoryExpression(commandLineOptions.Exclude).Filter);
+                            Console.WriteLine("Excluded categories: " + excludeFilter.ToString());
+
+                            if (filter.IsEmpty)
+                                filter = excludeFilter;
+                            else if (filter is AndFilter)
+                                ((AndFilter)filter).Add(excludeFilter);
+                            else
+                                filter = new AndFilter(filter, excludeFilter);
+                        }
                         RunTests(filter);
+                    }
                 }
                 catch (FileNotFoundException ex)
                 {
