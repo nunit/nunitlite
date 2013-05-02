@@ -319,7 +319,7 @@ Use   nant -projecthelp to see a full list of targets.
         property="framework" in="${standard.packages}">
 
       <if test="${framework::exists(framework)}">
-        <if test="${framework::sdk-exists(framework)}">
+        <if test="${string::starts-with(framework, 'silverlight') or framework::sdk-exists(framework)}">
           <call target="set-${framework}-runtime-config"/>
           <call target="package-build"/>
         </if>
@@ -336,7 +336,7 @@ Use   nant -projecthelp to see a full list of targets.
 
     <!-- Create the NuGet package -->
     <exec program="NuGet.exe"
-          commandline="pack NUnitLite.nuspec -OutputDirectory package"
+          commandline="pack NUnitLite.nuspec -OutputDirectory package -Version ${package.version}"
           workingdir="."/>
 
   </target>

@@ -41,7 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\..\bin\Debug\net-2.0\nunitlite.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\net-2.0\nunitlite.xml</DocumentationFile>
     <OutputPath>..\..\bin\Debug\net-2.0\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -51,7 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\..\bin\Release\net-2.0\nunitlite.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\net-2.0\nunitlite.xml</DocumentationFile>
     <OutputPath>..\..\bin\Release\net-2.0\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
