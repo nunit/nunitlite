@@ -172,6 +172,9 @@ namespace NUnit.Framework.Builders
         {
             TestMethod testMethod = new TestMethod(method, parentSuite);
 
+            Randomizer randomizer = Randomizer.GetRandomizer(MethodBase.GetCurrentMethod());
+            testMethod.Seed = randomizer.Next();
+
             string prefix = method.ReflectedType.FullName;
 
             // Needed to give proper fullname to test in a parameterized fixture.

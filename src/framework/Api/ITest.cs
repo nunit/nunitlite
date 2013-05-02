@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using NUnit.Framework.Internal;
 
 namespace NUnit.Framework.Api
 {
@@ -81,6 +82,12 @@ namespace NUnit.Framework.Api
         /// has any descendant tests.
         /// </summary>
         bool HasChildren { get; }
+
+        /// <summary>
+        /// Gets the Int value representing the seed for the RandomGenerator
+        /// </summary>
+        /// <value></value>
+        int Seed { get; }
 
         /// <summary>
         /// Gets this test's child tests
