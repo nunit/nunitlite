@@ -149,7 +149,7 @@ namespace NUnit.Framework.Internal
         #endregion
 
         #region Enums
-#if SILVERLIGHT || Compaq
+#if SILVERLIGHT || NETCF
         /// <summary>
         /// Return a random enum value from the specified type
         /// </summary>

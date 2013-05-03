@@ -171,8 +171,11 @@ namespace NUnit.Framework.Builders
         public static TestMethod BuildSingleTestMethod(MethodInfo method, Test parentSuite, ParameterSet parms)
         {
             TestMethod testMethod = new TestMethod(method, parentSuite);
-
+#if !NETCF
             Randomizer randomizer = Randomizer.GetRandomizer(MethodBase.GetCurrentMethod());
+#else
+            Randomizer randomizer = Randomizer.GetRandomizer(typeof(NUnitTestCaseBuilder).GetMethod("BuildSingleTestMethod"));
+#endif
             testMethod.Seed = randomizer.Next();
 
             string prefix = method.ReflectedType.FullName;

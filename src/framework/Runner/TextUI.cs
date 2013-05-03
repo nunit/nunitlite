@@ -165,7 +165,6 @@ namespace NUnitLite.Runner
                         if (commandLineOptions.Include != null && commandLineOptions.Include != string.Empty)
                         {
                             TestFilter includeFilter = new SimpleCategoryExpression(commandLineOptions.Include).Filter;
-                            Console.WriteLine("Included categories: " + includeFilter.ToString());
 
                             if (filter.IsEmpty)
                                 filter = includeFilter;
@@ -176,7 +175,6 @@ namespace NUnitLite.Runner
                         if (commandLineOptions.Exclude != null && commandLineOptions.Exclude != string.Empty)
                         {
                             TestFilter excludeFilter = new NotFilter(new SimpleCategoryExpression(commandLineOptions.Exclude).Filter);
-                            Console.WriteLine("Excluded categories: " + excludeFilter.ToString());
 
                             if (filter.IsEmpty)
                                 filter = excludeFilter;

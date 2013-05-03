@@ -2,7 +2,7 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 		<id>NUnitLite</id>
-		<version>0.8.0</version>
+		<version>0.9.0</version>
 		<authors>Charlie Poole</authors>
 		<owners>Charlie Poole</owners>
 		<licenseUrl>http://nunit.org/nuget/nunitlite-license.txt</licenseUrl>
@@ -19,18 +19,26 @@
 		<file src="LICENSE.txt" />
                 <file src="README.txt" />
                 <file src="CHANGES.txt" />
-		<file src="package\NUnitLite-0.8.0\net-4.0\nunitlite.dll"  target="lib/net40" />
-		<file src="package\NUnitLite-0.8.0\net-4.0\nunitlite.xml"  target="lib/net40" />
-		<file src="package\NUnitLite-0.8.0\net-3.5\nunitlite.dll"  target="lib/net35" />
-		<file src="package\NUnitLite-0.8.0\net-3.5\nunitlite.xml"  target="lib/net35" />
-		<file src="package\NUnitLite-0.8.0\net-2.0\nunitlite.dll"  target="lib/net20" />
-		<file src="package\NUnitLite-0.8.0\net-2.0\nunitlite.xml"  target="lib/net20" />
-		<file src="package\NUnitLite-0.8.0\net-1.1\nunitlite.dll"  target="lib/net11" />
-		<file src="package\NUnitLite-0.8.0\net-1.1\nunitlite.xml"  target="lib/net11" />
-		<file src="package\NUnitLite-0.8.0\netcf-3.5\nunitlite.dll"  target="lib/net35-cf" />
-		<file src="package\NUnitLite-0.8.0\netcf-3.5\nunitlite.xml"  target="lib/net35-cf" />
-		<file src="package\NUnitLite-0.8.0\netcf-2.0\nunitlite.dll"  target="lib/net20-cf" />
-		<file src="package\NUnitLite-0.8.0\netcf-2.0\nunitlite.xml"  target="lib/net20-cf" />
+		<file src="package\NUnitLite-0.9.0\net-4.5\nunitlite.dll"  target="lib/net45" />
+		<file src="package\NUnitLite-0.9.0\net-4.5\nunitlite.xml"  target="lib/net45" />
+		<file src="package\NUnitLite-0.9.0\net-4.0\nunitlite.dll"  target="lib/net40" />
+		<file src="package\NUnitLite-0.9.0\net-4.0\nunitlite.xml"  target="lib/net40" />
+		<file src="package\NUnitLite-0.9.0\net-3.5\nunitlite.dll"  target="lib/net35" />
+		<file src="package\NUnitLite-0.9.0\net-3.5\nunitlite.xml"  target="lib/net35" />
+		<file src="package\NUnitLite-0.9.0\net-2.0\nunitlite.dll"  target="lib/net20" />
+		<file src="package\NUnitLite-0.9.0\net-2.0\nunitlite.xml"  target="lib/net20" />
+		<file src="package\NUnitLite-0.9.0\net-1.1\nunitlite.dll"  target="lib/net11" />
+		<file src="package\NUnitLite-0.9.0\net-1.1\nunitlite.xml"  target="lib/net11" />
+		<file src="package\NUnitLite-0.9.0\netcf-3.5\nunitlite.dll"  target="lib/net35-cf" />
+		<file src="package\NUnitLite-0.9.0\netcf-3.5\nunitlite.xml"  target="lib/net35-cf" />
+		<file src="package\NUnitLite-0.9.0\netcf-2.0\nunitlite.dll"  target="lib/net20-cf" />
+		<file src="package\NUnitLite-0.9.0\netcf-2.0\nunitlite.xml"  target="lib/net20-cf" />
+		<file src="package\NUnitLite-0.9.0\silverlight-5.0\nunitlite.dll"  target="lib/sl50" />
+		<file src="package\NUnitLite-0.9.0\silverlight-5.0\nunitlite.xml"  target="lib/sl50" />
+		<file src="package\NUnitLite-0.9.0\silverlight-4.0\nunitlite.dll"  target="lib/sl40" />
+		<file src="package\NUnitLite-0.9.0\silverlight-4.0\nunitlite.xml"  target="lib/sl40" />
+		<file src="package\NUnitLite-0.9.0\silverlight-3.0\nunitlite.dll"  target="lib/sl30" />
+		<file src="package\NUnitLite-0.9.0\silverlight-3.0\nunitlite.xml"  target="lib/sl30" />
 		<file src="src\tests\Program.cs" target="content" />
 	</files>
 </package>
