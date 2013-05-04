@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nunitlite.build.include = nunitlite.build.include
 		NUnitLite.nuspec = NUnitLite.nuspec
 		nunitlite.projects.common = nunitlite.projects.common
+		README.txt = README.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-2.0", "src\mock-assembly\mock-assembly-2.0.csproj", "{1516338A-F26B-4BA7-AF6E-C3F6A39DC45B}"

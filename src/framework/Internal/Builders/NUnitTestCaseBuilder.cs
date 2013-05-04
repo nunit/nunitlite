@@ -48,11 +48,20 @@ namespace NUnit.Framework.Builders
     /// </summary>
     public class NUnitTestCaseBuilder : ITestCaseBuilder2
 	{
+        private Randomizer random;
 #if NUNITLITE
         private ITestCaseProvider testCaseProvider = new TestCaseProviders();
 #else
         private ITestCaseProvider testCaseProvider = CoreExtensions.Host.TestCaseProviders;
 #endif
+        /// <summary>
+        /// Default no argument constructor for NUnitTestCaseBuilder
+        /// </summary>
+        public NUnitTestCaseBuilder()
+        {
+            //MethodBase.GetCurrentMethod does not compile on NETCF so this method is used instead
+            random = Randomizer.GetRandomizer(typeof(NUnitTestCaseBuilder).GetConstructor(new Type[0]));
+        }
 
         #region ITestCaseBuilder Methods
         /// <summary>
@@ -168,9 +177,11 @@ namespace NUnit.Framework.Builders
         /// <param name="parentSuite">The suite or fixture to which the new test will be added</param>
         /// <param name="parms">The ParameterSet to be used, or null</param>
         /// <returns></returns>
-        public static TestMethod BuildSingleTestMethod(MethodInfo method, Test parentSuite, ParameterSet parms)
+        private TestMethod BuildSingleTestMethod(MethodInfo method, Test parentSuite, ParameterSet parms)
         {
             TestMethod testMethod = new TestMethod(method, parentSuite);
+
+            testMethod.Seed = random.Next();
 
             string prefix = method.ReflectedType.FullName;
 

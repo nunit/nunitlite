@@ -105,5 +105,29 @@ namespace NUnitLite.Runner.Tests
             Assert.That(options.Tests[1], Is.EqualTo("Class2"));
             Assert.That(options.Tests[2], Is.EqualTo("Class3"));
         }
+#if !SILVERLIGHT
+        [Test]
+        public void TestIncludeOption()
+        {
+            options.Parse("-include:1,2");
+            Assert.That(options.Error, Is.False);
+            Assert.That(options.Include == "1,2");
+        }
+        [Test]
+        public void TestExcludeOption()
+        {
+            options.Parse("-exclude:1,2");
+            Assert.That(options.Error, Is.False);
+            Assert.That(options.Exclude == "1,2");
+        }
+        [Test]
+        public void TestIncludeExcludeOption()
+        {
+            options.Parse("-include:3,4", "-exclude:1,2");
+            Assert.That(options.Error, Is.False);
+            Assert.That(options.Exclude == "1,2");
+            Assert.That(options.Include == "3,4");
+        }
+#endif
     }
 }

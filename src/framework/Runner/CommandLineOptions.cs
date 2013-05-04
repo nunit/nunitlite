@@ -51,6 +51,8 @@ namespace NUnitLite.Runner
         private string resultFile;
         private string resultFormat;
         private string outFile;
+        private string includeCategory;
+        private string excludeCategory;
 
         private bool error = false;
 
@@ -141,6 +143,28 @@ namespace NUnitLite.Runner
             get 
             {
                 return ExpandToFullPath(outFile);
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of categories to include
+        /// </summary>
+        public string Include
+        {
+            get
+            {
+                return includeCategory;
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of categories to exclude
+        /// </summary>
+        public string Exclude
+        {
+            get
+            {
+                return excludeCategory;
             }
         }
 
@@ -261,6 +285,12 @@ namespace NUnitLite.Runner
                     break;
                 case "labels":
                     labelTestsInOutput = true;
+                    break;
+                case "include":
+                    includeCategory = val;
+                    break;
+                case "exclude":
+                    excludeCategory = val;
                     break;
                 default:
                     error = true;

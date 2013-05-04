@@ -82,6 +82,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\Commands\TheoryResultCommand.cs" />
+    <Compile Include="Internal\Filters\SimpleCategoryExpression.cs" />
     <Compile Include="Internal\IApplyToContext.cs" />
     <Compile Include="Internal\IApplyToTest.cs" />
     <Compile Include="Api\IParameterDataSource.cs" />
@@ -304,6 +305,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\PropertyNames.cs" />
+    <Compile Include="Internal\RandomGenerator.cs" />
     <Compile Include="Internal\Randomizer.cs" />
     <Compile Include="Internal\Reflect.cs" />
     <Compile Include="Internal\Results\TestCaseResult.cs" />

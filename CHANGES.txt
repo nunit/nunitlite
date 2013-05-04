@@ -1,4 +1,6 @@
-NUnitLite Version 0.8 - September 13pac, 2012
+NUnitLite Version 0.9 - May 4, 2013
+
+NUnitLite Version 0.8 - September 13, 2012
 
 Runner
 

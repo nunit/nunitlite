@@ -31,7 +31,11 @@ namespace NUnit.Framework.Internal
 {
     /// <summary>
     /// Randomizer returns a set of random values in a repeatable
-    /// way, to allow re-running of tests if necessary.
+    /// way, to allow re-running of tests if necessary. 
+    /// 
+    /// This class is an internal framework class used for setting up tests. 
+    /// It is used to generate random test parameters, for an external Randomizer please see
+    /// RandomGenerator which allows for repeatable random during test execution
     /// </summary>
     public class Randomizer : Random
     {

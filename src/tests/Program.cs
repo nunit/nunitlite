@@ -60,6 +60,19 @@ namespace NUnitLite.Tests
         //
         //    -wait             Wait for a keypress before exiting.
         //
+        //    -include:categorylist 
+        //             If specified, nunitlite will only run the tests with a category 
+        //             that is in the comma separated list of category names. 
+        //             Example usage: -include:category1,category2 this command can be used
+        //             in combination with the -exclude option also note that exlude takes priority
+        //             over all includes.
+        //
+        //    -exclude:categorylist 
+        //             If specified, nunitlite will not run any of the tests with a category 
+        //             that is in the comma separated list of category names. 
+        //             Example usage: -exclude:category1,category2 this command can be used
+        //             in combination with the -include option also note that exclude takes priority
+        //             over all includes
         public static void Main(string[] args)
         {
             new TextUI().Execute(args);
