@@ -1,4 +1,46 @@
-NUnitLite Version 0.9 - May 4, 2013
+NUnitLite Version 0.9 - May 5, 2013
+
+Framework
+
+* A .NET 4.5 build is included. When using the 4.5 package, 
+  C# 5.0 async methods may be used as tests, as the target of 
+  a Throws constraint and as an ActualValueDelegate returning
+  the value to be tested.
+
+* Experimental builds for Silverlight 3.0, 4.0 and 5.0 are included.
+
+* TestContext.Random may be used to provide random values of various
+  types for use in your tests.
+
+* The experimental Asynchronous attribute has been removed.
+
+Runner
+
+* The runner now supports the -include and -exclude options, which
+  are used to specify categories of tests to be included in a run.
+
+* Test execution time is now reported at a higher resolution on
+  systems that support it.
+
+Bug Fixes
+
+*  501784 	Theory tests do not work correctly when using null parameters
+*  671432 	Upgrade NAnt to Latest Release
+* 1028188 	Add Support for Silverlight
+* 1029785 	Test loaded from remote folder failed to run with exception System.IO.Directory Not Found
+* 1057981 	C#5 async tests are not supported
+* 1060631 	Add .NET 4.5 build
+* 1064014 	Simple async tests should not return Task<T>
+* 1071164 	Support async methods in usage scenarios of Throws constraints
+* 1071714 	TestContext is broken when a previous version of the runner is used alongside a new version of the framework
+* 1071861 	Error in Path Constraints
+* 1072379 	Report test execution time at a higher resolution
+* 1073750 	Remove Asynchronous Attribute
+* 1074568 	Assert/Assume should support an async method for the ActualValueDelegate
+* 1082330 	Better Exception if SetCulture attribute is applied multiple times
+* 1111834 	Expose Random Object as part of the test context
+* 1172979 	Add Category Support to nunitlite Runner
+* 1174741 	sl-4.0 csproj file is corrupt
 
 NUnitLite Version 0.8 - September 13, 2012
 

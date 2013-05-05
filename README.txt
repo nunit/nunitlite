@@ -1,4 +1,4 @@
-NUnitLite Version 0.8 - September 13, 2012
+NUnitLite Version 0.9 - May 5, 2013
 
 NUnitLite is a small-footprint implementation of much of the current NUnit framework. It is distributed in source form and is intended for use in situations where NUnit is too large or complex. In particular, it targets mobile and embedded environments as well as testing of applications that require "embedding" the framework in another piece of software, as when testing plugin architectures.
 
@@ -6,7 +6,7 @@ This file provides basic information about NUnitLite. For more info see the NUni
 
 COPYRIGHT AND LICENSE
 
-NUnitLite is Copyright © 2012, Charlie Poole and is licensed under the MIT license.
+NUnitLite is Copyright © 2013, Charlie Poole and is licensed under the MIT license.
 
 A copy of the license is distributed with the program in the file LICENSE.txt and is also available at http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,7 +15,6 @@ NUNitLite is based on ideas in NUnit, but not on the NUnit implementation. In ad
 ATTRIBUTES
 
 NUnitLite supports most of the same attributes as NUnit 2.6.
-	AsynchronousAttribute (unique to NUnitLite)
 	CategoryAttribute
 	CombinatorialAttribute
 	CultureAttribute
@@ -46,9 +45,6 @@ NUnitLite supports most of the same attributes as NUnit 2.6.
 	TimeoutAttribute
 	ValuesAttribute
 	ValueSourceAttribute
-
-The AsynchronousAttribute marks a test that returns immediately when invoked, continuing to execute on a separate thread. The containing fixture waits for such tests to complete before exiting itself.
-
 
 ASSERTS
 
