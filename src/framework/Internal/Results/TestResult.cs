@@ -254,6 +254,7 @@ namespace NUnit.Framework.Internal
             XmlNode topNode = XmlNode.CreateTopLevelElement("dummy");
 
             AddToXml(topNode, recursive);
+            topNode.FirstChild.AddAttribute("assemblySeed", TestContext.AssemblySeed.ToString());
 
             return topNode.FirstChild;
         }
@@ -282,8 +283,8 @@ namespace NUnit.Framework.Internal
                 thisNode.AddAttribute("passed", PassCount.ToString());
                 thisNode.AddAttribute("failed", FailCount.ToString());
                 thisNode.AddAttribute("inconclusive", InconclusiveCount.ToString());
-                thisNode.AddAttribute("skipped", SkipCount.ToString());
-            }
+                thisNode.AddAttribute("skipped", SkipCount.ToString());                
+            }            
 
             thisNode.AddAttribute("asserts", this.AssertCount.ToString());
 

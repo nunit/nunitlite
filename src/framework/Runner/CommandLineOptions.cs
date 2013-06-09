@@ -27,8 +27,8 @@ using System.Text;
 using System.Collections;
 #if CLR_2_0 || CLR_4_0
 using System.Collections.Generic;
-using NUnit.Framework;
 #endif
+using NUnit.Framework;
 
 namespace NUnitLite.Runner
 {
@@ -295,7 +295,16 @@ namespace NUnitLite.Runner
                     break;
                 case "seed":
                     int seed = 0;
-                    if (int.TryParse(val, out seed))
+                    bool seedValid = false;
+                        try
+                        {
+                            seed = int.Parse(val);
+                            seedValid = true;
+                        }
+                        catch
+                        {
+                        }
+                    if(seedValid)
                         TestContext.AssemblySeed = seed;
                     else
                         error = true;

@@ -38,7 +38,7 @@ namespace NUnit.Framework
         private TestExecutionContext ec;
         private TestAdapter test;
         private ResultAdapter result;
-
+        private static int _AssemblySeed;
         #region Constructor
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace NUnit.Framework
         /// Sets and Gets the Assembly Seed used to generate Seeds
         /// for Random Generators in Tests
         /// </summary>
-        internal static int AssemblySeed { set; get; }
+        internal static int AssemblySeed { set { _AssemblySeed = value; } get { return _AssemblySeed; } }
 
 #if !NETCF
         /// <summary>
