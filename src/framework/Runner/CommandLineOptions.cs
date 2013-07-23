@@ -61,6 +61,8 @@ namespace NUnitLite.Runner
         private StringList invalidOptions = new StringList();
         private StringList parameters = new StringList();
 
+        private int randomSeed = -1;
+
         #region Properties
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ExploreFile
         {
-            get { return ExpandToFullPath(exploreFile.Length < 1 ? "tests.xml" : exploreFile); }
+            get { return exploreFile; }
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace NUnitLite.Runner
         /// </summary>
         public string ResultFile
         {
-            get { return ExpandToFullPath(resultFile); }
+            get { return resultFile; }
         }
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace NUnitLite.Runner
         {
             get 
             {
-                return ExpandToFullPath(outFile);
+                return outFile;
             }
         }
 
@@ -197,6 +199,20 @@ namespace NUnitLite.Runner
             get { return tests.Count; }
         }
 
+        /// <summary>
+        /// Gets the seed to be used for generating random values
+        /// </summary>
+        public int InitialSeed
+        {
+            get 
+            {
+                if (randomSeed < 0)
+                    randomSeed = new Random().Next();
+
+                return randomSeed; 
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -239,8 +255,9 @@ namespace NUnitLite.Runner
             get { return (string[])parameters.ToArray(); }
         }
 
-        private void ProcessOption(string opt)
+        private void ProcessOption(string option)
         {
+            string opt = option;
             int pos = opt.IndexOfAny( new char[] { ':', '=' } );
             string val = string.Empty;
 
@@ -271,18 +288,43 @@ namespace NUnitLite.Runner
                     break;
                 case "explore":
                     explore = true;
-                    exploreFile = val;
+                    if (val == null || val.Length == 0)
+                        val = "tests.xml";
+                    try
+                    {
+                        exploreFile = Path.GetFullPath(val);
+                    }
+                    catch
+                    {
+                        InvalidOption(option);
+                    }
                     break;
                 case "result":
-                    resultFile = val;
+                    if (val == null || val.Length == 0)
+                        val = "TestResult.xml";
+                    try
+                    {
+                        resultFile = Path.GetFullPath(val);
+                    }
+                    catch
+                    {
+                        InvalidOption(option);
+                    }
                     break;
                 case "format":
                     resultFormat = val;
                     if (resultFormat != "nunit3" && resultFormat != "nunit2")
-                        error = true;
+                        InvalidOption(option);
                     break;
                 case "out":
-                    outFile = val;
+                    try
+                    {
+                        outFile = Path.GetFullPath(val);
+                    }
+                    catch
+                    {
+                        InvalidOption(option);
+                    }
                     break;
                 case "labels":
                     labelTestsInOutput = true;
@@ -294,26 +336,25 @@ namespace NUnitLite.Runner
                     excludeCategory = val;
                     break;
                 case "seed":
-                    int seed = 0;
-                    bool seedValid = false;
-                        try
-                        {
-                            seed = int.Parse(val);
-                            seedValid = true;
-                        }
-                        catch
-                        {
-                        }
-                    if(seedValid)
-                        TestContext.AssemblySeed = seed;
-                    else
-                        error = true;
+                    try
+                    {
+                        randomSeed = int.Parse(val);
+                    }
+                    catch
+                    {
+                        InvalidOption(option);
+                    }
                     break;
                 default:
-                    error = true;
-                    invalidOptions.Add(opt);
+                    InvalidOption(option);
                     break;
             }
+        }
+
+        private void InvalidOption(string option)
+        {
+            error = true;
+            invalidOptions.Add(option);
         }
 
         private void ProcessParameter(string param)
@@ -341,8 +382,6 @@ namespace NUnitLite.Runner
                 StringBuilder sb = new StringBuilder();
                 foreach (string opt in invalidOptions)
                     sb.Append( "Invalid option: " + opt + NL );
-                if (resultFormat != null && resultFormat != "nunit3" && resultFormat != "nunit2")
-                    sb.Append("Invalid result format: " + resultFormat + NL);
                 return sb.ToString();
             }
         }

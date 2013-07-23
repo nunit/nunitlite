@@ -38,7 +38,7 @@ namespace NUnit.Framework
         private TestExecutionContext ec;
         private TestAdapter test;
         private ResultAdapter result;
-        private static int _AssemblySeed;
+
         #region Constructor
 
         /// <summary>
@@ -48,14 +48,6 @@ namespace NUnit.Framework
         public TestContext(TestExecutionContext ec)
         {
             this.ec = ec;
-        }
-
-        /// <summary>
-        /// Initialize Test Context Properties
-        /// </summary>
-        static TestContext()
-        {
-            AssemblySeed = new Random().Next();
         }
 
         #endregion
@@ -101,12 +93,6 @@ namespace NUnit.Framework
             }
         }
 
-        /// <summary>
-        /// Sets and Gets the Assembly Seed used to generate Seeds
-        /// for Random Generators in Tests
-        /// </summary>
-        internal static int AssemblySeed { set { _AssemblySeed = value; } get { return _AssemblySeed; } }
-
 #if !NETCF
         /// <summary>
         /// Gets the directory containing the current test assembly.
@@ -136,7 +122,7 @@ namespace NUnit.Framework
         {
             get
             {
-                return ec.Random;
+                return ec.RandomGenerator;
             }
         }
 

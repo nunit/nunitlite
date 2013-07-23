@@ -183,6 +183,9 @@ namespace NUnitLite.Runner
                             else
                                 filter = new AndFilter(filter, excludeFilter);
                         }
+
+                        NUnit.Framework.Internal.Randomizer.InitialSeed = commandLineOptions.InitialSeed;
+
                         RunTests(filter);
                     }
                 }
