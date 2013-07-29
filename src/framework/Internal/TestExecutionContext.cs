@@ -34,7 +34,7 @@ using System.Security.Principal;
 #endif
 
 using NUnit.Framework.Api;
-#if !NETCF
+#if !SILVERLIGHT && !NETCF
 using System.Runtime.Remoting.Messaging;
 #endif
 
@@ -244,6 +244,8 @@ namespace NUnit.Framework.Internal
         [ThreadStatic]
 #endif
         private static TestExecutionContext current;
+#else
+        private static readonly string CONTEXT_KEY = "NUnit.Framework.TestContext";
 #endif
 
         /// <summary>
@@ -260,7 +262,7 @@ namespace NUnit.Framework.Internal
 
                 return current; 
 #else
-                return CallContext.GetData("NUnit.Framework.TestContext") as TestExecutionContext;
+                return CallContext.GetData(CONTEXT_KEY) as TestExecutionContext;
 #endif
             }
         }
@@ -274,7 +276,7 @@ namespace NUnit.Framework.Internal
 #if SILVERLIGHT || NETCF
             current = ec;
 #else
-            CallContext.SetData("NUnit.Framework.TestContext", ec);
+            CallContext.SetData(CONTEXT_KEY, ec);
 #endif
         }
 
@@ -372,7 +374,7 @@ namespace NUnit.Framework.Internal
         }
 
         /// <summary>
-        /// Gets or sets the test case timeout vaue
+        /// Gets or sets the test case timeout value
         /// </summary>
         public int TestCaseTimeout
         {
