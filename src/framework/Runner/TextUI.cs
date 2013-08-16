@@ -151,6 +151,8 @@ namespace NUnitLite.Runner
                     // TODO: For now, ignore all but first assembly
                     Assembly assembly = assemblies[0] as Assembly;
 
+                    Randomizer.InitialSeed = commandLineOptions.InitialSeed;
+
                     if (!runner.Load(assembly, loadOptions))
                     {
                         AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(assembly);
@@ -183,8 +185,6 @@ namespace NUnitLite.Runner
                             else
                                 filter = new AndFilter(filter, excludeFilter);
                         }
-
-                        Randomizer.InitialSeed = commandLineOptions.InitialSeed;
 
                         RunTests(filter);
                     }
