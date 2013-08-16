@@ -292,7 +292,7 @@ namespace NUnitLite.Runner
                         val = "tests.xml";
                     try
                     {
-                        exploreFile = Path.GetFullPath(val);
+                        exploreFile = ExpandToFullPath(val);
                     }
                     catch
                     {
@@ -304,7 +304,7 @@ namespace NUnitLite.Runner
                         val = "TestResult.xml";
                     try
                     {
-                        resultFile = Path.GetFullPath(val);
+                        resultFile = ExpandToFullPath(val);
                     }
                     catch
                     {
@@ -319,7 +319,7 @@ namespace NUnitLite.Runner
                 case "out":
                     try
                     {
-                        outFile = Path.GetFullPath(val);
+                        outFile = ExpandToFullPath(val);
                     }
                     catch
                     {
