@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nunitlite.build = nunitlite.build
 		nunitlite.build.include = nunitlite.build.include
 		NUnitLite.nuspec = NUnitLite.nuspec
+		NUnitLiteCF.nuspec = NUnitLiteCF.nuspec
 		README.txt = README.txt
 	EndProjectSection
 EndProject

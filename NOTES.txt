@@ -1,8 +1,10 @@
 General notes for developers working on NUnitLite:
 
-1. NUnitLite is built for .NET 1.1, 2.0, 3.5 and 4.0 as well
-as Compact Framework 1.0, 2.0 and 3.5. The VS 2010 project only
-includes .NET 2.0, 3.5 and 4.0. There is also a VS 2008 CF
+1. NUnitLite is built for .NET 1.1, 2.0, 3.5 and 4.0, .NET
+CF 2.0 and 3.5 and Silverlight 3.0, 4.0 and 5.0. The VS 2010 
+project builds .NET 2.0, 3.5 and 4.0 aswell as the Silverlight
+builds. The VS2012 project builds .NET 2.0, 3.5, 4.0 and 4.5
+and Silverlight 4.0 and 5.0. There are also VS 2008 projects
 project for testing under CF 2.0 and 3.5. The NAnt script
 builds all the targets, provided you have them installed.
 For example, use 'nant net-1.1 build' or 'nant build-all'.
@@ -11,7 +13,9 @@ For example, use 'nant net-1.1 build' or 'nant build-all'.
 compilation where they are necessary. It's usually simpler 
 to use .NET 1.x compatible code in the framework itself.
 In the tests, it's necessary to use conditional compilation
-in order to make sure that things like lambdas work.
+in order to make sure that things like lambdas work. The
+next release of NUnitLite will only support .NET 2.0 and
+higher, making things somewhat easier.
 
 3. It may seem strange to find conditional code contained in
 these projects based on the definition of NUNITLITE. This is
