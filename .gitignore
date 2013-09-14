@@ -10,3 +10,6 @@ obj
 package
 TestResults
 _TEMP.nuspec
+
+# Keep empty directories:
+# Keep empty directories: >> .gitignore/.git*
